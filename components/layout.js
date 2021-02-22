@@ -3,71 +3,53 @@ import Image from 'next/image'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
-
-const name = 'Peeratchai Kittisupap'
-export const siteTitle = 'Mor Mark'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 export default function Layout({ children, home }) {
     return (
-        <div className={styles.container}>
-            <Head>
-                <link rel="icon" href="/favicon.ico" />
-                <meta
-                    name="description"
-                    content="Learn how to build a personal website using Next.js"
-                />
-                <meta
-                    property="og:image"
-                    content={`https://og-image.vercel.app/${encodeURI(
-                        siteTitle
-                    )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-                />
-                <meta name="og:title" content={siteTitle} />
-                <meta name="twitter:card" content="summary_large_image" />
-            </Head>
-            <header className={styles.header}>
-                {home ? (
-                    <>
-                        <Image
-                            priority
-                            src="/images/profile.jpg"
-                            className={utilStyles.borderCircle}
-                            height={144}
-                            width={144}
-                            alt={name}
-                        />
-                        <h1 className={utilStyles.heading2Xl}>{name}</h1>
-                    </>
-                ) : (
-                        <>
-                            <Link href="/">
-                                <a>
-                                    <Image
-                                        priority
-                                        src="/images/profile.jpg"
-                                        className={utilStyles.borderCircle}
-                                        height={108}
-                                        width={108}
-                                        alt={name}
-                                    />
-                                </a>
-                            </Link>
-                            <h2 className={utilStyles.headingLg}>
-                                <Link href="/">
-                                    <a className={utilStyles.colorInherit}>{name}</a>
-                                </Link>
-                            </h2>
-                        </>
-                    )}
-            </header>
-            <main>{children}</main>
-            {!home && (
-                <div className={styles.backToHome}>
-                    <Link href="/">
-                        <a>← Back to home</a>
-                    </Link>
-                </div>
-            )}
-        </div>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Brand href="#home" style={{ color: "white !important" }}>E-Menu</Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav" >
+                {/* <Nav className="mr-auto" >
+                    <Nav.Link style={{ float: "left" }} eventKey='1' href="#features">NewsPaper</Nav.Link>
+                    <Nav.Link style={{ float: "left" }} eventKey='2' href="#pricing">Menu Feeding</Nav.Link>
+                    <Nav.Link style={{ float: "left" }} eventKey='3' href="#pricing">Contact</Nav.Link>
+                    <Nav.Link style={{ float: "left" }} eventKey='4' href="#pricing">Check out</Nav.Link>
+                </Nav>
+                <Nav>
+                    <NavDropdown title="Login" id="nav-dropdown">
+                        <NavDropdown.Item eventKey="5.1">Update user profile</NavDropdown.Item>
+                        <NavDropdown.Item eventKey="5.2">Order</NavDropdown.Item>
+                    </NavDropdown>
+                </Nav> */}
+                <Nav>
+                    <Nav.Link eventKey="1" title="Item">
+                        NewsPaper
+                    </Nav.Link>
+                </Nav>
+                <Nav>
+                    <Nav.Link eventKey="2" title="Item">
+                        Menu Feeding
+                    </Nav.Link>
+                </Nav>
+                <Nav className="mr-auto">
+                    <Nav.Link eventKey="3">
+                        Contact
+                    </Nav.Link>
+                </Nav>
+                <Nav>
+                    <NavDropdown title="Login" id="nav-dropdown">
+                        <NavDropdown.Item eventKey="5.1">Update user profile</NavDropdown.Item>
+                        <NavDropdown.Item eventKey="5.2">Order</NavDropdown.Item>
+                    </NavDropdown>
+                </Nav>
+                <Nav>
+                    <Nav.Link eventKey="3">
+                        Check out
+                    </Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar >
     )
 }
