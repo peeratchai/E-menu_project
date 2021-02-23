@@ -23,6 +23,17 @@ a:hover {
 }
 
 img {
-  max-width: 100%;
-  display: block;
+  width: 100%;
+  /* display: block; */
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.navbar-dark .navbar-brand {
+  color: white !important;
 }
