@@ -2,41 +2,50 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
-import Link from 'next/link'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { useRouter } from 'next/router'
+import ActiveLink from './ActiveLink'
 
-export default function Layout({ children, home }) {
+export default function Layout({ children }) {
+    const router = useRouter()
+    console.log(router.pathname)
+
+    // const style = {
+    //     color: router.pathname === href ? 'white' : 'black',
+    // }
     return (
-        <div style={{ backgroundColor: '#f3f4f5' }}>
+        <div style={{ paddingBottom: '5px', backgroundColor: '#f3f4f5' }}>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                <Navbar.Brand href="#home" style={{ color: "white !important" }}>E-Menu</Navbar.Brand>
+                <style jsx>{`
+                    .nav-link {
+                        text-decoration: none;
+                    }
+                    .active:after {
+                        color:"white"
+                    }
+                    `}</style>
+                <Navbar.Brand href="/newspaper" style={{ color: "white !important" }}>E-Menu</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
-                    <Nav>
-                        <Nav.Link eventKey="1" title="Item" href="/">
-                            NewsPaper
-                    </Nav.Link>
-                    </Nav>
-                    <Nav>
-                        <Nav.Link eventKey="2" title="Item">
-                            Menu Feeding
-                    </Nav.Link>
-                    </Nav>
                     <Nav className="mr-auto">
-                        <Nav.Link eventKey="3">
-                            Contact
-                    </Nav.Link>
+                        <ActiveLink activeClassName="active" href="/newspaper">
+                            <a className="nav-link">NewsPaper</a>
+                        </ActiveLink>
+                        <ActiveLink activeClassName="active" href="/menuFeeding">
+                            <a className="nav-link">Menu Feeding</a>
+                        </ActiveLink>
+                        <ActiveLink activeClassName="active" href="#">
+                            <a className="nav-link">Contact</a>
+                        </ActiveLink>
                     </Nav>
                     <Nav>
                         <NavDropdown title="Login" id="nav-dropdown">
-                            <NavDropdown.Item eventKey="5.1">Update user profile</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="5.2">Order</NavDropdown.Item>
+                            <NavDropdown.Item >Update user profile</NavDropdown.Item>
+                            <NavDropdown.Item >Order</NavDropdown.Item>
                         </NavDropdown>
-                    </Nav>
-                    <Nav>
-                        <Nav.Link eventKey="3">
-                            Check out
-                    </Nav.Link>
+                        <ActiveLink activeClassName="active" href="#">
+                            <a className="nav-link">Check out</a>
+                        </ActiveLink>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

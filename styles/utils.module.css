@@ -41,7 +41,9 @@
 .list {
   list-style: none;
   padding: 20px;
-  margin: 0;
+  margin-bottom: 15px;
+  background-color: white;
+  border-radius: calc(0.25rem - 1px);
 }
 
 .listItem {

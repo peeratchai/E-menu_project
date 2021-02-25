@@ -50,7 +50,10 @@ export default function Home({ allPostsData }) {
   }
 
   return (
-    <Layout home>
+    <Layout>
+      <Head>
+        <title>E-Menu</title>
+      </Head>
       <Container>
         {listMenu}
       </Container>

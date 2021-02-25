@@ -13,22 +13,27 @@ body {
 }
 
 a {
-  color: rgb(115, 138, 149) !important;
+  /* color: rgb(115, 138, 149) !important; */
   text-decoration: none;
 }
 
 a:hover {
-  color: rgb(156, 189, 202) !important;
   text-decoration: underline;
 }
 
 img {
   width: 100%;
   /* display: block; */
-  height: auto;
-  max-height: 180px;
+  height: 160px;
   object-fit: cover;
 }
+
+/* @media only screen and (max-width: 768px) {
+  .img{
+    max-width: 300px;
+    max-height: 300px;
+  }
+} */
 
 .card {
   margin-bottom: 20px;
@@ -36,4 +41,18 @@ img {
 
 .navbar-dark .navbar-brand {
   color: white !important;
+}
+
+.container,
+.container-fluid,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  padding-right: 30px !important;
+  padding-left: 30px !important;
+}
+
+.card {
+  cursor: pointer;
 }

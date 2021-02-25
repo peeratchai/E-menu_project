@@ -1,7 +1,7 @@
 .container {
   max-width: 64rem;
   padding: 0 1rem;
-  margin: 3rem auto 6rem;
+  margin: 2rem auto 6rem;
 }
 
 .header {
@@ -13,4 +13,3 @@
 .backToHome {
   margin: 3rem 0 0;
 }
-
