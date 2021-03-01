@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import styles from './index.module.css'
 import Link from 'next/link'
 
-
 export default function RestaurantList({ props }) {
 
     const router = useRouter()

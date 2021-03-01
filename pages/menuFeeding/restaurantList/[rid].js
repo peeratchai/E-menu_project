@@ -502,27 +502,25 @@ function MyVerticallyCenteredModal(props) {
                     //PC Version
                     <>
                         <Modal.Header closeButton>
+                            <Modal.Title style={{ fontSize: "1.3rem" }}> ยำรวมมิตร</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
                             <Container>
                                 <Row>
                                     <Col xs={12} md={3}>
                                         <Image src='/images/food4.jpg' />
                                     </Col>
                                     <Col xs={6} md={9}>
-                                        <Row>
-                                            <Col>
-                                                Name : ยำรวมมิตร
-                                </Col>
-                                        </Row>
                                         <Row style={{ margin: "10px -15px" }}>
                                             <Col>
                                                 Detail : ยำรวมมิตร
-                                </Col>
+                                            </Col>
                                         </Row>
                                         <Row>
                                             <Col>
                                                 <span>
                                                     จำนวน : &nbsp;
-                                    </span>
+                                                </span>
                                                 <Button className={utilStyles.btn} onClick={() => { count > 1 ? (setCount((count - 1)), setTotal((total - price))) : null }} >
                                                     <RemoveIcon />
                                                 </Button>
@@ -542,11 +540,7 @@ function MyVerticallyCenteredModal(props) {
 
                                     </Col>
                                 </Row>
-                            </Container>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Container>
-                                <Form>
+                                <Form style={{ marginTop: "15px" }}>
                                     <Form.Group>
                                         <Form.Label>Special instruction</Form.Label>
                                         <Form.Control
