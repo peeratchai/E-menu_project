@@ -3,10 +3,6 @@ import utilStyles from '../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card, Image, Button } from 'react-bootstrap'
 import useMediaQuery from "../../utils/utils";
-import menu from '../../utils/menu.json'
-import StarHalfIcon from '@material-ui/icons/StarHalf';
-import StarIcon from '@material-ui/icons/Star';
-import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import Link from 'next/link'
 
 export default function Newspaper() {
@@ -18,8 +14,13 @@ export default function Newspaper() {
                     Area Selection
                 </h1>
                 <Row>
-                    <Col xs={6} md={3}>
-                        <Link href="">
+                    <Col xs={12} md={3}>
+                        <Link
+                            href={{
+                                pathname: '/menuFeeding/restaurantList',
+                                query: { area: 'Ari' },
+                            }}
+                        >
                             <Card>
                                 <Card.Img variant="top" src="/images/ari.jpg" />
                                 <Card.Body>
@@ -31,7 +32,7 @@ export default function Newspaper() {
                             </Card>
                         </Link>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/thonglor.jpg" />
                             <Card.Body>
@@ -42,7 +43,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/eakmai.jpg" />
                             <Card.Body>
@@ -53,7 +54,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/rama4.jpg" />
                             <Card.Body>
@@ -66,7 +67,7 @@ export default function Newspaper() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/ari.jpg" />
                             <Card.Body>
@@ -77,7 +78,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/thonglor.jpg" />
                             <Card.Body>
@@ -88,7 +89,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/eakmai.jpg" />
                             <Card.Body>
@@ -99,7 +100,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/rama4.jpg" />
                             <Card.Body>
@@ -112,7 +113,7 @@ export default function Newspaper() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/ari.jpg" />
                             <Card.Body>
@@ -123,7 +124,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/thonglor.jpg" />
                             <Card.Body>
@@ -134,7 +135,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/eakmai.jpg" />
                             <Card.Body>
@@ -145,7 +146,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/rama4.jpg" />
                             <Card.Body>
@@ -158,7 +159,7 @@ export default function Newspaper() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/ari.jpg" />
                             <Card.Body>
@@ -169,7 +170,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/thonglor.jpg" />
                             <Card.Body>
@@ -180,7 +181,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/eakmai.jpg" />
                             <Card.Body>
@@ -191,7 +192,7 @@ export default function Newspaper() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={6} md={3}>
+                    <Col xs={12} md={3}>
                         <Card>
                             <Card.Img variant="top" src="/images/rama4.jpg" />
                             <Card.Body>

@@ -1,0 +1,16 @@
+.content {
+  padding-left: 5px;
+  line-height: 20px;
+}
+
+.title {
+  font-size: 1rem !important;
+}
+
+.text {
+  font-size: 0.7rem !important;
+}
+
+.container_sm {
+  padding: 0 10px !important;
+}

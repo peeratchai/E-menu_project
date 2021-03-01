@@ -41,7 +41,7 @@
 .list {
   list-style: none;
   padding: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   background-color: white;
   border-radius: calc(0.25rem - 1px);
 }
@@ -52,4 +52,58 @@
 
 .lightText {
   color: #666;
+}
+
+.btn {
+  background-color: white;
+  border: 1px solid #dedede;
+  color: #a3a3a3;
+  padding: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn:hover,
+.btn:active,
+.btn:focus {
+  background-color: #cfcfcf !important;
+}
+
+.btnMobile {
+  background-color: white;
+  border: 1px solid #dedede;
+  color: #a3a3a3;
+  padding: 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btnMobile:hover,
+.btnMobile:active,
+.btnMobile:focus {
+  background-color: #cfcfcf !important;
+}
+
+.fontMobile {
+  font-size: 14px !important;
+}
+
+.fontTitleMobile {
+  font-size: 18px !important;
+}
+
+.fontTitle {
+  font-size: 24px !important;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.fontContent {
+  font-size: 16px !important;
+}
+
+.iconSize {
+  font-size: 20px !important;
 }

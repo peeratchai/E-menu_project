@@ -5,16 +5,16 @@ import utilStyles from '../styles/utils.module.css'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import ActiveLink from './ActiveLink'
+import { Link } from '@material-ui/core';
 
 export default function Layout({ children }) {
     const router = useRouter()
-    console.log(router.pathname)
 
     // const style = {
     //     color: router.pathname === href ? 'white' : 'black',
     // }
     return (
-        <div style={{ paddingBottom: '5px', backgroundColor: '#f3f4f5' }}>
+        <div style={{ paddingBottom: '5px' }}>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <style jsx>{`
                     .nav-link {
@@ -24,7 +24,9 @@ export default function Layout({ children }) {
                         color:"white"
                     }
                     `}</style>
-                <Navbar.Brand href="/newspaper" style={{ color: "white !important" }}>E-Menu</Navbar.Brand>
+                <ActiveLink activeClassName="active" href="/newspaper">
+                    <Navbar.Brand style={{ color: "white !important", cursor: "pointer" }}>E-Menu</Navbar.Brand>
+                </ActiveLink>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
                     <Nav className="mr-auto">

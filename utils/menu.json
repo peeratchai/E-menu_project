@@ -1,47 +1,42 @@
 [
     {
-        "title":"Food1",
-        "image":"/images/food1.jpg",
-        "detail":"detail"
+        "title":"Ithaa",
+        "image":"/images/restaurant4.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food2",
-        "image":"/images/food2.jpg",
-        "detail":"detail"
+        "title":"Dinner in the Sky",
+        "image":"/images/restaurant5.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food3",
-        "image":"/images/food3.jpg",
-        "detail":"detail"
+        "title":"Parallax Restaurant",
+        "image":"/images/restaurant6.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food2",
-        "image":"/images/food2.jpg",
-        "detail":"detail"
+        "title":"El Diablo “The Devil”",
+        "image":"/images/restaurant7.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food3",
-        "image":"/images/food3.jpg",
-        "detail":"detail"
+        "title":"Ithaa",
+        "image":"/images/restaurant4.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food2",
-        "image":"/images/food2.jpg",
-        "detail":"detail"
+        "title":"Dinner in the Sky",
+        "image":"/images/restaurant5.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food3",
-        "image":"/images/food3.jpg",
-        "detail":"detail"
+        "title":"Parallax Restaurant",
+        "image":"/images/restaurant6.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     },
     {
-        "title":"food2",
-        "image":"/images/food2.jpg",
-        "detail":"detail"
-    },
-    {
-        "title":"food3",
-        "image":"/images/food3.jpg",
-        "detail":"detail"
+        "title":"El Diablo “The Devil”",
+        "image":"/images/restaurant7.jpg",
+        "detail":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,"
     }
 ]
