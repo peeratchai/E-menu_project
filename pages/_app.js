@@ -1,6 +1,7 @@
 import '../styles/global.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AnimatePresence } from "framer-motion";
+import Head from 'next/head'
 
 const handExitComplete = () => {
     if (typeof window !== "undefined") {
@@ -25,6 +26,18 @@ const handExitComplete = () => {
 
 export default function App({ Component, pageProps }) {
     return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
+        <Head>
+            <link
+                href="https://fonts.googleapis.com/css?family=Work Sans"
+                rel="stylesheet"
+                key="google-font-cabin"
+            />
+        </Head>
+        <style global jsx>{`
+        body {
+            font-family: 'Work Sans', sans-serif;
+        }
+      `}</style>
         <Component {...pageProps} />
     </AnimatePresence>)
 }
