@@ -16,21 +16,44 @@ export default function Newspaper() {
                     key="google-font-cabin"
                 />
             </Head>
-            <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
-                <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
-                    <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
-                        Contact Informations
+            {
+                !isBreakpoint ? (
+                    //PC version
+                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
+                        <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
+                            <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
+                                Contact Informations
                     </div>
-                    <div style={{ color: "#ededed" }}>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            <div style={{ color: "#ededed", textShadow: "0 0 3px #000000" }}>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                     </div>
-                    <div style={{ marginTop: "50px" }}>
-                        <Button style={{ border: "none" }}>
-                            Contact Us
+                            <div style={{ marginTop: "50px" }}>
+                                <Button style={{ border: "none" }}>
+                                    Contact Us
                         </Button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                ) : (
+                    //Mobile version
+                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
+                        <div style={{ textAlign: "center", width: "100%", margin: "auto", padding: "10px", position: "relative" }}>
+                            <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
+                                Contact Informations
+                    </div>
+                            <div style={{ color: "#ededed", textShadow: "0 0 6px #000000" }}>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    </div>
+                            <div style={{ marginTop: "50px" }}>
+                                <Button style={{ border: "none" }}>
+                                    Contact Us
+                        </Button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
             <div className={utilStyles.container} style={{ backgroundColor: "#F2F5F6" }}>
                 <div className={utilStyles.headingLg} style={{ textAlign: "center", paddingTop: "30px" }}>
                     Get In Touch

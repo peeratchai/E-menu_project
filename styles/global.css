@@ -7,7 +7,7 @@ body {
   line-height: 1.6;
   font-size: 18px;
   height: 100%;
-  background-color: #EAEFF3 !important;
+  background-color: #eaeff3 !important;
 }
 
 * {
@@ -49,8 +49,7 @@ img {
 .container-fluid,
 .container-lg,
 .container-md,
-.container-sm
-.container-xl {
+.container-sm .container-xl {
   padding-right: 30px !important;
   padding-left: 30px !important;
 }
@@ -63,3 +62,6 @@ img {
   border-bottom: 1px solid #dee2e6 !important;
 }
 
+.custom-dialog-login {
+  max-width: 430px !important;
+}
