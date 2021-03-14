@@ -91,11 +91,12 @@
 }
 
 .fontTitleMobile {
-  font-size: 18px !important;
+  font-size: 1.5rem !important;
+  font-weight: 600;
 }
 
 .fontTitle {
-  font-size: 1.3rem !important;
+  font-size: 2.5rem !important;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
@@ -112,4 +113,18 @@
   max-width: 60rem;
   padding: 0 1rem;
   margin: 2rem auto 6rem;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+.cardText {
+  font-size: 16px;
+}
+
+.cardBody {
+  background-color: #fff;
+  /* background-color: #eaeff3; */
+  padding: 1.25rem 0 0 0;
 }

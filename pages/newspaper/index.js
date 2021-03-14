@@ -20,7 +20,7 @@ export default function Newspaper() {
                     <Image src={menu.image} rounded />
                 </Col>
                 <Col xs={12} md={8}>
-                    <Row className={utilStyles.fontTitle + " " + utilStyles.listItem}>
+                    <Row className={utilStyles.cardTitle + " " + utilStyles.listItem}>
                         {menu.title}
                     </Row>
                     <Row className={utilStyles.fontContent + " " + utilStyles.listItem}>

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react'
-
+import styles from './index.module.css'
 
 
 export default function Newspaper() {
@@ -20,6 +20,7 @@ export default function Newspaper() {
             <Container>
                 {
                     !isBreakpoint ? (
+                        // PC Version
                         <Row style={{ marginBottom: "20px" }}>
                             <Col>
                                 <span className={utilStyles.fontTitle}>
@@ -31,213 +32,129 @@ export default function Newspaper() {
                         </Row>
 
                     ) : (
-                            <Row style={{ marginBottom: "20px" }}>
+                        // Mobile Version
+                        <Row style={{ marginBottom: "20px" }}>
 
-                                <Col xs={7}>
-                                    <span className={utilStyles.fontTitle}>
-                                        Area Selection
+                            <Col xs={12}>
+                                <span className={utilStyles.fontTitleMobile}>
+                                    Area Selection
                                         </span>
-                                </Col>
-                                <Col xs={5} style={{ margin: "auto" }}>
-                                    <span onClick={() => setModalShow(true)} style={{ cursor: "pointer", border: "1px solid #9c9c9c", borderRadius: "5px", backgroundColor: "#9c9c9c", padding: "0 10px", color: "white" }}><SearchIcon /> <span style={{ fontSize: "1rem" }}>Search</span></span>
-                                </Col>
-                            </Row>
-                        )
+                            </Col>
+                            <Col xs={12} style={{ margin: "auto" }}>
+                                <span onClick={() => setModalShow(true)} style={{ cursor: "pointer", border: "1px solid #9c9c9c", borderRadius: "5px", backgroundColor: "#9c9c9c", padding: "0 10px", color: "white" }}><SearchIcon /> <span style={{ fontSize: "1rem" }}>Search</span></span>
+                            </Col>
+                        </Row>
+                    )
                 }
 
                 <Row>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} className={styles.colCard}>
                         <Link
                             href={{
                                 pathname: '/menuFeeding/restaurantList',
                                 query: { area: 'Ari' },
                             }}
                         >
-                            <Card>
-                                <Card.Img variant="top" src="/images/ari.jpg" />
-                                <Card.Body>
-                                    <Card.Title>Ari</Card.Title>
+                            <Card style={{ height: "100%", border: "none" }}>
+                                <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "70%" }} />
+                                <Card.Body className={utilStyles.cardBody}>
                                     <Card.Text>
-                                        20 Listing
-                                </Card.Text>
+                                        <div className={utilStyles.cardTitle}>Ari</div>
+                                        <div className={utilStyles.cardText}>20 Listing</div>
+                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </Link>
                     </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/thonglor.jpg" />
-                            <Card.Body>
-                                <Card.Title>Thonglor</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    15 Listing
+                                    <div className={utilStyles.cardTitle}>Thonglor</div>
+                                    <div className={utilStyles.cardText}>2150 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/eakmai.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ekamai</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    7 Listing
+                                    <div className={utilStyles.cardTitle}>Ekamai</div>
+                                    <div className={utilStyles.cardText}>7 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/rama4.jpg" />
-                            <Card.Body>
-                                <Card.Title>Rama 4</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    13 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/ari.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ari</Card.Title>
-                                <Card.Text>
-                                    20 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/thonglor.jpg" />
-                            <Card.Body>
-                                <Card.Title>Thonglor</Card.Title>
-                                <Card.Text>
-                                    15 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/eakmai.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ekamai</Card.Title>
-                                <Card.Text>
-                                    7 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/rama4.jpg" />
-                            <Card.Body>
-                                <Card.Title>Rama 4</Card.Title>
-                                <Card.Text>
-                                    13 Listing
+                                    <div className={utilStyles.cardTitle}>Rama 4</div>
+                                    <div className={utilStyles.cardText}>13 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/ari.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ari</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Link
+                            href={{
+                                pathname: '/menuFeeding/restaurantList',
+                                query: { area: 'Ari' },
+                            }}
+                        >
+                            <Card style={{ height: "100%", border: "none" }}>
+                                <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "70%" }} />
+                                <Card.Body className={utilStyles.cardBody}>
+                                    <Card.Text>
+                                        <div className={utilStyles.cardTitle}>Ari</div>
+                                        <div className={utilStyles.cardText}>20 Listing</div>
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Link>
+                    </Col>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    20 Listing
+                                    <div className={utilStyles.cardTitle}>Thonglor</div>
+                                    <div className={utilStyles.cardText}>2150 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/thonglor.jpg" />
-                            <Card.Body>
-                                <Card.Title>Thonglor</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    15 Listing
+                                    <div className={utilStyles.cardTitle}>Ekamai</div>
+                                    <div className={utilStyles.cardText}>7 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/eakmai.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ekamai</Card.Title>
+                    <Col xs={12} md={3} className={styles.colCard}>
+                        <Card style={{ height: "100%", border: "none" }}>
+                            <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
+                            <Card.Body className={utilStyles.cardBody}>
                                 <Card.Text>
-                                    7 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/rama4.jpg" />
-                            <Card.Body>
-                                <Card.Title>Rama 4</Card.Title>
-                                <Card.Text>
-                                    13 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/ari.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ari</Card.Title>
-                                <Card.Text>
-                                    20 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/thonglor.jpg" />
-                            <Card.Body>
-                                <Card.Title>Thonglor</Card.Title>
-                                <Card.Text>
-                                    15 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/eakmai.jpg" />
-                            <Card.Body>
-                                <Card.Title>Ekamai</Card.Title>
-                                <Card.Text>
-                                    7 Listing
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Card>
-                            <Card.Img variant="top" src="/images/rama4.jpg" />
-                            <Card.Body>
-                                <Card.Title>Rama 4</Card.Title>
-                                <Card.Text>
-                                    13 Listing
+                                    <div className={utilStyles.cardTitle}>Rama 4</div>
+                                    <div className={utilStyles.cardText}>13 Listing</div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
             </Container>
-            <MyVerticallyCenteredModal
+            <SearchLocationModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />
@@ -246,7 +163,7 @@ export default function Newspaper() {
 }
 
 //Modal Add Menu
-function MyVerticallyCenteredModal(props) {
+function SearchLocationModal(props) {
     const isBreakpoint = useMediaQuery(768)
 
     const [restaurantName, setRestaurantName] = React.useState();

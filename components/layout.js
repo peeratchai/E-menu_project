@@ -58,6 +58,15 @@ export default function Layout({ children, util }) {
                         </Nav.Item> */}
                         <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
 
+                        <ActiveLink activeClassName="active" href="/partner">
+                            <a className="nav-link">Partner</a>
+                        </ActiveLink>
+                        {/* <NavDropdown title="Partner" id="nav-dropdown">
+                            <NavDropdown.Item >Promote</NavDropdown.Item>
+                            <NavDropdown.Item >Menu</NavDropdown.Item>
+                            <NavDropdown.Item >Profile</NavDropdown.Item>
+                            <NavDropdown.Item >Setting</NavDropdown.Item>
+                        </NavDropdown> */}
                         {/* <NavDropdown title="Login" id="nav-dropdown">
                             <NavDropdown.Item >Update user profile</NavDropdown.Item>
                             <NavDropdown.Item >Order</NavDropdown.Item>
@@ -171,7 +180,7 @@ function LoginModal(props) {
                                         <Form.Group controlId="formBasicRetypePassword">
                                             <Form.Control type="password" placeholder="Retype Password" />
                                         </Form.Group>
-                                        <Form.Group controlId="formBasicRemember">
+                                        <Form.Group controlId="formBasicRemember" style={{ marginBottom: "3rem" }}>
                                             <Form.Check type="checkbox" label="Remember me" />
                                         </Form.Group>
                                         <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
