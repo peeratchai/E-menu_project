@@ -11,7 +11,7 @@ import React from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-export default function Layout({ children, util }) {
+export default function Layout({ children, util, mobile }) {
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -45,7 +45,7 @@ export default function Layout({ children, util }) {
                     </Nav>
                     <Nav>
                         <ActiveLink activeClassName="active" href="/newspaper">
-                            <a className="nav-link">NewsPaper</a>
+                            <a className="nav-link">Newspaper</a>
                         </ActiveLink>
                         <ActiveLink activeClassName="active" href="/menuFeeding">
                             <a className="nav-link">Menu Feeding</a>
@@ -82,12 +82,18 @@ export default function Layout({ children, util }) {
                     <div >
                         {children}
                     </div>
-                ) : (
-                    <div className={styles.container}>
-                        {children}
-                    </div>
-                )
+                ) :
+                    mobile ? (
+                        <div className={styles.containerMobile}>
+                            {children}
+                        </div>
+                    ) : (
+                        <div className={styles.container}>
+                            { children}
+                        </div>
+                    )
             }
+
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}

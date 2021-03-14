@@ -5,7 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
-  font-size: 18px;
+  font-size: 18px !important;
   height: 100%;
   /* background-color: #eaeff3 !important; */
   background-color: #fff !important;
@@ -65,4 +65,11 @@ img {
 
 .custom-dialog-login {
   max-width: 430px !important;
+}
+.menuModal-70w {
+  min-width: 70%;
+}
+
+.ant-upload {
+  width: 100%;
 }
