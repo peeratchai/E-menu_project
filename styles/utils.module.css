@@ -89,6 +89,9 @@
 .fontMobile {
   font-size: 14px !important;
 }
+.fontMobileSM {
+  font-size: 12px !important;
+}
 
 .fontTitleMobile {
   font-size: 1.5rem !important;
@@ -104,6 +107,9 @@
 .fontContent {
   font-size: 16px !important;
 }
+.fontContentSM {
+  font-size: 14px !important;
+}
 
 .iconSize {
   font-size: 20px !important;
@@ -111,6 +117,11 @@
 
 .container {
   max-width: 60rem;
+  padding: 0 1rem;
+  margin: 2rem auto 6rem;
+}
+.container_xl{
+  max-width: 80rem;
   padding: 0 1rem;
   margin: 2rem auto 6rem;
 }

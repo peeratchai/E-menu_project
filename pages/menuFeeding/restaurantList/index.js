@@ -17,7 +17,7 @@ export default function RestaurantList({ props }) {
             {
                 !isBreakpoint ? (
                     //PC Version
-                    <Layout>
+                    <Layout center>
                         <Container>
                             <Breadcrumb>
                                 <Link href="/menuFeeding" passHref>

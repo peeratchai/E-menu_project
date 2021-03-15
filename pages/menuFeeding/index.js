@@ -20,7 +20,7 @@ export default function Newspaper() {
             {
                 !isBreakpoint ? (
                     // PC Version
-                    <Layout>
+                    <Layout center>
                         <Container>
                             <Row style={{ marginBottom: "20px" }}>
                                 <Col>

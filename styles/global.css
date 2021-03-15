@@ -31,12 +31,7 @@ img {
   object-fit: cover;
 }
 
-/* @media only screen and (max-width: 768px) {
-  .img{
-    max-width: 300px;
-    max-height: 300px;
-  }
-} */
+
 
 .card {
   margin-bottom: 20px;

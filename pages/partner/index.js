@@ -144,7 +144,7 @@ export default function Partner() {
     };
 
     return (
-        <Layout>
+        <Layout center>
             <Container className={styles.container}>
                 <Tabs defaultActiveKey="promote" id="uncontrolled-tab-example">
                     <Tab eventKey="promote" title="Promote">

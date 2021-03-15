@@ -11,7 +11,7 @@ import React from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-export default function Layout({ children, util, mobile }) {
+export default function Layout({ children, util, mobile, center }) {
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -82,16 +82,21 @@ export default function Layout({ children, util, mobile }) {
                     <div >
                         {children}
                     </div>
-                ) :
-                    mobile ? (
-                        <div className={styles.containerMobile}>
-                            {children}
-                        </div>
-                    ) : (
-                        <div className={styles.container}>
-                            { children}
-                        </div>
-                    )
+                ) : null
+            }
+            {
+                mobile ? (
+                    <div className={styles.containerMobile}>
+                        {children}
+                    </div>
+                ) : null
+            }
+            {
+                center ? (
+                    <div className={styles.container}>
+                        {children}
+                    </div>
+                ) : null
             }
 
             <LoginModal
