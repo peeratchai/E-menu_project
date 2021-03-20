@@ -64,7 +64,7 @@ export default function Newspaper() {
                             <Row xs={12} md={4} xl={5}>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard} >
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news1.jpg" style={{ height: "25rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -75,7 +75,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news2.jpg" style={{ height: "15rem" }} />
 
                                         </div>
@@ -87,7 +87,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news9.jpg" style={{ height: "16rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -98,7 +98,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news2.jpg" style={{ height: "15rem" }} />
 
                                         </div>
@@ -112,7 +112,7 @@ export default function Newspaper() {
                                 </Col>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news3.jpg" style={{ height: "17rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -123,7 +123,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news4.jpg" style={{ height: "25rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -134,7 +134,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news7.jpg" style={{ height: "20rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -145,7 +145,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news8.jpg" style={{ height: "16rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -158,7 +158,7 @@ export default function Newspaper() {
                                 </Col>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news5.jpg" style={{ height: "21rem" }} />
 
                                         </div>
@@ -170,7 +170,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news6.jpg" style={{ height: "19rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -181,7 +181,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news5.jpg" style={{ height: "19rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -192,7 +192,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news6.jpg" style={{ height: "21rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -205,7 +205,7 @@ export default function Newspaper() {
                                 </Col>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news7.jpg" style={{ height: "20rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -216,7 +216,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news8.jpg" style={{ height: "16rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -227,7 +227,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news3.jpg" style={{ height: "17rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -238,7 +238,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news4.jpg" style={{ height: "25rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -251,7 +251,7 @@ export default function Newspaper() {
                                 </Col>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news9.jpg" style={{ height: "16rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -262,7 +262,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news10.jpg" style={{ height: "19rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -273,7 +273,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news1.jpg" style={{ height: "25rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -284,7 +284,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCard}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news2.jpg" style={{ height: "15rem" }} />
                                         </div>
                                         <div className={utilStyles.fontContent}>
@@ -306,7 +306,7 @@ export default function Newspaper() {
                             <Row xs={2}>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCardMobile} >
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news1.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -317,7 +317,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news2.jpg" style={{ height: "9rem" }} />
 
                                         </div>
@@ -329,7 +329,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news3.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -340,7 +340,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news9.jpg" style={{ height: "12rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -351,7 +351,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news5.jpg" style={{ height: "13rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -362,7 +362,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news6.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -375,7 +375,7 @@ export default function Newspaper() {
                                 </Col>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news9.jpg" style={{ height: "12rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -386,7 +386,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news5.jpg" style={{ height: "13rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -397,7 +397,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news6.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -408,7 +408,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile} >
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news1.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>
@@ -419,7 +419,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news2.jpg" style={{ height: "9rem" }} />
 
                                         </div>
@@ -431,7 +431,7 @@ export default function Newspaper() {
                                         </div>
                                     </div>
                                     <div className={styles.colCardMobile}>
-                                        <div className={styles.img_hover_zoom}>
+                                        <div className={utilStyles.img_hover_zoom}>
                                             <Image src="/images/news3.jpg" style={{ height: "10rem" }} />
                                         </div>
                                         <div className={utilStyles.fontMobile}>

@@ -31,8 +31,6 @@ img {
   object-fit: cover;
 }
 
-
-
 .card {
   margin-bottom: 20px;
 }
@@ -67,4 +65,8 @@ img {
 
 .ant-upload {
   width: 100%;
+}
+
+.anticon {
+  vertical-align: middle !important;
 }

@@ -40,7 +40,9 @@ export default function Newspaper() {
                                         }}
                                     >
                                         <Card style={{ height: "100%", border: "none" }}>
-                                            <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "70%" }} />
+                                            <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                                <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "100%" }} />
+                                            </div>
                                             <Card.Body className={utilStyles.cardBody}>
                                                 <Card.Text>
                                                     <div className={utilStyles.cardTitle}>Ari</div>
@@ -52,7 +54,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Thonglor</div>
@@ -63,7 +67,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Ekamai</div>
@@ -74,7 +80,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Rama 4</div>
@@ -93,7 +101,9 @@ export default function Newspaper() {
                                         }}
                                     >
                                         <Card style={{ height: "100%", border: "none" }}>
-                                            <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "70%" }} />
+                                            <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                                <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "100%" }} />
+                                            </div>
                                             <Card.Body className={utilStyles.cardBody}>
                                                 <Card.Text>
                                                     <div className={utilStyles.cardTitle}>Ari</div>
@@ -105,7 +115,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Thonglor</div>
@@ -116,7 +128,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Ekamai</div>
@@ -127,7 +141,9 @@ export default function Newspaper() {
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
                                     <Card style={{ height: "100%", border: "none" }}>
-                                        <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
+                                        <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
+                                            <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "100%" }} />
+                                        </div>
                                         <Card.Body className={utilStyles.cardBody}>
                                             <Card.Text>
                                                 <div className={utilStyles.cardTitle}>Rama 4</div>
@@ -149,17 +165,17 @@ export default function Newspaper() {
                         <Container className={utilStyles.container_sm}>
                             <Row style={{ marginBottom: "20px" }}>
 
-                                <Col xs={12}>
+                                <Col xs={7}>
                                     <span className={utilStyles.fontTitleMobile}>
                                         Area Selection
                                         </span>
                                 </Col>
-                                <Col xs={12} style={{ margin: "auto" }}>
+                                <Col xs={5} style={{ margin: "auto" }}>
                                     <span onClick={() => setModalShow(true)} style={{ cursor: "pointer", border: "1px solid #9c9c9c", borderRadius: "5px", backgroundColor: "#9c9c9c", padding: "0 10px", color: "white" }}><SearchIcon /> <span style={{ fontSize: "1rem" }}>Search</span></span>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Link
                                         href={{
                                             pathname: '/menuFeeding/restaurantList',
@@ -177,7 +193,7 @@ export default function Newspaper() {
                                         </Card>
                                     </Link>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>
@@ -188,7 +204,7 @@ export default function Newspaper() {
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>
@@ -199,7 +215,7 @@ export default function Newspaper() {
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>
@@ -212,7 +228,7 @@ export default function Newspaper() {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Link
                                         href={{
                                             pathname: '/menuFeeding/restaurantList',
@@ -230,7 +246,7 @@ export default function Newspaper() {
                                         </Card>
                                     </Link>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>
@@ -241,7 +257,7 @@ export default function Newspaper() {
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>
@@ -252,7 +268,7 @@ export default function Newspaper() {
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                <Col xs={12} md={3} className={styles.colCard}>
+                                <Col xs={6} md={3} className={styles.colCardMobile}>
                                     <Card style={{ height: "100%", border: "none" }}>
                                         <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "70%" }} />
                                         <Card.Body className={utilStyles.cardBody}>

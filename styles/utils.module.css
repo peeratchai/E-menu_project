@@ -120,7 +120,7 @@
   padding: 0 1rem;
   margin: 2rem auto 6rem;
 }
-.container_xl{
+.container_xl {
   max-width: 80rem;
   padding: 0 1rem;
   margin: 2rem auto 6rem;
@@ -142,4 +142,22 @@
 
 .container_sm {
   padding: 0 5px !important;
+  font-size: 16px;
+}
+
+/* [1] The container */
+.img_hover_zoom {
+  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+/* [2] Transition property for smooth transformation of images */
+.img_hover_zoom img {
+  transition: transform 0.5s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.img_hover_zoom:hover img {
+  transform: scale(1.2);
 }

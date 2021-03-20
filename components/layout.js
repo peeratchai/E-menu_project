@@ -10,6 +10,8 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import React from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import useMediaQuery from "../utils/utils";
+import { message } from 'antd';
 
 export default function Layout({ children, util, mobile, center }) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -71,8 +73,8 @@ export default function Layout({ children, util, mobile, center }) {
                             <NavDropdown.Item >Update user profile</NavDropdown.Item>
                             <NavDropdown.Item >Order</NavDropdown.Item>
                         </NavDropdown> */}
-                        <ActiveLink activeClassName="active" href="#">
-                            <a className="nav-link">Check out</a>
+                        <ActiveLink activeClassName="active" href="/checkout" >
+                            <a className="nav-link" >Check out</a>
                         </ActiveLink>
                     </Nav>
                 </Navbar.Collapse>
@@ -107,6 +109,7 @@ export default function Layout({ children, util, mobile, center }) {
     )
 }
 
+//Login Modal
 function LoginModal(props) {
 
     const [tab, setTab] = React.useState('login');
@@ -132,7 +135,7 @@ function LoginModal(props) {
                             <Row style={{ marginBottom: "1rem" }}>
                                 <Col>
                                     Log In Your Account
-                        </Col>
+                                </Col>
                             </Row>
                             <Form style={{ marginBottom: "3rem" }}>
                                 <Row>
@@ -145,7 +148,14 @@ function LoginModal(props) {
                                             <Form.Control type="password" placeholder="Password" />
                                         </Form.Group>
                                         <Form.Group controlId="formBasicRemember">
-                                            <Form.Check type="checkbox" label="Remember me" />
+                                            <Row xs={2}>
+                                                <Col>
+                                                    <Form.Check type="checkbox" label="Remember me" />
+                                                </Col>
+                                                <Col style={{ textAlign: "right" }}>
+                                                    <a href="#">Forgot?</a>
+                                                </Col>
+                                            </Row>
                                         </Form.Group>
                                         <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
@@ -190,9 +200,6 @@ function LoginModal(props) {
                                         </Form.Group>
                                         <Form.Group controlId="formBasicRetypePassword">
                                             <Form.Control type="password" placeholder="Retype Password" />
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicRemember" style={{ marginBottom: "3rem" }}>
-                                            <Form.Check type="checkbox" label="Remember me" />
                                         </Form.Group>
                                         <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             CREATE AN ACCOUNT

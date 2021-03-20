@@ -3,11 +3,9 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message } from 'antd';
-import { LoadingOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { Upload, message, Table, Space, Switch } from 'antd';
+import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React from 'react'
-import { Table, Space, Switch } from 'antd';
-import { DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -48,6 +46,7 @@ export default function Partner() {
                 <Space size="middle">
                     <Switch defaultChecked onChange={onChange} />
                     <Button style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>Add Menu</Button>
+                    <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
                     <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
                 </Space>
             ),
@@ -108,6 +107,7 @@ export default function Partner() {
                 render: (text, record) => (
                     <Space size="middle">
                         <Switch defaultChecked onChange={onChange} />
+                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
                         <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
                     </Space>
                 ),
@@ -166,7 +166,7 @@ export default function Partner() {
                                                 style={{ width: "100%" }}
                                             // onPreview={(e) => onPreview(e)}
                                             >
-                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Profile Image</Button>
+                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
                                             </Upload>
                                         </Col>
                                     </Row>
@@ -249,7 +249,10 @@ export default function Partner() {
                         </div>
                     </Tab>
                     <Tab eventKey="setting" title="Setting">
-                        3
+                        Sign Out
+                        <br />
+
+                        Term Agreement
                     </Tab>
                 </Tabs>
             </Container>
