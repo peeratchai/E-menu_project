@@ -8,10 +8,12 @@ import { useRouter } from 'next/router'
 import 'antd/dist/antd.css';
 import { Card, InputNumber, Skeleton } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-export default function CheckoutPage() {
+
+
+export default function Order() {
     const isBreakpoint = useMediaQuery(768)
     const router = useRouter()
-
+    const { oid } = router.query;
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     return (
         <>
@@ -117,7 +119,7 @@ export default function CheckoutPage() {
                                 <Row>
                                     <Col>
                                         <Button style={{ width: '100%', backgroundColor: "#19c7d7", border: "1px solid #19c7d7" }} onClick={() => setConfirmModalVisible(true)}>
-                                            สั่ง 2 รายการ
+                                            สั่งอีกครั้ง
                                         </Button>
                                     </Col>
                                 </Row>

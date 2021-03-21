@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import ActiveLink from './ActiveLink'
 import { Link } from '@material-ui/core';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
-import React from 'react'
+import React, { useEffect } from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import useMediaQuery from "../utils/utils";
@@ -15,6 +15,13 @@ import { message } from 'antd';
 
 export default function Layout({ children, util, mobile, center }) {
     const [modalShow, setModalShow] = React.useState(false);
+    const [login, setLogin] = React.useState(false);
+
+    useEffect(() => {
+        const loginStatus = window.localStorage.getItem('login');
+        console.log(loginStatus)
+        setLogin(loginStatus)
+    }, [])
 
     return (
         <div style={{ paddingBottom: '5px' }}>
@@ -58,7 +65,24 @@ export default function Layout({ children, util, mobile, center }) {
                         {/* <Nav.Item onClick={() => setModalShow(true)}>
                             Login
                         </Nav.Item> */}
-                        <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
+                        {
+                            !login ? (
+                                <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
+                            ) : (
+                                <NavDropdown title="Login" id="nav-dropdown">
+                                    <NavDropdown.Item >
+                                        <ActiveLink activeClassName="active" href="/userProfile">
+                                            <a className="nav-link">Update user profile</a>
+                                        </ActiveLink>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item >
+                                        <ActiveLink activeClassName="active" href="/orderHistory">
+                                            <a className="nav-link">Order History</a>
+                                        </ActiveLink>
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            )
+                        }
 
                         <ActiveLink activeClassName="active" href="/partner">
                             <a className="nav-link">Partner</a>
@@ -69,10 +93,7 @@ export default function Layout({ children, util, mobile, center }) {
                             <NavDropdown.Item >Profile</NavDropdown.Item>
                             <NavDropdown.Item >Setting</NavDropdown.Item>
                         </NavDropdown> */}
-                        {/* <NavDropdown title="Login" id="nav-dropdown">
-                            <NavDropdown.Item >Update user profile</NavDropdown.Item>
-                            <NavDropdown.Item >Order</NavDropdown.Item>
-                        </NavDropdown> */}
+
                         <ActiveLink activeClassName="active" href="/checkout" >
                             <a className="nav-link" >Check out</a>
                         </ActiveLink>
@@ -157,8 +178,9 @@ function LoginModal(props) {
                                                 </Col>
                                             </Row>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" onClick={() => window.localStorage.setItem('login', true)} style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
+
                                 </Button>
                                     </Col>
                                 </Row>
