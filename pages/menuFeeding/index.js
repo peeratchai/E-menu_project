@@ -39,7 +39,7 @@ export default function Newspaper() {
                                             query: { area: 'Ari' },
                                         }}
                                     >
-                                        <Card style={{ height: "100%", border: "none" }}>
+                                        <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                             <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                                 <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "100%" }} />
                                             </div>
@@ -53,7 +53,7 @@ export default function Newspaper() {
                                     </Link>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "100%" }} />
                                         </div>
@@ -66,7 +66,7 @@ export default function Newspaper() {
                                     </Card>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "100%" }} />
                                         </div>
@@ -79,7 +79,7 @@ export default function Newspaper() {
                                     </Card>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "100%" }} />
                                         </div>
@@ -100,7 +100,7 @@ export default function Newspaper() {
                                             query: { area: 'Ari' },
                                         }}
                                     >
-                                        <Card style={{ height: "100%", border: "none" }}>
+                                        <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                             <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                                 <Card.Img variant="top" src="/images/ari.jpg" style={{ height: "100%" }} />
                                             </div>
@@ -114,7 +114,7 @@ export default function Newspaper() {
                                     </Link>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/thonglor.jpg" style={{ height: "100%" }} />
                                         </div>
@@ -127,7 +127,7 @@ export default function Newspaper() {
                                     </Card>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/eakmai.jpg" style={{ height: "100%" }} />
                                         </div>
@@ -140,7 +140,7 @@ export default function Newspaper() {
                                     </Card>
                                 </Col>
                                 <Col xs={12} md={3} className={styles.colCard}>
-                                    <Card style={{ height: "100%", border: "none" }}>
+                                    <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
                                         <div className={utilStyles.img_hover_zoom} style={{ height: "80%" }} >
                                             <Card.Img variant="top" src="/images/rama4.jpg" style={{ height: "100%" }} />
                                         </div>
