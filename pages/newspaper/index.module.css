@@ -2,16 +2,14 @@
   padding: 0.4rem;
 }
 
-.img{
+.img {
   min-height: 15rem;
   max-height: 27rem;
 }
 
-
-
-.colCard{
+.colCard {
   margin-bottom: 45px;
 }
-.colCardMobile{
+.colCardMobile {
   margin-bottom: 20px;
 }

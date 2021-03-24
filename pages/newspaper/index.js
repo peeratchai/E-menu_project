@@ -8,6 +8,9 @@ import menu from '../../utils/menu.json'
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import StarIcon from '@material-ui/icons/Star';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import { Slider, Select, Checkbox } from 'antd';
+const { Option } = Select;
+import 'antd/dist/antd.css';
 
 export default function Newspaper() {
     const isBreakpoint = useMediaQuery(768)
@@ -61,6 +64,127 @@ export default function Newspaper() {
                     <Layout util>
                         <div className={utilStyles.container_xl}>
                             {/* {listMenu} */}
+                            <Row>
+                                <Col>
+                                    <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                        <div>
+
+                                            <b>Foot Type</b>
+
+                                        </div>
+                                        <div>
+                                            <Select
+                                                showSearch
+                                                style={{ width: '100%' }}
+                                                placeholder="Search to Select"
+                                                optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                filterSort={(optionA, optionB) =>
+                                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                }
+                                                className={'myfilter'}
+                                            >
+                                                <Option value="0">-</Option>
+                                                <Option value="1">Breads</Option>
+                                                <Option value="2">Rice</Option>
+                                                <Option value="3">Meat</Option>
+                                                <Option value="4">Pasta</Option>
+                                                <Option value="5">Noodles</Option>
+                                                <Option value="6">Vegetables</Option>
+                                                <Option value="7">Fruit</Option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+
+                                </Col>
+                                <Col>
+                                    <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                        <Row>
+                                            <Col>
+                                                <b>Payment option </b>
+                                            </Col>
+
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Select
+                                                    showSearch
+                                                    mode="multiple"
+                                                    showArrow={true}
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Search to Select"
+                                                    optionFilterProp="children"
+                                                    filterOption={(input, option) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                    filterSort={(optionA, optionB) =>
+                                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                    }
+                                                    className={'myfilter'}
+                                                >
+                                                    <Option value="0">-</Option>
+                                                    <Option value="1">Cash</Option>
+                                                    <Option value="2">Credit Cards</Option>
+                                                </Select>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                        <Row>
+                                            <Col>
+                                                <b>Distance</b>
+                                            </Col>
+
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Select
+                                                    showSearch
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Search to Select"
+                                                    optionFilterProp="children"
+                                                    filterOption={(input, option) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                    filterSort={(optionA, optionB) =>
+                                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                    }
+                                                    className={'myfilter'}
+                                                >
+                                                    <Option value="0">-</Option>
+                                                    <Option value="1">1 กิโลเมตร</Option>
+                                                    <Option value="2">2 กิโลเมตร</Option>
+                                                    <Option value="3">5 กิโลเมตร</Option>
+                                                    <Option value="4">10 กิโลเมตร</Option>
+                                                    <Option value="5">20 กิโลเมตร</Option>
+                                                    <Option value="6">40 กิโลเมตร</Option>
+                                                    <Option value="7">60 กิโลเมตร</Option>
+                                                    <Option value="8">80 กิโลเมตร</Option>
+                                                    <Option value="9">100 กิโลเมตร</Option>
+                                                    <Option value="10">250 กิโลเมตร</Option>
+                                                    <Option value="11">500 กิโลเมตร</Option>
+                                                </Select>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                        <Row>
+                                            <Col>
+                                                <Checkbox onChange={(e) => console.log(e)}><b>Parking</b></Checkbox>
+                                            </Col>
+                                        </Row>
+                                    </div>
+
+                                </Col>
+                            </Row>
+                            <br />
                             <Row xs={12} md={4} xl={5}>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard} >

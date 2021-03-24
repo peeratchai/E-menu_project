@@ -1,5 +1,4 @@
 .container {
-  margin-top: 7rem;
   box-shadow: 5px 10px 18px #888888;
   padding: 3rem;
   min-height: 15rem;
@@ -9,6 +8,50 @@
   margin-top: 15px;
 }
 
-.menuModalSize {
-  width: 70%;
+.container2 {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #dedede;
+}
+
+.img {
+  -webkit-user-drag: none;
+  height: 100%;
+  width: 100%;
+}
+
+.selected {
+  border: 2px solid orange;
+}
+
+.notSelected {
+  border: 1px solid #dedede;
+}
+
+.btnTableSize {
+  text-align: center;
+  padding: 10px;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btnTableType {
+  text-align: center;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.tableNumber {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-weight: 600;
+}
+
+.tableSelected {
+  background-color: #eef7f6;
 }

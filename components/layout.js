@@ -11,12 +11,11 @@ import React, { useEffect } from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import useMediaQuery from "../utils/utils";
-import { message } from 'antd';
+import { Badge } from 'antd';
 
 export default function Layout({ children, util, mobile, center }) {
     const [modalShow, setModalShow] = React.useState(false);
     const [login, setLogin] = React.useState(false);
-
     useEffect(() => {
         const loginStatus = window.localStorage.getItem('login');
         console.log(loginStatus)
@@ -29,7 +28,7 @@ export default function Layout({ children, util, mobile, center }) {
                 <title>E-Menu</title>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bree Serif" />
             </Head>
-            <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "White", boxShadow: "rgb(204 204 204) 3px 2px 8px 1px", padding: "20px 20px", fontWeight: "bold" }}>
+            <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "#eaeff3", boxShadow: "rgb(204 204 204) 3px 2px 8px 1px", padding: "20px 20px", fontWeight: "bold" }}>
                 <style jsx>{`
                     .nav-link {
                         text-decoration: none;
