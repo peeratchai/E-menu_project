@@ -2,18 +2,26 @@ import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import Container from 'react-bootstrap/Container'
-import { Row, Col, Card, Image, Button } from 'react-bootstrap'
+import { Row, Col, Card, Image, Button, Modal } from 'react-bootstrap'
 import useMediaQuery from "../../utils/utils";
 import menu from '../../utils/menu.json'
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import StarIcon from '@material-ui/icons/Star';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
-import { Slider, Select, Checkbox } from 'antd';
+import { Select, Checkbox } from 'antd';
+import React from 'react'
+
 const { Option } = Select;
 import 'antd/dist/antd.css';
 
 export default function Newspaper() {
     const isBreakpoint = useMediaQuery(768)
+    const [modalShow, setModalShow] = React.useState(false);
+
+    const searchFunc = () => {
+        setModalShow(true)
+        console.log("test")
+    }
 
     let listMenu
     if (!isBreakpoint) {
@@ -64,6 +72,7 @@ export default function Newspaper() {
                     <Layout util>
                         <div className={utilStyles.container_xl}>
                             {/* {listMenu} */}
+                            {/* Search Filter */}
                             <Row>
                                 <Col>
                                     <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
@@ -124,6 +133,7 @@ export default function Newspaper() {
                                                         optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                                     }
                                                     className={'myfilter'}
+
                                                 >
                                                     <Option value="0">-</Option>
                                                     <Option value="1">Cash</Option>
@@ -177,7 +187,13 @@ export default function Newspaper() {
                                     <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
                                         <Row>
                                             <Col>
-                                                <Checkbox onChange={(e) => console.log(e)}><b>Parking</b></Checkbox>
+                                                <b>Filter</b>
+                                            </Col>
+
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Checkbox onChange={(e) => console.log(e)}>Parking</Checkbox>
                                             </Col>
                                         </Row>
                                     </div>
@@ -185,6 +201,7 @@ export default function Newspaper() {
                                 </Col>
                             </Row>
                             <br />
+                            {/* {listMenu} */}
                             <Row xs={12} md={4} xl={5}>
                                 <Col style={{ padding: "0 7.5px" }}>
                                     <div className={styles.colCard} >
@@ -424,7 +441,7 @@ export default function Newspaper() {
                     </Layout >
                 ) : (
                     //Mobile Version
-                    <Layout mobile>
+                    <Layout mobile search searchFunc={searchFunc}>
                         <Container className={utilStyles.container_sm}>
                             {/* {listMenu} */}
                             <Row xs={2}>
@@ -568,9 +585,173 @@ export default function Newspaper() {
                                 </Col>
                             </Row>
                         </Container>
+                        <SearchLocationModal
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                        />
                     </Layout>
                 )
             }
         </>
     )
+}
+
+//Modal Add Menu
+function SearchLocationModal(props) {
+    const isBreakpoint = useMediaQuery(768)
+
+    const [restaurantName, setRestaurantName] = React.useState();
+    const [location, setLocation] = React.useState();
+    const [restaurantType, setRestaurantType] = React.useState();
+    const [foodType, setFoodType] = React.useState();
+
+    const onSearch = () => {
+        console.log(restaurantName, location, restaurantType, foodType)
+        props.onHide()
+    }
+
+    return (
+        <Modal
+            {...props}
+            size="xl"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title style={{ fontSize: "1.3rem" }}><b>Filter</b></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Container>
+                    <Row>
+                        <Col xs={12}>
+                            <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                <div className={utilStyles.fontTitleMobileSM}>
+                                    Foot Type
+                                </div>
+                                <div>
+                                    <Select
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Search to Select"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        filterSort={(optionA, optionB) =>
+                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                        }
+
+                                    >
+                                        <Option value="0">-</Option>
+                                        <Option value="1">Breads</Option>
+                                        <Option value="2">Rice</Option>
+                                        <Option value="3">Meat</Option>
+                                        <Option value="4">Pasta</Option>
+                                        <Option value="5">Noodles</Option>
+                                        <Option value="6">Vegetables</Option>
+                                        <Option value="7">Fruit</Option>
+                                    </Select>
+                                </div>
+
+                            </div>
+
+                        </Col>
+                        <Col xs={12}>
+                            <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                <Row>
+                                    <Col>
+                                        <div className={utilStyles.fontTitleMobileSM}>
+                                            Payment option
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Select
+                                            showSearch
+                                            mode="multiple"
+                                            showArrow={true}
+                                            style={{ width: '100%' }}
+                                            placeholder="Search to Select"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+
+
+                                        >
+                                            <Option value="0">-</Option>
+                                            <Option value="1">Cash</Option>
+                                            <Option value="2">Credit Cards</Option>
+                                        </Select>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Col>
+                        <Col xs={12}>
+                            <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                <Row>
+                                    <Col>
+                                        <div className={utilStyles.fontTitleMobileSM}>
+                                            Distance
+                                        </div>
+                                    </Col>
+
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Search to Select"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+
+                                        >
+                                            <Option value="0">-</Option>
+                                            <Option value="1">1 กิโลเมตร</Option>
+                                            <Option value="2">2 กิโลเมตร</Option>
+                                            <Option value="3">5 กิโลเมตร</Option>
+                                            <Option value="4">10 กิโลเมตร</Option>
+                                            <Option value="5">20 กิโลเมตร</Option>
+                                            <Option value="6">40 กิโลเมตร</Option>
+                                            <Option value="7">60 กิโลเมตร</Option>
+                                            <Option value="8">80 กิโลเมตร</Option>
+                                            <Option value="9">100 กิโลเมตร</Option>
+                                            <Option value="10">250 กิโลเมตร</Option>
+                                            <Option value="11">500 กิโลเมตร</Option>
+                                        </Select>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Col>
+                        <Col xs={12}>
+                            <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
+                                <Row>
+                                    <Col>
+                                        <Checkbox onChange={(e) => console.log(e)}>Parking</Checkbox>
+                                    </Col>
+                                </Row>
+                            </div>
+
+                        </Col>
+                    </Row>
+                </Container>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => { onSearch() }}>
+                    Search
+                </Button>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
 }

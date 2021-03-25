@@ -14,6 +14,7 @@
     "antd": "^4.13.1",
     "bootstrap": "^4.6.0",
     "framer-motion": "^3.7.0",
+    "google-map-react": "^2.1.9",
     "gray-matter": "^4.0.2",
     "next": "^10.0.0",
     "next-images": "^1.7.0",

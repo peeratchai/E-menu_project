@@ -98,6 +98,11 @@
   font-weight: 600;
 }
 
+.fontTitleMobileSM {
+  font-size: 1rem !important;
+  font-weight: 600;
+}
+
 .fontTitle {
   font-size: 2.5rem !important;
   font-weight: bold;

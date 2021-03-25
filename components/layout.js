@@ -1,26 +1,30 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
-import { Navbar, Nav, NavDropdown, Button, Modal, Row, Col, Container, Form } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import ActiveLink from './ActiveLink'
 import { Link } from '@material-ui/core';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
+import SearchIcon from '@material-ui/icons/Search';
 import React, { useEffect } from 'react'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import useMediaQuery from "../utils/utils";
 import { Badge } from 'antd';
 
-export default function Layout({ children, util, mobile, center }) {
+export default function Layout({ children, util, mobile, center, search, searchFunc }) {
     const [modalShow, setModalShow] = React.useState(false);
-    const [login, setLogin] = React.useState(false);
+    const [login, setLogin] = React.useState();
+    const isBreakpoint = useMediaQuery(768)
+
+
     useEffect(() => {
         const loginStatus = window.localStorage.getItem('login');
         console.log(loginStatus)
+        console.log(searchFunc)
         setLogin(loginStatus)
-    }, [])
+    })
 
     return (
         <div style={{ paddingBottom: '5px' }}>
@@ -39,12 +43,23 @@ export default function Layout({ children, util, mobile, center }) {
                     }
                     `}</style>
                 <ActiveLink activeClassName="active" href="/newspaper">
-                    <>
-                        <span style={{ paddingLeft: "5%" }}></span>
-                        <MenuBookIcon
-                            className="d-inline-block align-top" style={{ color: "#FF4A4F", fontSize: "2.5rem" }} />
-                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "10px", fontWeight: "bold", fontFamily: "Bree Serif" }}>E-Menu</Navbar.Brand>
-                    </>
+                    {
+                        isBreakpoint && search ? (
+                            //For Mobile
+                            <>
+                                <SearchIcon
+                                    className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
+                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "10px", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            </>
+                        ) : (
+                            //For PC
+                            <>
+                                <MenuBookIcon
+                                    className="d-inline-block align-top" style={{ color: "#FF4A4F", fontSize: "2.5rem" }} />
+                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "10px", fontWeight: "bold", fontFamily: "Bree Serif" }}>E-Menu</Navbar.Brand>
+                            </>
+                        )
+                    }
                 </ActiveLink>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
@@ -65,7 +80,7 @@ export default function Layout({ children, util, mobile, center }) {
                             Login
                         </Nav.Item> */}
                         {
-                            !login ? (
+                            login ? (
                                 <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
                             ) : (
                                 <NavDropdown title="Login" id="nav-dropdown">
@@ -142,12 +157,14 @@ function LoginModal(props) {
         >
             <Modal.Body style={{ padding: "65px 30px 45px" }}>
                 <Row style={{ textAlign: "center", marginBottom: "3.125rem", fontWeight: "bold" }}>
-                    <Col xs={6} sm={6} style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
-                        <h3 style={{ fontWeight: "700" }}>Login</h3>
-                    </Col>
-                    <Col xs={6} sm={6} style={{ cursor: "pointer" }} onClick={() => { setTab('register') }}>
-                        <h3 style={{ fontWeight: "700" }}>Register</h3>
-                    </Col>
+                    <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
+                        <Col style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
+                            <h3 style={{ fontWeight: "1000", margin: "0" }}> {tab == 'login' ? 'Login' : 'Register'} </h3>
+                        </Col>
+                        {/* <Col xs={6} sm={6} style={{ cursor: "pointer", backgroundColor: "#4b5d72" }} onClick={() => { setTab('register') }}>
+                            <h3 style={{ fontWeight: "700", margin: "0", color: "#748396" }}>Register</h3>
+                        </Col> */}
+                    </div>
                 </Row>
                 {
                     tab == 'login' ? (
@@ -157,7 +174,7 @@ function LoginModal(props) {
                                     Log In Your Account
                                 </Col>
                             </Row>
-                            <Form style={{ marginBottom: "3rem" }}>
+                            <Form style={{ marginBottom: "20px" }}>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="formBasicUsername">
@@ -183,22 +200,33 @@ function LoginModal(props) {
                                 </Button>
                                     </Col>
                                 </Row>
+
                             </Form>
-                            <Row style={{ height: "50px" }}>
-                                <Col xs={6} sm={6} style={{ margin: "auto" }}>
-                                    Or Log In With
-                    </Col>
-                                <Col xs={3} sm={3}>
-                                    <Button style={{ backgroundColor: "#3b5998", width: "100%", height: "100%" }}>
-                                        <FacebookIcon />
-                                    </Button>
-                                </Col>
-                                <Col xs={3} sm={3}>
-                                    <Button style={{ backgroundColor: "#1da1f2", width: "100%", height: "100%" }}>
-                                        <TwitterIcon />
-                                    </Button>
+                            <Row style={{ height: "50px", }}>
+                                <Col style={{ width: "100%", height: "100%" }}>
+                                    <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
+                                        <span>
+                                            Or Log In With
+                                        </span>
+                                    </div>
                                 </Col>
                             </Row>
+                            <Row style={{ marginBottom: "15px" }}>
+                                <Col>
+                                    <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div style={{ textAlign: "center" }}>
+                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => { setTab('register') }}>Sign Up</span>
+                                    </div>
+                                </Col>
+                            </Row>
+
                         </>
                     ) : (
                         <>
@@ -207,7 +235,7 @@ function LoginModal(props) {
                                     Create Your Account
                                 </Col>
                             </Row>
-                            <Form >
+                            <Form style={{ marginBottom: "20px" }}>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="formBasicUsername">
@@ -228,6 +256,31 @@ function LoginModal(props) {
                                     </Col>
                                 </Row>
                             </Form>
+
+                            <Row style={{ height: "50px" }}>
+                                <Col style={{ width: "100%", height: "100%" }}>
+                                    <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
+                                        <span>
+                                            Or Sign Up With
+                                        </span>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginBottom: "15px" }}>
+                                <Col>
+                                    <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div style={{ textAlign: "center" }}>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => { setTab('login') }}>Login</span>
+                                    </div>
+                                </Col>
+                            </Row>
                         </>
                     )
                 }

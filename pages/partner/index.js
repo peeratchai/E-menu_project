@@ -3,17 +3,25 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch } from 'antd';
+import { Upload, message, Table, Space, Switch, InputNumber, Slider } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
-import { m } from 'framer-motion';
-import { TableContainer } from '@material-ui/core';
+import AntdModal from "../../components/AntdModal"
 
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
+}
+
+function getBase64Antd(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 
 function beforeUpload(file) {
@@ -44,6 +52,13 @@ export default function Partner() {
     const [containerWidth, setContainerWidth] = React.useState();
     const [tableSelected, setTableSelected] = React.useState();
     const [dragging, setDragging] = React.useState(false);
+    const [priceMinSearch, setPriceMinSearch] = React.useState(0);
+    const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
+    const [previewVisible, setPreviewVisible] = React.useState(false);
+    const [previewImage, setPreviewImage] = React.useState('');
+    const [previewTitle, setPreviewTitle] = React.useState('');
+    const [fileList, setFileList] = React.useState([]);
+
 
     useEffect(() => {
         let containerWidth = refTableManagement.current.offsetWidth
@@ -216,6 +231,12 @@ export default function Partner() {
         }
     }
 
+    function onChangePrice(value) {
+        console.log('value: ', value);
+        setPriceMinSearch(value[0])
+        setPriceMaxSearch(value[1])
+    }
+
     let tableManagement = table && table.map((data) =>
         <Draggable
             bounds="parent"
@@ -232,6 +253,28 @@ export default function Partner() {
         </Draggable>
     )
 
+    const handleCancel = () => {
+        setPreviewVisible(false)
+    }
+
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64Antd(file.originFileObj);
+        }
+        console.log(file.preview)
+        setPreviewImage(file.url || file.preview,)
+        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1),)
+        setPreviewVisible(true)
+    };
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
+    const handleChangeUpload = ({ fileList }) => {
+        setFileList(fileList)
+    }
     return (
         <Layout center>
             <Container className={styles.container}>
@@ -338,7 +381,33 @@ export default function Partner() {
                         <div className={styles.tab}>
                             <Row>
                                 <Col sm={6}>
-                                    <Row>
+                                    {/* Upload restaurants logo */}
+                                    <div>
+                                        <Row>
+                                            <Col xs={8}>
+                                                <Upload
+                                                    listType="picture-card"
+                                                    fileList={fileList}
+                                                    onPreview={(e) => handlePreview(e)}
+                                                    onChange={(e) => handleChangeUpload(e)}
+                                                >
+                                                    {fileList.length > 1 ? null : uploadButton}
+                                                </Upload>
+                                            </Col>
+                                            <Col xs={4}>
+
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <AntdModal
+                                        previewVisible={previewVisible}
+                                        previewTitle={previewTitle}
+                                        footer={null}
+                                        onCancel={handleCancel}
+                                        previewImage={previewImage}
+                                    />
+
+                                    {/* <Row>
                                         <Col>
                                             <img src={restaurantLogoUrl} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
                                         </Col>
@@ -356,7 +425,7 @@ export default function Partner() {
                                                 <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
                                             </Upload>
                                         </Col>
-                                    </Row>
+                                    </Row> */}
                                 </Col>
                                 <Col sm={6}>
                                     <Form>
@@ -374,7 +443,9 @@ export default function Partner() {
                                         </Form.Group>
                                         <Form.Group controlId="priceRange">
                                             <Form.Label>Price Range</Form.Label>
-                                            <Form.Control type="text" placeholder="Price Range" />
+                                            <br />
+                                            <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
+                                            <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
                                         </Form.Group>
 
                                         <div style={{ textAlign: "right" }}>
