@@ -127,9 +127,9 @@ img {
   padding: 0;
 }
 
-div.ant-upload.ant-upload-select-picture-card {
-  width: 200px;
-  height: 200px;
+/* div.ant-upload.ant-upload-select-picture-card {
+  width: 150px;
+  height: 150px;
   margin-right: 8px;
   margin-bottom: 8px;
   text-align: center;
@@ -139,4 +139,49 @@ div.ant-upload.ant-upload-select-picture-card {
   border-radius: 2px;
   cursor: pointer;
   transition: border-color 0.3s;
+} */
+
+/* .upload-restaurant-list {
+  width: 104px !important;
+  height: 104px !important;
+}
+.upload-restaurant-logo {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.ant-upload-list {
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  list-style: none;
+  font-feature-settings: "tnum", "tnum";
+  line-height: 1.5715;
+}
+
+.ant-upload-list-picture-card-container {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  margin: 0 8px 8px 0;
+  vertical-align: top;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ant-upload-list-picture-card-container{
+  width: 100% !important;
+  height: 100% !important;
+} */
+
+.avatar-uploader > .ant-upload {
+  width: 150px !important;
+  height:  150px !important;
 }

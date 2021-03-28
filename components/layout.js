@@ -21,8 +21,8 @@ export default function Layout({ children, util, mobile, center, search, searchF
 
     useEffect(() => {
         const loginStatus = window.localStorage.getItem('login');
-        console.log(loginStatus)
-        console.log(searchFunc)
+        // console.log(loginStatus)
+        // console.log(searchFunc)
         setLogin(loginStatus)
     })
 
@@ -80,9 +80,7 @@ export default function Layout({ children, util, mobile, center, search, searchF
                             Login
                         </Nav.Item> */}
                         {
-                            login ? (
-                                <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
-                            ) : (
+                            login == 'true' ? (
                                 <NavDropdown title="Login" id="nav-dropdown">
                                     <NavDropdown.Item >
                                         <ActiveLink activeClassName="active" href="/userProfile">
@@ -95,6 +93,8 @@ export default function Layout({ children, util, mobile, center, search, searchF
                                         </ActiveLink>
                                     </NavDropdown.Item>
                                 </NavDropdown>
+                            ) : (
+                                <a className="nav-link" onClick={() => setModalShow(true)}>Login</a>
                             )
                         }
 
