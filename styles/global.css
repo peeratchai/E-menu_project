@@ -183,5 +183,40 @@ img {
 
 .avatar-uploader > .ant-upload {
   width: 150px !important;
-  height:  150px !important;
+  height: 150px !important;
+}
+
+.rcw-open-launcher {
+  height: auto !important;
+}
+
+.rcw-send .rcw-send-icon {
+  width: auto !important;
+}
+
+.rcw-close-launcher {
+  height: auto !important;
+}
+
+.rcw-launcher .rcw-badge {
+  z-index: 99999;
+}
+
+.balon1 {
+  float: right;
+  background: #35cce6;
+  border-radius: 10px;
+}
+
+.balon2 {
+  float: left;
+  background: #f4f7f9;
+  border-radius: 10px;
+}
+.message {
+  overflow: hidden;
+}
+
+.list-group-flush > .list-group-item:last-child {
+  border-bottom-width: 1px;
 }

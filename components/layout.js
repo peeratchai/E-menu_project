@@ -13,18 +13,62 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import useMediaQuery from "../utils/utils";
 import { Badge } from 'antd';
 
+import 'react-chat-widget/lib/styles.css';
+import dynamic from 'next/dynamic';
+const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget), {
+    ssr: false
+});
+
 export default function Layout({ children, util, mobile, center, search, searchFunc }) {
     const [modalShow, setModalShow] = React.useState(false);
     const [login, setLogin] = React.useState();
     const isBreakpoint = useMediaQuery(768)
 
 
+    const CustomTimeStampFragment = () => {
+        return (
+            <div className='rcw-client'>
+                <div className='rcw-message-text'>
+                    <p>Help!</p>
+                </div>
+                <span class="rcw-timestamp">06:38</span>
+            </div>
+        )
+    }
+
+    const CustomTimeStampFragmentAdmin = () => {
+        return (
+            <>
+                <img src="/images/administrator_icon.png" class="rcw-avatar" alt="profile" />
+                <div className='rcw-response'>
+                    <div className='rcw-message-text'>
+                        <p>Hello</p>
+                    </div>
+                    <span class="rcw-timestamp">06:37</span>
+                </div>
+            </>
+        )
+    }
+
     useEffect(() => {
-        const loginStatus = window.localStorage.getItem('login');
+        let loginStatus = false
+        if (typeof window !== 'undefined') {
+            const { addResponseMessage, renderCustomComponent } = require('react-chat-widget');
+            loginStatus = window.localStorage.getItem('login');
+            renderCustomComponent(CustomTimeStampFragmentAdmin)
+            renderCustomComponent(CustomTimeStampFragment)
+        }
         // console.log(loginStatus)
         // console.log(searchFunc)
         setLogin(loginStatus)
-    })
+
+    }, [])
+
+
+
+    const handleNewUserMessage = (handleNewUserMessage) => {
+        console.log(handleNewUserMessage)
+    }
 
     return (
         <div style={{ paddingBottom: '5px' }}>
@@ -101,13 +145,10 @@ export default function Layout({ children, util, mobile, center, search, searchF
                         <ActiveLink activeClassName="active" href="/partner">
                             <a className="nav-link">Partner</a>
                         </ActiveLink>
-                        {/* <NavDropdown title="Partner" id="nav-dropdown">
-                            <NavDropdown.Item >Promote</NavDropdown.Item>
-                            <NavDropdown.Item >Menu</NavDropdown.Item>
-                            <NavDropdown.Item >Profile</NavDropdown.Item>
-                            <NavDropdown.Item >Setting</NavDropdown.Item>
-                        </NavDropdown> */}
 
+                        <ActiveLink activeClassName="active" href="/admin">
+                            <a className="nav-link">Admin</a>
+                        </ActiveLink>
                         <ActiveLink activeClassName="active" href="/checkout" >
                             <a className="nav-link" >Check out</a>
                         </ActiveLink>
@@ -135,7 +176,22 @@ export default function Layout({ children, util, mobile, center, search, searchF
                     </div>
                 ) : null
             }
-
+            {/* <Widget
+                // titleAvatar={admin_icon}
+                profileAvatar={administrator_icon}
+                title="Administater"
+                subtitle="People Matters Department"
+                handleNewUserMessage={(newMessage) => handleNewUserMessage(newMessage)}
+                toggleWidget="true"
+            /> */}
+            <Widget
+                // titleAvatar={<MenuBookIcon />}
+                handleNewUserMessage={handleNewUserMessage}
+                // profileAvatar={logo}
+                title='My E-menu Live Chat'
+                subtitle='Ready to help you'
+                handleNewUserMessage={(newMessage) => handleNewUserMessage(newMessage)}
+            />
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
