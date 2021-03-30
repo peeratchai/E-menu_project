@@ -64,6 +64,14 @@ export default function Layout({ children, util, mobile, center, search, searchF
 
     }, [])
 
+    const signOut = () => {
+        let loginStatus
+        if (typeof window !== 'undefined') {
+            loginStatus = window.localStorage.setItem('login', false);
+        }
+        setLogin(loginStatus)
+    }
+
 
 
     const handleNewUserMessage = (handleNewUserMessage) => {
@@ -135,6 +143,9 @@ export default function Layout({ children, util, mobile, center, search, searchF
                                         <ActiveLink activeClassName="active" href="/orderHistory">
                                             <a className="nav-link">Order History</a>
                                         </ActiveLink>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item >
+                                        <a className="nav-link" onClick={() => signOut()}>Log Out</a>
                                     </NavDropdown.Item>
                                 </NavDropdown>
                             ) : (

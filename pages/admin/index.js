@@ -1,9 +1,9 @@
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs, Nav } from 'react-bootstrap'
+import { Row, Col, Form, Image, Tab, Modal, Container, Tabs, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag } from 'antd';
+import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
@@ -12,7 +12,8 @@ import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import DirectMessageAdmin from '../../components/DirectMessageAdmin/index'
-
+import { SearchOutlined } from '@ant-design/icons';
+import termAgreement from '../../utils/termAgreement.json'
 
 const { Option } = Select;
 
@@ -73,26 +74,35 @@ export default function Admin() {
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [checkBoxAllEmail, setCheckBoxAllEmail] = React.useState();
     const options = ['All Users', 'All Restaurants']
+    const [edifProfileModalShow, setEdifProfileModalShow] = React.useState();
+    const [profileEdited, setProfileEdited] = React.useState();
+    const [searchedColumn, setSearchedColumn] = React.useState('');
+    const [searchText, setSearchText] = React.useState('');
+    var searchInput = React.createRef();
 
     const columnsApprovePromotion = [
         {
             title: 'No',
             dataIndex: 'No',
             key: 'No',
+            width: 70,
         },
         {
             title: 'Promotions',
             dataIndex: 'Promotions',
             key: 'Promotions',
+            width: 300,
         },
         {
             title: 'Restaurant Name',
             dataIndex: 'RestaurantName',
             key: 'RestaurantName',
+            width: 200,
         },
         {
             title: 'Action',
             key: 'action',
+            width: 200,
             render: (text, record) => (
                 <Space size="middle">
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }}>
@@ -100,6 +110,151 @@ export default function Admin() {
                     </Tag>
                     <Tag color="red" key={record.length + 10} style={{ cursor: "pointer" }}>
                         Reject
+                    </Tag>
+                </Space>
+            ),
+        }
+    ]
+
+    const dataAccount = [
+        {
+            key: "1",
+            No: "1",
+            Name: "Peeratchai Kittisupap",
+            Gender: "ชาย",
+            Age: "25",
+            Type: "Restaurant"
+        },
+        {
+            key: "2",
+            No: "2",
+            Name: "Peeratchai Kittisupap",
+            Gender: "ชาย",
+            Age: "30",
+            Type: "User"
+        },
+        {
+            key: "3",
+            No: "3",
+            Name: "Peeratchai Kittisupap",
+            Gender: "หญิง",
+            Age: "27",
+            Type: "User"
+        }
+    ]
+
+    const getColumnSearchProps = (dataIndex) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{ width: 90 }}
+                    >
+                        Search
+              </Button>
+                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                        Reset
+              </Button>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => {
+                            confirm({ closeDropdown: false });
+                            setSearchText(selectedKeys[0])
+                            setSearchedColumn(dataIndex)
+                        }}
+                    >
+                        Filter
+              </Button>
+                </Space>
+            </div>
+        ),
+        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        onFilter: (value, record) =>
+            record[dataIndex]
+                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                : '',
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => searchInput.select(), 100);
+            }
+        },
+        render: text =>
+            searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[searchText]}
+                    autoEscape
+                    textToHighlight={text ? text.toString() : ''}
+                />
+            ) : (
+                text
+            ),
+    })
+
+    const columnsAccount = [
+        {
+            title: 'No',
+            dataIndex: 'No',
+            key: 'No',
+            width: 70,
+        },
+        {
+            title: 'Name',
+            dataIndex: 'Name',
+            key: 'Name',
+            width: 250,
+            ...getColumnSearchProps('Name'),
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'Gender',
+            key: 'Gender',
+            width: 100,
+        },
+        {
+            title: 'Age',
+            dataIndex: 'Age',
+            key: 'Age',
+            width: 100,
+        },
+        {
+            title: 'Type',
+            dataIndex: 'Type',
+            key: 'Type',
+            width: 200,
+            filters: [
+                { text: 'User', value: 'User' },
+                { text: 'Restaurant', value: 'Restaurant' },
+            ],
+            onFilter: (value, record) => record.Type.includes(value),
+            ellipsis: true,
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            width: 200,
+            render: (text, record) => (
+                <Space size="middle">
+                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => setEdifProfileModalShow(true)}>
+                        Edit
+                    </Tag>
+                    <Tag color="red" key={record.length + 10} style={{ cursor: "pointer" }}>
+                        Delete
                     </Tag>
                 </Space>
             ),
@@ -172,9 +327,18 @@ export default function Admin() {
             render: (text, record) => (
                 <Space size="middle">
                     <Switch defaultChecked onChange={onChange} />
-                    <Button style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>Add Menu</Button>
+                    {/* <Button style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>Add Menu</Button>
                     <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
-                    <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
+                    <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button> */}
+                    <Tag color="blue" key={text + 1} style={{ cursor: "pointer" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>
+                        Add Menu
+                    </Tag>
+                    <Tag color="green" key={text + 2} style={{ cursor: "pointer" }}>
+                        Edit
+                    </Tag>
+                    <Tag color="red" key={text + 3} style={{ cursor: "pointer" }}>
+                        Delete
+                    </Tag>
                 </Space>
             ),
         },
@@ -234,8 +398,14 @@ export default function Admin() {
                 render: (text, record) => (
                     <Space size="middle">
                         <Switch defaultChecked onChange={onChange} />
-                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
-                        <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
+                        {/* <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
+                        <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button> */}
+                        <Tag color="green" key={text + 2} style={{ cursor: "pointer" }}>
+                            Edit
+                        </Tag>
+                        <Tag color="red" key={text + 3} style={{ cursor: "pointer" }}>
+                            Delete
+                        </Tag>
                     </Space>
                 ),
             },
@@ -382,7 +552,7 @@ export default function Admin() {
                     !isBreakpoint ? (
                         //PC Version
                         <>
-                            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                            {/* <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
                                 Restaurant Name : &nbsp;
                                 <Select
                                     showSearch
@@ -401,7 +571,7 @@ export default function Admin() {
                                     <Option value="The Old English Pub">The Old English Pub</Option>
                                     <Option value="Chequers British Pub">Chequers British Pub</Option>
                                 </Select>
-                            </div>
+                            </div> */}
 
                             <Tab.Container id="left-tabs-example" defaultActiveKey="tableManagement">
                                 <Row>
@@ -429,13 +599,36 @@ export default function Admin() {
                                                 <Nav.Link eventKey="approvePromotion">Approve Promotion</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="accountMangement">Account Management</Nav.Link>
+                                                <Nav.Link eventKey="accountManagement">Account Management</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="setting">Setting </Nav.Link>
                                             </Nav.Item>
                                         </Nav>
                                     </Col>
                                     <Col sm={10}>
                                         <Tab.Content>
                                             <Tab.Pane eventKey="tableManagement">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                                                    Restaurant Name : &nbsp;
+                                                        <Select
+                                                        showSearch
+                                                        style={{ width: 400 }}
+                                                        placeholder="Select a restaurant name"
+                                                        optionFilterProp="children"
+                                                        onChange={() => onChangeRestaurantName}
+                                                        onSearch={() => onSearchRestaurantName}
+                                                        filterOption={(input, option) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                    >
+                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
+                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
+                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
+                                                        <Option value="The Old English Pub">The Old English Pub</Option>
+                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
+                                                    </Select>
+                                                </div>
                                                 <div className={styles.tab}>
                                                     <Row>
                                                         <Col xs={10}>
@@ -446,7 +639,7 @@ export default function Admin() {
                                                             </Form>
                                                         </Col>
                                                         <Col xs={2} style={{ textAlign: "right" }}>
-                                                            <Button onClick={() => setAddTableModalShow(true)}>
+                                                            <Button type="primary" onClick={() => setAddTableModalShow(true)}>
                                                                 Add
                                                             </Button>
                                                         </Col>
@@ -460,7 +653,27 @@ export default function Admin() {
                                                     </Row>
                                                 </div>
                                             </Tab.Pane>
-                                            <Tab.Pane eventKey="second">
+                                            <Tab.Pane eventKey="promote">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                                                    Restaurant Name : &nbsp;
+                                                        <Select
+                                                        showSearch
+                                                        style={{ width: 400 }}
+                                                        placeholder="Select a restaurant name"
+                                                        optionFilterProp="children"
+                                                        onChange={() => onChangeRestaurantName}
+                                                        onSearch={() => onSearchRestaurantName}
+                                                        filterOption={(input, option) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                    >
+                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
+                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
+                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
+                                                        <Option value="The Old English Pub">The Old English Pub</Option>
+                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
+                                                    </Select>
+                                                </div>
                                                 <div className={styles.tab}>
                                                     <Row>
                                                         <Col sm={6}>
@@ -491,7 +704,7 @@ export default function Admin() {
                                                                     <Form.Control as="textarea" rows={4} />
                                                                 </Form.Group>
                                                                 <div style={{ textAlign: "right" }}>
-                                                                    <Button variant="primary" type="submit">
+                                                                    <Button type="primary">
                                                                         Post
                                                                     </Button>
                                                                 </div>
@@ -501,14 +714,54 @@ export default function Admin() {
                                                 </div>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="menu">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                                                    Restaurant Name : &nbsp;
+                                                    <Select
+                                                        showSearch
+                                                        style={{ width: 400 }}
+                                                        placeholder="Select a restaurant name"
+                                                        optionFilterProp="children"
+                                                        onChange={() => onChangeRestaurantName}
+                                                        onSearch={() => onSearchRestaurantName}
+                                                        filterOption={(input, option) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                    >
+                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
+                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
+                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
+                                                        <Option value="The Old English Pub">The Old English Pub</Option>
+                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
+                                                    </Select>
+                                                </div>
                                                 <div className={styles.tab}>
                                                     <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                                                        <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)}>Add Category</Button>
+                                                        <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)} type="primary">Add Category</Button>
                                                     </div>
                                                     <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
                                                 </div>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="profile">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                                                    Restaurant Name : &nbsp;
+                                                    <Select
+                                                        showSearch
+                                                        style={{ width: 400 }}
+                                                        placeholder="Select a restaurant name"
+                                                        optionFilterProp="children"
+                                                        onChange={() => onChangeRestaurantName}
+                                                        onSearch={() => onSearchRestaurantName}
+                                                        filterOption={(input, option) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                    >
+                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
+                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
+                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
+                                                        <Option value="The Old English Pub">The Old English Pub</Option>
+                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
+                                                    </Select>
+                                                </div>
                                                 <div className={styles.tab}>
                                                     <Row>
                                                         <Col sm={6}>
@@ -599,7 +852,7 @@ export default function Admin() {
                                                                 </Form.Group>
 
                                                                 <div style={{ textAlign: "right" }}>
-                                                                    <Button variant="primary" >
+                                                                    <Button type="primary" >
                                                                         Save
                                             </Button>
                                                                 </div>
@@ -609,6 +862,9 @@ export default function Admin() {
                                                 </div>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="email">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                    Email
+                                                </div>
                                                 <div className={styles.tab}>
                                                     <div style={{ textAlign: "right", marginBottom: "15px" }}>
                                                         <Checkbox.Group options={options} onChange={(checkedValues) => onChangeCheckbox(checkedValues)} />
@@ -686,9 +942,9 @@ export default function Admin() {
 
 
                                                         <div style={{ textAlign: "right" }}>
-                                                            <Button variant="primary" >
+                                                            <Button type="primary" >
                                                                 Send Email
-                                            </Button>
+                                                            </Button>
                                                         </div>
                                                     </Form>
                                                 </div>
@@ -697,10 +953,25 @@ export default function Admin() {
                                                 <DirectMessageAdmin />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="approvePromotion">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                    Approve Promotion
+                                                </div>
                                                 <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="accountManagement">
-                                                <Table columns={columnsAccount} dataSource={datAccount} />
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                    Account Management
+                                                </div>
+                                                <Table columns={columnsAccount} dataSource={dataAccount} style={{ overflow: "auto" }} />
+                                            </Tab.Pane>
+
+                                            <Tab.Pane eventKey="setting">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                    Term Agreement
+                                                </div>
+                                                <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
+                                                    {termAgreement.text}
+                                                </Card>
                                             </Tab.Pane>
                                         </Tab.Content>
                                     </Col>
@@ -986,6 +1257,10 @@ export default function Admin() {
                                     <Option value="promote">Promote</Option>
                                     <Option value="menu">Menu</Option>
                                     <Option value="profile">Profile</Option>
+                                    <Option value="email">Email</Option>
+                                    <Option value="directMessage">Direct Message</Option>
+                                    <Option value="approvePromotion">Approve Promotion</Option>
+                                    <Option value="accountManagement">Account Management</Option>
                                     <Option value="setting">Setting</Option>
                                 </Select>
                             </div>
@@ -1106,7 +1381,7 @@ export default function Admin() {
                                                                                     </Col>
                                                                                     <Col xs={4}>
                                                                                         <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
-                                                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                                            <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
                                                                                 </Row>
@@ -1139,7 +1414,7 @@ export default function Admin() {
                                                                                     </Col>
                                                                                     <Col xs={4}>
                                                                                         <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
-                                                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                                            <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
                                                                                 </Row>
@@ -1172,7 +1447,7 @@ export default function Admin() {
                                                                                     </Col>
                                                                                     <Col xs={4}>
                                                                                         <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
-                                                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                                            <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
                                                                                 </Row>
@@ -1211,7 +1486,7 @@ export default function Admin() {
                                                                                     </Col>
                                                                                     <Col xs={4}>
                                                                                         <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
-                                                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                                            <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
                                                                                 </Row>
@@ -1244,7 +1519,7 @@ export default function Admin() {
                                                                                     </Col>
                                                                                     <Col xs={4}>
                                                                                         <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
-                                                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                                            <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
                                                                                 </Row>
@@ -1300,7 +1575,7 @@ export default function Admin() {
                                                         <Form.Control as="textarea" rows={4} />
                                                     </Form.Group>
                                                     <div style={{ textAlign: "right" }}>
-                                                        <Button variant="primary" type="submit">
+                                                        <Button type="primary" type="submit">
                                                             Post
                                             </Button>
                                                     </div>
@@ -1316,7 +1591,7 @@ export default function Admin() {
                                         <div style={{ textAlign: "right", marginBottom: "10px" }}>
                                             <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)}>Add Category</Button>
                                         </div>
-                                        <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
+                                        <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} style={{ overflow: "auto" }} />
                                     </div>
                                 ) : null
                             }
@@ -1412,9 +1687,9 @@ export default function Admin() {
                                                     </Form.Group>
 
                                                     <div style={{ textAlign: "right" }}>
-                                                        <Button variant="primary" >
+                                                        <Button type="primary" >
                                                             Save
-                                            </Button>
+                                                        </Button>
                                                     </div>
                                                 </Form>
                                             </Col>
@@ -1423,10 +1698,114 @@ export default function Admin() {
                                 ) : null
                             }
                             {
-                                menuSelected == 'setting' ? (
-                                    'Setting'
+                                menuSelected == 'email' ? (
+                                    <div className={styles.tab}>
+                                        <div style={{ textAlign: "right", marginBottom: "15px" }}>
+                                            <Checkbox.Group options={options} onChange={(checkedValues) => onChangeCheckbox(checkedValues)} />
+                                        </div>
+                                        <Form>
+                                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                                                <Form.Label column sm="2">
+                                                    From
+                            </Form.Label>
+                                                <Col sm="10">
+                                                    <Form.Control defaultValue="" />
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                                                <Form.Label column sm="2">
+                                                    To
+                            </Form.Label>
+                                                <Col sm="10">
+                                                    <Form.Control defaultValue="" />
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                                                <Form.Label column sm="2">
+                                                    CC
+                            </Form.Label>
+                                                <Col sm="10">
+                                                    <Form.Control defaultValue="" />
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                                                <Form.Label column sm="2">
+                                                    Subject
+                            </Form.Label>
+                                                <Col sm="10">
+                                                    <Form.Control defaultValue="" />
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                                                <Form.Label column sm="2">
+                                                    Message
+                            </Form.Label>
+                                                <Col sm="10">
+                                                    {/* <ReactRichEditor
+                                    onCodeChange={e => console.log(e)}
+                                    height={200}
+                                /> */}
+                                                    <SunEditor
+                                                        onChange={(content) => console.log(content)}
+                                                        onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
+                                                        // onImageUploadBefore={(files, info, uploadHandler) => handleImageUploadBefore(files, info, uploadHandler)}
+                                                        onImageUploadError={(errorMessage, result) => handleImageUploadError(errorMessage, result)}
+                                                        setOptions={{
+                                                            height: 200,
+                                                            buttonList: [[
+                                                                'align',
+                                                                'font',
+                                                                'fontColor',
+                                                                'fontSize',
+                                                                'formatBlock',
+                                                                'hiliteColor',
+                                                                'horizontalRule',
+                                                                'lineHeight',
+                                                                'list',
+                                                                'paragraphStyle',
+                                                                'table',
+                                                                'template',
+                                                                'textStyle',
+                                                                /** Dialog */
+                                                                'image',
+                                                                'link']]// Or Array of button list, eg. [['font', 'align'], ['image']]
+                                                        }}
+                                                    />
+                                                </Col>
+                                            </Form.Group>
+
+
+                                            <div style={{ textAlign: "right", paddingBottom: "15px" }}>
+                                                <Button type="primary" >
+                                                    Send Email
+                                            </Button>
+                                            </div>
+                                        </Form>
+                                    </div>
                                 ) : null
                             }
+                            {
+                                menuSelected == 'directMessage' ? (
+                                    <DirectMessageAdmin />
+                                ) : null
+                            }
+                            {
+                                menuSelected == 'approvePromotion' ? (
+                                    <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} style={{ overflow: "auto" }} />
+                                ) : null
+                            }                            {
+                                menuSelected == 'accountManagement' ? (
+                                    <Table columns={columnsAccount} dataSource={dataAccount} style={{ overflow: "auto" }} />
+                                ) : null
+                            }
+                            {
+                                menuSelected == 'setting' ? (
+                                    <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
+                                        {termAgreement.text}
+                                    </Card>
+                                ) : null
+                            }
+
                         </>
                     )
                 }
@@ -1451,6 +1830,11 @@ export default function Admin() {
                 show={viewOrderModalShow}
                 onHide={() => setViewOrderModalShow(false)}
                 tableNumber={tableSelected}
+            />
+            <EditProfile
+                show={edifProfileModalShow}
+                onHide={() => setEdifProfileModalShow(false)}
+                profile={profileEdited}
             />
         </Layout >
     )
@@ -1496,7 +1880,7 @@ function AddCategoryModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => { saveMenu() }}>
+                <Button onClick={() => { saveMenu() }} type="primary">
                     Submit
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>
@@ -1859,6 +2243,97 @@ function ViewOrderModal(props) {
                                 </div>
                             </Col>
                         </Row>
+                    </Col>
+                </Row>
+            </Modal.Body>
+        </Modal >
+    );
+}
+
+//Modal : View order each table
+function EditProfile(props) {
+    const isBreakpoint = useMediaQuery(768)
+
+    const [profileImage, setProfileImage] = React.useState("data:image/png;base64,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");
+    const [gender, setGender] = React.useState('ชาย');
+
+    return (
+
+        <Modal
+            centered
+            {...props}
+            dialogClassName="menuModal-70w"
+            aria-labelledby="contained-modal-title-vcenter"
+        >
+            <Modal.Header closeButton>
+                <Modal.Title style={{ fontSize: "1.3rem" }}>
+                    Edit Profile
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Row>
+                    <Col sm={6}>
+                        <Row>
+                            <Col>
+                                <img src={profileImage} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
+                            </Col>
+                        </Row>
+                        <br />
+                        <Row>
+                            <Col>
+                                <Upload
+                                    showUploadList={false}
+                                    beforeUpload={beforeUpload}
+                                    onChange={(e) => handleChange(e, 'RestaurantLogo')}
+                                    style={{ width: "100%" }}
+                                // onPreview={(e) => onPreview(e)}
+                                >
+                                    <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Profile Image</Button>
+                                </Upload>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col sm={6}>
+                        <Form>
+                            <Form.Group controlId="restaurantName">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            <Form.Group controlId="Gender">
+                                <Form.Label>Gander</Form.Label>
+                                <div>
+                                    <Radio.Group onChange={(e) => onChangeGender(e)} value={gender}>
+                                        <Radio value="ชาย">ชาย</Radio>
+                                        <Radio value="หญิง">หญิง</Radio>
+                                    </Radio.Group>
+                                </div>
+                            </Form.Group>
+                            <Form.Group controlId="email">
+                                <Form.Label>Age</Form.Label>
+                                <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            <Form.Group controlId="phone">
+                                <Form.Label>Phone number</Form.Label>
+                                <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            {
+                                !isBreakpoint ? (
+                                    //PC Version
+                                    <div style={{ textAlign: "right" }}>
+                                        <Button type="primary" >
+                                            Save
+                                    </Button>
+                                    </div>
+                                ) : (
+                                    //Mobile Version
+                                    <div style={{ textAlign: "left" }}>
+                                        <Button type="primary" >
+                                            Save
+                                    </Button>
+                                    </div>
+                                )
+                            }
+                        </Form>
                     </Col>
                 </Row>
             </Modal.Body>
