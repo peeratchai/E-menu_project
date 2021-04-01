@@ -1,8 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Upload, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Upload, Modal, Tag } from 'antd';
+import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
+const { confirm } = Modal;
 
 
 export default class AntdModal extends React.Component {
@@ -20,4 +21,29 @@ export default class AntdModal extends React.Component {
             </>
         );
     }
+}
+
+function showConfirm(props) {
+    confirm({
+        title: 'Delete Food Confirmation',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Are you seriously want to delete',
+        onOk() {
+            console.log('OK');
+            props.onOK();
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
+}
+
+export const DeleteConfirmModal = (props) => {
+    return (
+        <>
+            <Tag color="red" key={Math.random(99999)} style={{ cursor: "pointer" }} onClick={() => showConfirm(props)}>
+                Delete
+            </Tag>
+        </>
+    )
 }

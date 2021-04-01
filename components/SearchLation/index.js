@@ -37,7 +37,7 @@ export default function SearchLocationModal(props) {
                         <Col xs={12}>
                             <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
                                 <div className={utilStyles.fontTitleMobileSM}>
-                                    Foot Type
+                                    Food Type
                                 </div>
                                 <div>
                                     <Select

@@ -78,7 +78,7 @@ export default function Newspaper() {
                                     <div style={{ padding: "1.25rem", backgroundColor: "white", borderRadius: "2px" }}>
                                         <div>
 
-                                            <b>Foot Type</b>
+                                            <b>Food Type</b>
 
                                         </div>
                                         <div>
@@ -626,7 +626,7 @@ function SearchLocationModal(props) {
                         <Col xs={12}>
                             <div style={{ padding: "0.5rem", backgroundColor: "white", borderRadius: "2px" }}>
                                 <div className={utilStyles.fontTitleMobileSM}>
-                                    Foot Type
+                                    Food Type
                                 </div>
                                 <div>
                                     <Select

@@ -65,7 +65,7 @@ export default function RestaurantList({ props }) {
                                         </div>
                                         <br />
                                         <div>
-                                            Foot Type
+                                            Food Type
                                         </div>
                                         <div style={{ marginTop: "10px" }}>
                                             <Select

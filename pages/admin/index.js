@@ -8,6 +8,8 @@ import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFill
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
+import { DeleteConfirmModal } from "../../components/AntdModal"
+
 import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -78,31 +80,154 @@ export default function Admin() {
     const [profileEdited, setProfileEdited] = React.useState();
     const [searchedColumn, setSearchedColumn] = React.useState('');
     const [searchText, setSearchText] = React.useState('');
+    const [foodDataModalShow, setFoodDataModalShow] = React.useState(false);
     var searchInput = React.createRef();
+
+
+    const deleteFoodItem = () => {
+        console.log('Deleted food item.')
+    }
+    const columnsFoodData = [
+        {
+            title: 'No',
+            dataIndex: 'No',
+            key: 'No',
+        },
+        {
+            title: 'Name Thai',
+            dataIndex: 'nameThai',
+            key: 'nameThai',
+        },
+        {
+            title: 'Name English',
+            dataIndex: 'nameEnglish',
+            key: 'nameEnglish',
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+        },
+        {
+            title: 'National',
+            dataIndex: 'national',
+            key: 'national',
+        },
+        {
+            title: 'Food Kind',
+            dataIndex: 'foodKind',
+            key: 'foodKind',
+        },
+        {
+            title: 'Sub Kind',
+            dataIndex: 'subKind',
+            key: 'subKind',
+        },
+        {
+            title: 'Cook Method',
+            dataIndex: 'cookMethod',
+            key: 'cookMethod',
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <Space size="middle">
+                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }}>
+                        Edit
+                    </Tag>
+                    <DeleteConfirmModal onOK={deleteFoodItem} />
+                </Space>
+            ),
+        }
+    ]
+    const [dataFood, setDataFood] = React.useState([
+        {
+            key: "1",
+            No: "1",
+            nameThai: 'พิซซ่าเกาหลีทะเล',
+            nameEnglish: 'Haemul Pajeon',
+            price: 180,
+            category: null,
+            national: null,
+            foodKind: null,
+            subKind: null,
+            cookMethod: null
+        },
+        {
+            key: "2",
+            No: "2",
+            nameThai: 'ผัดวุ้นเส้น',
+            nameEnglish: 'Japchae',
+            price: 150,
+            category: null,
+            national: null,
+            foodKind: null,
+            subKind: null,
+            cookMethod: null
+        },
+        {
+            key: "3",
+            No: "3",
+            nameThai: 'เกี๊ยวซ่าเกาหลี',
+            nameEnglish: 'Mandu',
+            price: 120,
+            category: 'Appetizers',
+            national: 'Korea',
+            foodKind: 'Dumplings',
+            subKind: 'Pork',
+            cookMethod: 'Deep fried/Boiled'
+        },
+        {
+            key: "4",
+            No: "4",
+            nameThai: 'ปลาหมึกทอด',
+            nameEnglish: 'Calamari',
+            price: 110,
+            category: 'Appetizers',
+            national: 'Korea',
+            foodKind: 'Fried snack',
+            subKind: 'Squid',
+            cookMethod: 'Deep fried'
+        },
+        {
+            key: "5",
+            No: "5",
+            nameThai: 'ไก่ทอดซอสกระเทียม',
+            nameEnglish: 'Soy Garlic Chicken',
+            price: 100,
+            category: 'Appetizers',
+            national: 'Korea',
+            foodKind: 'Fried snack',
+            subKind: 'Chicken',
+            cookMethod: 'Deep fried'
+        }
+    ]);
 
     const columnsApprovePromotion = [
         {
             title: 'No',
             dataIndex: 'No',
             key: 'No',
-            width: 70,
         },
         {
             title: 'Promotions',
             dataIndex: 'Promotions',
             key: 'Promotions',
-            width: 300,
         },
         {
             title: 'Restaurant Name',
             dataIndex: 'RestaurantName',
             key: 'RestaurantName',
-            width: 200,
         },
         {
             title: 'Action',
             key: 'action',
-            width: 200,
             render: (text, record) => (
                 <Space size="middle">
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }}>
@@ -211,32 +336,27 @@ export default function Admin() {
             title: 'No',
             dataIndex: 'No',
             key: 'No',
-            width: 70,
         },
         {
             title: 'Name',
             dataIndex: 'Name',
             key: 'Name',
-            width: 250,
             ...getColumnSearchProps('Name'),
         },
         {
             title: 'Gender',
             dataIndex: 'Gender',
             key: 'Gender',
-            width: 100,
         },
         {
             title: 'Age',
             dataIndex: 'Age',
             key: 'Age',
-            width: 100,
         },
         {
             title: 'Type',
             dataIndex: 'Type',
             key: 'Type',
-            width: 200,
             filters: [
                 { text: 'User', value: 'User' },
                 { text: 'Restaurant', value: 'Restaurant' },
@@ -247,7 +367,6 @@ export default function Admin() {
         {
             title: 'Action',
             key: 'action',
-            width: 200,
             render: (text, record) => (
                 <Space size="middle">
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => setEdifProfileModalShow(true)}>
@@ -602,6 +721,9 @@ export default function Admin() {
                                                 <Nav.Link eventKey="accountManagement">Account Management</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
+                                                <Nav.Link eventKey="foodData">Food Data</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
                                                 <Nav.Link eventKey="setting">Setting </Nav.Link>
                                             </Nav.Item>
                                         </Nav>
@@ -738,7 +860,7 @@ export default function Admin() {
                                                     <div style={{ textAlign: "right", marginBottom: "10px" }}>
                                                         <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)} type="primary">Add Category</Button>
                                                     </div>
-                                                    <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
+                                                    <Table columns={columnsTable} dataSource={category} scroll={{ x: 'max-content' }} expandable={{ expandedRowRender }} />
                                                 </div>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="profile">
@@ -956,15 +1078,25 @@ export default function Admin() {
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                                                     Approve Promotion
                                                 </div>
-                                                <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} />
+                                                <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} scroll={{ x: 'max-content' }} />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="accountManagement">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                                                     Account Management
                                                 </div>
-                                                <Table columns={columnsAccount} dataSource={dataAccount} style={{ overflow: "auto" }} />
+                                                <Table columns={columnsAccount} dataSource={dataAccount} scroll={{ x: 'max-content' }} />
                                             </Tab.Pane>
-
+                                            <Tab.Pane eventKey="foodData">
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                    Food Data
+                                                </div>
+                                                <div style={{ textAlign: "right", padding: "15px" }}>
+                                                    <Button type="primary" onClick={() => setFoodDataModalShow(true)}>
+                                                        Add Food Item
+                                                    </Button>
+                                                </div>
+                                                <Table columns={columnsFoodData} dataSource={dataFood} scroll={{ x: 'max-content' }} />
+                                            </Tab.Pane>
                                             <Tab.Pane eventKey="setting">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                                                     Term Agreement
@@ -1821,6 +1953,11 @@ export default function Admin() {
                 onHide={() => setMenuModalShow(false)}
                 title={selectCategory}
             />
+            <AddFoodModal
+                show={foodDataModalShow}
+                onHide={() => setFoodDataModalShow(false)}
+                title='Add Food Item'
+            />
             <AddTableModal
                 show={addTableModalShow}
                 onHide={() => setAddTableModalShow(false)}
@@ -2068,7 +2205,7 @@ function AddTableModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => { saveMenu() }}>
+                <Button type="primary" onClick={() => { saveMenu() }}>
                     Add
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>
@@ -2337,6 +2474,100 @@ function EditProfile(props) {
                     </Col>
                 </Row>
             </Modal.Body>
+        </Modal >
+    );
+}
+
+//Modal : Add Food Item (Admin)
+function AddFoodModal(props) {
+
+    const [categoryName, setCategoryName] = React.useState();
+    const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState("data:image/png;base64,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");
+
+    const saveMenu = () => {
+        console.log('categoryName ->', categoryName)
+        setCategoryName("")
+        props.onHide()
+    }
+
+    return (
+
+        <Modal
+            {...props}
+            dialogClassName="menuModal-70w"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title style={{ fontSize: "1.3rem" }}>
+                    <b>{props.title}</b>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Container>
+                    <Row>
+                        <Col>
+                            <Form>
+                                <Form.Group as={Row} controlId="nameThai">
+                                    <Form.Label column sm={2}>Name Thai</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="NameEnglish">
+                                    <Form.Label column sm={2}>Name English</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="price">
+                                    <Form.Label column sm={2}>Price</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="category">
+                                    <Form.Label column sm={2}>Category</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="national">
+                                    <Form.Label column sm={2}>National</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="foodKind">
+                                    <Form.Label column sm={2}>Food Kind</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="subKind">
+                                    <Form.Label column sm={2}>Sub Kind</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="cookMethod">
+                                    <Form.Label column sm={2}>Cook Method</Form.Label>
+                                    <Col sm={10}>
+                                        <Form.Control type="text" placeholder="" />
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button type="primary" onClick={() => { saveMenu() }}>
+                    Add
+                </Button>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+
         </Modal >
     );
 }

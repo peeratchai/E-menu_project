@@ -259,3 +259,12 @@ img {
   overflow: hidden;
   outline: 0;
 }
+
+.ant-modal-confirm-body .ant-modal-confirm-title {
+  display: block;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: bold !important;
+  font-size: 16px;
+  line-height: 1.4;
+}
