@@ -1711,7 +1711,18 @@ function ViewOrderModal(props) {
                                         </Col>
                                         <Col xs={10}>
                                             <div>
-                                                <b>ผัดไทย</b>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>ผัดไทย</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "right" }}>
+                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
                                             </div>
                                             <div>
                                                 <b>x 1</b>
@@ -1733,7 +1744,18 @@ function ViewOrderModal(props) {
                                         </Col>
                                         <Col xs={10}>
                                             <div>
-                                                <b>ยำปลาหมึก</b>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>ยำปลาหมึก</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "right" }}>
+                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
                                             </div>
                                             <div>
                                                 <b>x 2</b>

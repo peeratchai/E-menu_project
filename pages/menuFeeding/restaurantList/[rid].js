@@ -91,7 +91,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)} id="1">
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -106,7 +106,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="the-team">
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -121,7 +121,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -136,7 +136,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -153,7 +153,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -168,7 +168,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -189,7 +189,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)}>
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -204,7 +204,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="the-team">
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -219,7 +219,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -234,7 +234,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -251,7 +251,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} >
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -266,7 +266,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="2">
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -287,7 +287,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)}>
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -302,7 +302,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -317,7 +317,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -332,7 +332,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -349,7 +349,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="3">
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -364,7 +364,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -454,7 +454,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)} id="1">
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -469,7 +469,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="the-team">
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -484,7 +484,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -499,7 +499,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -516,7 +516,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -531,7 +531,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="the-team">
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -548,7 +548,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -563,7 +563,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -580,7 +580,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -595,7 +595,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -616,7 +616,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)}>
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -631,7 +631,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -646,7 +646,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -661,7 +661,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -678,7 +678,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="2">
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -693,7 +693,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -710,7 +710,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} >
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -725,7 +725,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -742,7 +742,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -757,7 +757,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -778,7 +778,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} onClick={() => setModalShow(true)} >
-                                                                <Card.Img variant="top" src="/images/food4.jpg" />
+                                                                <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -793,7 +793,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} >
-                                                                <Card.Img variant="top" src="/images/food5.jpg" />
+                                                                <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -808,7 +808,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food6.jpg" />
+                                                                <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -823,7 +823,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food7.jpg" />
+                                                                <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -840,7 +840,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -855,7 +855,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -872,7 +872,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -887,7 +887,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -904,7 +904,7 @@ export default function Restaurant({ props }) {
                                                     <Row>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }}>
-                                                                <Card.Img variant="top" src="/images/food8.jpg" />
+                                                                <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>
@@ -919,7 +919,7 @@ export default function Restaurant({ props }) {
                                                         </Col>
                                                         <Col xs={6} md={3}>
                                                             <Card style={{ border: "none" }} id="3">
-                                                                <Card.Img variant="top" src="/images/food9.jpg" />
+                                                                <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "100px" }} />
                                                                 <Card.Text className={styles.text} style={{ padding: "10px", fontWeight: "bold" }}>
                                                                     <Row>
                                                                         <Col xs={12} md={8}>

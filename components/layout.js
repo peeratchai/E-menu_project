@@ -223,10 +223,10 @@ function LoginModal(props) {
             dialogClassName='custom-dialog-login'
         >
             <Modal.Body style={{ padding: "65px 30px 45px" }}>
-                <Row style={{ textAlign: "center", marginBottom: "3.125rem", fontWeight: "bold" }}>
+                <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
                     <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
                         <Col style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
-                            <h3 style={{ fontWeight: "1000", margin: "0" }}> {tab == 'login' ? 'Login' : 'Register'} </h3>
+                            <h4 style={{ fontWeight: "1000", margin: "0" }}> {tab == 'login' ? 'Login' : tab == 'register' ? 'Register' : tab == 'forgotPassword' ? 'Forgot Your Password ?' : null} </h4>
                         </Col>
                         {/* <Col xs={6} sm={6} style={{ cursor: "pointer", backgroundColor: "#4b5d72" }} onClick={() => { setTab('register') }}>
                             <h3 style={{ fontWeight: "700", margin: "0", color: "#748396" }}>Register</h3>
@@ -244,8 +244,8 @@ function LoginModal(props) {
                             <Form style={{ marginBottom: "20px" }}>
                                 <Row>
                                     <Col>
-                                        <Form.Group controlId="formBasicUsername">
-                                            <Form.Control type="Username" placeholder="Username" />
+                                        <Form.Group controlId="formBasicEmail">
+                                            <Form.Control type="email" placeholder="Email" />
                                         </Form.Group>
 
                                         <Form.Group controlId="formBasicPassword">
@@ -257,7 +257,7 @@ function LoginModal(props) {
                                                     <Form.Check type="checkbox" label="Remember me" />
                                                 </Col>
                                                 <Col style={{ textAlign: "right" }}>
-                                                    <a href="#">Forgot?</a>
+                                                    <a href="#" onClick={() => { setTab('forgotPassword') }}>Forgot password?</a>
                                                 </Col>
                                             </Row>
                                         </Form.Group>
@@ -295,7 +295,11 @@ function LoginModal(props) {
                             </Row>
 
                         </>
-                    ) : (
+                    ) : null
+                }
+
+                {
+                    tab == 'register' ? (
                         <>
                             <Row style={{ marginBottom: "1rem" }}>
                                 <Col>
@@ -305,11 +309,8 @@ function LoginModal(props) {
                             <Form style={{ marginBottom: "20px" }}>
                                 <Row>
                                     <Col>
-                                        <Form.Group controlId="formBasicUsername">
-                                            <Form.Control type="Username" placeholder="Username" />
-                                        </Form.Group>
                                         <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="Username" placeholder="Email Address" />
+                                            <Form.Control type="email" placeholder="Email Address" />
                                         </Form.Group>
                                         <Form.Group controlId="formBasicPassword">
                                             <Form.Control type="password" placeholder="Password" />
@@ -349,7 +350,35 @@ function LoginModal(props) {
                                 </Col>
                             </Row>
                         </>
-                    )
+                    ) : null
+                }
+                {
+                    tab == 'forgotPassword' ? (
+                        <>
+                            <Row style={{ marginBottom: "1rem", textAlign: "center" }}>
+                                <Col>
+                                    Don't worry! Just fill in your email and we'll send
+                                    you a link to reset your password
+                                </Col>
+                            </Row>
+                            <Form style={{ marginBottom: "20px" }}>
+                                <Row>
+                                    <Col>
+                                        <Form.Group controlId="formBasicEmail">
+                                            <Form.Label><b>EMAIL ADDRESS</b></Form.Label>
+                                            <Form.Control type="email" placeholder="Email" />
+                                        </Form.Group>
+                                        <div style={{ textAlign: "center" }}>
+                                            <Button variant="primary" onClick={() => setTab('login')} style={{ width: "50%", border: "none" }}>
+                                                Reset password
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </Form>
+                        </>
+                    ) : null
                 }
 
             </Modal.Body>

@@ -13,7 +13,7 @@ class DirectMessageAdmin extends Component {
     state = {
         customers: [{ uid: "1", name: "UserName1" }, { uid: "2", name: "UserName2" }],
         selectedCustomer: '1',
-        chat: [{ id: "a1", text: "help", receiver: "user" }, { uid: "2", id: "b2", text: "what", receiver: "admin" }],
+        chat: [{ id: "a1", text: "help", receiver: "user", time: "06:37" }, { uid: "2", id: "b2", text: "what", receiver: "admin", time: "06:38" }],
         chatIsLoading: false,
         customerIsLoading: false
     }
@@ -47,6 +47,8 @@ class DirectMessageAdmin extends Component {
                                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                 }
                                             >
+                                                <Option value="All Users">All Users</Option>
+                                                <Option value="All Restaurants">All Restaurants</Option>
                                                 <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
                                                 <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
                                                 <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
@@ -113,9 +115,12 @@ class ChatBox extends Component {
                     {
                         chat
                             .map(chat =>
-                                <div key={chat.id} className="message">
-                                    <div className={`${chat.receiver !== 'admin' ? 'balon1' : 'balon2'} p-3 m-1`}>
-                                        {chat.text}
+                                <div key={chat.id} className="rcw-message">
+                                    <div className={`${chat.receiver == 'admin' ? 'rcw-response' : 'rcw-client'}`}>
+                                        <div className={`${chat.receiver == 'admin' ? 'balon2' : 'balon1'} rcw-message-text p-3 m-1`}>
+                                            {chat.text}
+                                        </div>
+                                        <span className={`${chat.receiver == 'admin' ? null : 'alignRight'}`} > {chat.time}</span>
                                     </div>
                                 </div>)
                     }
