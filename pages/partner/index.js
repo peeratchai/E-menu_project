@@ -4,7 +4,7 @@ import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Modal, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { Upload, message, Table, Space, Switch, Select, Slider, Card, TimePicker } from 'antd';
-import { PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { PlusOutlined, UploadOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
@@ -1491,15 +1491,15 @@ export default function Partner() {
                                                         </Form.Group>
                                                         <Form.Group controlId="webSiteUrl">
                                                             <Form.Label>Website URL</Form.Label>
-                                                            <Form.Control type="text"  />
+                                                            <Form.Control type="text" />
                                                         </Form.Group>
                                                         <Form.Group controlId="facebookURL">
                                                             <Form.Label>Facebook URL</Form.Label>
-                                                            <Form.Control type="text"  />
+                                                            <Form.Control type="text" />
                                                         </Form.Group>
                                                         <Form.Group controlId="twitter">
                                                             <Form.Label>Twitter URL</Form.Label>
-                                                            <Form.Control type="text"  />
+                                                            <Form.Control type="text" />
                                                         </Form.Group>
                                                         <Form.Group controlId="priceRange">
                                                             <Form.Label>Price Range</Form.Label>
@@ -1934,6 +1934,7 @@ function ViewOrderModal(props) {
                                                     </Col>
                                                     <Col xs={4}>
                                                         <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                         </div>
                                                     </Col>
@@ -1967,6 +1968,7 @@ function ViewOrderModal(props) {
                                                     </Col>
                                                     <Col xs={4}>
                                                         <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                         </div>
                                                     </Col>
@@ -1983,6 +1985,9 @@ function ViewOrderModal(props) {
                                 </div>
                             </Col>
                         </Row>
+                        <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                            Total is 240 THB
+                        </div>
                     </Col>
                 </Row>
             </Modal.Body>
