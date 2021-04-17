@@ -20,7 +20,7 @@ export default function Order() {
             {
                 isBreakpoint ? (
                     <>
-                        <Layout mobile>
+                        <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>
                                 <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                     <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
@@ -164,7 +164,7 @@ function ConfirmOrderModal(props) {
                 </Row>
                 <Row>
                     <Col>
-                        <div style={{ textAlign: "center", color: "#ced2dc" }} className={utilStyles.fontContentSM}>
+                        <div style={{ textAlign: "center", color: "#ced2dc" }} className={utilStyles.font_size_sm}>
                             คุณต้องการยืนยันการสั่งอาหารหรือไม่
                         </div>
                     </Col>

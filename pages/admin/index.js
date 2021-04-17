@@ -1,7 +1,7 @@
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Tab, Modal, Container, Tabs, Nav } from 'react-bootstrap'
+import { Row, Col, Form, Image, Tab, Modal, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
@@ -669,7 +669,7 @@ export default function Admin() {
     }
 
     return (
-        <Layout center>
+        <Layout containerType="center">
             <Container className={!isBreakpoint ? styles.container : utilStyles.container_sm + " " + utilStyles.background_white}>
 
                 {
@@ -1034,10 +1034,6 @@ export default function Admin() {
                                                                 Message
                                             </Form.Label>
                                                             <Col sm="10">
-                                                                {/* <ReactRichEditor
-                                                    onCodeChange={e => console.log(e)}
-                                                    height={200}
-                                                /> */}
                                                                 <SunEditor
                                                                     onChange={(content) => console.log(content)}
                                                                     onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
@@ -1115,275 +1111,7 @@ export default function Admin() {
                                 </Row>
                             </Tab.Container>
 
-                            {/* <Tabs defaultActiveKey="restaurantManagement" id="uncontrolled-tab-example">
-                                <Tab eventKey="restaurantManagement" title="Restaurant Management">
-                                    <div className={styles.tab}>
-                                        <Row>
-                                            <Col xs={11}>
-                                                <Form>
-                                                    <Form.Group controlId="areaName">
-                                                        <Form.Control type="text" placeholder="ชื่อบริเวณ" />
-                                                    </Form.Group>
-                                                </Form>
-                                            </Col>
-                                            <Col xs={1}>
-                                                <Button onClick={() => setAddTableModalShow(true)}>
-                                                    Add
-                                    </Button>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={{ height: "30rem" }} ref={refTableManagement}>
-                                                <div className={styles.container2}>
-                                                    {tableManagement}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Tab>
-                                <Tab eventKey="promote" title="Promote">
-                                    <div className={styles.tab}>
-                                        <Row>
-                                            <Col sm={6}>
-                                                <Row>
-                                                    <Col>
-                                                        <img src={promoteImageUrl} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
-                                                    </Col>
-                                                </Row>
-                                                <br />
-                                                <Row>
-                                                    <Col>
-                                                        <Upload
-                                                            showUploadList={false}
-                                                            beforeUpload={beforeUpload}
-                                                            onChange={(e) => handleChange(e, 'PromoteImage')}
-                                                            style={{ width: "100%" }}
-                                                        // onPreview={(e) => onPreview(e)}
-                                                        >
-                                                            <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
-                                                        </Upload>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                            <Col sm={6}>
-                                                <Form>
-                                                    <Form.Group controlId="exampleForm.ControlTextarea1">
-                                                        <Form.Label className={utilStyles.cardTitle}>Promoted contents</Form.Label>
-                                                        <Form.Control as="textarea" rows={4} />
-                                                    </Form.Group>
-                                                    <div style={{ textAlign: "right" }}>
-                                                        <Button variant="primary" type="submit">
-                                                            Post
-                                            </Button>
-                                                    </div>
-                                                </Form>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Tab>
-                                <Tab eventKey="menu" title="Menu">
-                                    <div className={styles.tab}>
-                                        <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                                            <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)}>Add Category</Button>
-                                        </div>
-                                        <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
-                                    </div>
-                                </Tab>
-                                <Tab eventKey="profile" title="Profile">
-                                    <div className={styles.tab}>
-                                        <Row>
-                                            <Col sm={6}>
-                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                    <Row style={{ marginBottom: "10px" }}>
-                                                        <Col>
-                                                            <div>
-                                                                Restaurant Logo
-                                                </div>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row style={{ textAlign: "center" }}>
-                                                        <Col>
-                                                            <Row>
-                                                                <Col>
-                                                                    <img src={restaurantLogoUrl} alt="avatar" style={{ width: '100%', height: '10rem', border: "1px solid #555", borderRadius: "5px", objectFit: "contain" }} />
-                                                                </Col>
-                                                            </Row>
-                                                            <br />
-                                                            <Row>
-                                                                <Col>
-                                                                    <Upload
-                                                                        showUploadList={false}
-                                                                        beforeUpload={beforeUpload}
-                                                                        onChange={(e) => handleChange(e, 'RestaurantLogo')}
-                                                                        style={{ width: "100%" }}
-                                                                    // onPreview={(e) => onPreview(e)}
-                                                                    >
-                                                                        <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
-                                                                    </Upload>
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                    <Row style={{ marginBottom: "10px" }}>
-                                                        <Col>
-                                                            <div>
-                                                                Restaurant Picture
-                                                </div>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col>
-                                                            <Upload
-                                                                listType="picture-card"
-                                                                fileList={restaurantfileList}
-                                                                onPreview={(e) => handlePreview(e)}
-                                                                onChange={(e) => handleChangeUploadRestaurant(e)}
-                                                                className="upload-restaurant-list"
-                                                            >
-                                                                {restaurantfileList.length > 3 ? null : uploadButton}
-                                                            </Upload>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                                <AntdModal
-                                                    previewVisible={previewVisible}
-                                                    previewTitle={previewTitle}
-                                                    footer={null}
-                                                    onCancel={handleCancel}
-                                                    previewImage={previewImage}
-                                                />
-
-
-                                            </Col>
-                                            <Col sm={6}>
-                                                <Form>
-                                                    <Form.Group controlId="restaurantName">
-                                                        <Form.Label>Restaurant Name</Form.Label>
-                                                        <Form.Control type="text" placeholder="Enter Restaurant Name" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="location">
-                                                        <Form.Label>Location</Form.Label>
-                                                        <Form.Control type="text" placeholder="Location" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="openingTime">
-                                                        <Form.Label>Opening Time</Form.Label>
-                                                        <Form.Control type="text" placeholder="Opening Time" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="priceRange">
-                                                        <Form.Label>Price Range</Form.Label>
-                                                        <br />
-                                                        <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
-                                                        <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
-                                                    </Form.Group>
-
-                                                    <div style={{ textAlign: "right" }}>
-                                                        <Button variant="primary" >
-                                                            Save
-                                            </Button>
-                                                    </div>
-                                                </Form>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Tab>
-                                <Tab eventKey="email" title="Email">
-                                    <div className={styles.tab}>
-                                        <div style={{ textAlign: "right", marginBottom: "15px" }}>
-                                            <Checkbox.Group options={options} onChange={(checkedValues) => onChangeCheckbox(checkedValues)} />
-                                        </div>
-                                        <Form>
-                                            <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                <Form.Label column sm="2">
-                                                    From
-                                            </Form.Label>
-                                                <Col sm="10">
-                                                    <Form.Control defaultValue="" />
-                                                </Col>
-                                            </Form.Group>
-                                            <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                <Form.Label column sm="2">
-                                                    To
-                                            </Form.Label>
-                                                <Col sm="10">
-                                                    <Form.Control defaultValue="" />
-                                                </Col>
-                                            </Form.Group>
-                                            <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                <Form.Label column sm="2">
-                                                    CC
-                                            </Form.Label>
-                                                <Col sm="10">
-                                                    <Form.Control defaultValue="" />
-                                                </Col>
-                                            </Form.Group>
-                                            <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                <Form.Label column sm="2">
-                                                    Subject
-                                            </Form.Label>
-                                                <Col sm="10">
-                                                    <Form.Control defaultValue="" />
-                                                </Col>
-                                            </Form.Group>
-                                            <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                <Form.Label column sm="2">
-                                                    Message
-                                            </Form.Label>
-                                                <Col sm="10">
-                                                    {/* <ReactRichEditor
-                                                    onCodeChange={e => console.log(e)}
-                                                    height={200}
-                                                /> 
-                            <SunEditor
-                                onChange={(content) => console.log(content)}
-                                onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
-                                // onImageUploadBefore={(files, info, uploadHandler) => handleImageUploadBefore(files, info, uploadHandler)}
-                                onImageUploadError={(errorMessage, result) => handleImageUploadError(errorMessage, result)}
-                                setOptions={{
-                                    height: 200,
-                                    buttonList: [[
-                                        'align',
-                                        'font',
-                                        'fontColor',
-                                        'fontSize',
-                                        'formatBlock',
-                                        'hiliteColor',
-                                        'horizontalRule',
-                                        'lineHeight',
-                                        'list',
-                                        'paragraphStyle',
-                                        'table',
-                                        'template',
-                                        'textStyle',
-                                        'image',
-                                        'link']]// Or Array of button list, eg. [['font', 'align'], ['image']]
-                                }}
-                            />
-                        </Col>
-                                            </Form.Group>
-
-
-            <div style={{ textAlign: "right" }}>
-                <Button variant="primary" >
-                    Send Email
-                                            </Button>
-            </div>
-                                        </Form>
-                                    </div >
-                                </Tab >
-                                <Tab eventKey="directMessage" title="Direct Message">
-                                    <DirectMessageAdmin />
-                                </Tab>
-                                <Tab eventKey="approvePromotion" title="Approve Promotion">
-                                    <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} />
-                                </Tab>
-                                <Tab eventKey="setting" title="Setting">
-            Sign Out
-                                    <br />
-                                Term Agreement
-                            </Tab> 
-                            </Tabs > */}
+                            
                         </>
                     ) : (
                         //Mobile Version
@@ -1430,7 +1158,7 @@ export default function Admin() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -1454,7 +1182,7 @@ export default function Admin() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -1478,7 +1206,7 @@ export default function Admin() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -1517,7 +1245,7 @@ export default function Admin() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -1550,7 +1278,7 @@ export default function Admin() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -1583,7 +1311,7 @@ export default function Admin() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -1622,7 +1350,7 @@ export default function Admin() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -1655,7 +1383,7 @@ export default function Admin() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button type="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -2288,7 +2016,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>
@@ -2312,7 +2040,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>
@@ -2336,7 +2064,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>

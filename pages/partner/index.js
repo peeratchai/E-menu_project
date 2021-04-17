@@ -1,15 +1,16 @@
-import Layout, { siteTitle } from '../../components/layout'
+import Layout from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
+import { Row, Col, Form, Image, Button, Tab, Modal, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Card } from 'antd';
-import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { Upload, message, Table, Space, Switch, Select, Slider, Card, TimePicker } from 'antd';
+import { PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
 import useMediaQuery from "../../utils/utils";
 import termAgreement from '../../utils/termAgreement.json'
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 
 const { Option } = Select;
 function getBase64(img, callback) {
@@ -126,15 +127,14 @@ export default function Partner() {
     ]);
 
 
-    const handleAdd = (data) => {
-        const dataSource = category;
-        console.log(data)
-        const newData = {
+    const handleAddCategory = (categoryName) => {
+        const existingCategory = category;
+        const newCategory = {
             key: (category.length + 1),
-            category: data
+            category: categoryName
         };
-
-        setCategory([...dataSource, newData])
+        console.log([...existingCategory, newCategory])
+        setCategory([...existingCategory, newCategory])
     };
 
     const columnsTable = columns.map((col) => {
@@ -222,12 +222,10 @@ export default function Partner() {
     }
 
     const onDrop = (event) => {
-
         // your code
     }
 
     const onDrag = () => {
-
         setDragging(true)
     }
 
@@ -276,7 +274,6 @@ export default function Partner() {
         setPreviewVisible(true)
     };
     const uploadButton = (
-
         <div >
             <PlusOutlined />
             <div style={{ marginTop: 8 }}>Upload</div>
@@ -301,261 +298,235 @@ export default function Partner() {
     }
 
     return (
-        <Layout center>
+        <Layout containerType="center">
             <Container className={!isBreakpoint ? styles.container : utilStyles.container_sm + " " + utilStyles.background_white}>
 
                 {
                     !isBreakpoint ? (
                         //PC Version
-                        <Tabs defaultActiveKey="restaurantManagement" id="uncontrolled-tab-example">
-                            <Tab eventKey="restaurantManagement" title="Restaurant Management">
-                                <div className={styles.tab}>
-                                    <Row>
-                                        <Col xs={11}>
-                                            <Form>
-                                                <Form.Group controlId="areaName">
-                                                    <Form.Control type="text" placeholder="ชื่อบริเวณ" />
-                                                </Form.Group>
-                                            </Form>
-                                        </Col>
-                                        <Col xs={1}>
-                                            <Button onClick={() => setAddTableModalShow(true)}>
-                                                Add
-                                    </Button>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col style={{ height: "30rem" }} ref={refTableManagement}>
-                                            <div className={styles.container2}>
-                                                {tableManagement}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Tab>
-                            <Tab eventKey="dashboard" title="Dashboard">
-                                <div className={styles.tab}>
-                                    <Row style={{ height: "80vh" }}>
-                                        <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
-                                            {/* Table list */}
-                                            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                Period : &nbsp;
-                                                    <Select
-                                                    showSearch
-                                                    style={{ width: '70%' }}
-                                                    placeholder="Select period"
-                                                    optionFilterProp="children"
-                                                    onChange={() => onChangePeriod}
-                                                    onSearch={() => onSearchPeriod}
-                                                    filterOption={(input, option) =>
-                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                    }
-                                                >
-                                                    <Option value="5 Jan 2021">5 Jan 2021</Option>
-                                                    <Option value="4 Jan 2021">4 Jan 2021</Option>
-                                                    <Option value="3 Jan 2021">3 Jan 2021</Option>
-                                                    <Option value="2 Jan 2021">2 Jan 2021</Option>
-                                                    <Option value="1 Jan 2021">1 Jan 2021</Option>
-                                                </Select>
-                                            </div>
 
-                                            <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
-                                                <Col>
-                                                    <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                        <Row >
-                                                            <Col>
-                                                                <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                                &nbsp;&nbsp; T1
-                                                            </Col>
-                                                            <Col>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    <b>1,059 THB</b>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                <b>Completed</b>
-                                                            </Col>
-                                                            <Col xs={8}>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
-                                                                    14:14:59 - 20/03/2021
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
-                                                <Col>
-                                                    <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                        <Row >
-                                                            <Col>
-                                                                <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T2
-                                            </Col>
-                                                            <Col>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    <b>860 THB</b>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                <b>Completed</b>
-                                                            </Col >
-                                                            <Col xs={8}>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
-                                                                    14:14:59 - 20/03/2021
-                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
-                                                <Col>
-                                                    <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                        <Row >
-                                                            <Col>
-                                                                <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T1
-                                            </Col>
-                                                            <Col>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    <b>1530 THB</b>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                <b>Completed</b>
-                                                            </Col >
-                                                            <Col xs={8} >
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
-                                                                    14:14:59 - 20/03/2021
-                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                        <Col xs={8}>
-                                            <Row style={{ paddingBottom: "10px" }}>
-                                                <Col>
-                                                    <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                        <Row >
-                                                            <Col xs={2}>
-                                                                <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
-                                                            </Col>
-                                                            <Col xs={10}>
-                                                                <div>
-                                                                    <b>ผัดไทย</b>
-                                                                </div>
-                                                                <div>
-                                                                    <b>x 1</b>
-                                                                </div>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    Price : 80 THB
-                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ paddingBottom: "10px" }}>
-                                                <Col>
-                                                    <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                        <Row >
-                                                            <Col xs={2}>
-                                                                <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
-                                                            </Col>
-                                                            <Col xs={10}>
-                                                                <div>
-                                                                    <b>ยำปลาหมึก</b>
-                                                                </div>
-                                                                <div>
-                                                                    <b>x 2</b>
-                                                                </div>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    Price : 160 THB
-                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Tab>
-                            <Tab eventKey="promote" title="Promote">
-                                <div className={styles.tab}>
-                                    <Row>
-                                        <Col sm={6}>
-                                            <Row>
-                                                <Col>
-                                                    <img src={promoteImageUrl} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
-                                                </Col>
-                                            </Row>
-                                            <br />
-                                            <Row>
-                                                <Col>
-                                                    <Upload
-                                                        showUploadList={false}
-                                                        beforeUpload={beforeUpload}
-                                                        onChange={(e) => handleChange(e, 'PromoteImage')}
-                                                        style={{ width: "100%" }}
-                                                    // onPreview={(e) => onPreview(e)}
-                                                    >
-                                                        <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
-                                                    </Upload>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                        <Col sm={6}>
-                                            <Form>
-                                                <Form.Group controlId="exampleForm.ControlTextarea1">
-                                                    <Form.Label className={utilStyles.cardTitle}>Promoted contents</Form.Label>
-                                                    <Form.Control as="textarea" rows={4} />
-                                                </Form.Group>
-                                                <div style={{ textAlign: "right" }}>
-                                                    <Button variant="primary" type="submit">
-                                                        Post
-                                            </Button>
-                                                </div>
-                                            </Form>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Tab>
-                            <Tab eventKey="menu" title="Menu">
-                                <div className={styles.tab}>
-                                    <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                                        <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)}>Add Category</Button>
-                                    </div>
-                                    <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
-                                </div>
-                            </Tab>
-                            <Tab eventKey="profile" title="Profile">
-                                <div className={styles.tab}>
-                                    <Row>
-                                        <Col sm={6}>
-                                            {/* Upload restaurants logo */}
-                                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                <Row style={{ marginBottom: "10px" }}>
-                                                    <Col>
-                                                        <div>
-                                                            Restaurant Logo
-                                                </div>
+                        <Tab.Container id="left-tabs-management-admin" defaultActiveKey="restaurantManagement">
+                            <Row>
+                                <Col sm={2}>
+                                    <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="restaurantManagement">Restaurant Management</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="promote">Promote</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="menu">Menu</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="profile">Profile</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="setting">Setting</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
+                                </Col>
+                                <Col sm={10}>
+                                    <Tab.Content>
+                                        <Tab.Pane eventKey="restaurantManagement">
+                                            <div className={styles.tab}>
+                                                <Row>
+                                                    <Col xs={11}>
+                                                        <Form>
+                                                            <Form.Group controlId="areaName">
+                                                                <Form.Control type="text" placeholder="ชื่อบริเวณ" />
+                                                            </Form.Group>
+                                                        </Form>
+                                                    </Col>
+                                                    <Col xs={1}>
+                                                        <Button onClick={() => setAddTableModalShow(true)}>
+                                                            Add
+                                    </Button>
                                                     </Col>
                                                 </Row>
-                                                <Row style={{ textAlign: "center" }}>
-                                                    <Col>
+                                                <Row>
+                                                    <Col style={{ height: "30rem" }} ref={refTableManagement}>
+                                                        <div className={styles.container2}>
+                                                            {tableManagement}
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="dashboard">
+
+                                            <div className={styles.tab}>
+                                                <Row style={{ height: "80vh" }}>
+                                                    <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+                                                        {/* Table list */}
+                                                        <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                                                            Period : &nbsp;
+                                                    <Select
+                                                                showSearch
+                                                                style={{ width: '70%' }}
+                                                                placeholder="Select period"
+                                                                optionFilterProp="children"
+                                                                onChange={() => onChangePeriod}
+                                                                onSearch={() => onSearchPeriod}
+                                                                filterOption={(input, option) =>
+                                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                                }
+                                                            >
+                                                                <Option value="5 Jan 2021">5 Jan 2021</Option>
+                                                                <Option value="4 Jan 2021">4 Jan 2021</Option>
+                                                                <Option value="3 Jan 2021">3 Jan 2021</Option>
+                                                                <Option value="2 Jan 2021">2 Jan 2021</Option>
+                                                                <Option value="1 Jan 2021">1 Jan 2021</Option>
+                                                            </Select>
+                                                        </div>
+
+                                                        <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
+                                                            <Col>
+                                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                                                    <Row >
+                                                                        <Col>
+                                                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                                &nbsp;&nbsp; T1
+                                                            </Col>
+                                                                        <Col>
+                                                                            <div style={{ textAlign: "right" }}>
+                                                                                <b>1,059 THB</b>
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row>
+                                                                        <Col xs={4} style={{ fontSize: "14px" }}>
+                                                                            <b>Completed</b>
+                                                                        </Col>
+                                                                        <Col xs={8}>
+                                                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                                                14:14:59 - 20/03/2021
+                                                                </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
+                                                            <Col>
+                                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                                                    <Row >
+                                                                        <Col>
+                                                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T2
+                                            </Col>
+                                                                        <Col>
+                                                                            <div style={{ textAlign: "right" }}>
+                                                                                <b>860 THB</b>
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row>
+                                                                        <Col xs={4} style={{ fontSize: "14px" }}>
+                                                                            <b>Completed</b>
+                                                                        </Col >
+                                                                        <Col xs={8}>
+                                                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                                                14:14:59 - 20/03/2021
+                                                </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
+                                                            <Col>
+                                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                                                    <Row >
+                                                                        <Col>
+                                                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T1
+                                            </Col>
+                                                                        <Col>
+                                                                            <div style={{ textAlign: "right" }}>
+                                                                                <b>1530 THB</b>
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row>
+                                                                        <Col xs={4} style={{ fontSize: "14px" }}>
+                                                                            <b>Completed</b>
+                                                                        </Col >
+                                                                        <Col xs={8} >
+                                                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                                                14:14:59 - 20/03/2021
+                                                </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col xs={8}>
+                                                        <Row style={{ paddingBottom: "10px" }}>
+                                                            <Col>
+                                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                                                    <Row >
+                                                                        <Col xs={2}>
+                                                                            <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
+                                                                        </Col>
+                                                                        <Col xs={10}>
+                                                                            <div>
+                                                                                <b>ผัดไทย</b>
+                                                                            </div>
+                                                                            <div>
+                                                                                <b>x 1</b>
+                                                                            </div>
+                                                                            <div style={{ textAlign: "right" }}>
+                                                                                Price : 80 THB
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row style={{ paddingBottom: "10px" }}>
+                                                            <Col>
+                                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                                                    <Row >
+                                                                        <Col xs={2}>
+                                                                            <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
+                                                                        </Col>
+                                                                        <Col xs={10}>
+                                                                            <div>
+                                                                                <b>ยำปลาหมึก</b>
+                                                                            </div>
+                                                                            <div>
+                                                                                <b>x 2</b>
+                                                                            </div>
+                                                                            <div style={{ textAlign: "right" }}>
+                                                                                Price : 160 THB
+                                                                             </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <div style={{ position: 'absolute', bottom: '0', right: '0' }}>
+                                                            Total is : 240 บาท
+                                                        </div>
+
+
+                                                    </Col>
+
+                                                </Row>
+                                            </div>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="promote">
+                                            <div className={styles.tab}>
+                                                <Row>
+                                                    <Col sm={6}>
                                                         <Row>
                                                             <Col>
-                                                                <img src={restaurantLogoUrl} alt="avatar" style={{ width: '100%', height: '10rem', border: "1px solid #555", borderRadius: "5px", objectFit: "contain" }} />
+                                                                <img src={promoteImageUrl} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
                                                             </Col>
                                                         </Row>
                                                         <br />
@@ -564,86 +535,235 @@ export default function Partner() {
                                                                 <Upload
                                                                     showUploadList={false}
                                                                     beforeUpload={beforeUpload}
-                                                                    onChange={(e) => handleChange(e, 'RestaurantLogo')}
+                                                                    onChange={(e) => handleChange(e, 'PromoteImage')}
                                                                     style={{ width: "100%" }}
                                                                 // onPreview={(e) => onPreview(e)}
                                                                 >
-                                                                    <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
+                                                                    <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
                                                                 </Upload>
                                                             </Col>
                                                         </Row>
                                                     </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                <Row style={{ marginBottom: "10px" }}>
-                                                    <Col>
-                                                        <div>
-                                                            Restaurant Picture
-                                                </div>
+                                                    <Col sm={6}>
+                                                        <Form>
+                                                            <Form.Group controlId="promoted.contents">
+                                                                <Form.Label >Promoted contents</Form.Label>
+                                                                <Form.Control as="textarea" rows={4} />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="banner.text">
+                                                                <Form.Label >Banner Text</Form.Label>
+                                                                <Form.Control as="textarea" rows={2} />
+                                                            </Form.Group>
+                                                            <div style={{ textAlign: "right" }}>
+                                                                <Button variant="primary" type="submit">
+                                                                    Post
+                                                                </Button>
+                                                            </div>
+                                                        </Form>
                                                     </Col>
                                                 </Row>
+                                            </div>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="menu">
+                                            <div className={styles.tab}>
+                                                <div style={{ textAlign: "right", marginBottom: "10px" }}>
+                                                    <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)}>Add Category</Button>
+                                                </div>
+                                                <Table columns={columnsTable} dataSource={category} expandable={{ expandedRowRender }} />
+                                            </div>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="profile">
+                                            <div className={styles.tab}>
                                                 <Row>
-                                                    <Col>
-                                                        <Upload
-                                                            listType="picture-card"
-                                                            fileList={restaurantfileList}
-                                                            onPreview={(e) => handlePreview(e)}
-                                                            onChange={(e) => handleChangeUploadRestaurant(e)}
-                                                            className="upload-restaurant-list"
-                                                        >
-                                                            {restaurantfileList.length > 3 ? null : uploadButton}
-                                                        </Upload>
+                                                    {/* Left section */}
+                                                    <Col sm={6}>
+                                                        {/* Upload restaurants logo */}
+                                                        <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingLeft: "18px", paddingBottom: "10px" }}>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Restaurant Logo</b>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ textAlign: "center" }}>
+                                                                <Col>
+                                                                    <Row>
+                                                                        <Col>
+                                                                            <img src={restaurantLogoUrl} alt="avatar" style={{ width: '100%', height: '10rem', border: "1px solid #555", borderRadius: "5px", objectFit: "contain" }} />
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <br />
+                                                                    <Row>
+                                                                        <Col>
+                                                                            <Upload
+                                                                                showUploadList={false}
+                                                                                beforeUpload={beforeUpload}
+                                                                                onChange={(e) => handleChange(e, 'RestaurantLogo')}
+                                                                                style={{ width: "100%" }}
+                                                                            // onPreview={(e) => onPreview(e)}
+                                                                            >
+                                                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
+                                                                            </Upload>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Restaurant Banner Picture</b>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Upload
+                                                                        listType="picture-card"
+                                                                        fileList={restaurantfileList}
+                                                                        onPreview={(e) => handlePreview(e)}
+                                                                        onChange={(e) => handleChangeUploadRestaurant(e)}
+                                                                        className="upload-restaurant-list"
+                                                                    >
+                                                                        {restaurantfileList.length > 3 ? null : uploadButton}
+                                                                    </Upload>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px" }}>
+                                                            <Row style={{ marginBottom: "15px" }}>
+                                                                <Col>
+                                                                    <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Monday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Tuesday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Wednesday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Thursday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Friday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Saturday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col xs={3}>
+                                                                    Sunday
+                                                                </Col>
+                                                                <Col xs={9}>
+                                                                    <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <AntdModal
+                                                            previewVisible={previewVisible}
+                                                            previewTitle={previewTitle}
+                                                            footer={null}
+                                                            onCancel={handleCancel}
+                                                            previewImage={previewImage}
+                                                        />
+                                                    </Col>
+                                                    {/* Right section */}
+                                                    <Col sm={6}>
+                                                        <Row style={{ marginBottom: "10px" }}>
+                                                            <Col>
+                                                                <div>
+                                                                    <b>Restaurant Details</b>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <Form>
+                                                            <Form.Group controlId="restaurantName">
+                                                                <Form.Label>Restaurant Name</Form.Label>
+                                                                <Form.Control type="text" placeholder="Enter Restaurant Name" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="location">
+                                                                <Form.Label>Location</Form.Label>
+                                                                <Form.Control type="text" placeholder="Location" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="phoneNumber">
+                                                                <Form.Label>Phone Number</Form.Label>
+                                                                <Form.Control type="text" placeholder="Phone Number" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="webSiteUrl">
+                                                                <Form.Label>Website URL</Form.Label>
+                                                                <Form.Control type="text" placeholder="Phone Number" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="facebookURL">
+                                                                <Form.Label>Facebook URL</Form.Label>
+                                                                <Form.Control type="text" placeholder="Phone Number" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="twitter">
+                                                                <Form.Label>Twitter URL</Form.Label>
+                                                                <Form.Control type="text" placeholder="Phone Number" />
+                                                            </Form.Group>
+                                                            <Form.Group controlId="priceRange">
+                                                                <Form.Label>Price Range</Form.Label>
+                                                                <br />
+                                                                <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
+                                                                <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
+                                                            </Form.Group>
+
+                                                            <div style={{ textAlign: "right" }}>
+                                                                <Button variant="primary" >
+                                                                    Save
+                                                                </Button>
+                                                            </div>
+                                                        </Form>
                                                     </Col>
                                                 </Row>
                                             </div>
-                                            <AntdModal
-                                                previewVisible={previewVisible}
-                                                previewTitle={previewTitle}
-                                                footer={null}
-                                                onCancel={handleCancel}
-                                                previewImage={previewImage}
-                                            />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="setting">
+                                            <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
+                                                {termAgreement.text}
+                                            </Card>
+                                        </Tab.Pane>
+                                    </Tab.Content>
+                                </Col>
+                            </Row>
+                        </Tab.Container>
 
-
-                                        </Col>
-                                        <Col sm={6}>
-                                            <Form>
-                                                <Form.Group controlId="restaurantName">
-                                                    <Form.Label>Restaurant Name</Form.Label>
-                                                    <Form.Control type="text" placeholder="Enter Restaurant Name" />
-                                                </Form.Group>
-                                                <Form.Group controlId="location">
-                                                    <Form.Label>Location</Form.Label>
-                                                    <Form.Control type="text" placeholder="Location" />
-                                                </Form.Group>
-                                                <Form.Group controlId="openingTime">
-                                                    <Form.Label>Opening Time</Form.Label>
-                                                    <Form.Control type="text" placeholder="Opening Time" />
-                                                </Form.Group>
-                                                <Form.Group controlId="priceRange">
-                                                    <Form.Label>Price Range</Form.Label>
-                                                    <br />
-                                                    <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
-                                                    <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
-                                                </Form.Group>
-
-                                                <div style={{ textAlign: "right" }}>
-                                                    <Button variant="primary" >
-                                                        Save
-                                            </Button>
-                                                </div>
-                                            </Form>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Tab>
-                            <Tab eventKey="setting" title="Setting">
-                                <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
-                                    {termAgreement.text}
-                                </Card>
-                            </Tab>
-                        </Tabs>
                     ) : (
                         //Mobile Version
                         <>
@@ -686,7 +806,7 @@ export default function Partner() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -710,7 +830,7 @@ export default function Partner() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -734,7 +854,7 @@ export default function Partner() {
                                                         </Row>
                                                         <Row>
                                                             <Col>
-                                                                <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                     14:14:59 - 20/03/2021
                                                 </div>
                                                             </Col>
@@ -773,7 +893,7 @@ export default function Partner() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -806,7 +926,7 @@ export default function Partner() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -839,7 +959,7 @@ export default function Partner() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -878,7 +998,7 @@ export default function Partner() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -911,7 +1031,7 @@ export default function Partner() {
                                                                                         </div>
                                                                                     </Col>
                                                                                     <Col xs={4}>
-                                                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "center" }}>
+                                                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "center" }}>
                                                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                                                         </div>
                                                                                     </Col>
@@ -981,7 +1101,7 @@ export default function Partner() {
                                                                     <b>Completed</b>
                                                                 </Col>
                                                                 <Col xs={8}>
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                         14:14:59 - 20/03/2021
                                                                 </div>
                                                                 </Col>
@@ -1008,7 +1128,7 @@ export default function Partner() {
                                                                     <b>Completed</b>
                                                                 </Col >
                                                                 <Col xs={8}>
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                         14:14:59 - 20/03/2021
                                                 </div>
                                                                 </Col>
@@ -1035,7 +1155,7 @@ export default function Partner() {
                                                                     <b>Completed</b>
                                                                 </Col >
                                                                 <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                         14:14:59 - 20/03/2021
                                                 </div>
                                                                 </Col>
@@ -1062,7 +1182,7 @@ export default function Partner() {
                                                                     <b>Completed</b>
                                                                 </Col >
                                                                 <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                         14:14:59 - 20/03/2021
                                                 </div>
                                                                 </Col>
@@ -1089,7 +1209,7 @@ export default function Partner() {
                                                                     <b>Completed</b>
                                                                 </Col >
                                                                 <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                                         14:14:59 - 20/03/2021
                                                 </div>
                                                                 </Col>
@@ -1207,14 +1327,14 @@ export default function Partner() {
                                 menuSelected == 'profile' ? (
                                     <div className={styles.tab}>
                                         <Row>
-                                            <Col sm={6}>
+                                            <Col xd={12}>
                                                 {/* Upload restaurants logo */}
-                                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                    <Row style={{ marginBottom: "10px" }}>
+                                                <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingBottom: "10px" }}>
+                                                    <Row style={{ marginBottom: "10px", paddingLeft: "18px" }}>
                                                         <Col>
                                                             <div>
-                                                                Restaurant Logo
-                                                </div>
+                                                                <b>Restaurant Logo</b>
+                                                            </div>
                                                         </Col>
                                                     </Row>
                                                     <Row style={{ textAlign: "center" }}>
@@ -1245,8 +1365,8 @@ export default function Partner() {
                                                     <Row style={{ marginBottom: "10px" }}>
                                                         <Col>
                                                             <div>
-                                                                Restaurant Picture
-                                                </div>
+                                                                <b>Restaurant Banner Picture</b>
+                                                            </div>
                                                         </Col>
                                                     </Row>
                                                     <Row>
@@ -1263,6 +1383,83 @@ export default function Partner() {
                                                         </Col>
                                                     </Row>
                                                 </div>
+                                                <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px", borderBottom: "1px solid #DEDEDE", marginBottom: "10px" }}>
+                                                    <Row style={{ marginBottom: "15px" }}>
+                                                        <Col>
+                                                            <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Monday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Tuesday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Wednesday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Thursday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Friday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Saturday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "5px" }}>
+                                                        <Col>
+                                                            Sunday
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                        </Col>
+                                                    </Row>
+                                                </div>
                                                 <AntdModal
                                                     previewVisible={previewVisible}
                                                     previewTitle={previewTitle}
@@ -1271,35 +1468,53 @@ export default function Partner() {
                                                     previewImage={previewImage}
                                                 />
 
+                                                <div style={{ padding: "0 18px" }}>
+                                                    <Row style={{ marginBottom: "10px" }}>
+                                                        <Col>
+                                                            <div>
+                                                                <b>Restaurant Details</b>
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                    <Form>
+                                                        <Form.Group controlId="restaurantName">
+                                                            <Form.Label>Restaurant Name</Form.Label>
+                                                            <Form.Control type="text" />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="location">
+                                                            <Form.Label>Location</Form.Label>
+                                                            <Form.Control type="text" />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="phoneNumber">
+                                                            <Form.Label>Phone Number</Form.Label>
+                                                            <Form.Control type="text" />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="webSiteUrl">
+                                                            <Form.Label>Website URL</Form.Label>
+                                                            <Form.Control type="text"  />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="facebookURL">
+                                                            <Form.Label>Facebook URL</Form.Label>
+                                                            <Form.Control type="text"  />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="twitter">
+                                                            <Form.Label>Twitter URL</Form.Label>
+                                                            <Form.Control type="text"  />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="priceRange">
+                                                            <Form.Label>Price Range</Form.Label>
+                                                            <br />
+                                                            <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
+                                                            <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
+                                                        </Form.Group>
 
-                                            </Col>
-                                            <Col sm={6}>
-                                                <Form>
-                                                    <Form.Group controlId="restaurantName">
-                                                        <Form.Label>Restaurant Name</Form.Label>
-                                                        <Form.Control type="text" placeholder="Enter Restaurant Name" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="location">
-                                                        <Form.Label>Location</Form.Label>
-                                                        <Form.Control type="text" placeholder="Location" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="openingTime">
-                                                        <Form.Label>Opening Time</Form.Label>
-                                                        <Form.Control type="text" placeholder="Opening Time" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="priceRange">
-                                                        <Form.Label>Price Range</Form.Label>
-                                                        <br />
-                                                        <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
-                                                        <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
-                                                    </Form.Group>
-
-                                                    <div style={{ textAlign: "right" }}>
-                                                        <Button variant="primary" >
-                                                            Save
-                                            </Button>
-                                                    </div>
-                                                </Form>
+                                                        <div style={{ textAlign: "right" }}>
+                                                            <Button variant="primary" >
+                                                                Save
+                                                            </Button>
+                                                        </div>
+                                                    </Form>
+                                                </div>
                                             </Col>
                                         </Row>
                                     </div>
@@ -1320,7 +1535,7 @@ export default function Partner() {
             <AddCategoryModal
                 show={categoryModalShow}
                 onHide={() => setCategoryModalShow(false)}
-                addCategory={(data) => (handleAdd(data), console.log(data))}
+                addcategory={(data) => (handleAddCategory(data))}
             />
             <AddMenuModal
                 show={menuModalShow}
@@ -1351,7 +1566,7 @@ function AddCategoryModal(props) {
     const saveMenu = () => {
         console.log('categoryName ->', categoryName)
         setCategoryName("")
-        props.addCategory(categoryName)
+        props.addcategory(categoryName)
         props.onHide()
     }
 
@@ -1521,7 +1736,7 @@ function AddTableModal(props) {
                     <Row>
                         <Col>
                             <div>
-                                <Image src={tableImages[tableSize][tableType]} style={{ objectFit: "contain" }} />
+                                <Image src={tableImages[tableSize][tableType]} className={utilStyles.image_size_160x160} style={{ objectFit: "contain" }} />
                             </div>
                         </Col>
                     </Row>
@@ -1644,7 +1859,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>
@@ -1668,7 +1883,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>
@@ -1692,7 +1907,7 @@ function ViewOrderModal(props) {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.fontContentSM}>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
                                                 14:14:59 - 20/03/2021
                                                 </div>
                                         </Col>
@@ -1718,7 +1933,7 @@ function ViewOrderModal(props) {
                                                         </div>
                                                     </Col>
                                                     <Col xs={4}>
-                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "right" }}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                         </div>
                                                     </Col>
@@ -1751,7 +1966,7 @@ function ViewOrderModal(props) {
                                                         </div>
                                                     </Col>
                                                     <Col xs={4}>
-                                                        <div className={utilStyles.fontContentSM} style={{ textAlign: "right" }}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
                                                             <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
                                                         </div>
                                                     </Col>

@@ -5,7 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
-  font-size: 18px !important;
+  font-size: 16px !important;
   height: 100%;
   /* background-color: #eaeff3 !important; */
   background-color: #eaeff3 !important;
@@ -26,8 +26,6 @@ a:hover {
 
 img {
   width: 100%;
-  /* display: block; */
-  /* height: 160px; */
   object-fit: cover;
 }
 
@@ -271,4 +269,10 @@ img {
 
 .alignRight {
   text-align: right;
+}
+
+input#whatSearch.form-control {
+  padding: 0 !important;
+  border: none !important;
+  font-size: 0.9rem;
 }

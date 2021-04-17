@@ -112,7 +112,7 @@
 .fontContent {
   font-size: 16px !important;
 }
-.fontContentSM {
+.font_size_sm {
   font-size: 14px !important;
 }
 
@@ -121,19 +121,14 @@
 }
 
 .container {
-  max-width: 60rem;
-  padding: 0 1rem;
-  margin: 2rem auto 6rem;
-}
-.container_xl {
-  max-width: 80rem;
+  max-width: 1200px;
   padding: 0 1rem;
   margin: 2rem auto 6rem;
 }
 
 .cardTitle {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
 }
 .cardText {
   font-size: 16px;
@@ -153,7 +148,7 @@
 /* [1] The container */
 .img_hover_zoom {
   overflow: hidden; /* [1.2] Hide the overflowing of child elements */
-  border-radius: 15px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -169,4 +164,12 @@
 
 .background_white {
   background-color: white;
+}
+
+.image_size_160x160 {
+  height: 160px;
+}
+
+.font_size_md{
+  font-size: 0.9rem !important;
 }

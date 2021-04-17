@@ -152,7 +152,7 @@ export default function UserProfile() {
     };
 
     return (
-        <Layout center>
+        <Layout containerType="center">
             <Container className={styles.container}>
                 <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                     <Tab eventKey="profile" title="Profile">
@@ -181,7 +181,7 @@ export default function UserProfile() {
                                 </Col>
                                 <Col sm={6}>
                                     <Form>
-                                        <Form.Group controlId="restaurantName">
+                                        <Form.Group controlId="Name">
                                             <Form.Label>Name</Form.Label>
                                             <Form.Control type="text" placeholder="" />
                                         </Form.Group>

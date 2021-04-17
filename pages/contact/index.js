@@ -5,10 +5,10 @@ import useMediaQuery from "../../utils/utils";
 import utilStyles from '../../styles/utils.module.css'
 import Head from 'next/head'
 
-export default function Newspaper() {
+export default function Contact() {
     const isBreakpoint = useMediaQuery(768)
     return (
-        <Layout util>
+        <Layout>
             <Head>
                 <link
                     href="https://fonts.googleapis.com/css?family=Montserrat"

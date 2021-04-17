@@ -19,11 +19,26 @@ const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget)
     ssr: false
 });
 
-export default function Layout({ children, util, mobile, center, search, searchFunc }) {
+export default function Layout({ children, containerType, search, searchFunc }) {
     const [modalShow, setModalShow] = React.useState(false);
     const [login, setLogin] = React.useState();
     const isBreakpoint = useMediaQuery(768)
+    const [containerStyle, setContainerStyle] = React.useState(null);
 
+    useEffect(() => {
+        setStyleOfContainer(containerType)
+    }, [containerType])
+
+    const setStyleOfContainer = (containerType) => {
+        let style = ""
+        switch (containerType) {
+            case 'mobile': style = styles.containerMobile; break;
+            case 'center': style = styles.container; break;
+            default: break;
+        }
+
+        setContainerStyle(style)
+    }
 
     const CustomTimeStampFragment = () => {
         return (
@@ -166,35 +181,10 @@ export default function Layout({ children, util, mobile, center, search, searchF
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            {
-                util ? (
-                    <div >
-                        {children}
-                    </div>
-                ) : null
-            }
-            {
-                mobile ? (
-                    <div className={styles.containerMobile}>
-                        {children}
-                    </div>
-                ) : null
-            }
-            {
-                center ? (
-                    <div className={styles.container}>
-                        {children}
-                    </div>
-                ) : null
-            }
-            {/* <Widget
-                // titleAvatar={admin_icon}
-                profileAvatar={administrator_icon}
-                title="Administater"
-                subtitle="People Matters Department"
-                handleNewUserMessage={(newMessage) => handleNewUserMessage(newMessage)}
-                toggleWidget="true"
-            /> */}
+            <div className={containerStyle}>
+                {children}
+            </div>
+
             <Widget
                 // titleAvatar={<MenuBookIcon />}
                 handleNewUserMessage={handleNewUserMessage}

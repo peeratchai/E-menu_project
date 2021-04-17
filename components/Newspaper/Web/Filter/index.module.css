@@ -1,0 +1,49 @@
+.boxHighlight {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  border-radius: 2px;
+}
+
+.cardHighlight {
+  padding: 12px 0;
+}
+
+.banner {
+  width: 100vw;
+  background-image: url("/images/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 1px;
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(50%, transparent),
+    color-stop(rgba(255, 255, 255, 0.5)),
+    to(white)
+  );
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(255, 255, 255, 0.5),
+    white
+  );
+}

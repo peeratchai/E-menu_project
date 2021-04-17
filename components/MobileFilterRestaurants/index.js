@@ -8,7 +8,7 @@ const { Option } = Select;
 import 'antd/dist/antd.css';
 
 //Modal Add Menu
-export default function SearchLocationModal(props) {
+export default function MobileFilterRestaurants(props) {
     const isBreakpoint = useMediaQuery(768)
 
     const [restaurantName, setRestaurantName] = React.useState();

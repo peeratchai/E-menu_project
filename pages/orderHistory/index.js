@@ -15,19 +15,19 @@ export default function OrderHistory() {
     const router = useRouter()
 
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
-
     const viewOrder = (orderId) => {
         router.push({
-            pathname: "/orderHistory/[oid]",
+            pathname: "/orderHistory/orderDetails",
             query: { oid: orderId }
         })
     }
+
     return (
         <>
             {
                 isBreakpoint ? (
                     <>
-                        <Layout mobile>
+                        <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>
                                 <Row style={{ height: "4rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} onClick={() => viewOrder(1)}>
                                     <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
@@ -141,7 +141,7 @@ function ConfirmOrderModal(props) {
                 </Row>
                 <Row>
                     <Col>
-                        <div style={{ textAlign: "center", color: "#ced2dc" }} className={utilStyles.fontContentSM}>
+                        <div style={{ textAlign: "center", color: "#ced2dc" }} className={utilStyles.font_size_sm}>
                             คุณต้องการยืนยันการสั่งอาหารหรือไม่
                         </div>
                     </Col>

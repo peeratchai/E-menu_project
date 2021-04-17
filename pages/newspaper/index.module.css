@@ -1,15 +1,5 @@
-.cardBodyMobile {
-  padding: 0.4rem;
-}
-
-.img {
-  min-height: 15rem;
-  max-height: 27rem;
-}
-
-.colCard {
-  margin-bottom: 45px;
-}
-.colCardMobile {
-  margin-bottom: 20px;
+.container {
+  max-width: 1200px;
+  padding: 0 1rem;
+  margin: 0 auto 6rem;
 }
