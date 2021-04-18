@@ -9,7 +9,7 @@ import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
 import { DeleteConfirmModal } from "../../components/AntdModal"
-import { EditableTable } from '../../components/tableAntdesign/tableAntdesign';
+import { EditableTable } from '../../components/TableAntdesign/tableAntdesign';
 
 import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
