@@ -46,7 +46,7 @@ export default function Newspaper() {
                         <br />
                         <WebPromotionlist />
                     </div>
-                </div >
+                </div>
             </Layout >
         )
     }

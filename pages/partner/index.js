@@ -1800,7 +1800,6 @@ function AddTableModal(props) {
 //Modal : View order each table
 function ViewOrderModal(props) {
 
-    const [categoryName, setCategoryName] = React.useState();
     const [tableNumber, setTableNumber] = React.useState(props.tableNumber)
 
     return (

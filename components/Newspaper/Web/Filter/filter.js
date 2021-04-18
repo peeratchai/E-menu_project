@@ -185,7 +185,7 @@ export default function WebFilter() {
                                 <WatchLaterIcon style={{ fontSize: "22px" }} />
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
-                                Open
+                                Open now
                         </div>
                         </div>
                     </div>
@@ -221,6 +221,7 @@ export default function WebFilter() {
                     </div>
                 </Row>
             </div>
+
         </div>
 
     )

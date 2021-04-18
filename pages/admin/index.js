@@ -1,16 +1,16 @@
 import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Tab, Modal, Container, Nav } from 'react-bootstrap'
+import { Row, Col, Form, Image, Tab, Modal, Container, Nav, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm } from 'antd';
-import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm, TimePicker } from 'antd';
+import { PlusOutlined, UploadOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
 import { DeleteConfirmModal } from "../../components/AntdModal"
 import { EditableTable } from '../../components/TableAntdesign/tableAntdesign';
-
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -832,6 +832,10 @@ export default function Admin() {
                                                                     <Form.Label className={utilStyles.cardTitle}>Promoted contents</Form.Label>
                                                                     <Form.Control as="textarea" rows={4} />
                                                                 </Form.Group>
+                                                                <Form.Group controlId="banner.text">
+                                                                    <Form.Label >Banner Text</Form.Label>
+                                                                    <Form.Control as="textarea" rows={2} />
+                                                                </Form.Group>
                                                                 <div style={{ textAlign: "right" }}>
                                                                     <Button type="primary">
                                                                         Post
@@ -893,13 +897,14 @@ export default function Admin() {
                                                 </div>
                                                 <div className={styles.tab}>
                                                     <Row>
+                                                        {/* Left section */}
                                                         <Col sm={6}>
                                                             {/* Upload restaurants logo */}
-                                                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
+                                                            <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingLeft: "18px", paddingBottom: "10px" }}>
                                                                 <Row style={{ marginBottom: "10px" }}>
                                                                     <Col>
                                                                         <div>
-                                                                            Restaurant Logo
+                                                                            <b>Restaurant Logo</b>
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
@@ -931,8 +936,8 @@ export default function Admin() {
                                                                 <Row style={{ marginBottom: "10px" }}>
                                                                     <Col>
                                                                         <div>
-                                                                            Restaurant Picture
-                                                </div>
+                                                                            <b>Restaurant Banner Picture</b>
+                                                                        </div>
                                                                     </Col>
                                                                 </Row>
                                                                 <Row>
@@ -949,6 +954,69 @@ export default function Admin() {
                                                                     </Col>
                                                                 </Row>
                                                             </div>
+                                                            <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px" }}>
+                                                                <Row style={{ marginBottom: "15px" }}>
+                                                                    <Col>
+                                                                        <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Monday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Tuesday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Wednesday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Thursday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Friday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Saturday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row style={{ marginBottom: "10px" }}>
+                                                                    <Col xs={3}>
+                                                                        Sunday
+                                                                </Col>
+                                                                    <Col xs={9}>
+                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </div>
                                                             <AntdModal
                                                                 previewVisible={previewVisible}
                                                                 previewTitle={previewTitle}
@@ -956,10 +1024,16 @@ export default function Admin() {
                                                                 onCancel={handleCancel}
                                                                 previewImage={previewImage}
                                                             />
-
-
                                                         </Col>
+                                                        {/* Right section */}
                                                         <Col sm={6}>
+                                                            <Row style={{ marginBottom: "10px" }}>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Restaurant Details</b>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
                                                             <Form>
                                                                 <Form.Group controlId="restaurantName">
                                                                     <Form.Label>Restaurant Name</Form.Label>
@@ -969,21 +1043,34 @@ export default function Admin() {
                                                                     <Form.Label>Location</Form.Label>
                                                                     <Form.Control type="text" placeholder="Location" />
                                                                 </Form.Group>
-                                                                <Form.Group controlId="openingTime">
-                                                                    <Form.Label>Opening Time</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Opening Time" />
+                                                                <Form.Group controlId="phoneNumber">
+                                                                    <Form.Label>Phone Number</Form.Label>
+                                                                    <Form.Control type="text" placeholder="Phone Number" />
+                                                                </Form.Group>
+                                                                <Form.Group controlId="webSiteUrl">
+                                                                    <Form.Label>Website URL</Form.Label>
+                                                                    <Form.Control type="text" placeholder="Phone Number" />
+                                                                </Form.Group>
+                                                                <Form.Group controlId="facebookURL">
+                                                                    <Form.Label>Facebook URL</Form.Label>
+                                                                    <Form.Control type="text" placeholder="Phone Number" />
+                                                                </Form.Group>
+                                                                <Form.Group controlId="twitter">
+                                                                    <Form.Label>Twitter URL</Form.Label>
+                                                                    <Form.Control type="text" placeholder="Phone Number" />
                                                                 </Form.Group>
                                                                 <Form.Group controlId="priceRange">
-                                                                    <Form.Label>Price Range</Form.Label>
+                                                                    <Form.Label>Price Range (Generated by system)</Form.Label>
                                                                     <br />
-                                                                    <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePrice} />
+                                                                    {/* Price range is generated by system */}
+                                                                    <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} disabled={true} />
                                                                     <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
                                                                 </Form.Group>
 
                                                                 <div style={{ textAlign: "right" }}>
                                                                     <Button type="primary" >
                                                                         Save
-                                            </Button>
+                                                                    </Button>
                                                                 </div>
                                                             </Form>
                                                         </Col>
@@ -1440,6 +1527,10 @@ export default function Admin() {
                                                     <Form.Group controlId="exampleForm.ControlTextarea1">
                                                         <Form.Label className={utilStyles.cardTitle}>Promoted contents</Form.Label>
                                                         <Form.Control as="textarea" rows={4} />
+                                                    </Form.Group>
+                                                    <Form.Group controlId="banner.text">
+                                                        <Form.Label >Banner Text</Form.Label>
+                                                        <Form.Control as="textarea" rows={2} />
                                                     </Form.Group>
                                                     <div style={{ textAlign: "right" }}>
                                                         <Button type="primary" type="submit">
@@ -2002,133 +2093,466 @@ function ViewOrderModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    All bills
+                    All Tables
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Row style={{ height: "80vh" }}>
-                    <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
-                        {/* Table list */}
-                        <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                <Tabs defaultActiveKey="newOrder" id="orderStatus-tabs">
+                    <Tab eventKey="newOrder" title="New order">
+                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+                                {/* Table list */}
+                                <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
                                                 &nbsp;&nbsp; T1
                                             </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>1,059 THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                14:14:59 - 20/03/2021
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1,059 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
                                                 </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
                                                 &nbsp;&nbsp; T2
                                             </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>860 THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                14:14:59 - 20/03/2021
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>860 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
                                                 </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
                                                 &nbsp;&nbsp; T3
                                             </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>1530 THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                14:14:59 - 20/03/2021
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1530 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
                                                 </div>
-                                        </Col>
-                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={8}>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ผัดไทย</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                    <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 1</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 80 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ยำปลาหมึก</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                    <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 2</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 160 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                                    <b>Total is 240 THB</b>
                                 </div>
                             </Col>
                         </Row>
-                    </Col>
-                    <Col xs={8}>
-                        <Row style={{ paddingBottom: "10px" }}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col xs={2}>
-                                            <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
-                                        </Col>
-                                        <Col xs={10}>
-                                            <div>
-                                                <b>ผัดไทย</b>
-                                            </div>
-                                            <div>
-                                                <b>x 1</b>
-                                            </div>
-                                            <div style={{ textAlign: "right" }}>
-                                                Price : 80 THB
+                    </Tab>
+                    <Tab eventKey="inOrder" title="In Order">
+                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+                                {/* Table list */}
+                                <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T1
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1,059 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
                                                 </div>
-                                        </Col>
-                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T2
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>860 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T3
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1530 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={8}>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ผัดไทย</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                    <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 1</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 80 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ยำปลาหมึก</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                    <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 2</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 160 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                                    <b>Total is 240 THB</b>
                                 </div>
                             </Col>
                         </Row>
-                        <Row style={{ paddingBottom: "10px" }}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col xs={2}>
-                                            <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
-                                        </Col>
-                                        <Col xs={10}>
-                                            <div>
-                                                <b>ยำปลาหมึก</b>
-                                            </div>
-                                            <div>
-                                                <b>x 2</b>
-                                            </div>
-                                            <div style={{ textAlign: "right" }}>
-                                                Price : 160 THB
+                    </Tab>
+                    <Tab eventKey="completed" title="Completed">
+                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+                                {/* Table list */}
+                                <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T1
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1,059 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
                                                 </div>
-                                        </Col>
-                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T2
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>860 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col>
+                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                &nbsp;&nbsp; T3
+                                            </Col>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        <b>1530 THB</b>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                        14:14:59 - 20/03/2021
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={8}>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ผัดไทย</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <b>Completed</b>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 1</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 80 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row style={{ paddingBottom: "10px" }}>
+                                    <Col>
+                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                            <Row >
+                                                <Col xs={2}>
+                                                    <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
+                                                </Col>
+                                                <Col xs={10}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col xs={8}>
+                                                                <div>
+                                                                    <b>ยำปลาหมึก</b>
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                                    <b>Completed</b>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div>
+                                                        <b>x 2</b>
+                                                    </div>
+                                                    <div style={{ textAlign: "right" }}>
+                                                        Price : 160 THB
+                                                </div>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                                    <b>Total is 240 THB</b>
                                 </div>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
+                    </Tab>
+                </Tabs>
             </Modal.Body>
         </Modal >
     );
@@ -2352,9 +2776,6 @@ function EditMasterDataModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button type="primary" onClick={() => { saveMenu() }}>
-                    Add
-                </Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
 
@@ -2428,31 +2849,96 @@ function EditFoodDataModal(props) {
                                 <Form.Group as={Row} controlId="category">
                                     <Form.Label column sm={2}>Category</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" value={foodData.category} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select category"
+                                            optionFilterProp="children"
+                                            value={foodData.category}
+                                            onChange={(e) => onChangeCategory(e)}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            <Option value="Category 1">Category 1</Option>
+                                            <Option value="Category 2">Category 2</Option>
+                                        </Select>
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="national">
                                     <Form.Label column sm={2}>National</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" value={foodData.national} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select national"
+                                            optionFilterProp="children"
+                                            value={foodData.national}
+                                            onChange={(e) => onChangeNational(e)}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            <Option value="National 1">National 1</Option>
+                                            <Option value="National 2">National 2</Option>
+                                        </Select>
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="foodKind">
                                     <Form.Label column sm={2}>Food Kind</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" value={foodData.foodKind} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select foodKind"
+                                            optionFilterProp="children"
+                                            value={foodData.foodKind}
+                                            onChange={() => onChangeFoodKind}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            <Option value="Food Kind 1">Food Kind 1</Option>
+                                            <Option value="Food Kind 2">Food Kind 2</Option>
+                                        </Select>
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="subKind">
                                     <Form.Label column sm={2}>Sub Kind</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" value={foodData.subKind} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select sub kind"
+                                            optionFilterProp="children"
+                                            value={foodData.subKind}
+                                            onChange={(e) => onChangeSubKind(e)}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            <Option value="Sub Kind 1">Sub Kind 1</Option>
+                                            <Option value="Sub Kind 2">Sub Kind 2</Option>
+                                        </Select>
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="cookMethod">
                                     <Form.Label column sm={2}>Cook Method</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" value={foodData.cookMethod} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select cookMethod"
+                                            optionFilterProp="children"
+                                            value={foodData.cookMethod}
+                                            onChange={(e) => onChangeCookMethod(e)}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            <Option value="Cook Method 1">Cook Method 1</Option>
+                                            <Option value="Cook Method 2">Cook Method 2</Option>
+                                        </Select>
                                     </Col>
                                 </Form.Group>
                             </Form>

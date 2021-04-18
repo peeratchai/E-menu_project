@@ -8,8 +8,11 @@ export default function WebPromotionlist() {
         <Row xs={12} md={3} >
             <Col style={{ padding: "0 1.2rem" }}>
                 <div className={styles.colCard} >
-                    <div className={utilStyles.img_hover_zoom}>
-                        <Image src="/images/news1.jpg" style={{ height: "25rem" }} />
+                    <div className={utilStyles.img_hover_zoom} style={{ backgroundImage: " url('/images/news1.jpg')", backgroundSize: "cover", height: "25rem" }}>
+                        {/* <Image src="/images/news1.jpg" style={{}} /> */}
+                        <div className={styles.bannerText}>
+                            Sale up to 60%
+                        </div>
                     </div>
                     <div className={utilStyles.fontContent}>
                         <b>Ithaa</b> - Rangali Island, Maldives
@@ -19,8 +22,11 @@ export default function WebPromotionlist() {
                                         </div>
                 </div>
                 <div className={styles.colCard}>
-                    <div className={utilStyles.img_hover_zoom}>
-                        <Image src="/images/news2.jpg" style={{ height: "15rem" }} />
+                    <div className={utilStyles.img_hover_zoom} style={{ backgroundImage: " url('/images/news2.jpg')", backgroundSize: "cover", height: "25rem" }}>
+                        {/* <Image src="/images/news1.jpg" style={{}} /> */}
+                        <div className={styles.bannerText}>
+                            Sale up to 60%
+                        </div>
                     </div>
                     <div className={utilStyles.fontContent}>
                         <b>Dinner in the Sky</b> - Over 45 countries worldwide
