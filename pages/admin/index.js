@@ -3,12 +3,13 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Tab, Modal, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card } from 'antd';
+import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
 import { DeleteConfirmModal } from "../../components/AntdModal"
+import { EditableTable } from '../../components/tableAntdesign/tableAntdesign';
 
 import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
@@ -82,7 +83,8 @@ export default function Admin() {
     const [searchText, setSearchText] = React.useState('');
     const [foodDataModalShow, setFoodDataModalShow] = React.useState(false);
     const [viewPromoteShowModal, setViewPromoteShowModal] = React.useState(false);
-
+    const [foodItemSelectedForEdit, setFoodItemSelectedForEdit] = React.useState();
+    const [editMasterDataModalShow, setEditMasterDataModalShow] = React.useState(false);
     var searchInput = React.createRef();
 
 
@@ -140,7 +142,7 @@ export default function Admin() {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }}>
+                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => { setFoodDataModalShow(true), setFoodItemSelectedForEdit(record) }}>
                         Edit
                     </Tag>
                     <DeleteConfirmModal onOK={deleteFoodItem} />
@@ -1092,8 +1094,8 @@ export default function Admin() {
                                                     Food Data
                                                 </div>
                                                 <div style={{ textAlign: "right", padding: "15px" }}>
-                                                    <Button type="primary" onClick={() => setFoodDataModalShow(true)}>
-                                                        Add Food Item
+                                                    <Button type="primary" onClick={() => setEditMasterDataModalShow(true)}>
+                                                        Edit master data
                                                     </Button>
                                                 </div>
                                                 <Table columns={columnsFoodData} dataSource={dataFood} scroll={{ x: 'max-content' }} />
@@ -1111,7 +1113,7 @@ export default function Admin() {
                                 </Row>
                             </Tab.Container>
 
-                            
+
                         </>
                     ) : (
                         //Mobile Version
@@ -1676,6 +1678,7 @@ export default function Admin() {
                 }
 
             </Container >
+            {/* Modal Sections */}
             <AddCategoryModal
                 show={categoryModalShow}
                 onHide={() => setCategoryModalShow(false)}
@@ -1686,10 +1689,16 @@ export default function Admin() {
                 onHide={() => setMenuModalShow(false)}
                 title={selectCategory}
             />
-            <AddFoodModal
+            <EditFoodDataModal
                 show={foodDataModalShow}
                 onHide={() => setFoodDataModalShow(false)}
-                title='Add Food Item'
+                title='Edit Food Item'
+                foodData={foodItemSelectedForEdit}
+            />
+            <EditMasterDataModal
+                show={editMasterDataModalShow}
+                onHide={() => setEditMasterDataModalShow(false)}
+                title='Edit master data'
             />
             <AddTableModal
                 show={addTableModalShow}
@@ -2216,11 +2225,163 @@ function EditProfile(props) {
     );
 }
 
-//Modal : Add Food Item (Admin)
-function AddFoodModal(props) {
+//Modal : Edit master data such as Category, National, Food kind ,Etc.. for Admin
+function EditMasterDataModal(props) {
 
     const [categoryName, setCategoryName] = React.useState();
-    const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState("data:image/png;base64,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");
+    const [masterData, setMasterData] = React.useState(
+        [
+            {
+                key: '1',
+                name: 'Category 1',
+            },
+            {
+                key: '2',
+                name: 'Category 2',
+            },
+        ]
+    );
+    const [dataSelected, setDataSelected] = React.useState("Category");
+
+
+    const saveMenu = () => {
+        console.log('categoryName ->', categoryName)
+        setCategoryName("")
+        props.onHide()
+    }
+
+    const handleDeleteItem = (key) => {
+        const tempMasterData = masterData
+        setMasterData(tempMasterData.filter((item) => item.key !== key))
+    };
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            width: '60%',
+            editable: true,
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <Space size="middle">
+                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDeleteItem(record.key)}>
+                        <a style={{ color: "#1890ff" }}>Delete</a>
+                    </Popconfirm>
+                </Space>
+            ),
+        }
+    ];
+
+    const EditDataTable = (data) => {
+        setMasterData(data);
+    };
+
+    function onChangeData(dataSelected) {
+        console.log('search:', dataSelected);
+        setDataSelected(dataSelected)
+    }
+
+    function onSearchData(val) {
+        console.log('search:', val);
+    }
+
+    const addNewItem = () => {
+        const newData = {
+            name: "New data",
+        };
+        setMasterData([...masterData, newData])
+    };
+
+    return (
+
+        <Modal
+            {...props}
+            dialogClassName="menuModal-60w"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title style={{ fontSize: "1.3rem" }}>
+                    <b>{props.title}</b>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Container>
+                    <Row>
+                        <Col>
+                            <Select
+                                showSearch
+                                style={{ width: 200, marginRight: "10px" }}
+                                placeholder="Select a data to manage"
+                                optionFilterProp="children"
+                                value={dataSelected}
+                                onChange={(e) => onChangeData(e)}
+                                onSearch={() => onSearchData}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                <Option value="Category">Category</Option>
+                                <Option value="National">National</Option>
+                                <Option value="Food Kind">Food Kind</Option>
+                                <Option value="Sub Kind">Sub Kind</Option>
+                                <Option value="Cook Method">Cook Method</Option>
+                            </Select>
+                        </Col>
+                        <Col>
+                            <div style={{ textAlign: "right" }}>
+                                <Button onClick={() => addNewItem()}>
+                                    Add new item
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginTop: "15px" }}>
+                        <Col>
+                            <EditableTable
+                                columns={columns}
+                                dataSource={masterData}
+                                edit={(data) => EditDataTable(data)}
+                            />
+                        </Col>
+                    </Row>
+                </Container>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button type="primary" onClick={() => { saveMenu() }}>
+                    Add
+                </Button>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+
+        </Modal >
+    );
+}
+
+//Modal : Edit food data (Admin)
+function EditFoodDataModal(props) {
+
+    const [categoryName, setCategoryName] = React.useState();
+    const [foodData, setFoodData] = React.useState({
+        nameThai: null,
+        nameEnglish: null,
+        price: null,
+        category: null,
+        national: null,
+        foodKind: null,
+        subKind: null,
+        cookMethod: null
+    });
+
+    useEffect(() => {
+        if (props.foodData != undefined) {
+            setFoodData(props.foodData)
+        }
+    }, [props])
 
     const saveMenu = () => {
         console.log('categoryName ->', categoryName)
@@ -2249,49 +2410,49 @@ function AddFoodModal(props) {
                                 <Form.Group as={Row} controlId="nameThai">
                                     <Form.Label column sm={2}>Name Thai</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.nameThai} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="NameEnglish">
                                     <Form.Label column sm={2}>Name English</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.nameEnglish} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="price">
                                     <Form.Label column sm={2}>Price</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.price} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="category">
                                     <Form.Label column sm={2}>Category</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.category} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="national">
                                     <Form.Label column sm={2}>National</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.national} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="foodKind">
                                     <Form.Label column sm={2}>Food Kind</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.foodKind} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="subKind">
                                     <Form.Label column sm={2}>Sub Kind</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.subKind} />
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="cookMethod">
                                     <Form.Label column sm={2}>Cook Method</Form.Label>
                                     <Col sm={10}>
-                                        <Form.Control type="text" placeholder="" />
+                                        <Form.Control type="text" placeholder="" value={foodData.cookMethod} />
                                     </Col>
                                 </Form.Group>
                             </Form>
@@ -2301,7 +2462,7 @@ function AddFoodModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button type="primary" onClick={() => { saveMenu() }}>
-                    Add
+                    Save
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>

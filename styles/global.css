@@ -61,6 +61,10 @@ img {
   min-width: 70%;
 }
 
+.menuModal-60w {
+  min-width: 60%;
+}
+
 .ant-upload {
   width: 100%;
 }
@@ -275,4 +279,40 @@ input#whatSearch.form-control {
   padding: 0 !important;
   border: none !important;
   font-size: 0.9rem;
+}
+
+#orderStatus-tabs-tab-newOrder {
+  color: red;
+}
+#orderStatus-tabs-tab-inOrder {
+  color: green;
+}
+
+#orderStatus-tabs-tab-completed {
+  color: gray;
+}
+
+/* Edit cell table */
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  padding: 4px 11px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] .editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #434343;
+}
+/* Edit cell table */
+
+div.ant-row.ant-form-item {
+  margin: 0;
 }
