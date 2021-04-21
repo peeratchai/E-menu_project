@@ -10,7 +10,8 @@ import React from 'react'
 import styles from './index.module.css'
 import GoogleMapReact from 'google-map-react';
 import { Slider, Select, Checkbox } from 'antd';
-import MobileFilterRestaurants from '../../components/MobileFilterRestaurants/index'
+import MobileFilterRestaurant from '../../components/MenuFeeding/Mobile/Filter'
+import ShowFiilterSelected from '../../components/ShowFiilterSelected'
 
 const { Option } = Select;
 import 'antd/dist/antd.css';
@@ -23,7 +24,7 @@ export default function MenuFeeding() {
     const [modalShow, setModalShow] = React.useState(false);
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
-    
+
     const searchFunc = () => {
         setModalShow(true)
     }
@@ -403,15 +404,14 @@ export default function MenuFeeding() {
                                 </Col>
                             </Row>
                         </div>
-                        <MobileFilterRestaurants
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                        />
                     </Layout>
                 ) : (
                     // Mobile Version
                     <Layout containerType="mobile" search searchFunc={searchFunc}>
                         <Container className={utilStyles.container_sm}>
+
+                            <ShowFiilterSelected />
+
                             <Row style={{ marginBottom: "20px" }}>
                                 <Col xs={12}>
                                     <span className={utilStyles.fontTitleMobile}>
@@ -419,6 +419,32 @@ export default function MenuFeeding() {
                                         </span>
                                 </Col>
                             </Row>
+
+                            {/* Results found */}
+                            <Row style={{ padding: "0 10px 10px 10px" }} className={utilStyles.font_size_sm}>
+                                <Col xs={5} style={{ margin: "auto" }}>
+                                    <div>
+                                        <b>130 Results found</b>
+                                    </div>
+                                </Col>
+                                <Col xs={7}>
+                                    <div style={{ textAlign: "right" }}>
+                                        <b>sort by</b> &nbsp;
+                                        <Select
+                                            showSearch
+                                            style={{ width: "25vw", textAlign: "left" }}
+                                            placeholder="Search to Select"
+                                            defaultValue="Lastet"
+                                        >
+                                            <Option value="-">-</Option>
+                                            <Option value="Lastet">Lastet</Option>
+                                            <Option value="Bangkok">Bangkok</Option>
+                                            <Option value="Nonthaburi">Nonthaburi</Option>
+                                        </Select>
+                                    </div>
+                                </Col>
+                            </Row>
+
                             <Row>
                                 <Col xs={12} className={styles.colCardMobile}>
                                     <Link
@@ -526,7 +552,7 @@ export default function MenuFeeding() {
                                 </Col>
                             </Row>
                         </Container>
-                        <MobileFilterRestaurants
+                        <MobileFilterRestaurant
                             show={modalShow}
                             onHide={() => setModalShow(false)}
                         />

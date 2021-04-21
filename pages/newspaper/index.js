@@ -1,15 +1,15 @@
-import Layout, { siteTitle } from '../../components/layout'
+import Layout from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import useMediaQuery from "../../utils/utils";
-import { Select, Checkbox } from 'antd';
-import React, { useEffect } from 'react'
+import MobilePromotionlist from '../../components/Newspaper/Mobile/Promotionlist/promotionlist'
 import WebFilter from '../../components/Newspaper/Web/Filter/filter'
 import WebPromotionlist from '../../components/Newspaper/Web/Promotionlist/promotionlist'
-import MobilePromotionlist from '../../components/Newspaper/Mobile/Promotionlist/promotionlist'
-import MobileFilterRestaurants from '../../components/MobileFilterRestaurants/index'
+import MobileFilter from '../../components/Newspaper/Mobile/Filter'
+import ShowFiilterSelected from '../../components/ShowFiilterSelected'
 import styles from './index.module.css'
 import 'antd/dist/antd.css';
+import React from 'react'
 
 export default function Newspaper() {
     const isBreakpoint = useMediaQuery(768)
@@ -27,9 +27,10 @@ export default function Newspaper() {
         component = (
             <Layout containerType="mobile" search searchFunc={searchFunc}>
                 <Container className={utilStyles.container_sm}>
+                    <ShowFiilterSelected />
                     <MobilePromotionlist />
                 </Container>
-                <MobileFilterRestaurants
+                <MobileFilter
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                 />

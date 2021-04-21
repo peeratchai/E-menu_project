@@ -154,7 +154,7 @@ export default function WebFilter() {
                 <Row>
                     <div style={{ fontSize: "1.125rem", color: "#666666", marginBottom: "1.25rem" }}>
                         Or browse the highlights
-                </div>
+                    </div>
                 </Row>
 
                 {/* Highlights */}

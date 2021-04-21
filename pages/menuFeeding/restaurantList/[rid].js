@@ -610,7 +610,7 @@ export default function Restaurant({ props }) {
                                         </div>
                                         <div style={{ marginTop: "10px" }}>
                                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                            </div>
+                                        </div>
                                         <Tabs
                                             id="controlled-tab-example"
                                             activeKey={key}
@@ -1105,6 +1105,163 @@ export default function Restaurant({ props }) {
                                                 </div>
                                             </Tab>
                                         </Tabs>
+                                        <Row>
+                                            <Col md={4} className={utilStyles.font_size_sm} style={{ marginTop: "20px" }}>
+                                                <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
+                                                    <div style={{ width: "100%", height: "240px" }}>
+                                                        <GoogleMapReact
+                                                            // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
+                                                            defaultCenter={{
+                                                                lat: 13.7587154,
+                                                                lng: 100.5663139,
+                                                            }}
+                                                            defaultZoom={11}
+                                                        >
+                                                            <AnyReactComponent
+                                                                lat={59.955413}
+                                                                lng={30.337844}
+                                                                text="My Marker"
+                                                            />
+                                                        </GoogleMapReact>
+                                                    </div>
+                                                    <div style={{ padding: "1.25rem" }}>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <LocationOnIcon /> &nbsp; 125 Mountain St, Brooklyn, NY
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <PhoneIcon /> &nbsp; (301) 453-8688
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <LanguageIcon /> &nbsp; <a href="#">www.thaistaste.com</a>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0" }}>
+                                                            <FacebookIcon style={{ color: "#3b5998", fontSize: "40px", marginRight: "5px" }} /> <TwitterIcon style={{ color: "#1da1f2", fontSize: "40px" }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ backgroundColor: "#f0f2f3" }}>
+                                                    <div style={{ padding: "1.25rem" }}>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }} >
+                                                            <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
+                                                        </div>
+                                                        <div style={{ padding: "15px 0" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Today</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right", color: "#74b100 " }}>
+                                                                        Open Now!
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Monday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Tuesday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Wednesday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Thursday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Friday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Saturday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div style={{ padding: "10px 0" }}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <div>
+                                                                        <b>Sunday</b>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col>
+                                                                    <div style={{ textAlign: "right" }}>
+                                                                        08:00AM - 09:00PM
+                                                                </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>

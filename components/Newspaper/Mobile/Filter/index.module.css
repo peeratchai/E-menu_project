@@ -1,0 +1,19 @@
+.colPadding {
+  padding: 0.5rem;
+}
+
+.boxHighlight {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  background-color: #f7f7f7;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.cardHighlight {
+  padding: 12px 0;
+}

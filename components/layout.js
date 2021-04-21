@@ -19,7 +19,7 @@ const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget)
     ssr: false
 });
 
-export default function Layout({ children, containerType, search, searchFunc }) {
+export default function Layout({ children, containerType, searchFunc }) {
     const [modalShow, setModalShow] = React.useState(false);
     const [login, setLogin] = React.useState();
     const isBreakpoint = useMediaQuery(768)
@@ -111,12 +111,12 @@ export default function Layout({ children, containerType, search, searchFunc }) 
                     `}</style>
                 <ActiveLink activeClassName="active" href="/newspaper">
                     {
-                        isBreakpoint && search ? (
+                        isBreakpoint ? (
                             //For Mobile
                             <>
-                                <SearchIcon
-                                    className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
-                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "10px", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+
+                                <SearchIcon className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
                             </>
                         ) : (
                             //For PC
@@ -131,7 +131,6 @@ export default function Layout({ children, containerType, search, searchFunc }) 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
                     <Nav className="mr-auto">
-
                     </Nav>
                     <Nav>
                         <ActiveLink activeClassName="active" href="/newspaper">
@@ -254,7 +253,7 @@ function LoginModal(props) {
                                         <Button variant="primary" onClick={() => window.localStorage.setItem('login', true)} style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
 
-                                </Button>
+                                        </Button>
                                     </Col>
                                 </Row>
 

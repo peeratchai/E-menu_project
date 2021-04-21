@@ -10,9 +10,10 @@ import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import GoogleMapReact from 'google-map-react';
 import React from 'react'
-import MobileFilterRestaurants from '../../../components/MobileFilterRestaurants/index'
+import MobileFilterRestaurant from '../../../components/MenuFeeding/Mobile/Filter'
 import SearchIcon from '@material-ui/icons/Search';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import ShowFiilterSelected from '../../../components/ShowFiilterSelected'
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const { Option } = Select;
@@ -530,12 +531,41 @@ export default function RestaurantList({ props }) {
                     //Mobile Version
                     <Layout containerType="mobile" search searchFunc={searchFunc}>
                         <Container className={utilStyles.container_sm} >
+
+                            <ShowFiilterSelected />
+
                             <Breadcrumb>
                                 <Link href="/menuFeeding" passHref>
                                     <Breadcrumb.Item>Ari</Breadcrumb.Item>
                                 </Link>
                                 <Breadcrumb.Item active>Restaurant List</Breadcrumb.Item>
                             </Breadcrumb>
+
+                            {/* Results found */}
+                            <Row style={{ padding: "0 10px 10px 10px" }} className={utilStyles.font_size_sm}>
+                                <Col xs={5} style={{ margin: "auto" }}>
+                                    <div>
+                                        <b>130 Results found</b>
+                                    </div>
+                                </Col>
+                                <Col xs={7}>
+                                    <div style={{ textAlign: "right" }}>
+                                        <b>sort by</b> &nbsp;
+                                        <Select
+                                            showSearch
+                                            style={{ width: "25vw", textAlign: "left" }}
+                                            placeholder="Search to Select"
+                                            defaultValue="Lastet"
+                                        >
+                                            <Option value="-">-</Option>
+                                            <Option value="Lastet">Lastet</Option>
+                                            <Option value="Bangkok">Bangkok</Option>
+                                            <Option value="Nonthaburi">Nonthaburi</Option>
+                                        </Select>
+                                    </div>
+                                </Col>
+                            </Row>
+
                             {/* List of Restaurant */}
                             <Row>
                                 <Col xs={12} md={4}>
@@ -548,19 +578,25 @@ export default function RestaurantList({ props }) {
                                         <Card>
                                             <Card.Img variant="top" src="/images/restaurant1.jpg" />
                                             <Card.Body className={styles.content}>
-                                                <Card.Title className={styles.title}>Park Hyatt Bangkok</Card.Title>
+                                                <Card.Title className={styles.title}><b>Park Hyatt Bangkok</b></Card.Title>
                                                 <Card.Text className={styles.card_text}>
                                                     <Row>
-                                                        <Col>
-                                                            <span style={{ backgroundColor: "rgb(162,216,76)", padding: "2px 4px", borderRadius: "3px", color: "white" }}>4.9</span>
-                                    &nbsp;&nbsp;
-                                    <span >120 rating</span>
-                                                        </Col>
+                                                        <Col style={{ borderRight: "1px solid #dee2e6" }}>
+                                                            Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
+                                                                </Col>
+                                                        <Col style={{ color: "#74b100" }}>
+                                                            Open now!
+                                                            </Col>
                                                     </Row>
                                                     <Row style={{ marginTop: "10px" }}>
-                                                        <Col>
+                                                        <Col style={{ paddingBottom: "15px", borderBottom: "1px solid #dee2e6" }}>
                                                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                        </Col>
+                                                            </Col>
+                                                    </Row>
+                                                    <Row style={{ marginTop: "15px" }}>
+                                                        <Col>
+                                                            <LocationOnIcon /> &nbsp; 92 Halsey St, Brooklyn, NY
+                                                            </Col>
                                                     </Row>
                                                 </Card.Text>
                                             </Card.Body>
@@ -763,7 +799,7 @@ export default function RestaurantList({ props }) {
                                 </Col>
                             </Row>
                         </Container>
-                        <MobileFilterRestaurants
+                        <MobileFilterRestaurant
                             show={modalShow}
                             onHide={() => setModalShow(false)}
                         />

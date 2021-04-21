@@ -229,6 +229,7 @@ img {
     margin: 0 !important;
     max-width: none !important;
     width: 100% !important;
+    z-index: 2 !important;
   }
 
   .rcw-conversation-container.active {
@@ -237,16 +238,6 @@ img {
     transform: translateY(0) !important;
     transition: opacity 0.3s ease, transform 0.3s ease !important;
   }
-}
-
-.navbar-toggler {
-  padding: 0.25rem 0.75rem;
-  font-size: 1.25rem;
-  line-height: 1;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  margin: 0 !important;
 }
 
 .modal {
@@ -315,4 +306,9 @@ input#whatSearch.form-control {
 
 div.ant-row.ant-form-item {
   margin: 0;
+}
+
+.navbar-toggler {
+  position: absolute;
+  top: 25px;
 }
