@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import styles from './index.module.css'
 import Link from 'next/link'
 import Carousel from 'react-bootstrap/Carousel'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useMediaQuery from "../../../utils/utils";
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -18,6 +18,8 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
+import { RightOutlined } from '@ant-design/icons';
+import { StyleSharp } from '@material-ui/icons'
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -30,6 +32,63 @@ export default function Restaurant({ props }) {
     const route = router.route
     const aspath = route.split('/')
     const path = '/' + aspath[1] + '/' + aspath[2] + '/' + router.query.restaurant + '?' + 'area=' + router.query.area + '&' + 'restaurant=' + router.query.restaurant
+    const [categoryNav, setCategoryNav] = React.useState();
+    const [transformCategoryNav, setTransformCategoryNav] = React.useState();
+    const [categoryList, setCategoryList] = React.useState([{ categoryName: 'foodType', isActive: true }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodTypeFinal', isActive: false }]);
+    const refCategoryNav = React.useRef();
+    const refCategoryList = React.useRef();
+    const toggleClassSelectedCategory = (index) => {
+        let currentCategoryList = categoryList
+        currentCategoryList.filter((category) => category.isActive == true).forEach(category => category.isActive = false)
+        currentCategoryList[index].isActive = !currentCategoryList[index].isActive
+        console.log(currentCategoryList)
+        setCategoryList(currentCategoryList)
+        activeCategory()
+    }
+
+    useEffect(() => {
+        activeCategory()
+    }, [])
+
+    const setClassNameCategoryNav = (category, index) => {
+        if (category.isActive) {
+            if (index == 0) {
+                return styles.category_active_first_child
+            } else {
+                return styles.category_active
+            }
+        } else {
+            if (index == 0) {
+                return styles.category_first_child
+            } else {
+                return styles.category
+            }
+        }
+    }
+
+    const activeCategory = () => {
+        let tempCategoryNav = categoryList.map((category, index) =>
+        (
+            <div className={setClassNameCategoryNav(category, index) + " " + utilStyles.fontMobileSM} key={category.categoryName + index} onClick={() => toggleClassSelectedCategory(index)}>
+                {category.categoryName}
+            </div>
+        ))
+        setCategoryNav(tempCategoryNav)
+    }
+
+    const scrollCategoryNav = () => {
+        console.log('refCategoryNav', refCategoryNav.current.offsetWidth)
+        console.log('refCategoryList', refCategoryList.current.offsetWidth)
+        let widthCategoryNav = refCategoryNav.current.offsetWidth
+        let widthCategoryList = refCategoryList.current.offsetWidth
+        let widthButtonScroller = 24
+        let differentWidthBetweenNavAndCategoryList = (widthCategoryList - widthCategoryNav) + (widthButtonScroller)
+        if ((transformCategoryNav + widthCategoryNav) <= differentWidthBetweenNavAndCategoryList) {
+            setTransformCategoryNav(-(transformCategoryNav + widthCategoryNav))
+        } else {
+            setTransformCategoryNav(-(differentWidthBetweenNavAndCategoryList))
+        }
+    }
 
     return (
         <>
@@ -73,20 +132,35 @@ export default function Restaurant({ props }) {
                                     />
                                 </Carousel.Item>
                             </Carousel>
-                            <Card>
+                            <Card style={{ cursor: "auto" }}>
                                 <Card.Body>
                                     <Card.Title>Park Hyatt Bangkok</Card.Title>
                                     <Card.Text className={styles.card_text}>
-                                        <div>
-                                            <span style={{ backgroundColor: "rgb(162,216,76)", padding: "2px 4px", borderRadius: "3px", color: "white" }}>4.9</span>
-                                    &nbsp;&nbsp;
-                                    <span >120 rating</span>
-                                        </div>
-                                        <div style={{ marginTop: "10px" }}>
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                        </div>
+                                        <Row>
+                                            <Col style={{ borderRight: "1px solid #dee2e6" }}>
+                                                Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
+                                            </Col>
+                                            <Col style={{ color: "#74b100" }}>
+                                                Open now!
+                                            </Col>
+                                        </Row>
+                                        <Row style={{ marginTop: "10px" }}>
+                                            <Col style={{ paddingBottom: "15px", borderBottom: "1px solid #dee2e6" }}>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                                            </Col>
+                                        </Row>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col md={8}>
+
+                                                <div className={styles.nav_category} ref={refCategoryNav}>
+                                                    <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${transformCategoryNav}px)` }}>
+                                                        {categoryNav}
+                                                    </div>
+                                                    <Button className={styles.nav_scroller_button} onClick={() => scrollCategoryNav()}>
+                                                        <RightOutlined className={styles.nav_scroller_icon} />
+                                                    </Button>
+                                                </div>
+
                                                 <Tabs
                                                     id="menu-tab"
                                                     activeKey={key}
