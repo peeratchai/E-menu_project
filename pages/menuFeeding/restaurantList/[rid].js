@@ -1,26 +1,27 @@
-import Layout, { siteTitle } from '../../../components/layout'
+import Layout from '../../../components/layout'
 import utilStyles from '../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card, Image, Button, Breadcrumb, Tabs, Tab, Modal, Form } from 'react-bootstrap'
+import { Card as Cardantd } from 'antd';
+import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import styles from './index.module.css'
 import Link from 'next/link'
 import Carousel from 'react-bootstrap/Carousel'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import useMediaQuery from "../../../utils/utils";
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import GoogleMapReact from 'google-map-react';
-import { Anchor } from "antd";
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LanguageIcon from '@material-ui/icons/Language';
 import PhoneIcon from '@material-ui/icons/Phone';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import { RightOutlined } from '@ant-design/icons';
-import { StyleSharp } from '@material-ui/icons'
+import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 
+const { Meta } = Cardantd;
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 export default function Restaurant({ props }) {
@@ -30,13 +31,50 @@ export default function Restaurant({ props }) {
     const { area, restaurant } = router.query;
     const [modalShow, setModalShow] = React.useState(false);
     const route = router.route
+
     const aspath = route.split('/')
     const path = '/' + aspath[1] + '/' + aspath[2] + '/' + router.query.restaurant + '?' + 'area=' + router.query.area + '&' + 'restaurant=' + router.query.restaurant
     const [categoryNav, setCategoryNav] = React.useState();
-    const [transformCategoryNav, setTransformCategoryNav] = React.useState();
-    const [categoryList, setCategoryList] = React.useState([{ categoryName: 'foodType', isActive: true }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodTypeFinal', isActive: false }]);
+    const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
+    // const [categoryList, setCategoryList] = React.useState([{ categoryName: 'ยำ', isActive: true }, { categoryName: 'ข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodTypeFinal', isActive: false }]);
+    const [categoryList, setCategoryList] = React.useState([{ categoryName: 'เมนูยำ', isActive: true }, { categoryName: 'เมนูข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน7', isActive: false }, { categoryName: 'เมนูแซลม่อน8', isActive: false }, { categoryName: 'เมนูแซลม่อน9', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }]);
     const refCategoryNav = React.useRef();
     const refCategoryList = React.useRef();
+    const [styleButtonRight, setStyleButtonRight] = React.useState(styles.nav_scroller_button_right);
+    const [styleButtonLeft, setStyleButtonLeft] = React.useState(styles.nav_scroller_button_left + " " + styles.hide);
+    const [menuEachCategory, setMenuEachCategory] = React.useState("");
+    const [widthCategoryList, setWidthCategoryList] = React.useState();
+    const [menuList, setMenuList] = React.useState(
+        {
+            'เมนูยำ': [
+                { name: 'ยำรวมมิตร', price: 100, image: "/images/food4.jpg" },
+                { name: 'ยำหมึกกระดอง', price: 150, image: "/images/food5.jpg" },
+                { name: 'ยำหมึกสาย', price: 120, image: "/images/food6.jpg" }
+            ],
+            'เมนูข้าว': [
+                { name: 'ข้าวผัดทะเลรวมมิตร', price: 80, image: "/images/food7.jpg" },
+            ],
+            'เมนูลูกชิ้น': [
+                { name: 'Meatball', price: 60, image: "/images/food8.jpg" },
+
+            ],
+            'เมนูแซลม่อน': [
+                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
+            ],
+            'เมนูแซลม่อน7': [
+                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
+            ],
+            'เมนูแซลม่อน8': [
+                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
+            ],
+            'เมนูแซลม่อน9': [
+                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
+            ]
+        }
+    );
+
+    const categoryRefs = useRef([]);
+
     const toggleClassSelectedCategory = (index) => {
         let currentCategoryList = categoryList
         currentCategoryList.filter((category) => category.isActive == true).forEach(category => category.isActive = false)
@@ -47,13 +85,14 @@ export default function Restaurant({ props }) {
     }
 
     useEffect(() => {
+        renderMenuList()
         activeCategory()
-    }, [])
+    }, [widthCategoryList])
 
     const setClassNameCategoryNav = (category, index) => {
         if (category.isActive) {
             if (index == 0) {
-                return styles.category_active_first_child
+                return styles.category_first_child_active
             } else {
                 return styles.category_active
             }
@@ -67,29 +106,129 @@ export default function Restaurant({ props }) {
     }
 
     const activeCategory = () => {
+
+        let widthCategoryNav = refCategoryNav.current.offsetWidth
+        let widthCategoryList = refCategoryList.current.offsetWidth
+        console.log('widthCategoryNav', widthCategoryNav)
+        console.log('widthCategoryList', widthCategoryList)
+        if (widthCategoryList <= widthCategoryNav) {
+            setStyleButtonRight(styles.nav_scroller_button_right + " " + styles.hide)
+        } else {
+            setStyleButtonRight(styles.nav_scroller_button_right)
+        }
+
         let tempCategoryNav = categoryList.map((category, index) =>
         (
-            <div className={setClassNameCategoryNav(category, index) + " " + utilStyles.fontMobileSM} key={category.categoryName + index} onClick={() => toggleClassSelectedCategory(index)}>
+            <div className={setClassNameCategoryNav(category, index) + " " + utilStyles.font_size_md + " " + styles.category_nav} key={category.categoryName + index} onClick={() => { toggleClassSelectedCategory(index), scrollToCategorySection(index) }}>
                 {category.categoryName}
             </div>
         ))
+
+        setWidthCategoryList(widthCategoryList)
         setCategoryNav(tempCategoryNav)
     }
 
-    const scrollCategoryNav = () => {
-        console.log('refCategoryNav', refCategoryNav.current.offsetWidth)
-        console.log('refCategoryList', refCategoryList.current.offsetWidth)
-        let widthCategoryNav = refCategoryNav.current.offsetWidth
-        let widthCategoryList = refCategoryList.current.offsetWidth
-        let widthButtonScroller = 24
-        let differentWidthBetweenNavAndCategoryList = (widthCategoryList - widthCategoryNav) + (widthButtonScroller)
-        if ((transformCategoryNav + widthCategoryNav) <= differentWidthBetweenNavAndCategoryList) {
-            setTransformCategoryNav(-(transformCategoryNav + widthCategoryNav))
-        } else {
-            setTransformCategoryNav(-(differentWidthBetweenNavAndCategoryList))
+    const scrollToCategorySection = (index) => {
+        if (categoryRefs.current[index] !== undefined) {
+            categoryRefs.current[index].scrollIntoView({ behavior: 'smooth' })
         }
     }
 
+    const scrollCategoryNav = (direction) => {
+        let widthCategoryNav = refCategoryNav.current.offsetWidth
+        let widthCategoryList = refCategoryList.current.offsetWidth
+        let differentWidthBetweenNavAndCategoryList = (widthCategoryList - widthCategoryNav)
+        let currentslidingPxCategoryNav = slidingPxCategoryNav
+        let slidingPx = 0
+
+
+        if (direction === 'right') {
+            if ((currentslidingPxCategoryNav - (widthCategoryNav / 2)) > (-differentWidthBetweenNavAndCategoryList)) {
+                slidingPx = currentslidingPxCategoryNav - (widthCategoryNav / 2)
+                setslidingPxCategoryNav(slidingPx)
+            }
+            if ((currentslidingPxCategoryNav - (widthCategoryNav / 2)) <= (-differentWidthBetweenNavAndCategoryList)) {
+                slidingPx = -(differentWidthBetweenNavAndCategoryList)
+                setslidingPxCategoryNav(slidingPx)
+            }
+        }
+
+        if (direction === 'left') {
+            if ((currentslidingPxCategoryNav + (widthCategoryNav / 2)) < 0) {
+                slidingPx = currentslidingPxCategoryNav + (widthCategoryNav / 2)
+                setslidingPxCategoryNav(slidingPx)
+            }
+            if ((currentslidingPxCategoryNav + (widthCategoryNav / 2)) >= 0) {
+                setslidingPxCategoryNav(slidingPx)
+            }
+        }
+
+        console.log('slidingPx', slidingPx)
+        console.log('differentWidthBetweenNavAndCategoryList', differentWidthBetweenNavAndCategoryList)
+
+        if (slidingPx < 0) {
+            setStyleButtonLeft(styles.nav_scroller_button_left)
+        } else {
+            setStyleButtonLeft(styles.nav_scroller_button_left + " " + styles.hide)
+        }
+
+        if (slidingPx === -(differentWidthBetweenNavAndCategoryList)) {
+            setStyleButtonRight(styles.nav_scroller_button_right + " " + styles.hide)
+        } else {
+            setStyleButtonRight(styles.nav_scroller_button_right)
+        }
+    }
+
+    const renderMenuList = () => {
+        console.log(menuList)
+        let categorySection = categoryList.map((category, index) => {
+            console.log(menuList[category.categoryName])
+            let menucard = menuList[category.categoryName].map((menu) =>
+                <Col xs={6} className={styles.menu_card} onClick={() => setModalShow(true)}>
+                    <Cardantd
+                        cover={
+                            <img
+                                alt="example"
+                                src={menu.image}
+                                style={{ height: '200px' }}
+                            />
+                        }
+                        actions={[
+                            menu.price + " Baht"
+                        ]}
+                    >
+                        <Meta
+                            title={menu.name}
+                            description="This is the description"
+                        />
+                    </Cardantd>
+                </Col>
+            )
+
+            return (
+                <div>
+                    <div ref={(categoryRef) => (categoryRefs.current[index] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
+
+                    </div>
+                    <Row className={styles.category_section} >
+                        <Col xs={12}>
+                            <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
+                                {category.categoryName}
+                            </div>
+                        </Col>
+                        <Col xs={12}>
+                            <Row className={styles.menu_section}>
+                                {menucard}
+                            </Row>
+                        </Col>
+                    </Row>
+                </div>
+            )
+        })
+        console.log(categorySection)
+
+        setMenuEachCategory(categorySection)
+    }
     return (
         <>
             {
@@ -136,336 +275,42 @@ export default function Restaurant({ props }) {
                                 <Card.Body>
                                     <Card.Title>Park Hyatt Bangkok</Card.Title>
                                     <Card.Text className={styles.card_text}>
-                                        <Row>
-                                            <Col style={{ borderRight: "1px solid #dee2e6" }}>
-                                                Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
+                                        <div className={styles.restaurant_details}>
+                                            <Row>
+                                                <Col style={{ borderRight: "1px solid #dee2e6" }}>
+                                                    Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
+                                                    </Col>
+                                                <Col style={{ color: "#74b100" }}>
+                                                    Open now!
                                             </Col>
-                                            <Col style={{ color: "#74b100" }}>
-                                                Open now!
+                                            </Row>
+                                            <Row style={{ marginTop: "10px" }}>
+                                                <Col style={{ paddingBottom: "15px" }}>
+                                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
                                             </Col>
-                                        </Row>
-                                        <Row style={{ marginTop: "10px" }}>
-                                            <Col style={{ paddingBottom: "15px", borderBottom: "1px solid #dee2e6" }}>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                            </Col>
-                                        </Row>
+                                            </Row>
+                                        </div>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col md={8}>
-
-                                                <div className={styles.nav_category} ref={refCategoryNav}>
-                                                    <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${transformCategoryNav}px)` }}>
-                                                        {categoryNav}
+                                                <div className={styles.nav_category_layout} >
+                                                    <div className={styles.nav_category} ref={refCategoryNav}>
+                                                        <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
+                                                            {categoryNav}
+                                                        </div>
+                                                        <Button className={styleButtonLeft} onClick={() => scrollCategoryNav('left')}>
+                                                            <LeftOutlined className={styles.nav_scroller_icon} />
+                                                        </Button>
+                                                        <Button className={styleButtonRight} onClick={() => scrollCategoryNav('right')}>
+                                                            <RightOutlined className={styles.nav_scroller_icon} />
+                                                        </Button>
                                                     </div>
-                                                    <Button className={styles.nav_scroller_button} onClick={() => scrollCategoryNav()}>
-                                                        <RightOutlined className={styles.nav_scroller_icon} />
-                                                    </Button>
                                                 </div>
 
-                                                <Tabs
-                                                    id="menu-tab"
-                                                    activeKey={key}
-                                                    onSelect={(k) => (setKey(k), router.push(path + "#" + k))}
-                                                    style={{ marginTop: "20px" }}
-                                                >
+                                                {/* Menu list */}
+                                                <div calssName={styles.menu_list}>
+                                                    {menuEachCategory}
+                                                </div>
 
-                                                    <Tab
-                                                        eventKey="1"
-                                                        title="Toppic"
-                                                    >
-                                                        <div style={{ marginTop: "30px" }}>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} onClick={() => setModalShow(true)} id="1">
-                                                                        <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    100
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} id="the-team">
-                                                                        <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกกระดอง
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    150
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกสาย
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    120
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ข้าวผัดทะเลรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    80
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ลูกชิ้น
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    60
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    แซนมอน
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    299
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Tab>
-                                                    <Tab eventKey="2" title="แซลมอน">
-                                                        <div style={{ marginTop: "30px" }}>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} onClick={() => setModalShow(true)}>
-                                                                        <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    100
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} id="the-team">
-                                                                        <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกกระดอง
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    150
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกสาย
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    120
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ข้าวผัดทะเลรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    80
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} >
-                                                                        <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ลูกชิ้น
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    60
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} id="2">
-                                                                        <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    แซนมอน
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    299
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Tab>
-                                                    <Tab eventKey="3" title="ลูกชิ้น">
-                                                        <div style={{ marginTop: "30px" }}>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} onClick={() => setModalShow(true)}>
-                                                                        <Card.Img variant="top" src="/images/food4.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    100
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food5.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกกระดอง
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    150
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food6.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ยำหมึกสาย
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    120
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food7.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ข้าวผัดทะเลรวมมิตร
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    80
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }} id="3">
-                                                                        <Card.Img variant="top" src="/images/food8.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    ลูกชิ้น
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    60
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                                <Col xs={6} md={3}>
-                                                                    <Card style={{ border: "none" }}>
-                                                                        <Card.Img variant="top" src="/images/food9.jpg" style={{ height: "150px" }} />
-                                                                        <Card.Text className={styles.card_text} style={{ padding: "10px", fontWeight: "bold" }}>
-                                                                            <Row>
-                                                                                <Col xs={12} md={8}>
-                                                                                    แซนมอน
-                                                            </Col>
-                                                                                <Col xs={12} md={4} style={{ textAlign: "right" }}>
-                                                                                    299
-                                                            </Col>
-                                                                            </Row>
-                                                                        </Card.Text>
-                                                                    </Card>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Tab>
-                                                </Tabs>
                                             </Col>
 
                                             <Col md={4} className={utilStyles.font_size_md} style={{ marginTop: "20px" }}>

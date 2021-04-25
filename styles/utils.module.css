@@ -112,9 +112,7 @@
 .fontContent {
   font-size: 16px !important;
 }
-.font_size_sm {
-  font-size: 14px !important;
-}
+
 
 .iconSize {
   font-size: 20px !important;
@@ -170,8 +168,16 @@
   height: 160px;
 }
 
+.font_size_xl {
+  font-size: 2rem !important;
+}
+
 .font_size_md {
   font-size: 0.9rem !important;
+}
+
+.font_size_sm {
+  font-size: 14px !important;
 }
 
 .backgroundColorTheme {
