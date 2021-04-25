@@ -9,7 +9,7 @@ import 'antd/dist/antd.css';
 
 //Modal Add Menu
 export default function MobileFilterRestaurants(props) {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
 
     const [restaurantName, setRestaurantName] = React.useState();
     const [location, setLocation] = React.useState();

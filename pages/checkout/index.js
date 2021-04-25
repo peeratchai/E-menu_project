@@ -9,14 +9,14 @@ import 'antd/dist/antd.css';
 import { Card, InputNumber, Skeleton } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 export default function CheckoutPage() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
 
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     return (
         <>
             {
-                isBreakpoint ? (
+                isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>

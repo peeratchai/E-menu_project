@@ -11,7 +11,7 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 export default function OrderHistory() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
 
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
@@ -25,7 +25,7 @@ export default function OrderHistory() {
     return (
         <>
             {
-                isBreakpoint ? (
+                isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>

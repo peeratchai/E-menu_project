@@ -22,12 +22,10 @@ const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget)
 export default function Layout({ children, containerType, searchFunc }) {
     const [modalShow, setModalShow] = React.useState(false);
     const [login, setLogin] = React.useState();
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const [containerStyle, setContainerStyle] = React.useState(null);
 
-    useEffect(() => {
-        setStyleOfContainer(containerType)
-    }, [containerType])
+
 
     const setStyleOfContainer = (containerType) => {
         let style = ""
@@ -73,11 +71,10 @@ export default function Layout({ children, containerType, searchFunc }) {
             renderCustomComponent(CustomTimeStampFragmentAdmin)
             renderCustomComponent(CustomTimeStampFragment)
         }
-        // console.log(loginStatus)
-        // console.log(searchFunc)
         setLogin(loginStatus)
+        setStyleOfContainer(containerType)
 
-    }, [])
+    }, [containerType])
 
     const signOut = () => {
         let loginStatus
@@ -111,7 +108,7 @@ export default function Layout({ children, containerType, searchFunc }) {
                     `}</style>
                 <ActiveLink activeClassName="active" href="/newspaper">
                     {
-                        isBreakpoint ? (
+                        isMobileResolution ? (
                             //For Mobile
                             <>
                                 <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>

@@ -19,7 +19,7 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const { Option } = Select;
 
 export default function RestaurantList({ props }) {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const { area } = router.query;
     const [modalShow, setModalShow] = React.useState(false);
@@ -40,7 +40,7 @@ export default function RestaurantList({ props }) {
     return (
         <>
             {
-                !isBreakpoint ? (
+                !isMobileResolution ? (
                     //PC Version
                     <Layout containerType="center">
                         <Breadcrumb>

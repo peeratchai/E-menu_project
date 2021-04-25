@@ -19,7 +19,7 @@ import 'antd/dist/antd.css';
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 export default function MenuFeeding() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
 
     const [modalShow, setModalShow] = React.useState(false);
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
@@ -36,7 +36,7 @@ export default function MenuFeeding() {
     return (
         <>
             {
-                !isBreakpoint ? (
+                !isMobileResolution ? (
                     // PC Version
                     <Layout containerType="center">
                         <div className={utilStyles.container_xl}>

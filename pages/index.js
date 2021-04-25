@@ -10,10 +10,10 @@ import StarIcon from '@material-ui/icons/Star';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
 
 export default function Home({ allPostsData }) {
-  const isBreakpoint = useMediaQuery(768)
+  const isMobileResolution = useMediaQuery(768)
 
   let listMenu
-  if (!isBreakpoint) {
+  if (!isMobileResolution) {
     //for Mobile
     listMenu = menu && menu.map((menu, Index) => (
       <Row className={utilStyles.list} key={menu.title + Index}>

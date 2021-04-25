@@ -1,0 +1,28 @@
+.card_text {
+  font-size: 0.9rem !important;
+}
+
+.menu_card {
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.restaurant_details {
+  box-shadow: 0 6px 2px -2px rgb(0 0 0 / 8%);
+}
+
+.category_dropdown {
+  width: 100%;
+  box-shadow: 0 6px 2px -2px rgb(0 0 0 / 8%);
+  margin-top: 15px;
+  padding-bottom: 15px;
+}
+
+.category_section {
+  margin: 15px 0 0 0;
+  box-shadow: 0 6px 2px -2px rgb(0 0 0 / 8%);
+}
+
+.ant-card-body {
+  padding: 5 !important;
+}

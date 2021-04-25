@@ -12,7 +12,7 @@ import 'antd/dist/antd.css';
 import React from 'react'
 
 export default function Newspaper() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
 
     const searchFunc = () => {
@@ -22,7 +22,7 @@ export default function Newspaper() {
 
     let component
 
-    if (isBreakpoint) {
+    if (isMobileResolution) {
         //Layout for mobile
         component = (
             <Layout containerType="mobile" search searchFunc={searchFunc}>

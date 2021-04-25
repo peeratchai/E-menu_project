@@ -11,14 +11,14 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 
 export default function Order() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const { oid } = router.query;
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     return (
         <>
             {
-                isBreakpoint ? (
+                isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>

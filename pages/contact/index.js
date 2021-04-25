@@ -6,7 +6,7 @@ import utilStyles from '../../styles/utils.module.css'
 import Head from 'next/head'
 
 export default function Contact() {
-    const isBreakpoint = useMediaQuery(768)
+    const isMobileResolution = useMediaQuery(768)
     return (
         <Layout>
             <Head>
@@ -17,7 +17,7 @@ export default function Contact() {
                 />
             </Head>
             {
-                !isBreakpoint ? (
+                !isMobileResolution ? (
                     //PC version
                     <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
                         <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
