@@ -133,7 +133,7 @@ export default function RestaurantDetails() {
     }
 
     return (
-        <Layout containerType="mobile">
+        <Layout containerType="mobile" searchFunc={() => console.log("test")} page="restaurantDetails">
             <Container className={utilStyles.container_sm}>
                 <Breadcrumb>
                     <Link href="/menuFeeding" passHref>
@@ -189,21 +189,12 @@ export default function RestaurantDetails() {
                                             </Col>
                                 </Row>
                             </div>
-                            <Select
-                                showSearch
-                                className={styles.category_dropdown}
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                filterSort={(optionA, optionB) =>
-                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                }
-                                onChange={(category) => scrollindToCategorySectionMobile(category)}
-                                value={categorySelected}
-                            >
-                                {categoryDropdownMobile}
-                            </Select>
+
+                            <div className={styles.categoryDropdown}>
+                                <Select defaultValue="restaurantManagement" value={categorySelected} style={{ width: '100%' }} onChange={(category) => scrollindToCategorySectionMobile(category)}>
+                                    {categoryDropdownMobile}
+                                </Select>
+                            </div>
 
                             <Row>
                                 <Col>
@@ -375,7 +366,7 @@ export default function RestaurantDetails() {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />
-            <div style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "1", height: "70px", backgroundColor: "white" }}>
+            <div style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
                     <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#ff4a4f", borderRadius: "5px", color: "white" }}>
                         <Row>

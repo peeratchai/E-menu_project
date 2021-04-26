@@ -2,3 +2,14 @@
   margin: 30px;
 }
 
+.checkout_button,
+.checkout_button:hover,
+.checkout_button:focus,
+.checkout_button:active {
+  border-radius: 0;
+  width: 100%;
+  background-color: #ff4a4f !important;
+  border: none;
+  color: white !important;
+  box-shadow: none !important;
+}

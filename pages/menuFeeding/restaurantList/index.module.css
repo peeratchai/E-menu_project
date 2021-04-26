@@ -39,18 +39,7 @@
   position: relative;
 }
 
-.nav_scroller_button_right {
-  width: 16px;
-  display: block;
-  height: 100%;
-  right: 0;
-  top: 0;
-  background-color: white;
-  border: none;
-  color: #cecece;
-  position: absolute;
-  border-radius: 0;
-}
+.nav_scroller_button_right,
 .nav_scroller_button_right:hover,
 .nav_scroller_button_right:focus,
 .nav_scroller_button_right:active {
@@ -67,18 +56,7 @@
   border-radius: 0;
 }
 
-.nav_scroller_button_left {
-  border-radius: 0;
-  width: 16px;
-  display: block;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: white;
-  border: none;
-  color: #cecece;
-  position: absolute;
-}
+.nav_scroller_button_left,
 .nav_scroller_button_left:hover,
 .nav_scroller_button_left:focus,
 .nav_scroller_button_left:active {

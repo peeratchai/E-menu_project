@@ -116,7 +116,7 @@ export default function CheckoutPage() {
                                 <br />
                                 <Row>
                                     <Col>
-                                        <Button style={{ width: '100%', backgroundColor: "#19c7d7", border: "1px solid #19c7d7" }} onClick={() => setConfirmModalVisible(true)}>
+                                        <Button className={styles.checkout_button}  onClick={() => setConfirmModalVisible(true)}>
                                             สั่ง 2 รายการ
                                         </Button>
                                     </Col>

@@ -214,7 +214,7 @@ export default function Restaurant({ props }) {
                             />
                         }
                         actions={[
-                            menu.price + " Baht"
+                            <b>{menu.price + "Baht"}</b>
                         ]}
                     >
                         <Meta
