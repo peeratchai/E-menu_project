@@ -1,10 +1,34 @@
 
 import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import React from 'react'
+import authentication from '../../../services/authentication'
 
 export default function LoginModal(props) {
 
+    const [validatedSignUpForm, setValidatedSignUpForm] = React.useState(false);
+    const [email, setEmail] = React.useState(null);
+    const [password, setPassword] = React.useState(null);
+    const [retypePassword, setRetypePassword] = React.useState(null);
     const [tab, setTab] = React.useState('login');
+    const notDisplay = null
+
+    const signupWithEmail = (event) => {
+        const form = event.currentTarget;
+        console.log(form.checkValidity())
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            console.log('email', email)
+            let result = authentication.signupWithEmail(email, password)
+            // if(result)
+            event.preventDefault();
+        }
+
+        setValidatedSignUpForm(true);
+
+    }
+
     return (
         <Modal
             {...props}
@@ -18,9 +42,6 @@ export default function LoginModal(props) {
                         <Col style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
                             <h4 style={{ fontWeight: "1000", margin: "0" }}> {tab == 'login' ? 'Login' : tab == 'register' ? 'Register' : tab == 'forgotPassword' ? 'Forgot Your Password ?' : null} </h4>
                         </Col>
-                        {/* <Col xs={6} sm={6} style={{ cursor: "pointer", backgroundColor: "#4b5d72" }} onClick={() => { setTab('register') }}>
-                            <h3 style={{ fontWeight: "700", margin: "0", color: "#748396" }}>Register</h3>
-                        </Col> */}
                     </div>
                 </Row>
                 {
@@ -85,7 +106,7 @@ export default function LoginModal(props) {
                             </Row>
 
                         </>
-                    ) : null
+                    ) : notDisplay
                 }
 
                 {
@@ -96,21 +117,48 @@ export default function LoginModal(props) {
                                     Create Your Account
                                 </Col>
                             </Row>
-                            <Form style={{ marginBottom: "20px" }}>
+                            <Form style={{ marginBottom: "20px" }} noValidate validated={validatedSignUpForm} onSubmit={signupWithEmail}>
                                 <Row>
                                     <Col>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="email" placeholder="Email Address" />
+                                        <Form.Group controlId="validationEmail" >
+                                            <Form.Control
+                                                type="email"
+                                                placeholder="Email Address"
+                                                required
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                Invalid email
+                                            </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Password" />
+                                        <Form.Group controlId="validationPassword">
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Password"
+                                                required
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                password is required !
+                                            </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Form.Group controlId="formBasicRetypePassword">
-                                            <Form.Control type="password" placeholder="Retype Password" />
+                                        <Form.Group controlId="validationRetypePassword">
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Retype Password"
+                                                required
+                                                value={retypePassword}
+                                                onChange={(e) => setRetypePassword(e.target.value)}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                Password does not matches !
+                                            </Form.Control.Feedback>
                                         </Form.Group>
                                         <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             CREATE AN ACCOUNT
-                                </Button>
+                                        </Button>
                                     </Col>
                                 </Row>
                             </Form>
@@ -140,7 +188,7 @@ export default function LoginModal(props) {
                                 </Col>
                             </Row>
                         </>
-                    ) : null
+                    ) : notDisplay
                 }
                 {
                     tab == 'forgotPassword' ? (
@@ -168,7 +216,7 @@ export default function LoginModal(props) {
 
                             </Form>
                         </>
-                    ) : null
+                    ) : notDisplay
                 }
 
             </Modal.Body>
