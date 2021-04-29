@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const authentication = {
-    signupWithEmail: function (email, password) {
+    signupWithEmail: async function (email, password) {
         let config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -11,12 +11,60 @@ const authentication = {
             email: email,
             password: password
         }
-        axios.post('https://cee-menu-tvh2o.ondigitalocean.app/auth/signup-with-email', data, config).then(function (response) {
-            console.log(response);
-        })
+        let response = await axios.post('/api/auth/signup-with-email', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
             .catch(function (error) {
-                console.log(error);
+                console.log(error)
+                return error
             });
+
+        return response
+    },
+
+    signinWithEmail: async function (email, password) {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        let data = {
+            email: email,
+            password: password
+        }
+        let response = await axios.post('/api/auth/signin-with-email', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
+    },
+
+    getProfile: async function (accessToken) {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }
+
+        let response = await axios.get('/api/profile/get', config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
     },
 }
 

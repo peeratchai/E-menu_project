@@ -1,32 +1,72 @@
 
 import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import React from 'react'
+import { message } from 'antd';
 import authentication from '../../../services/authentication'
+import styles from './index.module.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function LoginModal(props) {
-
+    const [form, setForm] = React.useState({})
     const [validatedSignUpForm, setValidatedSignUpForm] = React.useState(false);
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [retypePassword, setRetypePassword] = React.useState(null);
     const [tab, setTab] = React.useState('login');
+    const [errors, setErrors] = React.useState({});
+    const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
 
-    const signupWithEmail = (event) => {
-        const form = event.currentTarget;
-        console.log(form.checkValidity())
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value
+        })
+        // Check and see if errors exist, and remove them from the error object:
+        if (!!errors[field]) setErrors({
+            ...errors,
+            [field]: null
+        })
+    }
+
+    const findFormErrors = () => {
+        const { email, password, retypePassword } = form
+        const newErrors = {}
+        // email errors
+        if (!email || email === '') newErrors.email = 'Email is required !'
+        // password errors
+        if (!password || password === '') newErrors.password = 'Password is required !'
+        // retypePassword errors
+        if (!retypePassword || retypePassword === '') newErrors.retypePassword = 'Retype password is required !'
+        else if (password !== retypePassword) newErrors.retypePassword = 'Password dose not match'
+        return newErrors
+    }
+
+    const signupWithEmail = async (event) => {
+        // const form = event.currentTarget;
+        event.preventDefault();
+
+        const newErrors = findFormErrors()
+        if (Object.keys(newErrors).length > 0) {
+            // We got errors!
+            setErrors(newErrors)
         } else {
-            console.log('email', email)
-            let result = authentication.signupWithEmail(email, password)
-            // if(result)
-            event.preventDefault();
+            try {
+                let response = await authentication.signupWithEmail(email, password)
+                let accessToken = response.data.accessToken
+                localStorage.setItem('accessToken', accessToken)
+                try {
+                    response = await authentication.getProfile(accessToken)
+                    let profile = response.data
+                    localStorage.setItem('profile', profile)
+                } catch (error) {
+                    console.log(error)
+                }
+            } catch (error) {
+                message.error('Email already exists !');
+            }
         }
-
-        setValidatedSignUpForm(true);
-
+        // setValidatedSignUpForm(true);
     }
 
     return (
@@ -40,12 +80,12 @@ export default function LoginModal(props) {
                 <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
                     <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
                         <Col style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
-                            <h4 style={{ fontWeight: "1000", margin: "0" }}> {tab == 'login' ? 'Login' : tab == 'register' ? 'Register' : tab == 'forgotPassword' ? 'Forgot Your Password ?' : null} </h4>
+                            <h4 style={{ fontWeight: "1000", margin: "0" }}> {title[tab]} </h4>
                         </Col>
                     </div>
                 </Row>
                 {
-                    tab == 'login' ? (
+                    tab === 'login' ? (
                         <>
                             <Row style={{ marginBottom: "1rem" }}>
                                 <Col>
@@ -104,59 +144,59 @@ export default function LoginModal(props) {
                                     </div>
                                 </Col>
                             </Row>
-
                         </>
                     ) : notDisplay
                 }
 
                 {
-                    tab == 'register' ? (
+                    tab === 'register' ? (
                         <>
                             <Row style={{ marginBottom: "1rem" }}>
                                 <Col>
                                     Create Your Account
                                 </Col>
                             </Row>
-                            <Form style={{ marginBottom: "20px" }} noValidate validated={validatedSignUpForm} onSubmit={signupWithEmail}>
+                            <Form style={{ marginBottom: "20px" }} onSubmit={signupWithEmail}>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="validationEmail" >
                                             <Form.Control
                                                 type="email"
                                                 placeholder="Email Address"
-                                                required
                                                 value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
+                                                onChange={(e) => setField('email', e.target.value)}
+                                                isInvalid={!!errors.email}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                Invalid email
+                                                {errors.email}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group controlId="validationPassword">
                                             <Form.Control
                                                 type="password"
                                                 placeholder="Password"
-                                                required
                                                 value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
+                                                onChange={(e) => setField('password', e.target.value)}
+                                                isInvalid={!!errors.password}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                password is required !
+                                                {errors.password}
                                             </Form.Control.Feedback>
+
                                         </Form.Group>
                                         <Form.Group controlId="validationRetypePassword">
                                             <Form.Control
                                                 type="password"
                                                 placeholder="Retype Password"
-                                                required
                                                 value={retypePassword}
-                                                onChange={(e) => setRetypePassword(e.target.value)}
+                                                onChange={(e) => setField('retypePassword', e.target.value)}
+                                                isInvalid={!!errors.retypePassword}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                Password does not matches !
+                                                {errors.retypePassword}
                                             </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" type="submit" className={styles.button_create_account} >
                                             CREATE AN ACCOUNT
                                         </Button>
                                     </Col>
@@ -191,7 +231,7 @@ export default function LoginModal(props) {
                     ) : notDisplay
                 }
                 {
-                    tab == 'forgotPassword' ? (
+                    tab === 'forgotPassword' ? (
                         <>
                             <Row style={{ marginBottom: "1rem", textAlign: "center" }}>
                                 <Col>
