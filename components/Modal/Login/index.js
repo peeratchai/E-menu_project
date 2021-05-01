@@ -1,6 +1,6 @@
 
 import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { message } from 'antd';
 import authentication from '../../../services/authentication'
 import styles from './index.module.css'
@@ -8,14 +8,37 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function LoginModal(props) {
     const [form, setForm] = React.useState({})
-    const [validatedSignUpForm, setValidatedSignUpForm] = React.useState(false);
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [retypePassword, setRetypePassword] = React.useState(null);
     const [tab, setTab] = React.useState('login');
     const [errors, setErrors] = React.useState({});
+    const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && tab !== 'register') {
+            let isRememberMe = window.localStorage.getItem('isRememberMe');
+            console.log('Use')
+            if (isRememberMe) {
+                setIsRememberMe(isRememberMe)
+                setRememberMeValue()
+            }
+        }
+    }, [])
+
+    const setRememberMeValue = () => {
+        let emailEncode = window.localStorage.getItem('email');
+        let passwordEncode = window.localStorage.getItem('password');
+        let email = Buffer.from(emailEncode, 'base64').toString()
+        let password = Buffer.from(passwordEncode, 'base64').toString()
+        console.log(email)
+        setEmail(email)
+        setPassword(password)
+        setForm({ 'email': email, 'password': password })
+        console.log(form)
+    }
 
     const setField = (field, value) => {
         setForm({
@@ -29,11 +52,14 @@ export default function LoginModal(props) {
         })
     }
 
-    const findFormErrors = () => {
+    const findSignupFormErrors = () => {
         const { email, password, retypePassword } = form
+        // var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+
         const newErrors = {}
         // email errors
         if (!email || email === '') newErrors.email = 'Email is required !'
+        // else if (!pattern.test(email)) newErrors.email = 'Please enter valid email address !'
         // password errors
         if (!password || password === '') newErrors.password = 'Password is required !'
         // retypePassword errors
@@ -42,13 +68,33 @@ export default function LoginModal(props) {
         return newErrors
     }
 
-    const signupWithEmail = async (event) => {
-        // const form = event.currentTarget;
-        event.preventDefault();
+    const findSigninFormErrors = () => {
+        const { email, password } = form
+        console.log('email:', email)
+        console.log('password:', password)
 
-        const newErrors = findFormErrors()
+        const newErrors = {}
+        // email errors
+        if (!email || email === '') newErrors.email = 'Email is required !'
+        // password errors
+        if (!password || password === '') newErrors.password = 'Password is required !'
+        // retypePassword errors
+        return newErrors
+    }
+
+    const findResetPasswordFormErrors = () => {
+        const { email } = form
+        const newErrors = {}
+        // email errors
+        if (!email || email === '') newErrors.email = 'Email is required !'
+
+        return newErrors
+    }
+
+    const signupWithEmail = async (event) => {
+        event.preventDefault();
+        const newErrors = findSignupFormErrors()
         if (Object.keys(newErrors).length > 0) {
-            // We got errors!
             setErrors(newErrors)
         } else {
             try {
@@ -66,7 +112,54 @@ export default function LoginModal(props) {
                 message.error('Email already exists !');
             }
         }
-        // setValidatedSignUpForm(true);
+    }
+
+    const signinWithEmail = async (event) => {
+        event.preventDefault();
+        const newErrors = findSigninFormErrors()
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors)
+            console.log(form)
+
+        } else {
+            try {
+                const { email, password } = form
+                let response = await authentication.signinWithEmail(email, password)
+                let accessToken = response.data.accessToken
+                localStorage.setItem('accessToken', accessToken)
+                localStorage.setItem('islogin', true)
+                props.onHide()
+                props.setlogin(true)
+                if (isRememberMe) {
+                    const b64EncodedEmail = Buffer.from(email).toString('base64')
+                    const b64EncodedPassword = Buffer.from(password).toString('base64')
+                    localStorage.setItem('email', b64EncodedEmail)
+                    localStorage.setItem('password', b64EncodedPassword)
+                    localStorage.setItem('isRememberMe', true)
+                }
+            } catch (error) {
+                const newErrors = {}
+                newErrors.password = 'Invalid your password or forgot password ?'
+                setErrors(newErrors)
+                message.error('Invalid your password or forgot password ?');
+            }
+        }
+    }
+
+    const resetPassword = async (event) => {
+        event.preventDefault();
+        const newErrors = findResetPasswordFormErrors()
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors)
+        } else {
+            try {
+                const { email } = form
+                let response = await authentication.resetPassword(email)
+                console.log(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 
     return (
@@ -95,26 +188,43 @@ export default function LoginModal(props) {
                             <Form style={{ marginBottom: "20px" }}>
                                 <Row>
                                     <Col>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="email" placeholder="Email" />
+                                        <Form.Group >
+                                            <Form.Control
+                                                type="email"
+                                                placeholder="Email"
+                                                value={email}
+                                                onChange={(e) => setField('email', e.target.value)}
+                                                isInvalid={!!errors.email}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.email}
+                                            </Form.Control.Feedback>
                                         </Form.Group>
 
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Password" />
+                                        <Form.Group>
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Password"
+                                                value={password}
+                                                onChange={(e) => setField('password', e.target.value)}
+                                                isInvalid={!!errors.password}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.password}
+                                            </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Form.Group controlId="formBasicRemember">
+                                        <Form.Group>
                                             <Row xs={2}>
                                                 <Col>
-                                                    <Form.Check type="checkbox" label="Remember me" />
+                                                    <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(true) }} label="Remember me" />
                                                 </Col>
                                                 <Col style={{ textAlign: "right" }}>
                                                     <a href="#" onClick={() => { setTab('forgotPassword') }}>Forgot password?</a>
                                                 </Col>
                                             </Row>
                                         </Form.Group>
-                                        <Button variant="primary" onClick={() => window.localStorage.setItem('login', true)} style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" onClick={() => { signinWithEmail() }} style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
-
                                         </Button>
                                     </Col>
                                 </Row>
@@ -140,7 +250,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => { setTab('register') }}>Sign Up</span>
+                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (setTab('register'), setEmail(null), setPassword(null))}>Sign Up</span>
                                     </div>
                                 </Col>
                             </Row>
@@ -196,7 +306,7 @@ export default function LoginModal(props) {
                                                 {errors.retypePassword}
                                             </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit" className={styles.button_create_account} >
+                                        <Button variant="primary" type="submit" className={styles.button} >
                                             CREATE AN ACCOUNT
                                         </Button>
                                     </Col>
@@ -223,7 +333,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => { setTab('login') }}>Login</span>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (setTab('login'), setRememberMeValue())}>Login</span>
                                     </div>
                                 </Col>
                             </Row>
@@ -239,16 +349,25 @@ export default function LoginModal(props) {
                                     you a link to reset your password
                                 </Col>
                             </Row>
-                            <Form style={{ marginBottom: "20px" }}>
+                            <Form style={{ marginBottom: "20px" }} onSubmit={resetPassword}>
                                 <Row>
                                     <Col>
-                                        <Form.Group controlId="formBasicEmail">
+                                        <Form.Group >
                                             <Form.Label><b>EMAIL ADDRESS</b></Form.Label>
-                                            <Form.Control type="email" placeholder="Email" />
+                                            <Form.Control
+                                                type="email"
+                                                placeholder="Email"
+                                                onChange={(e) => setField('email', e.target.value)}
+                                                isInvalid={!!errors.email}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.email}
+                                            </Form.Control.Feedback>
+
                                         </Form.Group>
                                         <div style={{ textAlign: "center" }}>
-                                            <Button variant="primary" onClick={() => setTab('login')} style={{ width: "50%", border: "none" }}>
-                                                Reset password
+                                            <Button variant="primary" type="submit" className={styles.button}>
+                                                Change password
                                             </Button>
                                         </div>
                                     </Col>

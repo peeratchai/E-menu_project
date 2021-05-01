@@ -11,6 +11,9 @@ import LoginModal from './Modal/Login'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import 'react-chat-widget/lib/styles.css';
 import dynamic from 'next/dynamic';
+React.useLayoutEffect = React.useEffect
+
+
 const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget), {
     ssr: false
 });
@@ -21,7 +24,7 @@ export default function Layout({ children, containerType, searchFunc, page }) {
 
     //// Set state
     const [modalShow, setModalShow] = React.useState(false);
-    const [login, setLogin] = React.useState();
+    const [islogin, setIsLogin] = React.useState();
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
     ////
@@ -66,22 +69,22 @@ export default function Layout({ children, containerType, searchFunc, page }) {
         let loginStatus = false
         if (typeof window !== 'undefined') {
             const { addResponseMessage, renderCustomComponent } = require('react-chat-widget');
-            loginStatus = window.localStorage.getItem('login');
+            loginStatus = window.localStorage.getItem('islogin');
             renderCustomComponent(CustomTimeStampFragmentAdmin)
             renderCustomComponent(CustomTimeStampFragment)
         }
-        setLogin(loginStatus)
+        setIsLogin(loginStatus)
         setStyleOfContainer(containerType)
         generateButtonNavbar()
 
-    }, [containerType, page])
+    }, [containerType, page, islogin])
 
     const signOut = () => {
         let loginStatus
         if (typeof window !== 'undefined') {
-            loginStatus = window.localStorage.setItem('login', false);
+            loginStatus = window.localStorage.setItem('islogin', false);
         }
-        setLogin(loginStatus)
+        setIsLogin(loginStatus)
     }
 
 
@@ -148,28 +151,7 @@ export default function Layout({ children, containerType, searchFunc, page }) {
                         color:"white"
                     }
                     `}</style>
-                {/* <ActiveLink activeClassName="active" href="/newspaper">
-                    {
-                        isMobileResolution ? (
-                            //For Mobile
-                            <>
-                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
-
-                                <SearchIcon className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
-                            </>
-                        ) : (
-                            //For PC
-                            <>
-                                <MenuBookIcon
-                                    className="d-inline-block align-top" style={{ color: "#FF4A4F", fontSize: "2.5rem" }} />
-                                <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "10px", fontWeight: "bold", fontFamily: "Bree Serif" }}>E-Menu</Navbar.Brand>
-                            </>
-                        )
-                    }
-                </ActiveLink> */}
-                {
-                    NavbarMenu
-                }
+                {NavbarMenu}
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
                     <Nav className="mr-auto">
@@ -188,7 +170,7 @@ export default function Layout({ children, containerType, searchFunc, page }) {
                             Login
                         </Nav.Item> */}
                         {
-                            login == 'true' ? (
+                            islogin == 'true' ? (
                                 <NavDropdown title="Login" id="nav-dropdown">
                                     <NavDropdown.Item >
                                         <ActiveLink activeClassName="active" href="/userProfile">
@@ -237,6 +219,7 @@ export default function Layout({ children, containerType, searchFunc, page }) {
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                setlogin={(boolean) => (setIsLogin(boolean), console.log(boolean))}
             />
         </div >
     )

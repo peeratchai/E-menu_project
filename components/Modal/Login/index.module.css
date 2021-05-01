@@ -1,13 +1,13 @@
-.button_create_account {
+.button {
   width: 100%;
   background-color: #ff4a4f !important;
   border: none !important;
   color: white !important;
 }
 
-.button_create_account:hover,
-.button_create_account:active,
-.button_create_account:focus {
+.button:hover,
+.button:active,
+.button:focus {
   width: 100%;
   background-color: #ff575c !important;
   border: #ff575c !important;

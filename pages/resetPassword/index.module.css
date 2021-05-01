@@ -1,0 +1,31 @@
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -250px;
+  width: 500px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 0 3px #ccc;
+  -webkit-box-shadow: 0 0 3px #ccc;
+  box-shadow: 0 0 3px #ccc;
+}
+
+.button_reset_password {
+  width: 100%;
+  background-color: #ff4a4f !important;
+  border: none !important;
+  color: white !important;
+}
+
+.button_reset_password:hover,
+.button_reset_password:active,
+.button_reset_password:focus {
+  width: 100%;
+  background-color: #ff575c !important;
+  border: #ff575c !important;
+  box-shadow: 0 0 0 0.2rem rgb(255 87 92 / 50%);
+  color: white !important;
+}
