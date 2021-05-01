@@ -29,6 +29,10 @@ module.exports = {
                 source: '/api/resetpassword',
                 destination: API_URL + '/profile/request_resetpassword',
             },
+            {
+                source: '/api/location',
+                destination: API_URL + '/location',
+            }
         ]
     },
 

@@ -91,6 +91,31 @@ const authentication = {
             });
 
         return response
+    },
+
+    loginWithGuestUser: async function () {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        let data = {
+            email: 'guest@test.com',
+            password: 'p@assword_guestuser'
+        }
+
+        console.log(data)
+        let response = await axios.post('/api/auth/signin-with-email', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
     }
 }
 

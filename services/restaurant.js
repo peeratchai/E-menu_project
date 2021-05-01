@@ -1,17 +1,14 @@
 const axios = require('axios');
 
-const restaurant = {
-    getLocation: () => {
+const restaurantService = {
+    getLocationList: async function (accessToken) {
         let config = {
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': 'Bearer ' + accessToken
             }
         }
-        let data = {
-            email: email,
-            password: password
-        }
-        let response = await axios.post('/api/auth/signup-with-email', data, config)
+
+        let response = await axios.get('/api/location', config)
             .then(function (response) {
                 console.log(response)
                 return response
@@ -21,11 +18,10 @@ const restaurant = {
                 return error
             });
 
-        const axios = require('axios');
         return response
     },
 
-    getRestaurantSearchByFilter: () => {
+    getRestaurantSearchByFilter: async function () {
         let config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -50,4 +46,4 @@ const restaurant = {
     }
 }
 
-export default restaurant
+export default restaurantService

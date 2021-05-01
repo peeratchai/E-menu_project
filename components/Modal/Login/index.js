@@ -5,10 +5,11 @@ import { message } from 'antd';
 import authentication from '../../../services/authentication'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import utilStyles from '../../../styles/utils.module.css'
 
 export default function LoginModal(props) {
     const [form, setForm] = React.useState({})
-    const [email, setEmail] = React.useState(null);
+    const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState(null);
     const [retypePassword, setRetypePassword] = React.useState(null);
     const [tab, setTab] = React.useState('login');
@@ -18,15 +19,20 @@ export default function LoginModal(props) {
     const notDisplay = null
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && tab !== 'register') {
+        if (typeof window !== 'undefined' && tab !== 'register' && email === "") {
+            console.log(email)
             let isRememberMe = window.localStorage.getItem('isRememberMe');
-            console.log('Use')
             if (isRememberMe) {
                 setIsRememberMe(isRememberMe)
                 setRememberMeValue()
             }
         }
     }, [])
+
+    const changeTab = (tabName) => {
+        setTab(tabName)
+        setErrors({})
+    }
 
     const setRememberMeValue = () => {
         let emailEncode = window.localStorage.getItem('email');
@@ -54,12 +60,11 @@ export default function LoginModal(props) {
 
     const findSignupFormErrors = () => {
         const { email, password, retypePassword } = form
-        // var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         const newErrors = {}
         // email errors
         if (!email || email === '') newErrors.email = 'Email is required !'
-        // else if (!pattern.test(email)) newErrors.email = 'Please enter valid email address !'
+        else if (!pattern.test(email)) newErrors.email = 'Please enter valid email address !'
         // password errors
         if (!password || password === '') newErrors.password = 'Password is required !'
         // retypePassword errors
@@ -72,10 +77,12 @@ export default function LoginModal(props) {
         const { email, password } = form
         console.log('email:', email)
         console.log('password:', password)
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 
         const newErrors = {}
         // email errors
         if (!email || email === '') newErrors.email = 'Email is required !'
+        else if (!pattern.test(email)) newErrors.email = 'Please enter valid email address !'
         // password errors
         if (!password || password === '') newErrors.password = 'Password is required !'
         // retypePassword errors
@@ -85,8 +92,11 @@ export default function LoginModal(props) {
     const findResetPasswordFormErrors = () => {
         const { email } = form
         const newErrors = {}
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+
         // email errors
         if (!email || email === '') newErrors.email = 'Email is required !'
+        else if (!pattern.test(email)) newErrors.email = 'Please enter valid email address !'
 
         return newErrors
     }
@@ -98,6 +108,8 @@ export default function LoginModal(props) {
             setErrors(newErrors)
         } else {
             try {
+                const { email, password } = form
+                console.log(email, password)
                 let response = await authentication.signupWithEmail(email, password)
                 let accessToken = response.data.accessToken
                 localStorage.setItem('accessToken', accessToken)
@@ -109,7 +121,9 @@ export default function LoginModal(props) {
                     console.log(error)
                 }
             } catch (error) {
-                message.error('Email already exists !');
+                const newErrors = {}
+                newErrors.email = 'Email already exists !'
+                setErrors(newErrors)
             }
         }
     }
@@ -141,7 +155,6 @@ export default function LoginModal(props) {
                 const newErrors = {}
                 newErrors.password = 'Invalid your password or forgot password ?'
                 setErrors(newErrors)
-                message.error('Invalid your password or forgot password ?');
             }
         }
     }
@@ -172,7 +185,7 @@ export default function LoginModal(props) {
             <Modal.Body style={{ padding: "65px 30px 45px" }}>
                 <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
                     <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
-                        <Col style={{ cursor: "pointer" }} onClick={() => { setTab('login') }}>
+                        <Col style={{ cursor: "pointer" }} onClick={() => { changeTab('login') }}>
                             <h4 style={{ fontWeight: "1000", margin: "0" }}> {title[tab]} </h4>
                         </Col>
                     </div>
@@ -185,14 +198,14 @@ export default function LoginModal(props) {
                                     Log In Your Account
                                 </Col>
                             </Row>
-                            <Form style={{ marginBottom: "20px" }}>
+                            <Form style={{ marginBottom: "20px" }} onSubmit={signinWithEmail}>
                                 <Row>
                                     <Col>
                                         <Form.Group >
                                             <Form.Control
-                                                type="email"
+                                                type="text"
                                                 placeholder="Email"
-                                                value={email}
+                                                defaultValue={email}
                                                 onChange={(e) => setField('email', e.target.value)}
                                                 isInvalid={!!errors.email}
                                             />
@@ -205,7 +218,7 @@ export default function LoginModal(props) {
                                             <Form.Control
                                                 type="password"
                                                 placeholder="Password"
-                                                value={password}
+                                                defaultValue={password}
                                                 onChange={(e) => setField('password', e.target.value)}
                                                 isInvalid={!!errors.password}
                                             />
@@ -219,11 +232,11 @@ export default function LoginModal(props) {
                                                     <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(true) }} label="Remember me" />
                                                 </Col>
                                                 <Col style={{ textAlign: "right" }}>
-                                                    <a href="#" onClick={() => { setTab('forgotPassword') }}>Forgot password?</a>
+                                                    <a href="#" onClick={() => { changeTab('forgotPassword') }}>Forgot password?</a>
                                                 </Col>
                                             </Row>
                                         </Form.Group>
-                                        <Button variant="primary" onClick={() => { signinWithEmail() }} style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
                                         </Button>
                                     </Col>
@@ -250,7 +263,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (setTab('register'), setEmail(null), setPassword(null))}>Sign Up</span>
+                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (changeTab('register'), setEmail(null), setPassword(null))}>Sign Up</span>
                                     </div>
                                 </Col>
                             </Row>
@@ -271,7 +284,7 @@ export default function LoginModal(props) {
                                     <Col>
                                         <Form.Group controlId="validationEmail" >
                                             <Form.Control
-                                                type="email"
+                                                type="text"
                                                 placeholder="Email Address"
                                                 value={email}
                                                 onChange={(e) => setField('email', e.target.value)}
@@ -333,7 +346,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (setTab('login'), setRememberMeValue())}>Login</span>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (changeTab('login'), setRememberMeValue())}>Login</span>
                                     </div>
                                 </Col>
                             </Row>
@@ -352,10 +365,10 @@ export default function LoginModal(props) {
                             <Form style={{ marginBottom: "20px" }} onSubmit={resetPassword}>
                                 <Row>
                                     <Col>
-                                        <Form.Group >
+                                        <Form.Group>
                                             <Form.Label><b>EMAIL ADDRESS</b></Form.Label>
                                             <Form.Control
-                                                type="email"
+                                                type="text"
                                                 placeholder="Email"
                                                 onChange={(e) => setField('email', e.target.value)}
                                                 isInvalid={!!errors.email}
@@ -369,6 +382,10 @@ export default function LoginModal(props) {
                                             <Button variant="primary" type="submit" className={styles.button}>
                                                 Change password
                                             </Button>
+                                        </div>
+                                        <br />
+                                        <div style={{ textAlign: "right", cursor: "pointer", color: "#1890FF" }} className={utilStyles.fontsize_sm} onClick={() => changeTab('login')}>
+                                            {"< Back"}
                                         </div>
                                     </Col>
                                 </Row>
