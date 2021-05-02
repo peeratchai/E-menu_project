@@ -4,3 +4,6 @@
 .colCardMobile {
   height: 350px;
 }
+.search_Box:focus {
+  box-shadow: none !important;
+}

@@ -271,6 +271,11 @@ input#whatSearch.form-control {
   border: none !important;
   font-size: 0.9rem;
 }
+input#whereSearch.form-control {
+  padding: 0 !important;
+  border: none !important;
+  font-size: 0.9rem;
+}
 
 #orderStatus-tabs-tab-newOrder {
   color: red;

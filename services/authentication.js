@@ -108,7 +108,7 @@ const authentication = {
         let response = await axios.post('/api/auth/signin-with-email', data, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data.accessToken
             })
             .catch(function (error) {
                 console.log(error)

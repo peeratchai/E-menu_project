@@ -147,7 +147,7 @@ export default function RestaurantListWeb(props) {
                                         <b>Where</b>
                                     </Col>
                                     <Col xs={9} style={{ paddingLeft: "0" }}>
-                                        <Form.Group controlId="whareSearch" style={{ marginBottom: "0" }}>
+                                        <Form.Group controlId="whereSearch" style={{ marginBottom: "0" }}>
                                             <Form.Control type="text" placeholder="City, postcode.." className={styles.search_Box} />
                                         </Form.Group>
                                     </Col>

@@ -1,3 +1,4 @@
+import authentication from './authentication'
 
 
 export default async function checkLogin() {
@@ -7,7 +8,7 @@ export default async function checkLogin() {
         return accessTokenlocalStorage
     } else {
         //// non login
-        let accessToken = await loginWithGuestUser()
+        let accessToken = await authentication.loginWithGuestUser()
         return accessToken
     }
 

@@ -15,14 +15,14 @@ export default function AddMenuModal(props) {
     const [total, setTotal] = React.useState(100);
     const [price, setPrice] = React.useState(100);
     const [menuDetail, setMenuDetail] = React.useState({
-        name: null,
+        name: "",
         price: 0,
-        image_url: null,
-        description: null
+        image_url: "",
+        description: ""
     })
 
     useEffect(() => {
-        if (props !== undefined) {
+        if (props.menu_detail !== undefined) {
             console.log(props)
             setMenuDetail(props.menu_detail)
             setTotal(props.menu_detail.price)
