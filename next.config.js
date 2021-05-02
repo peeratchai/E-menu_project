@@ -49,7 +49,10 @@ module.exports = {
                 source: '/api/restaurant/search_by_filter',
                 destination: API_URL + '/restaurant/search_by_filter',
             },
-
+            {
+                source: '/api/location/search_by_filter',
+                destination: API_URL + '/location/search_by_filter',
+            },
         ]
     },
 

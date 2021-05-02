@@ -30,7 +30,7 @@ const { Option } = Select;
 export default function RestaurantList() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName } = router.query;
+    const { locationId, locationName, locationLatLong } = router.query;
     const [modalShow, setModalShow] = React.useState(false);
     const [restaurantList, setRestaurantList] = React.useState([]);
 
@@ -38,11 +38,12 @@ export default function RestaurantList() {
         if (!router.isReady) {
             // console.log('not ready')
         } else {
-            if (locationId === undefined) {
+            if (locationId === undefined || locationName === undefined || locationLatLong === undefined) {
                 router.push({
                     pathname: "/menuFeeding"
                 })
             } else {
+                console.log('restaurantList')
                 let accessToken = await checkLogin()
                 let restaurantList = await getRestaurant(accessToken);
                 console.log('restaurantList', restaurantList)
@@ -51,28 +52,16 @@ export default function RestaurantList() {
         }
     }, [router.isReady])
 
-    // const getQuery = () => {
-    //     let splitPath = asPath.split('?')
-    //     splitPath = splitPath[1].split('&')
-    //     let SplitLocationId = splitPath[0].split('=')
-    //     let locationId = SplitLocationId[1]
-    //     let SplitLocationName = splitPath[1].split('=')
-    //     let locationName = SplitLocationName[1]
-    //     console.log(locationId);
-    //     console.log(locationName);
-    //     return { locationId: locationId, locationName: locationName }
-    // }
-
     const getAddressOnGoogleMaps = async (restaurantList) => {
-        let point, substringPotion, splitPotion, latLong, lat, long
+        let point, substringPotion, splitPotion, latLong, lat, lng
         Promise.all(restaurantList.map(async (restaurantDetails) => {
-            point = 'POINT(13.724035849919018 100.57927717448996)';
+            point = restaurantDetails.location;
             substringPotion = point.substring(5)
             splitPotion = substringPotion.split('(').join('').split(')');
             latLong = splitPotion[0].split(' ')
             lat = latLong[0]
-            long = latLong[1]
-            let address = await Geocode.fromLatLng(lat, long).then(
+            lng = latLong[1]
+            let address = await Geocode.fromLatLng(lat, lng).then(
                 (response) => {
                     const address = response.results[0].formatted_address;
                     return address
@@ -109,6 +98,7 @@ export default function RestaurantList() {
                         restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
+                        location_lat_long={locationLatLong}
                     />
                 ) : (
                     //Mobile Version

@@ -9,7 +9,6 @@ import GoogleMapReact from 'google-map-react';
 import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import restaurantService from '../../../../services/restaurant'
-import authentication from '../../../../services/authentication'
 import checkLogin from '../../../../services/checkLogin'
 import Filter from '../Filter'
 const { Option } = Select;
@@ -41,13 +40,20 @@ export default function WebLocationList() {
         }
     }
 
+    const onSearch = async (filterForm) => {
+        console.log(filterForm)
+        let accessToken = await checkLogin()
+        // let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filterForm)
+        // setLocationList(locationListByFilter)
+    }
+
 
     const locationCard = locationList && locationList.map((locationDetails) => (
         <Col xs={12} md={6} className={styles.colCard}>
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList',
-                    query: { locationId: locationDetails.id, locationName: locationDetails.title },
+                    query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location },
                 }}
             >
                 <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
@@ -70,7 +76,9 @@ export default function WebLocationList() {
             <div className={utilStyles.container_xl}>
                 <Row style={{ marginTop: "15px" }}>
                     <Col xs={6} md={4}>
-                        <Filter />
+                        <Filter
+                            onSearch={(form) => onSearch(form)}
+                        />
                     </Col>
 
                     {/* List Restaurant */}

@@ -17,9 +17,10 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import AddMenuModal from '../../../Modal/AddMenuModal'
+import changeFormatLatLong from '../../../../services/chaneformatLatLong'
+import PointInMaps from '../../../PointInMaps'
 
 const { Meta } = Cardantd;
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 
 export default function RestaurantDetailWeb(props) {
@@ -52,7 +53,9 @@ export default function RestaurantDetailWeb(props) {
     const [locationName, setLocationName] = React.useState()
     const [locationId, setLocationId] = React.useState()
     const [menuSelected, setMenuSelected] = React.useState()
-
+    const [lat, setLat] = React.useState(13.8537968);
+    const [lng, setLng] = React.useState(100.3764991);
+    const [locationLatLong, setLocationLatLong] = React.useState("");
 
     ////Set Ref
     const refCategoryNav = React.useRef();
@@ -63,7 +66,7 @@ export default function RestaurantDetailWeb(props) {
 
     useEffect(() => {
         if (props && props.restaurant_detail !== undefined) {
-            let { restaurant_detail, location_id, location_name } = props
+            let { restaurant_detail, location_id, location_name, location_lat_long } = props
             let categoryList = []
             restaurant_detail.menu_categories.map((category, index) => {
                 if (index === 0) {
@@ -72,6 +75,11 @@ export default function RestaurantDetailWeb(props) {
                     categoryList.push({ categoryName: category.name, isActive: false })
                 }
             })
+
+            let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
+            setLocationLatLong(location_lat_long)
+            setLat(parseFloat(lat))
+            setLng(parseFloat(lng))
             setCategoryList(categoryList)
             renderMenuList(restaurant_detail)
             activeCategory()
@@ -288,7 +296,7 @@ export default function RestaurantDetailWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationId, locationName: locationName },
+                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
                         }}
                         passHref
                     >
@@ -345,17 +353,17 @@ export default function RestaurantDetailWeb(props) {
                                     <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
                                         <div style={{ width: "100%", height: "240px" }}>
                                             <GoogleMapReact
-                                                // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
-                                                defaultCenter={{
-                                                    lat: 13.7587154,
-                                                    lng: 100.5663139,
+                                                bootstrapURLKeys={{ key: 'AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw' }}
+                                                center={{
+                                                    lat: lat,
+                                                    lng: lng,
                                                 }}
                                                 defaultZoom={11}
                                             >
-                                                <AnyReactComponent
-                                                    lat={59.955413}
-                                                    lng={30.337844}
-                                                    text="My Marker"
+                                                <PointInMaps
+                                                    lat={lat}
+                                                    lng={lng}
+                                                    name={restaurantDetail.name}
                                                 />
                                             </GoogleMapReact>
                                         </div>

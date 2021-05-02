@@ -59,29 +59,47 @@ const restaurantService = {
         return response
     },
 
-    getRestaurantSearchByFilter: async function () {
+    getRestaurantSearchByFilter: async function (accessToken, filterForm) {
         let config = {
             headers: {
+                'Authorization': 'Bearer ' + accessToken,
                 'Content-Type': 'application/json'
             }
         }
-        let data = {
-            email: email,
-            password: password
-        }
+        let data = filterForm
+        console.log(data)
         let response = await axios.post('/api/restaurant/search_by_filter', data, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data
             })
             .catch(function (error) {
                 console.log(error)
                 return error
             });
-
-        const axios = require('axios');
+        return response
+    },
+    getLocationSearchByFilter: async function (accessToken, filterForm) {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            }
+        }
+        let data = filterForm
+        let response = await axios.post('/api/location/search_by_filter', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
         return response
     }
+
+
 }
 
 export default restaurantService

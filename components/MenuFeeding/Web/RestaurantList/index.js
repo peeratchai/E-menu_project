@@ -9,38 +9,63 @@ import GoogleMapReact from 'google-map-react';
 import React, { useEffect } from 'react'
 import SearchIcon from '@material-ui/icons/Search';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Geocode from "react-geocode";
+import Filter from '../Filter'
+import restaurantService from '../../../../services/restaurant'
+import checkLogin from '../../../../services/checkLogin'
+import { SettingsSystemDaydreamSharp } from '@material-ui/icons'
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const { Option } = Select;
-Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
-Geocode.setLanguage("th");
-// Geocode.setRegion("es");
-Geocode.setLocationType("ROOFTOP");
-Geocode.enableDebug();
-
 
 export default function RestaurantListWeb(props) {
 
-    const [priceMinSearch, setPriceMinSearch] = React.useState(0);
-    const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
-    const [restaurantList, setRestaurantList] = React.useState([]);
+    const [restaurantList, setRestaurantList] = React.useState(null);
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
+    const [locationLatLong, setLocationLatLong] = React.useState("");
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantCard, setRestaurantCard] = React.useState();
+    const [locationInMaps, setLocationInMaps] = React.useState([]);
+    const [centerLocationLatLong, setCenterLocationLatLong] = React.useState();
 
     useEffect(() => {
-        if (props && props !== undefined) {
+        if (props.restaurant_list.length !== 0) {
             // setRestaurantList(props.restaurant_list)
-            console.log(props.restaurant_list)
-            setLocationName(props.location_name)
-            setLocationId(props.location_id)
-            setTotalResult(props.restaurant_list.length)
-            setRestaurantList(props.restaurant_list)
-            renderRestaurantCard(props.restaurant_list)
+            const { restaurant_list, location_name, location_id, location_lat_long } = props
+            console.log('location_lat_long', location_lat_long)
+
+            if (restaurantList === null) {
+                setCenterLocationLatLong(location_lat_long)
+                setLocationName(location_name)
+                setLocationId(location_id)
+                setLocationLatLong(location_lat_long)
+                setTotalResult(restaurant_list.length)
+                setRestaurantList(restaurant_list)
+                renderRestaurantCard(restaurant_list)
+                setMaps(restaurant_list)
+            } else {
+                setTotalResult(restaurantList.length)
+                setRestaurantList(restaurantList)
+                renderRestaurantCard(restaurantList)
+                setMaps(restaurantList)
+            }
         }
     }, [props, restaurantList])
+
+    const setMaps = (restaurant_list) => {
+        let LocationInMaps = []
+        let point, substringPotion, splitPotion, latLong, lat, lng
+        restaurant_list.map((restaurantDetails) => {
+            point = restaurantDetails.location;
+            substringPotion = point.substring(5)
+            splitPotion = substringPotion.split('(').join('').split(')');
+            latLong = splitPotion[0].split(' ')
+            lat = latLong[0]
+            lng = latLong[1]
+            LocationInMaps.push({ lat: lat, lng: lng, name: restaurantDetails.name })
+        })
+
+        setLocationInMaps(LocationInMaps)
+    }
 
     const renderRestaurantCard = (restaurant_list) => {
         let restaurantCard = restaurant_list && restaurant_list.map((restaurantDetails) => {
@@ -49,7 +74,7 @@ export default function RestaurantListWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList/' + restaurantDetails.name,
-                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id },
+                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id, locationLatLong: locationLatLong },
                         }}
                     >
                         <Card>
@@ -86,6 +111,15 @@ export default function RestaurantListWeb(props) {
         setRestaurantCard(restaurantCard)
     }
 
+    const onSearch = async (filterForm) => {
+        console.log(filterForm)
+        filterForm.business_location = locationId
+        let accessToken = await checkLogin()
+        let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filterForm)
+        console.log('filter', locationListByFilter)
+        setRestaurantList(locationListByFilter)
+    }
+
     function onChangePriceFilter(value) {
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
@@ -105,173 +139,11 @@ export default function RestaurantListWeb(props) {
             <Row style={{ marginTop: "15px" }}>
                 <Col xs={6} md={4}>
                     {/* Filter */}
-                    <div style={{ height: '10rem', width: '100%' }}>
-                        <GoogleMapReact
-                            // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
-                            defaultCenter={{
-                                lat: 13.7587154,
-                                lng: 100.5663139,
-                            }}
-                            defaultZoom={11}
-                        >
-                            <AnyReactComponent
-                                lat={59.955413}
-                                lng={30.337844}
-                                text="My Marker"
-                            />
-                        </GoogleMapReact>
-                    </div>
-                    <br />
-                    <br />
-
-                    <div style={{ width: '100%', padding: "1.875rem", backgroundColor: "white" }} className={utilStyles.font_size_sm}>
-                        <div className={utilStyles.headingMd}>
-                            <b>Search</b>
-                        </div>
-                        <br />
-                        <div style={{ marginTop: "10px" }}>
-                            <Form>
-                                <Row style={{ border: "1px solid #ced4da", margin: "0" }}>
-                                    <Col xs={3} style={{ margin: "auto" }}>
-                                        <b>What</b>
-                                    </Col>
-                                    <Col xs={9} style={{ paddingLeft: "0" }}>
-                                        <Form.Group controlId="whatSearch" style={{ marginBottom: "0" }}>
-                                            <Form.Control type="text" placeholder="Any keywords.." className={styles.search_Box} />
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-                                <br />
-                                <Row style={{ border: "1px solid #ced4da", margin: "0" }}>
-                                    <Col xs={3} style={{ margin: "auto" }}>
-                                        <b>Where</b>
-                                    </Col>
-                                    <Col xs={9} style={{ paddingLeft: "0" }}>
-                                        <Form.Group controlId="whereSearch" style={{ marginBottom: "0" }}>
-                                            <Form.Control type="text" placeholder="City, postcode.." className={styles.search_Box} />
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-                                <br />
-                                <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md}>
-                                    <SearchIcon /> Search
-                                </Button>
-                            </Form>
-                        </div>
-                    </div>
-
-                    <br />
-                    <br />
-
-                    <div style={{ width: '100%', padding: "1.875rem", backgroundColor: "white" }} className={utilStyles.font_size_sm}>
-                        <div className={utilStyles.headingMd}>
-                            <b>Filter</b>
-                        </div>
-                        <br />
-                        <div>
-                            Food Type
-                                        </div>
-                        <div style={{ marginTop: "10px" }}>
-                            <Select
-                                showSearch
-                                style={{ width: '100%' }}
-                                placeholder="Search to Select"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                filterSort={(optionA, optionB) =>
-                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                }
-                                defaultValue="Breads"
-                            >
-                                <Option value="0">-</Option>
-                                <Option value="Breads">Breads</Option>
-                                <Option value="2">Rice</Option>
-                                <Option value="3">Meat</Option>
-                                <Option value="4">Pasta</Option>
-                                <Option value="5">Noodles</Option>
-                                <Option value="6">Vegetables</Option>
-                                <Option value="7">Fruit</Option>
-                            </Select>
-                        </div>
-
-                        <div style={{ marginTop: "10px" }}>
-                            <Form>
-                                <Form.Group controlId="priceRange">
-                                    <Form.Label>Price Range</Form.Label>
-                                    <br />
-                                    <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePriceFilter} />
-                                    <div className={utilStyles.font_size_sm}>From {priceMinSearch} to {priceMaxSearch} baht</div>
-                                </Form.Group>
-                            </Form>
-                        </div>
-
-                        <div style={{ marginTop: "10px" }}>
-                            <div>
-                                Payment option
-                                            </div>
-                            <div style={{ marginTop: "10px" }}>
-                                <Select
-                                    showSearch
-                                    style={{ width: '100%' }}
-                                    placeholder="Search to Select"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                    filterSort={(optionA, optionB) =>
-                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                    }
-                                    defaultValue="Cash"
-                                >
-                                    <Option value="-">-</Option>
-                                    <Option value="Cash">Cash</Option>
-                                    <Option value="Credit">Credit Cards</Option>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: "10px" }}>
-                            <div>
-                                Distance
-                                            </div>
-                            <div style={{ marginTop: "10px" }}>
-                                <Select
-                                    showSearch
-                                    style={{ width: '100%' }}
-                                    placeholder="Search to Select"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                    filterSort={(optionA, optionB) =>
-                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                    }
-                                    defaultValue="3"
-                                >
-                                    <Option value="0">-</Option>
-                                    <Option value="1">1 กิโลเมตร</Option>
-                                    <Option value="2">2 กิโลเมตร</Option>
-                                    <Option value="3">5 กิโลเมตร</Option>
-                                    <Option value="4">10 กิโลเมตร</Option>
-                                    <Option value="5">20 กิโลเมตร</Option>
-                                    <Option value="6">40 กิโลเมตร</Option>
-                                    <Option value="7">60 กิโลเมตร</Option>
-                                    <Option value="8">80 กิโลเมตร</Option>
-                                    <Option value="9">100 กิโลเมตร</Option>
-                                    <Option value="10">250 กิโลเมตร</Option>
-                                    <Option value="11">500 กิโลเมตร</Option>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: "20px" }}>
-                            <Checkbox onChange={(e) => console.log(e)}>Open Now</Checkbox>
-                            <Checkbox onChange={(e) => console.log(e)}>Parking</Checkbox>
-                        </div>
-
-                    </div>
+                    <Filter
+                        onSearch={(form) => onSearch(form)}
+                        location_restaurant_in_maps={locationInMaps}
+                        center_location_LatLong={centerLocationLatLong}
+                    />
                 </Col>
                 {/* List Restaurant */}
                 <Col xs={6} md={8}>

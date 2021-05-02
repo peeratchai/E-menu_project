@@ -21,7 +21,7 @@ Geocode.enableDebug();
 export default function Restaurant({ props }) {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName, restaurantId } = router.query;
+    const { locationId, locationName, restaurantId, locationLatLong } = router.query;
     const { asPath } = useRouter()
 
     ////Set State
@@ -86,7 +86,8 @@ export default function Restaurant({ props }) {
         if (!router.isReady) {
             // console.log('not ready')
         } else {
-            if (locationId === undefined) {
+
+            if (locationId === undefined || locationName === undefined || restaurantId === undefined || locationLatLong === undefined) {
                 router.push({
                     pathname: "/menuFeeding"
                 })
@@ -101,14 +102,14 @@ export default function Restaurant({ props }) {
 
 
     const getAddressOnGoogleMaps = async (restaurantDetail) => {
-        let point, substringPotion, splitPotion, latLong, lat, long
+        let point, substringPotion, splitPotion, latLong, lat, lng
         point = 'POINT(13.724035849919018 100.57927717448996)';
         substringPotion = point.substring(5)
         splitPotion = substringPotion.split('(').join('').split(')');
         latLong = splitPotion[0].split(' ')
         lat = latLong[0]
-        long = latLong[1]
-        let address = await Geocode.fromLatLng(lat, long).then(
+        lng = latLong[1]
+        let address = await Geocode.fromLatLng(lat, lng).then(
             (response) => {
                 const address = response.results[0].formatted_address;
                 return address
@@ -305,6 +306,7 @@ export default function Restaurant({ props }) {
                         restaurant_detail={restaurantDetail}
                         location_name={locationName}
                         location_id={locationId}
+                        location_lat_long={locationLatLong}
                     />
                 ) : (
                     // Mobile Version
