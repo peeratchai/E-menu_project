@@ -1,5 +1,5 @@
-import Layout from '../../layout'
-import utilStyles from '../../../styles/utils.module.css'
+import Layout from '../../../layout'
+import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card, Image, Breadcrumb } from 'react-bootstrap'
 import { Card as Cardantd, Select, Button } from 'antd';
@@ -16,13 +16,13 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import AddMenuModal from '../../../components/Modal/AddMenuModal'
+import AddMenuModal from '../../../Modal/AddMenuModal'
 
 const { Meta } = Cardantd;
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 
-export default function RestaurantDetails() {
+export default function RestaurantDetailMobile() {
     const router = useRouter()
     const { area, restaurant } = router.query;
 

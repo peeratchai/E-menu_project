@@ -1,40 +1,33 @@
-import Layout from '../../../components/layout'
+
 import utilStyles from '../../../styles/utils.module.css'
-import { Row, Col, Card, Image, Button, Breadcrumb } from 'react-bootstrap'
-import { Card as Cardantd } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import styles from './index.module.css'
-import Link from 'next/link'
-import Carousel from 'react-bootstrap/Carousel'
 import React, { useEffect, useRef } from 'react'
 import useMediaQuery from "../../../utils/utils";
-import GoogleMapReact from 'google-map-react';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import LanguageIcon from '@material-ui/icons/Language';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import RestaurantDetailsMobile from '../../../components/RestaurantDetails/Mobile'
-import AddMenuModal from '../../../components/Modal/AddMenuModal'
+import RestaurantDetailMobile from '../../../components/MenuFeeding/Mobile/RestaurantDetail'
+import RestaurantDetailWeb from '../../../components/MenuFeeding/Web/RestaurantDetail'
+import restaurantService from '../../../services/restaurant'
+import checkLogin from '../../../services/checkLogin'
+import Geocode from "react-geocode";
 
-const { Meta } = Cardantd;
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
+Geocode.setLanguage("th");
+// Geocode.setRegion("es");
+Geocode.setLocationType("ROOFTOP");
+Geocode.enableDebug();
+
 
 export default function Restaurant({ props }) {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { area, restaurant } = router.query;
+    const { locationId, locationName, restaurantId } = router.query;
+    const { asPath } = useRouter()
 
     ////Set State
-    const [modalShow, setModalShow] = React.useState(false);
-    const [categoryNav, setCategoryNav] = React.useState();
+
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
-    const [styleButtonRight, setStyleButtonRight] = React.useState(styles.nav_scroller_button_right);
-    const [styleButtonLeft, setStyleButtonLeft] = React.useState(styles.nav_scroller_button_left + " " + styles.hide);
-    const [menuEachCategory, setMenuEachCategory] = React.useState("");
+
     const [widthCategoryNav, setWidthCategoryNav] = React.useState();
     const [widthCategoryList, setWidthCategoryList] = React.useState();
     const [categoryList, setCategoryList] = React.useState([{ categoryName: 'เมนูยำ', isActive: true }, { categoryName: 'เมนูข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน7', isActive: false }, { categoryName: 'เมนูแซลม่อน8', isActive: false }, { categoryName: 'เมนูแซลม่อน9', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }]);
@@ -66,6 +59,8 @@ export default function Restaurant({ props }) {
             ]
         }
     );
+
+    const [restaurantDetail, setRestaurantDetail] = React.useState()
     // const [categoryList, setCategoryList] = React.useState([{ categoryName: 'ยำ', isActive: true }, { categoryName: 'ข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodType', isActive: false }, , { categoryName: 'foodTypeFinal', isActive: false }]);
     ////
 
@@ -87,13 +82,64 @@ export default function Restaurant({ props }) {
         activeCategory()
     }
 
-    useEffect(() => {
-        if (isMobileResolution === false) {
-            renderMenuList()
-            activeCategory()
+    useEffect(async () => {
+        if (!router.isReady) {
+            // console.log('not ready')
+        } else {
+            if (locationId === undefined) {
+                router.push({
+                    pathname: "/menuFeeding"
+                })
+            } else {
+                let accessToken = await checkLogin()
+                let restaurantDetail = await getRestaurantDetail(accessToken, restaurantId)
+                await getAddressOnGoogleMaps(restaurantDetail)
+                // setRestaurantDetail(restaurantDetail)
+            }
         }
+    }, [router.isReady])
 
-    }, [widthCategoryList, widthCategoryNav])
+
+    const getAddressOnGoogleMaps = async (restaurantDetail) => {
+        let point, substringPotion, splitPotion, latLong, lat, long
+        point = 'POINT(13.724035849919018 100.57927717448996)';
+        substringPotion = point.substring(5)
+        splitPotion = substringPotion.split('(').join('').split(')');
+        latLong = splitPotion[0].split(' ')
+        lat = latLong[0]
+        long = latLong[1]
+        let address = await Geocode.fromLatLng(lat, long).then(
+            (response) => {
+                const address = response.results[0].formatted_address;
+                return address
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+        restaurantDetail.googleMapsAddress = address
+        setRestaurantDetail(restaurantDetail)
+        console.log('restaurantDetail', restaurantDetail)
+
+    }
+
+    // const getQuery = () => {
+    //     console.log(asPath)
+    //     let splitPath = asPath.split('?')
+    //     splitPath = splitPath[1].split('&')
+    //     let SplitLocationId = splitPath[0].split('=')
+    //     let locationId = SplitLocationId[1]
+    //     let SplitLocationName = splitPath[1].split('=')
+    //     let locationName = SplitLocationName[1]
+    //     let SplitRestaurantId = splitPath[2].split('=')
+    //     let restaurantId = SplitRestaurantId[1]
+    //     return { locationId: locationId, locationName: locationName, restaurantId: restaurantId }
+    // }
+
+    const getRestaurantDetail = async (accessToken, restaurantId) => {
+        let response = await restaurantService.getRestaurantById(accessToken, restaurantId)
+        return response.data
+    }
 
     const setClassNameCategoryNav = (category, index) => {
         if (category.isActive) {
@@ -199,312 +245,70 @@ export default function Restaurant({ props }) {
         }
     }
 
-    const renderMenuList = () => {
-        // console.log(menuList)
-        let categorySection = categoryList.map((category, index) => {
-            // console.log(menuList[category.categoryName])
-            let menucard = menuList[category.categoryName].map((menu) =>
-                <Col xs={6} className={styles.menu_card} onClick={() => setModalShow(true)}>
-                    <Cardantd
-                        cover={
-                            <img
-                                alt="example"
-                                src={menu.image}
-                                style={{ height: '200px' }}
-                            />
-                        }
-                        actions={[
-                            <b>{menu.price + "Baht"}</b>
-                        ]}
-                    >
-                        <Meta
-                            title={menu.name}
-                            description="This is the description"
-                        />
-                    </Cardantd>
-                </Col>
-            )
+    // const renderMenuList = () => {
+    //     // console.log(menuList)
+    //     let categorySection = categoryList.map((category, index) => {
+    //         // console.log(menuList[category.categoryName])
+    //         let menucard = menuList[category.categoryName].map((menu) =>
+    //             <Col xs={6} className={styles.menu_card} onClick={() => setModalShow(true)}>
+    //                 <Cardantd
+    //                     cover={
+    //                         <img
+    //                             alt="example"
+    //                             src={menu.image}
+    //                             style={{ height: '200px' }}
+    //                         />
+    //                     }
+    //                     actions={[
+    //                         <b>{menu.price + "Baht"}</b>
+    //                     ]}
+    //                 >
+    //                     <Meta
+    //                         title={menu.name}
+    //                         description="This is the description"
+    //                     />
+    //                 </Cardantd>
+    //             </Col>
+    //         )
 
-            return (
-                <div>
-                    <div ref={(categoryRef) => (refsCategory.current[index] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
+    //         return (
+    //             <div>
+    //                 <div ref={(categoryRef) => (refsCategory.current[index] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
 
-                    </div>
-                    <Row className={styles.category_section} >
-                        <Col xs={12}>
-                            <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
-                                {category.categoryName}
-                            </div>
-                        </Col>
-                        <Col xs={12}>
-                            <Row className={styles.menu_section}>
-                                {menucard}
-                            </Row>
-                        </Col>
-                    </Row>
-                </div>
-            )
-        })
-        // console.log(categorySection)
+    //                 </div>
+    //                 <Row className={styles.category_section} >
+    //                     <Col xs={12}>
+    //                         <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
+    //                             {category.categoryName}
+    //                         </div>
+    //                     </Col>
+    //                     <Col xs={12}>
+    //                         <Row className={styles.menu_section}>
+    //                             {menucard}
+    //                         </Row>
+    //                     </Col>
+    //                 </Row>
+    //             </div>
+    //         )
+    //     })
+    //     // console.log(categorySection)
 
-        setMenuEachCategory(categorySection)
-    }
-
-
+    //     setMenuEachCategory(categorySection)
+    // }
 
     return (
         <>
             {
                 !isMobileResolution ? (
                     // PC Version
-                    <Layout>
-                        <div className={styles.container}>
-                            <Breadcrumb>
-                                <Link href="/menuFeeding" passHref>
-                                    <Breadcrumb.Item>{area}</Breadcrumb.Item>
-                                </Link>
-                                <Link href="/menuFeeding/restaurantList" passHref>
-                                    <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
-                                </Link>
-                                <Breadcrumb.Item active>{restaurant}</Breadcrumb.Item>
-                            </Breadcrumb>
-                            <Carousel>
-                                <Carousel.Item interval={1000}>
-                                    <Image
-                                        className="d-block w-100"
-                                        src="/images/restaurant1.jpg"
-                                        alt="First slide"
-                                        style={{ height: "300px", objectFit: "cover" }}
-                                    />
-                                </Carousel.Item>
-                                <Carousel.Item interval={500}>
-                                    <Image
-                                        className="d-block w-100"
-                                        src="/images/restaurant1_1.jpg"
-                                        alt="Second slide"
-                                        style={{ height: "300px", objectFit: "cover" }}
-                                    />
-                                </Carousel.Item>
-                                <Carousel.Item>
-                                    <Image
-                                        className="d-block w-100"
-                                        src="/images/restaurant1_2.jpg"
-                                        alt="Third slide"
-                                        style={{ height: "300px", objectFit: "cover" }}
-                                    />
-                                </Carousel.Item>
-                            </Carousel>
-                            <Card style={{ cursor: "auto" }}>
-                                <Card.Body>
-                                    <Card.Title>Park Hyatt Bangkok</Card.Title>
-                                    <Card.Text className={styles.card_text}>
-                                        <div className={styles.restaurant_details}>
-                                            <Row>
-                                                <Col style={{ borderRight: "1px solid #dee2e6" }}>
-                                                    Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
-                                                    </Col>
-                                                <Col style={{ color: "#74b100" }}>
-                                                    Open now!
-                                            </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: "10px" }}>
-                                                <Col style={{ paddingBottom: "15px" }}>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                            </Col>
-                                            </Row>
-                                        </div>
-                                        <Row style={{ marginTop: "15px" }}>
-                                            <Col md={8}>
-                                                <div className={styles.nav_category_layout} >
-                                                    <div className={styles.nav_category} ref={refCategoryNav}>
-                                                        <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
-                                                            {categoryNav}
-                                                        </div>
-                                                        <Button className={styleButtonLeft} onClick={() => scrollCategoryNav('left')}>
-                                                            <LeftOutlined className={styles.nav_scroller_icon} />
-                                                        </Button>
-                                                        <Button className={styleButtonRight} onClick={() => scrollCategoryNav('right')}>
-                                                            <RightOutlined className={styles.nav_scroller_icon} />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-
-                                                {/* Menu list */}
-                                                <div calssName={styles.menu_list}>
-                                                    {menuEachCategory}
-                                                </div>
-
-                                            </Col>
-
-                                            <Col md={4} className={utilStyles.font_size_md} style={{ marginTop: "20px" }}>
-                                                <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
-                                                    <div style={{ width: "100%", height: "240px" }}>
-                                                        <GoogleMapReact
-                                                            // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
-                                                            defaultCenter={{
-                                                                lat: 13.7587154,
-                                                                lng: 100.5663139,
-                                                            }}
-                                                            defaultZoom={11}
-                                                        >
-                                                            <AnyReactComponent
-                                                                lat={59.955413}
-                                                                lng={30.337844}
-                                                                text="My Marker"
-                                                            />
-                                                        </GoogleMapReact>
-                                                    </div>
-                                                    <div style={{ padding: "1.25rem" }}>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <LocationOnIcon /> &nbsp; 125 Mountain St, Brooklyn, NY
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <PhoneIcon /> &nbsp; (301) 453-8688
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <LanguageIcon /> &nbsp; <a href="#">www.thaistaste.com</a>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0" }}>
-                                                            <FacebookIcon style={{ color: "#3b5998", fontSize: "40px", marginRight: "5px" }} /> <TwitterIcon style={{ color: "#1da1f2", fontSize: "40px" }} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div style={{ backgroundColor: "#f0f2f3" }}>
-                                                    <div style={{ padding: "1.25rem" }}>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }} >
-                                                            <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
-                                                        </div>
-                                                        <div style={{ padding: "15px 0" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Today</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right", color: "#74b100 " }}>
-                                                                        Open Now!
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Monday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Tuesday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Wednesday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Thursday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Friday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Saturday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div style={{ padding: "10px 0" }}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Sunday</b>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        08:00AM - 09:00PM
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </div >
-                        <AddMenuModal
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                        />
-                    </Layout>
-
+                    <RestaurantDetailWeb
+                        restaurant_detail={restaurantDetail}
+                        location_name={locationName}
+                        location_id={locationId}
+                    />
                 ) : (
                     // Mobile Version
-                    <RestaurantDetailsMobile />
+                    <RestaurantDetailMobile />
                 )
             }
         </>

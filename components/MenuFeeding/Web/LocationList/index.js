@@ -10,7 +10,7 @@ import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import restaurantService from '../../../../services/restaurant'
 import authentication from '../../../../services/authentication'
-
+import checkLogin from '../../../../services/checkLogin'
 const { Option } = Select;
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
@@ -20,28 +20,16 @@ export default function WebLocationList() {
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
     const [locationList, setLocationList] = React.useState([]);
+    const [totalResult, setTotalResult] = React.useState(0);
 
     useEffect(async () => {
         if (typeof window !== 'undefined') {
-            let accessTokenlocalStorage = window.localStorage.getItem('accessToken');
-            if (accessTokenlocalStorage !== null) {
-                let LocationList = await getLocationList(accessTokenlocalStorage)
-                setLocationList(LocationList)
-                console.log('LocationList', LocationList)
-            } else {
-                //// non login
-                let accessToken = await loginWithGuestUser()
-                let LocationList = await getLocationList(accessToken)
-                setLocationList(LocationList)
-            }
+            let accessToken = await checkLogin()
+            let LocationList = await getLocationList(accessToken)
+            setLocationList(LocationList)
+            setTotalResult(LocationList.length)
         }
     }, [])
-
-    const loginWithGuestUser = async () => {
-        let response = await authentication.loginWithGuestUser();
-        let accescToken = response.data.accessToken
-        return accescToken
-    }
 
     const getLocationList = async (accessToken) => {
         try {
@@ -64,7 +52,7 @@ export default function WebLocationList() {
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList',
-                    query: { area: 'Ari' },
+                    query: { locationId: locationDetails.id, locationName: locationDetails.title },
                 }}
             >
                 <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
@@ -74,7 +62,7 @@ export default function WebLocationList() {
                     <Card.Body className={utilStyles.cardBody}>
                         <Card.Text>
                             <div className={utilStyles.cardTitle}>{locationDetails.title}</div>
-                            <div className={utilStyles.cardText}>20 Listing</div>
+                            <div className={utilStyles.cardText}>{locationDetails.total} Listing</div>
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -262,7 +250,7 @@ export default function WebLocationList() {
                         <Row style={{ padding: "20px 10px" }}>
                             <Col>
                                 <div>
-                                    <b>56 Results found</b>
+                                    <b>{totalResult} Results found</b>
                                 </div>
                             </Col>
                             <Col>
