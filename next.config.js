@@ -40,7 +40,12 @@ module.exports = {
             {
                 source: '/api/restaurant/:restaurantId',
                 destination: API_URL + '/restaurant/:restaurantId',
-            }
+            },
+            {
+                source: '/api/promotion',
+                destination: API_URL + '/promotion',
+            },
+
         ]
     },
 

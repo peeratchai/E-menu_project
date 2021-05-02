@@ -9,19 +9,33 @@ import MobileFilter from '../../components/Newspaper/Mobile/Filter'
 import ShowFiilterSelected from '../../components/ShowFiilterSelected'
 import styles from './index.module.css'
 import 'antd/dist/antd.css';
-import React from 'react'
+import React, { useEffect } from 'react'
+import newspaperService from '../../services/newspaper'
+import checklogin from '../../services/checkLogin'
 
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
+    const [newspaperList, setNewspaperList] = React.useState();
 
     const searchFunc = () => {
         setModalShow(true)
         console.log("test")
     }
 
-    let component
+    useEffect(async () => {
+        let accessToken = await checklogin()
+        let newspaperList = await getNewspaperlist(accessToken)
+        setNewspaperList(newspaperList)
+    }, [])
 
+    const getNewspaperlist = async (accessToken) => {
+        let response = await newspaperService.getNewspaperList(accessToken);
+        console.log('response', response)
+        return response.data
+    }
+
+    let component
     if (isMobileResolution) {
         //Layout for mobile
         component = (
@@ -45,7 +59,9 @@ export default function Newspaper() {
                 <div style={{ backgroundColor: "white" }}>
                     <div className={styles.container} >
                         <br />
-                        <WebPromotionlist />
+                        <WebPromotionlist
+                            newspaper_list={newspaperList}
+                        />
                     </div>
                 </div>
             </Layout >
