@@ -28,9 +28,7 @@ export default function MenuFeeding() {
             {
                 !isMobileResolution ? (
                     // PC Version
-                    <WebLocationList
-
-                    />
+                    <WebLocationList/>
                 ) : (
                     // Mobile Version
                     <Layout containerType="mobile" search searchFunc={searchFunc}>

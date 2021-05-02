@@ -45,6 +45,10 @@ module.exports = {
                 source: '/api/promotion',
                 destination: API_URL + '/promotion',
             },
+            {
+                source: '/api/restaurant/search_by_filter',
+                destination: API_URL + '/restaurant/search_by_filter',
+            },
 
         ]
     },

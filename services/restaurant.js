@@ -69,7 +69,7 @@ const restaurantService = {
             email: email,
             password: password
         }
-        let response = await axios.post('/api/auth/signup-with-email', data, config)
+        let response = await axios.post('/api/restaurant/search_by_filter', data, config)
             .then(function (response) {
                 console.log(response)
                 return response
