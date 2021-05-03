@@ -4,13 +4,14 @@ import { Form, Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import authentication from '../../services/authentication'
 import { message } from 'antd'
+import { useRouter } from 'next/router'
 
 export default function resetPassword() {
     const [form, setForm] = React.useState({})
     const router = useRouter()
     const { u, token } = router.query;
     const [id, setId] = React.useState()
-    const [token, setToken] = React.useState()
+    const [accessToken, setAccessToken] = React.useState()
 
     // const [password, setPassword] = React.useState(null);
     // const [confirmPassword, setConfirmPassword] = React.useState(null);
@@ -22,7 +23,7 @@ export default function resetPassword() {
         if (u !== undefined) {
             console.log('have u data : ', u)
             setId(u)
-            setToken(token)
+            setAccessToken(token)
         }
     }, [])
 
@@ -38,7 +39,7 @@ export default function resetPassword() {
         })
     }
 
-    const resetPassword = (event) => {
+    const resetPassword = async (event) => {
         event.preventDefault();
         const newErrors = findResetPasswordFormErrors()
 
@@ -47,7 +48,7 @@ export default function resetPassword() {
         } else {
             let data = {
                 id: id,
-                token: token,
+                token: accessToken,
                 password: form.password
             }
             try {
