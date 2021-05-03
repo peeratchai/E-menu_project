@@ -180,7 +180,7 @@ export default function RestaurantDetailMobile(props) {
             <Row>
                 <Col>
                     <div>
-                        <b>Monday</b>
+                        <b>{business_hour.day}</b>
                     </div>
                 </Col>
                 <Col>
