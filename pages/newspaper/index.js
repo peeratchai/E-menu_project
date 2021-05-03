@@ -19,6 +19,7 @@ export default function Newspaper() {
     const [modalShow, setModalShow] = React.useState(false);
     const [newspaperList, setNewspaperList] = React.useState();
     const [accessToken, setAccessToken] = React.useState();
+    const [filter, setFilter] = React.useState({});
 
     const searchFunc = () => {
         setModalShow(true)
@@ -42,6 +43,7 @@ export default function Newspaper() {
         let filter = changeFormatFilter(filterForm)
         console.log('filter', filter)
         let locationListSearchByFilter = await newspaperService.getNewspaperListBySearch(accessToken, filter)
+        setFilter(filterForm)
         console.log('locationListSearchByFilter', locationListSearchByFilter)
         setNewspaperList(locationListSearchByFilter)
     }
@@ -52,12 +54,17 @@ export default function Newspaper() {
         component = (
             <Layout containerType="mobile" search searchFunc={searchFunc}>
                 <Container className={utilStyles.container_sm}>
-                    <ShowFiilterSelected />
-                    <MobilePromotionlist />
+                    <ShowFiilterSelected
+                        filter={filter}
+                    />
+                    <MobilePromotionlist
+                        newspaper_list={newspaperList}
+                    />
                 </Container>
                 <MobileFilter
                     show={modalShow}
                     onHide={() => setModalShow(false)}
+                    onSearch={(form) => onSearch(form)}
                 />
             </Layout>
         )

@@ -42,15 +42,10 @@ export default function MobileFilterRestaurantList(props) {
     }, [props])
 
     const onChangePriceFilter = (value) => {
-        // console.log('value: ', value);
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
         let price_from = value[0]
         let price_to = value[1]
-
-        // setform('price_from', price_from)
-        // setform('price_to', price_to)
-
         setform('price_to_price_from', price_from + " " + price_to)
 
     }

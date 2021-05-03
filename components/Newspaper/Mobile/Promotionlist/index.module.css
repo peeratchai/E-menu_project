@@ -1,7 +1,19 @@
-
-.colCard {
-  margin-bottom: 45px;
-}
 .colCardMobile {
   margin-bottom: 20px;
+}
+.bannerText {
+  padding: 0 10px;
+  text-align: center;
+  -ms-transform: rotate(20deg);
+  transform: rotate(-30deg);
+  position: relative;
+  top: 50%;
+  margin: auto;
+  color: black;
+  font-weight: 600;
+  background-color: white;
+  opacity: 0.7;
+  font-size: 1rem;
+  border-radius: 5px;
+  width: 70%;
 }

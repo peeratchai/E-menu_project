@@ -2,6 +2,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Image } from 'react-bootstrap'
 import React, { useEffect } from 'react'
+import Link from 'next/link'
 
 export default function WebPromotionlist(props) {
 
@@ -21,67 +22,89 @@ export default function WebPromotionlist(props) {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]
         let column1 = column1Array && column1Array.map((newspaperDetail) => (
-            <div className={styles.colCard} >
-                <div className={utilStyles.parent_zoom_bgImg}>
-                    <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
-                        <div className={styles.bannerText}>
-                            {newspaperDetail.promote_content}
+            <Link
+                href={{
+                    pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
+                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                }}
+            >
+                <div className={styles.colCard} >
+                    <div className={utilStyles.parent_zoom_bgImg}>
+                        <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
+                            <div className={styles.bannerText}>
+                                {newspaperDetail.promote_content}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className={utilStyles.fontContent}>
-                    <b>{newspaperDetail.restaurant.name}</b>
+                    <div className={utilStyles.fontContent}>
+                        <b>{newspaperDetail.restaurant.name}</b>
+                    </div>
+                    <div className={utilStyles.font_size_sm}>
+                        {newspaperDetail.title}
+                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
                 </div>
-                <div className={utilStyles.font_size_sm}>
-                    {newspaperDetail.title}
-                    {/* Opening : 8.00 am - 17.30 pm */}
-                </div>
-            </div>
+            </Link>
         ))
 
         let column2Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 1)
 
         let column2 = column2Array && column2Array.map((newspaperDetail) => (
-            <div className={styles.colCard} >
-                <div className={utilStyles.parent_zoom_bgImg}>
-                    <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
-                        <div className={styles.bannerText}>
-                            {newspaperDetail.promote_content}
+            <Link
+                href={{
+                    pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
+                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                }}
+            >
+                <div className={styles.colCard} >
+                    <div className={utilStyles.parent_zoom_bgImg}>
+                        <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
+                            <div className={styles.bannerText}>
+                                {newspaperDetail.promote_content}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className={utilStyles.fontContent}>
-                    <b>{newspaperDetail.restaurant.name}</b>
+                    <div className={utilStyles.fontContent}>
+                        <b>{newspaperDetail.restaurant.name}</b>
+                    </div>
+                    <div className={utilStyles.font_size_sm}>
+                        {newspaperDetail.title}
+                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
                 </div>
-                <div className={utilStyles.font_size_sm}>
-                    {newspaperDetail.title}
-                    {/* Opening : 8.00 am - 17.30 pm */}
-                </div>
-            </div>
+            </Link>
+
         ))
 
         let column3Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 2)
 
         let column3 = column3Array && column3Array.map((newspaperDetail) => (
-            <div className={styles.colCard} >
-                <div className={utilStyles.parent_zoom_bgImg}>
-                    <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
-                        <div className={styles.bannerText}>
-                            {newspaperDetail.promote_content}
+            <Link
+                href={{
+                    pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
+                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                }}
+            >
+                <div className={styles.colCard} >
+                    <div className={utilStyles.parent_zoom_bgImg}>
+                        <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
+                            <div className={styles.bannerText}>
+                                {newspaperDetail.promote_content}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className={utilStyles.fontContent}>
-                    <b>{newspaperDetail.restaurant.name}</b>
+                    <div className={utilStyles.fontContent}>
+                        <b>{newspaperDetail.restaurant.name}</b>
+                    </div>
+                    <div className={utilStyles.font_size_sm}>
+                        {newspaperDetail.title}
+                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
                 </div>
-                <div className={utilStyles.font_size_sm}>
-                    {newspaperDetail.title}
-                    {/* Opening : 8.00 am - 17.30 pm */}
-                </div>
-            </div>
+            </Link>
         ))
         setPromotionsCardColumn1(column1)
         setPromotionsCardColumn2(column2)

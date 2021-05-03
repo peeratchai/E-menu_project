@@ -1,6 +1,6 @@
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
-import { Row, Col, Button, Modal } from 'react-bootstrap'
+import { Row, Col, Button, Modal, Form } from 'react-bootstrap'
 import React from 'react'
 import { Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
@@ -13,12 +13,25 @@ const { Option } = Select;
 
 //Modal filter for mobile resolution
 export default function MobileFilter(props) {
-    const [foodType, setFoodType] = React.useState();
-    const [paymentOption, setPaymentOption] = React.useState();
-    const [distance, setDistance] = React.useState();
+
+    const [form, setForm] = React.useState({
+        food_type: '',
+        payment_option: '',
+        distance: 0,
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null
+    })
+    const setform = (fieldName, value) => {
+        // console.log
+        setForm({
+            ...form,
+            [fieldName]: value
+        })
+    }
 
     const onSearch = () => {
-        console.log(restaurantName, location, restaurantType, foodType)
+        props.onSearch(form)
         props.onHide()
     }
 
@@ -40,7 +53,20 @@ export default function MobileFilter(props) {
                                 Food Type
                                 </div>
                             <div>
-                                <Select
+                                <Form.Group >
+                                    <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
+                                        <option value="" key="null">-</option>
+                                        <option value="Breads" key="Breads">Breads</option>
+                                        <option value="Rice" key="Rice">Rice</option>
+                                        <option value="Meat" key="Meat">Meat</option>
+                                        <option value="Pasta" key="Pasta">Pasta</option>
+                                        <option value="Noodles" key="Noodles">Noodles</option>
+                                        <option value="Vegetables" key="Vegetables">Vegetables</option>
+                                        <option value="Fruit" key="Fruit">Fruit</option>
+                                    </Form.Control>
+                                </Form.Group>
+
+                                {/* <Select
                                     showSearch
                                     style={{ width: '100%' }}
                                     placeholder="Search to Select"
@@ -61,7 +87,7 @@ export default function MobileFilter(props) {
                                     <Option value="5">Noodles</Option>
                                     <Option value="6">Vegetables</Option>
                                     <Option value="7">Fruit</Option>
-                                </Select>
+                                </Select> */}
                             </div>
                         </Col>
                         <Col xs={12} className={styles.colPadding}>
@@ -74,7 +100,14 @@ export default function MobileFilter(props) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Select
+                                    <Form.Group >
+                                        <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
+                                            <option value="">-</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Credit Card">Credit Cards</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    {/* <Select
                                         showSearch
                                         mode="multiple"
                                         showArrow={true}
@@ -93,7 +126,7 @@ export default function MobileFilter(props) {
                                         <Option value="0">-</Option>
                                         <Option value="1">Cash</Option>
                                         <Option value="2">Credit Cards</Option>
-                                    </Select>
+                                    </Select> */}
                                 </Col>
                             </Row>
                         </Col>
@@ -108,7 +141,23 @@ export default function MobileFilter(props) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Select
+                                    <Form.Group >
+                                        <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
+                                            <option value="">-</option>
+                                            <option value="1">1 กิโลเมตร</option>
+                                            <option value="2">2 กิโลเมตร</option>
+                                            <option value="5">5 กิโลเมตร</option>
+                                            <option value="10">10 กิโลเมตร</option>
+                                            <option value="20">20 กิโลเมตร</option>
+                                            <option value="40">40 กิโลเมตร</option>
+                                            <option value="60">60 กิโลเมตร</option>
+                                            <option value="80">80 กิโลเมตร</option>
+                                            <option value="100">100 กิโลเมตร</option>
+                                            <option value="250">250 กิโลเมตร</option>
+                                            <option value="500">500 กิโลเมตร</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    {/* <Select
                                         showSearch
                                         style={{ width: '100%' }}
                                         placeholder="Search to Select"
@@ -133,14 +182,15 @@ export default function MobileFilter(props) {
                                         <Option value="9">100 กิโลเมตร</Option>
                                         <Option value="10">250 กิโลเมตร</Option>
                                         <Option value="11">500 กิโลเมตร</Option>
-                                    </Select>
+                                    </Select> */}
                                 </Col>
                             </Row>
                         </Col>
                         <Col xs={12} className={styles.colPadding}>
                             <Row>
                                 <Col>
-                                    <Checkbox onChange={(e) => console.log(e)}>Parking</Checkbox>
+                                    <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} checked={form.is_open_now} >Open Now</Checkbox>
+                                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} checked={form.have_parking}>Parking</Checkbox>
                                 </Col>
                             </Row>
                         </Col>

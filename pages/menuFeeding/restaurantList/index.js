@@ -25,6 +25,7 @@ export default function RestaurantList() {
         if (!router.isReady) {
             // console.log('not ready')
         } else {
+            console.log(locationLatLong)
             if (locationId === undefined || locationName === undefined || locationLatLong === undefined) {
                 router.push({
                     pathname: "/menuFeeding"

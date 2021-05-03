@@ -56,7 +56,7 @@ export default function RestaurantDetailWeb(props) {
     const [lat, setLat] = React.useState(13.8537968);
     const [lng, setLng] = React.useState(100.3764991);
     const [locationLatLong, setLocationLatLong] = React.useState("");
-
+    const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
     ////Set Ref
     const refCategoryNav = React.useRef();
     const refCategoryList = React.useRef();
@@ -75,7 +75,6 @@ export default function RestaurantDetailWeb(props) {
                     categoryList.push({ categoryName: category.name, isActive: false })
                 }
             })
-
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
             setLocationLatLong(location_lat_long)
             setLat(parseFloat(lat))
@@ -85,8 +84,14 @@ export default function RestaurantDetailWeb(props) {
             activeCategory()
             setRestaurantDetail(restaurant_detail)
             setRestaurantBanner(restaurant_detail)
-            setLocationName(location_name)
-            setLocationId(location_id)
+
+            if (location_id === undefined && location_name === undefined) {
+                setIsViewRestaurantFromPromotionPage(true)
+            } else {
+                setLocationName(location_name)
+                setLocationId(location_id)
+            }
+
         }
 
     }, [props, widthCategoryList, widthCategoryNav])
@@ -286,20 +291,36 @@ export default function RestaurantDetailWeb(props) {
         <Layout>
             <div className={styles.container}>
                 <Breadcrumb>
-                    <Link href="/menuFeeding" passHref>
-                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
-                    </Link>
-                    <Link
-                        href={{
-                            pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
-                        }}
-                        passHref
-                    >
-                        <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
-                    </Link>
+                    {
+                        isViewRestaurantFromPromotionPage ?
+                            (
+                                <>
+                                    <Link href="/" passHref>
+                                        <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
+                                    </Link>
+                                    <Breadcrumb.Item>{restaurantDetail.name}</Breadcrumb.Item>
+                                </>
+                            ) :
+                            (
+                                <>
+                                    <Link href="/menuFeeding" passHref>
+                                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
+                                    </Link>
+                                    <Link
+                                        href={{
+                                            pathname: '/menuFeeding/restaurantList',
+                                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
+                                        }}
+                                        passHref
+                                    >
+                                        <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
+                                    </Link>
+                                </>
+                            )
+                    }
+
                     <Breadcrumb.Item active>{restaurant}</Breadcrumb.Item>
-                </Breadcrumb>
+                </Breadcrumb >
                 <Carousel>
                     {restaurantBannerPicture}
                 </Carousel>
@@ -412,6 +433,6 @@ export default function RestaurantDetailWeb(props) {
                 onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}
             />
-        </Layout>
+        </Layout >
     )
 }

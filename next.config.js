@@ -8,7 +8,7 @@ module.exports = {
                 source: '/',
                 destination: '/newspaper',
                 permanent: true,
-            },
+            }
         ]
     },
     async rewrites() {

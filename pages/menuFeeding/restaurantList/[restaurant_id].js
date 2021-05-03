@@ -30,7 +30,8 @@ export default function Restaurant({ props }) {
             // console.log('not ready')
         } else {
 
-            if (locationId === undefined || locationName === undefined || restaurantId === undefined || locationLatLong === undefined) {
+            console.log(restaurantId, locationLatLong)
+            if (restaurantId === undefined || locationLatLong === undefined) {
                 router.push({
                     pathname: "/menuFeeding"
                 })

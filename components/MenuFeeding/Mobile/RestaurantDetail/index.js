@@ -41,6 +41,7 @@ export default function RestaurantDetailMobile(props) {
     const [menuSelected, setMenuSelected] = React.useState()
     const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
     const [menu_in_basket, setMenu_in_basket] = React.useState()
+    const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
     const [restaurantDetail, setRestaurantDetail] = React.useState({
         name: "",
         description: "",
@@ -90,8 +91,13 @@ export default function RestaurantDetailMobile(props) {
             renderMenuList(restaurant_detail)
             setRestaurantDetail(restaurant_detail)
             setRestaurantBanner(restaurant_detail)
-            setLocationName(location_name)
-            setLocationId(location_id)
+
+            if (location_id === undefined && location_name === undefined) {
+                setIsViewRestaurantFromPromotionPage(true)
+            } else {
+                setLocationName(location_name)
+                setLocationId(location_id)
+            }
             checkMenuFromBasket()
         }
 
@@ -190,19 +196,33 @@ export default function RestaurantDetailMobile(props) {
         <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={menu_in_basket}>
             <Container className={utilStyles.container_sm}>
                 <Breadcrumb>
-                    <Link href="/menuFeeding" passHref>
-                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
-                    </Link>
-                    <Link
-                        href={{
-                            pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
-                        }}
-                        passHref
-                    >
-                        <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
-                    </Link>
-                    <Breadcrumb.Item active>{restaurant}</Breadcrumb.Item>
+                    {
+                        isViewRestaurantFromPromotionPage ?
+                            (
+                                <>
+                                    <Link href="/" passHref>
+                                        <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
+                                    </Link>
+                                    <Breadcrumb.Item>{restaurantDetail.name}</Breadcrumb.Item>
+                                </>
+                            ) :
+                            (
+                                <>
+                                    <Link href="/menuFeeding" passHref>
+                                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
+                                    </Link>
+                                    <Link
+                                        href={{
+                                            pathname: '/menuFeeding/restaurantList',
+                                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
+                                        }}
+                                        passHref
+                                    >
+                                        <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
+                                    </Link>
+                                </>
+                            )
+                    }
                 </Breadcrumb>
                 <Carousel>
                     {restaurantBannerPicture}

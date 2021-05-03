@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 import authentication from '../../services/authentication'
 import { message } from 'antd'
 import { useRouter } from 'next/router'
+import 'antd/dist/antd.css';
 
 export default function resetPassword() {
     const [form, setForm] = React.useState({})
@@ -18,14 +19,23 @@ export default function resetPassword() {
     const [errors, setErrors] = React.useState({});
 
     useEffect(() => {
-        console.log('u data : ', u)
-        console.log('token data : ', token)
-        if (u !== undefined) {
-            console.log('have u data : ', u)
-            setId(u)
-            setAccessToken(token)
+
+        if (!router.isReady) {
+            // console.log('not ready')
+        } else {
+            console.log('u data : ', u)
+            console.log('token data : ', token)
+            if (u !== undefined && token !== undefined) {
+                console.log('have u data : ', u)
+                setId(u)
+                setAccessToken(token)
+            } else {
+                message.error('Please check your email to reset password again. ')
+                router.push({ path: "/" })
+            }
         }
-    }, [])
+
+    }, [router.isReady])
 
     const setField = (field, value) => {
         setForm({
@@ -54,7 +64,7 @@ export default function resetPassword() {
             try {
                 let response = await authentication.resetPassword(data)
                 console.log('response', response)
-                message.error('Reset password succesful.')
+                message.success('Reset password succesful.')
 
                 router.push({
                     pathname: "/"
