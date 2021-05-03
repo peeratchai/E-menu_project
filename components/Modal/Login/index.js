@@ -167,7 +167,7 @@ export default function LoginModal(props) {
         } else {
             try {
                 const { email } = form
-                let response = await authentication.resetPassword(email)
+                let response = await authentication.requestResetPassword(email)
                 console.log(response)
             } catch (error) {
                 console.log(error)

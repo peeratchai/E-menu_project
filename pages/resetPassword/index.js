@@ -2,10 +2,15 @@ import Layout from '../../components/layout'
 import styles from './index.module.css'
 import { Form, Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'
+import authentication from '../../services/authentication'
+import { message } from 'antd'
+
 export default function resetPassword() {
     const [form, setForm] = React.useState({})
     const router = useRouter()
     const { u, token } = router.query;
+    const [id, setId] = React.useState()
+    const [token, setToken] = React.useState()
 
     // const [password, setPassword] = React.useState(null);
     // const [confirmPassword, setConfirmPassword] = React.useState(null);
@@ -16,6 +21,8 @@ export default function resetPassword() {
         console.log('token data : ', token)
         if (u !== undefined) {
             console.log('have u data : ', u)
+            setId(u)
+            setToken(token)
         }
     }, [])
 
@@ -38,7 +45,23 @@ export default function resetPassword() {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors)
         } else {
+            let data = {
+                id: id,
+                token: token,
+                password: form.password
+            }
+            try {
+                let response = await authentication.resetPassword(data)
+                console.log('response', response)
+                message.error('Reset password succesful.')
 
+                router.push({
+                    pathname: "/"
+                })
+            } catch (error) {
+                console.log('error', error)
+                message.error('Reset password not succesful.Please try agian')
+            }
         }
     }
 

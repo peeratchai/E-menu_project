@@ -69,8 +69,8 @@ const authentication = {
         return response
     },
 
-    resetPassword: async function (email) {
 
+    requestResetPassword: async function (email) {
         let config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -78,6 +78,27 @@ const authentication = {
         }
         let data = {
             email: email,
+        }
+        console.log(data)
+        let response = await axios.post('/api/request_resetpassword', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
+    },
+
+    resetPassword: async function (data) {
+
+        let config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
         console.log(data)
         let response = await axios.post('/api/resetpassword', data, config)
