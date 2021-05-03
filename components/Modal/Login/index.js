@@ -168,6 +168,8 @@ export default function LoginModal(props) {
             try {
                 const { email } = form
                 let response = await authentication.requestResetPassword(email)
+                message.success("Please check your email to reset password.")
+                props.onHide()
                 console.log(response)
             } catch (error) {
                 console.log(error)
