@@ -2,31 +2,37 @@ import Layout from '../../../layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import { Row, Col, Card, Button, Form } from 'react-bootstrap'
 import Link from 'next/link'
-import SearchIcon from '@material-ui/icons/Search';
 import React, { useEffect } from 'react'
 import styles from './index.module.css'
-import GoogleMapReact from 'google-map-react';
-import { Slider, Select, Checkbox } from 'antd';
+import { message, Select, } from 'antd';
 import 'antd/dist/antd.css';
 import restaurantService from '../../../../services/restaurant'
 import checkLogin from '../../../../services/checkLogin'
 import Filter from '../Filter'
+import changeFormatFilter from '../../../../services/changeFormatFilter'
+
+
 const { Option } = Select;
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 
-export default function WebLocationList() {
+export default function LocationListWeb() {
 
     const [locationList, setLocationList] = React.useState([]);
     const [totalResult, setTotalResult] = React.useState(0);
 
     useEffect(async () => {
         if (typeof window !== 'undefined') {
-            let accessToken = await checkLogin()
-            let LocationList = await getLocationList(accessToken)
-            setLocationList(LocationList)
-            setTotalResult(LocationList.length)
+            try {
+                let accessToken = await checkLogin()
+                let LocationList = await getLocationList(accessToken)
+                // console.log(LocationList)
+                setLocationList(LocationList)
+                setTotalResult(LocationList.length)
+            } catch (error) {
+                console.log(error)
+                message.error('Something went wrong. please try again')
+            }
         }
     }, [])
 
@@ -41,9 +47,10 @@ export default function WebLocationList() {
     }
 
     const onSearch = async (filterForm) => {
-        console.log(filterForm)
+        let filter = changeFormatFilter(filterForm)
         let accessToken = await checkLogin()
-        // let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filterForm)
+        let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
+        console.log(locationListByFilter)
         // setLocationList(locationListByFilter)
     }
 
@@ -77,7 +84,7 @@ export default function WebLocationList() {
                 <Row style={{ marginTop: "15px" }}>
                     <Col xs={6} md={4}>
                         <Filter
-                            onSearch={(form) => onSearch(form)}
+                            onSearch={(filterForm) => onSearch(filterForm)}
                         />
                     </Col>
 

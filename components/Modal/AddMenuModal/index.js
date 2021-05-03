@@ -23,7 +23,6 @@ export default function AddMenuModal(props) {
 
     useEffect(() => {
         if (props.menu_detail !== undefined) {
-            console.log(props)
             setMenuDetail(props.menu_detail)
             setTotal(props.menu_detail.price)
             console.log(menuDetail)
@@ -31,6 +30,18 @@ export default function AddMenuModal(props) {
     }, [props])
 
     const saveMenu = () => {
+        let basket = window.localStorage.getItem('basket');
+        if (basket === undefined || basket === null) {
+            let key = menuDetail.name
+            let menu = { [key]: menuDetail }
+            console.log(menu)
+            window.localStorage.setItem('basket', menu);
+        } else {
+            let key = menuDetail.name
+            let menu = { [key]: menuDetail }
+            basket = { ...basket, menu }
+            window.localStorage.setItem('basket', basket);
+        }
         console.log('specialInstruction ->', specialInstruction)
         console.log('count ->', count)
         props.onHide()

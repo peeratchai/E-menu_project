@@ -26,7 +26,7 @@ const { Meta } = Cardantd;
 export default function RestaurantDetailWeb(props) {
 
     const router = useRouter()
-    const { area, restaurant } = router.query;
+    const { restaurant } = router.query;
 
     ////Set State
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
@@ -136,8 +136,6 @@ export default function RestaurantDetailWeb(props) {
 
         let widthCategoryNav = refCategoryNav.current.offsetWidth
         let widthCategoryList = refCategoryList.current.offsetWidth
-        // console.log('widthCategoryNav', widthCategoryNav)
-        // console.log('widthCategoryList', widthCategoryList)
         if (widthCategoryList <= widthCategoryNav) {
             setStyleButtonRight(styles.nav_scroller_button_right + " " + styles.hide)
         } else {
@@ -221,11 +219,9 @@ export default function RestaurantDetailWeb(props) {
     }
 
     const renderMenuList = (restaurantDetail) => {
-        // console.log(menuList)
-
-        let categorySection = restaurantDetail.menu_categories.map((category, index) => {
-            let menuCard = category.menus.map((menu) =>
-                <Col xs={6} className={styles.menu_card} onClick={() => (setMenuSelected(menu), setModalShow(true))}>
+        let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
+            let menuCard = category.menus.map((menu, menuIndex) =>
+                <Col xs={6} className={styles.menu_card} key={menu + menuIndex} onClick={() => (setMenuSelected(menu), setModalShow(true))}>
                     <Cardantd
                         cover={
                             <img
@@ -248,7 +244,7 @@ export default function RestaurantDetailWeb(props) {
 
             return (
                 <div>
-                    <div ref={(categoryRef) => (refsCategory.current[index] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
+                    <div ref={(categoryRef) => (refsCategory.current[categoryIndex] = categoryRef)} style={{ position: "relative", top: '-65px' }} key={category.categoryName + categoryIndex}>
 
                     </div>
                     <Row className={styles.category_section} >

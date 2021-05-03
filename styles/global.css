@@ -317,3 +317,14 @@ div.ant-row.ant-form-item {
   position: absolute;
   top: 25px;
 }
+
+.myfilter.form-control {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.myfilter.form-control:focus {
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}

@@ -53,6 +53,10 @@ module.exports = {
                 source: '/api/location/search_by_filter',
                 destination: API_URL + '/location/search_by_filter',
             },
+            {
+                source: '/api/promotion/newspaper',
+                destination: API_URL + '/promotion/newspaper',
+            },
         ]
     },
 

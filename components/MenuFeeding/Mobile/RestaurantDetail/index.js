@@ -17,48 +17,41 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AddMenuModal from '../../../Modal/AddMenuModal'
+import changeFormatLatLong from '../../../../services/chaneformatLatLong'
+import PointInMaps from '../../../PointInMaps'
 
 const { Meta } = Cardantd;
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 
-export default function RestaurantDetailMobile() {
+export default function RestaurantDetailMobile(props) {
     const router = useRouter()
-    const { area, restaurant } = router.query;
-
+    const { restaurant } = router.query;
     //// Set State
+    const showBasketButton = ""
     const [modalShow, setModalShow] = React.useState(false);
     const [categoryList, setCategoryList] = React.useState([{ categoryName: 'เมนูยำ', isActive: true }, { categoryName: 'เมนูข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน7', isActive: false }, { categoryName: 'เมนูแซลม่อน8', isActive: false }, { categoryName: 'เมนูแซลม่อน9', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }]);
     const [menuEachCategory, setMenuEachCategory] = React.useState("");
     const [categorySelected, setCategorySelected] = React.useState("");
-    const [menuList, setMenuList] = React.useState(
-        {
-            'เมนูยำ': [
-                { name: 'ยำรวมมิตร', price: 100, image: "/images/food4.jpg" },
-                { name: 'ยำหมึกกระดอง', price: 150, image: "/images/food5.jpg" },
-                { name: 'ยำหมึกสาย', price: 120, image: "/images/food6.jpg" }
-            ],
-            'เมนูข้าว': [
-                { name: 'ข้าวผัดทะเลรวมมิตร', price: 80, image: "/images/food7.jpg" },
-            ],
-            'เมนูลูกชิ้น': [
-                { name: 'Meatball', price: 60, image: "/images/food8.jpg" },
-
-            ],
-            'เมนูแซลม่อน': [
-                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
-            ],
-            'เมนูแซลม่อน7': [
-                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
-            ],
-            'เมนูแซลม่อน8': [
-                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
-            ],
-            'เมนูแซลม่อน9': [
-                { name: 'แซนมอน', price: 299, image: "/images/food9.jpg" },
-            ]
-        }
-    );
+    const [lat, setLat] = React.useState(13.8537968);
+    const [lng, setLng] = React.useState(100.3764991);
+    const [locationName, setLocationName] = React.useState()
+    const [locationId, setLocationId] = React.useState()
+    const [restaurantBannerPicture, setRestaurantBannerPicture] = React.useState()
+    const [locationLatLong, setLocationLatLong] = React.useState("");
+    const [menuSelected, setMenuSelected] = React.useState()
+    const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
+    const [menu_in_basket, setMenu_in_basket] = React.useState()
+    const [restaurantDetail, setRestaurantDetail] = React.useState({
+        name: "",
+        description: "",
+        phone: "",
+        website: "",
+        facebook: "",
+        business_hour: [],
+        restaurant_pictures: [],
+        price_from: "",
+        price_to: ""
+    })
     ////
 
     ////Set Ref
@@ -75,28 +68,73 @@ export default function RestaurantDetailMobile() {
         setCategorySelected(category)
     }
 
-    useEffect(() => {
-        renderMenuList()
-        setCategorySelected(categoryList[0].categoryName)
-    }, [])
 
-    const renderMenuList = () => {
-        // console.log(menuList)
-        let categorySection = categoryList.map((category, categoryIndex) => {
-            // console.log(menuList[category.categoryName])
-            let menucard = menuList[category.categoryName].map((menu, menuIndex) =>
-                <Col xs={6} className={styles.menu_card} key={menu.name + menuIndex} onClick={() => setModalShow(true)}>
+    useEffect(() => {
+        if (props && props.restaurant_detail !== undefined) {
+            let { restaurant_detail, location_id, location_name, location_lat_long } = props
+            let categoryList = []
+            restaurant_detail.menu_categories.map((category, index) => {
+                if (index === 0) {
+                    categoryList.push({ categoryName: category.name, isActive: true })
+                } else {
+                    categoryList.push({ categoryName: category.name, isActive: false })
+                }
+            })
+
+            let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
+            setLocationLatLong(location_lat_long)
+            setLat(parseFloat(lat))
+            setLng(parseFloat(lng))
+            setCategoryList(categoryList)
+            setCategorySelected(categoryList[0].categoryName)
+            renderMenuList(restaurant_detail)
+            setRestaurantDetail(restaurant_detail)
+            setRestaurantBanner(restaurant_detail)
+            setLocationName(location_name)
+            setLocationId(location_id)
+            checkMenuFromBasket()
+        }
+
+    }, [props])
+
+    const checkMenuFromBasket = () => {
+        let basket = window.localStorage.getItem('basket');
+        console.log(basket)
+        if (basket !== undefined && basket !== null) {
+            console.log('have menu in basket')
+            setMenu_in_basket(basket)
+            setHave_menu_in_basket(true)
+        }
+    }
+
+    const setRestaurantBanner = (restaurant_detail) => {
+        let restaurantBanner = restaurant_detail.restaurant_pictures.map((picture) => (
+            <Carousel.Item interval={1000}>
+                <Image
+                    className="d-block w-100"
+                    src={picture.image_url}
+                    style={{ height: "300px", objectFit: "cover" }}
+                />
+            </Carousel.Item>
+        ))
+        setRestaurantBannerPicture(restaurantBanner)
+    }
+
+    const renderMenuList = (restaurantDetail) => {
+        let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
+            let menucard = category.menus.map((menu, menuIndex) =>
+                <Col xs={6} className={styles.menu_card} key={menu.name + menuIndex} onClick={() => (setMenuSelected(menu), setModalShow(true))}>
                     <Cardantd
                         bodyStyle={{ padding: "5px" }}
                         cover={
                             <img
                                 alt="example"
-                                src={menu.image}
+                                src={menu.image_url}
                                 style={{ height: '120px' }}
                             />
                         }
                         actions={[
-                            menu.price + " Baht"
+                            <b>{menu.price + " Baht"}</b>
                         ]}
                     >
                         <Meta
@@ -108,14 +146,13 @@ export default function RestaurantDetailMobile() {
             )
 
             return (
-                <div key={category.categoryName + categoryIndex}>
-                    <div ref={(categoryRef) => (refsCategory.current[category.categoryName] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
-
+                <div key={category.name + categoryIndex}>
+                    <div ref={(categoryRef) => (refsCategory.current[category.name] = categoryRef)} style={{ position: "relative", top: '-65px' }}>
                     </div>
                     <Row className={styles.category_section} >
                         <Col xs={12}>
                             <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
-                                {category.categoryName}
+                                {category.name}
                             </div>
                         </Col>
                         <Col xs={12}>
@@ -132,47 +169,47 @@ export default function RestaurantDetailMobile() {
         setMenuEachCategory(categorySection)
     }
 
+    const business_hourHTML = restaurantDetail && restaurantDetail.business_hour.map((business_hour) => (
+        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+            <Row>
+                <Col>
+                    <div>
+                        <b>Monday</b>
+                    </div>
+                </Col>
+                <Col>
+                    <div style={{ textAlign: "right" }}>
+                        {business_hour.opening_time} - {business_hour.closing_time}
+                    </div>
+                </Col>
+            </Row>
+        </div>
+    ))
+
     return (
-        <Layout containerType="mobile" searchFunc={() => console.log("test")} page="restaurantDetails">
+        <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={menu_in_basket}>
             <Container className={utilStyles.container_sm}>
                 <Breadcrumb>
                     <Link href="/menuFeeding" passHref>
-                        <Breadcrumb.Item>{area}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
                     </Link>
-                    <Link href="/menuFeeding/restaurantList" passHref>
+                    <Link
+                        href={{
+                            pathname: '/menuFeeding/restaurantList',
+                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
+                        }}
+                        passHref
+                    >
                         <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
                     </Link>
                     <Breadcrumb.Item active>{restaurant}</Breadcrumb.Item>
                 </Breadcrumb>
                 <Carousel>
-                    <Carousel.Item interval={1000}>
-                        <Image
-                            className="d-block w-100"
-                            src="/images/restaurant1.jpg"
-                            alt="First slide"
-                            style={{ height: "300px" }}
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item interval={500}>
-                        <Image
-                            className="d-block w-100"
-                            src="/images/restaurant1_1.jpg"
-                            alt="Second slide"
-                            style={{ height: "300px" }}
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <Image
-                            className="d-block w-100"
-                            src="/images/restaurant1_2.jpg"
-                            alt="Third slide"
-                            style={{ height: "300px" }}
-                        />
-                    </Carousel.Item>
+                    {restaurantBannerPicture}
                 </Carousel>
                 <Card>
                     <Card.Body>
-                        <Card.Title>Park Hyatt Bangkok</Card.Title>
+                        <Card.Title>{restaurantDetail.name}</Card.Title>
                         <Card.Text className={styles.card_text}>
                             <div className={styles.restaurant_details}>
                                 <Row>
@@ -206,29 +243,29 @@ export default function RestaurantDetailMobile() {
                                     <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
                                         <div style={{ width: "100%", height: "240px" }}>
                                             <GoogleMapReact
-                                                // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
-                                                defaultCenter={{
-                                                    lat: 13.7587154,
-                                                    lng: 100.5663139,
+                                                bootstrapURLKeys={{ key: 'AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw' }}
+                                                center={{
+                                                    lat: lat,
+                                                    lng: lng,
                                                 }}
                                                 defaultZoom={11}
                                             >
-                                                <AnyReactComponent
-                                                    lat={59.955413}
-                                                    lng={30.337844}
-                                                    text="My Marker"
+                                                <PointInMaps
+                                                    lat={lat}
+                                                    lng={lng}
+                                                    name={restaurantDetail.name}
                                                 />
                                             </GoogleMapReact>
                                         </div>
                                         <div style={{ padding: "1.25rem" }}>
                                             <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <LocationOnIcon /> &nbsp; 125 Mountain St, Brooklyn, NY
-                                                        </div>
+                                                <LocationOnIcon /> &nbsp; {restaurantDetail.googleMapsAddress}
+                                            </div>
                                             <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <PhoneIcon /> &nbsp; (301) 453-8688
-                                                        </div>
+                                                <PhoneIcon /> &nbsp; {restaurantDetail.phone}
+                                            </div>
                                             <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <LanguageIcon /> &nbsp; <a href="#">www.thaistaste.com</a>
+                                                <LanguageIcon /> &nbsp; <a href="#">{restaurantDetail.website}</a>
                                             </div>
                                             <div style={{ padding: "10px 0" }}>
                                                 <FacebookIcon style={{ color: "#3b5998", fontSize: "40px", marginRight: "5px" }} /> <TwitterIcon style={{ color: "#1da1f2", fontSize: "40px" }} />
@@ -255,105 +292,7 @@ export default function RestaurantDetailMobile() {
                                                     </Col>
                                                 </Row>
                                             </div>
-
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Monday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Tuesday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Wednesday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Thursday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Friday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Saturday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            <div style={{ padding: "10px 0" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Sunday</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right" }}>
-                                                            08:00AM - 09:00PM
-                                                                </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
+                                            {business_hourHTML}
                                         </div>
                                     </div>
                                 </Col>
@@ -364,9 +303,10 @@ export default function RestaurantDetailMobile() {
             </Container>
             <AddMenuModal
                 show={modalShow}
-                onHide={() => setModalShow(false)}
+                onHide={() => (setModalShow(false), checkMenuFromBasket())}
+                menu_detail={menuSelected}
             />
-            <div style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
+            <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
                     <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#ff4a4f", borderRadius: "5px", color: "white" }}>
                         <Row>

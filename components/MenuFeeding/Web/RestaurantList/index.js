@@ -1,18 +1,22 @@
 import Layout from '../../../layout'
-import utilStyles from '../../../../styles/utils.module.css'
 import { Row, Col, Card, Button, Form, Breadcrumb } from 'react-bootstrap'
 import styles from './index.module.css'
 import Link from 'next/link'
 import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
-import GoogleMapReact from 'google-map-react';
 import React, { useEffect } from 'react'
-import SearchIcon from '@material-ui/icons/Search';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Filter from '../Filter'
 import restaurantService from '../../../../services/restaurant'
 import checkLogin from '../../../../services/checkLogin'
-import { SettingsSystemDaydreamSharp } from '@material-ui/icons'
+import Geocode from "react-geocode";
+import changeFormatFilter from '../../../../services/changeFormatFilter'
+
+Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
+Geocode.setLanguage("th");
+// Geocode.setRegion("es");
+Geocode.setLocationType("ROOFTOP");
+Geocode.enableDebug();
 
 const { Option } = Select;
 
@@ -31,7 +35,6 @@ export default function RestaurantListWeb(props) {
         if (props.restaurant_list.length !== 0) {
             // setRestaurantList(props.restaurant_list)
             const { restaurant_list, location_name, location_id, location_lat_long } = props
-            console.log('location_lat_long', location_lat_long)
 
             if (restaurantList === null) {
                 setCenterLocationLatLong(location_lat_long)
@@ -112,20 +115,39 @@ export default function RestaurantListWeb(props) {
     }
 
     const onSearch = async (filterForm) => {
-        console.log(filterForm)
         filterForm.business_location = locationId
+        let filter = changeFormatFilter(filterForm)
         let accessToken = await checkLogin()
-        let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filterForm)
+        let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         console.log('filter', locationListByFilter)
-        setRestaurantList(locationListByFilter)
+        await getAddressOnGoogleMaps(locationListByFilter)
     }
 
-    function onChangePriceFilter(value) {
-        setPriceMinSearch(value[0])
-        setPriceMaxSearch(value[1])
+    const getAddressOnGoogleMaps = async (restaurantList) => {
+        let point, substringPotion, splitPotion, latLong, lat, lng
+        Promise.all(restaurantList.map(async (restaurantDetails) => {
+            point = restaurantDetails.location;
+            substringPotion = point.substring(5)
+            splitPotion = substringPotion.split('(').join('').split(')');
+            latLong = splitPotion[0].split(' ')
+            lat = latLong[0]
+            lng = latLong[1]
+            let address = await Geocode.fromLatLng(lat, lng).then(
+                (response) => {
+                    const address = response.results[0].formatted_address;
+                    return address
+                },
+                (error) => {
+                    console.error(error);
+                }
+            );
+            restaurantDetails.googleMapsAddress = address
+            return address
+        })).then(() => {
+            setRestaurantList(restaurantList)
+        })
+
     }
-
-
 
     return (
         <Layout containerType="center">

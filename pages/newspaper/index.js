@@ -12,11 +12,13 @@ import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import newspaperService from '../../services/newspaper'
 import checklogin from '../../services/checkLogin'
+import changeFormatFilter from '../../services/changeFormatFilter'
 
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
     const [newspaperList, setNewspaperList] = React.useState();
+    const [accessToken, setAccessToken] = React.useState();
 
     const searchFunc = () => {
         setModalShow(true)
@@ -26,6 +28,7 @@ export default function Newspaper() {
     useEffect(async () => {
         let accessToken = await checklogin()
         let newspaperList = await getNewspaperlist(accessToken)
+        setAccessToken(accessToken)
         setNewspaperList(newspaperList)
     }, [])
 
@@ -33,6 +36,14 @@ export default function Newspaper() {
         let response = await newspaperService.getNewspaperList(accessToken);
         console.log('response', response)
         return response.data
+    }
+
+    const onSearch = async (filterForm) => {
+        let filter = changeFormatFilter(filterForm)
+        console.log('filter', filter)
+        let locationListSearchByFilter = await newspaperService.getNewspaperListBySearch(accessToken, filter)
+        console.log('locationListSearchByFilter', locationListSearchByFilter)
+        setNewspaperList(locationListSearchByFilter)
     }
 
     let component
@@ -55,7 +66,9 @@ export default function Newspaper() {
         //Layout for web
         component = (
             <Layout>
-                <WebFilter />
+                <WebFilter
+                    onSearch={(form) => onSearch(form)}
+                />
                 <div style={{ backgroundColor: "white" }}>
                     <div className={styles.container} >
                         <br />

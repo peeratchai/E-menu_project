@@ -8,49 +8,43 @@ import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
-
 const { Option } = Select;
-
-
-
 
 export default function Filter(props) {
 
-    const [priceMinSearch, setPriceMinSearch] = React.useState(0);
-    const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
+    const [priceMinSearch, setPriceMinSearch] = React.useState();
+    const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [form, setForm] = React.useState({
-        what: null,
-        where: null,
-        food_type: null,
-        price_from: null,
-        price_to: null,
-        payment_option: null,
-        distance: null,
-        is_open_now: null,
-        have_parking: null,
+        what: '',
+        where: '',
+        food_type: '',
+        payment_option: '',
+        distance: 0,
+        price_to_price_from: '0 0',
+        is_open_now: false,
+        have_parking: false,
         sort_by: null
     })
     const [defaultCenterMaps, setDefaultCenterMaps] = React.useState({ lat: 13.8537968, lng: 100.3764991 });
 
     const onChangePriceFilter = (value) => {
-        console.log('value: ', value);
+        // console.log('value: ', value);
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
         let price_from = value[0]
         let price_to = value[1]
 
-        setform('price_from', price_from)
-        setform('price_to', price_to)
-
+        setform('price_to_price_from', price_from + " " + price_to)
+        // setform('price_from', price_from)
     }
 
     useEffect(() => {
-
+        // console.log(form)
         if (props.center_location_LatLong !== undefined) {
             const { center_location_LatLong, location_restaurant_in_maps } = props
             let { lat, lng } = changeFormatLatLong(center_location_LatLong)
-            console.log(lat, lng)
+            // console.log(lat, lng)
             setDefaultCenterMaps({ lat: parseFloat(lat), lng: parseFloat(lng) })
             setLocationInMaps(location_restaurant_in_maps)
         }
@@ -141,7 +135,20 @@ export default function Filter(props) {
                     Food Type
                 </div>
                 <div style={{ marginTop: "10px" }}>
-                    <Select
+                    <Form.Group >
+                        <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
+                            <option value="">-</option>
+                            <option value="Breads">Breads</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Pasta">Pasta</option>
+                            <option value="Noodles">Noodles</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Fruit">Fruit</option>
+                        </Form.Control>
+                    </Form.Group>
+
+                    {/* <Select
                         showSearch
                         style={{ width: '100%' }}
                         placeholder="Search to Select"
@@ -163,7 +170,7 @@ export default function Filter(props) {
                         <Option value="5">Noodles</Option>
                         <Option value="6">Vegetables</Option>
                         <Option value="7">Fruit</Option>
-                    </Select>
+                    </Select> */}
                 </div>
 
                 <div style={{ marginTop: "10px" }}>
@@ -171,7 +178,7 @@ export default function Filter(props) {
                         <Form.Group controlId="priceRange">
                             <Form.Label>Price Range</Form.Label>
                             <br />
-                            <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePriceFilter} />
+                            <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} value={[priceMinSearch, priceMaxSearch]} max={4000} onChange={onChangePriceFilter} />
                             <div className={utilStyles.font_size_sm}>From {priceMinSearch} to {priceMaxSearch} baht</div>
                         </Form.Group>
                     </Form>
@@ -182,7 +189,14 @@ export default function Filter(props) {
                         Payment option
                                             </div>
                     <div style={{ marginTop: "10px" }}>
-                        <Select
+                        <Form.Group >
+                            <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
+                                <option value="">-</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Credit Card">Credit Cards</option>
+                            </Form.Control>
+                        </Form.Group>
+                        {/* <Select
                             showSearch
                             style={{ width: '100%' }}
                             placeholder="Search to Select"
@@ -199,7 +213,7 @@ export default function Filter(props) {
                             <Option value={null}>-</Option>
                             <Option value="Cash">Cash</Option>
                             <Option value="Credit Card">Credit Cards</Option>
-                        </Select>
+                        </Select> */}
                     </div>
                 </div>
 
@@ -208,7 +222,23 @@ export default function Filter(props) {
                         Distance
                                             </div>
                     <div style={{ marginTop: "10px" }}>
-                        <Select
+                        <Form.Group >
+                            <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
+                                <option value="">-</option>
+                                <option value="1">1 กิโลเมตร</option>
+                                <option value="2">2 กิโลเมตร</option>
+                                <option value="5">5 กิโลเมตร</option>
+                                <option value="10">10 กิโลเมตร</option>
+                                <option value="20">20 กิโลเมตร</option>
+                                <option value="40">40 กิโลเมตร</option>
+                                <option value="60">60 กิโลเมตร</option>
+                                <option value="80">80 กิโลเมตร</option>
+                                <option value="100">100 กิโลเมตร</option>
+                                <option value="250">250 กิโลเมตร</option>
+                                <option value="500">500 กิโลเมตร</option>
+                            </Form.Control>
+                        </Form.Group>
+                        {/* <Select
                             showSearch
                             style={{ width: '100%' }}
                             placeholder="Search to Select"
@@ -234,13 +264,13 @@ export default function Filter(props) {
                             <Option value="9">100 กิโลเมตร</Option>
                             <Option value="10">250 กิโลเมตร</Option>
                             <Option value="11">500 กิโลเมตร</Option>
-                        </Select>
+                        </Select> */}
                     </div>
                 </div>
 
                 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                    <Checkbox onChange={(value) => setform('is_open_now', value)} >Open Now</Checkbox>
-                    <Checkbox onChange={(value) => setform('have_parking', value)} >Parking</Checkbox>
+                    <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
+                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
                 </div>
 
                 <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>

@@ -2,11 +2,11 @@ import Head from 'next/head'
 import styles from './layout.module.css'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { useRouter } from 'next/router'
+import { Badge } from 'antd';
 import ActiveLink from './ActiveLink'
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SearchIcon from '@material-ui/icons/Search';
 import React, { useEffect } from 'react'
-import useMediaQuery from "../utils/utils";
 import LoginModal from './Modal/Login'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import 'react-chat-widget/lib/styles.css';
@@ -18,8 +18,7 @@ const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget)
     ssr: false
 });
 
-export default function Layout({ children, containerType, searchFunc, page }) {
-    const isMobileResolution = useMediaQuery(768)
+export default function Layout({ children, containerType, searchFunc, page, menuInBasket }) {
     const router = useRouter()
 
     //// Set state
@@ -27,6 +26,8 @@ export default function Layout({ children, containerType, searchFunc, page }) {
     const [islogin, setIsLogin] = React.useState();
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
+    const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
+    const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(false)
     ////
 
     const setStyleOfContainer = (containerType) => {
@@ -68,8 +69,17 @@ export default function Layout({ children, containerType, searchFunc, page }) {
     useEffect(() => {
         let loginStatus = false
         if (typeof window !== 'undefined') {
+            // console.log('menuInBasket', menuInBasket)
             const { addResponseMessage, renderCustomComponent } = require('react-chat-widget');
             loginStatus = window.localStorage.getItem('islogin');
+            // let basket = window.localStorage.getItem('basket');
+            // if (basket !== null) {
+            //     let menuList = Object.keys(basket)
+            //     console.log('menuList', menuList)
+            //     console.log('menuList.length', menuList.length)
+            //     setTotal_menu_in_basket(menuList.length)
+            //     setHave_menu_in_basket(true)
+            // }
             renderCustomComponent(CustomTimeStampFragmentAdmin)
             renderCustomComponent(CustomTimeStampFragment)
         }
@@ -77,7 +87,7 @@ export default function Layout({ children, containerType, searchFunc, page }) {
         setStyleOfContainer(containerType)
         generateButtonNavbar()
 
-    }, [containerType, page, islogin])
+    }, [containerType, page, islogin, menuInBasket])
 
     const signOut = () => {
         let loginStatus
@@ -102,13 +112,23 @@ export default function Layout({ children, containerType, searchFunc, page }) {
     const generateButtonNavbar = () => {
         let buttonNavbar
         if (page === 'restaurantDetails') {
-            buttonNavbar =
-                <ActiveLink activeClassName="active" href="/newspaper">
-                    <>
-                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
-                        <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
-                    </>
-                </ActiveLink>
+            if (have_menu_in_basket) {
+                buttonNavbar =
+                    <ActiveLink activeClassName="active" href="/newspaper">
+                        <>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
+                        </>
+                    </ActiveLink>
+            } else {
+                buttonNavbar =
+                    <ActiveLink activeClassName="active" href="/newspaper">
+                        <>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
+                        </>
+                    </ActiveLink>
+            }
 
         } else {
 

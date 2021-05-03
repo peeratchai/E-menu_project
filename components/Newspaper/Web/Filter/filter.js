@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 import { Select, Checkbox } from 'antd';
 import React from 'react'
 import { StarOutlined, FireOutlined } from '@ant-design/icons';
@@ -6,10 +6,31 @@ import styles from './index.module.css';
 import utilStyles from '../../../../styles/utils.module.css'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
+import SearchIcon from '@material-ui/icons/Search';
 
 const { Option } = Select;
 
-export default function WebFilter() {
+export default function WebFilter(props) {
+
+    const [form, setForm] = React.useState({
+        food_type: '',
+        payment_option: '',
+        distance: 0,
+        price_to: null,
+        price_from: null,
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null
+    })
+
+    const setform = (fieldName, value) => {
+        setForm({
+            ...form,
+            [fieldName]: value
+        })
+    }
+
+
     return (
         <div className={styles.banner}>
             <div className={utilStyles.container} style={{ position: "relative", zIndex: "9999" }}>
@@ -35,7 +56,19 @@ export default function WebFilter() {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Select
+                                    <Form.Group >
+                                        <Form.Control className={'myfilter'} as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
+                                            <option value="">-</option>
+                                            <option value="Breads">Breads</option>
+                                            <option value="Rice">Rice</option>
+                                            <option value="Meat">Meat</option>
+                                            <option value="Pasta">Pasta</option>
+                                            <option value="Noodles">Noodles</option>
+                                            <option value="Vegetables">Vegetables</option>
+                                            <option value="Fruit">Fruit</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    {/* <Select
                                         showSearch
                                         style={{ width: '100%' }}
                                         placeholder="Search to Select"
@@ -56,7 +89,7 @@ export default function WebFilter() {
                                         <Option value="5">Noodles</Option>
                                         <Option value="6">Vegetables</Option>
                                         <Option value="7">Fruit</Option>
-                                    </Select>
+                                    </Select> */}
                                 </Col>
                             </Row>
                         </div>
@@ -70,7 +103,14 @@ export default function WebFilter() {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Select
+                                    <Form.Group >
+                                        <Form.Control className={'myfilter'} as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
+                                            <option value="">-</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Credit Card">Credit Cards</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    {/* <Select
                                         showSearch
                                         mode="multiple"
                                         showArrow={true}
@@ -89,7 +129,7 @@ export default function WebFilter() {
                                         <Option value="0">-</Option>
                                         <Option value="1">Cash</Option>
                                         <Option value="2">Credit Cards</Option>
-                                    </Select>
+                                    </Select> */}
                                 </Col>
                             </Row>
                         </div>
@@ -104,7 +144,23 @@ export default function WebFilter() {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Select
+                                    <Form.Group >
+                                        <Form.Control className={'myfilter'} as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
+                                            <option value="">-</option>
+                                            <option value="1">1 กิโลเมตร</option>
+                                            <option value="2">2 กิโลเมตร</option>
+                                            <option value="5">5 กิโลเมตร</option>
+                                            <option value="10">10 กิโลเมตร</option>
+                                            <option value="20">20 กิโลเมตร</option>
+                                            <option value="40">40 กิโลเมตร</option>
+                                            <option value="60">60 กิโลเมตร</option>
+                                            <option value="80">80 กิโลเมตร</option>
+                                            <option value="100">100 กิโลเมตร</option>
+                                            <option value="250">250 กิโลเมตร</option>
+                                            <option value="500">500 กิโลเมตร</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    {/* <Select
                                         showSearch
                                         style={{ width: '100%' }}
                                         placeholder="Search to Select"
@@ -129,7 +185,7 @@ export default function WebFilter() {
                                         <Option value="9">100 กิโลเมตร</Option>
                                         <Option value="10">250 กิโลเมตร</Option>
                                         <Option value="11">500 กิโลเมตร</Option>
-                                    </Select>
+                                    </Select> */}
                                 </Col>
                             </Row>
                         </div>
@@ -144,7 +200,17 @@ export default function WebFilter() {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Checkbox onChange={(e) => console.log(e)}>Parking</Checkbox>
+                                    <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
+                                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div>
+                                        <Button style={{ textAlign: "center", width: "50%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
+                                            <SearchIcon /> Search
+                                        </Button>
+                                    </div>
                                 </Col>
                             </Row>
                         </div>

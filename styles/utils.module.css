@@ -234,3 +234,7 @@
   left: 0;
   background-color: rgba(52, 73, 94, 0.75);
 }
+
+.hide {
+  display: none;
+}

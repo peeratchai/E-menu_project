@@ -1,13 +1,23 @@
 import Layout from '../../components/layout'
 import styles from './index.module.css'
 import { Form, Button } from 'react-bootstrap'
-import React from 'react'
+import React, { useEffect } from 'react'
 export default function resetPassword() {
     const [form, setForm] = React.useState({})
+    const router = useRouter()
+    const { u, token } = router.query;
 
     // const [password, setPassword] = React.useState(null);
     // const [confirmPassword, setConfirmPassword] = React.useState(null);
     const [errors, setErrors] = React.useState({});
+
+    useEffect(() => {
+        console.log('u data : ', u)
+        console.log('token data : ', token)
+        if (u !== undefined) {
+            console.log('have u data : ', u)
+        }
+    }, [])
 
     const setField = (field, value) => {
         setForm({
@@ -40,9 +50,6 @@ export default function resetPassword() {
         const newErrors = {}
         // password errors
         if (!password || password === '') newErrors.password = 'Password is required !'
-        // confirmPassword errors
-
-        // confirmPassword errors
         if (!confirmPassword || confirmPassword === '') newErrors.confirmPassword = 'confirmPassword is required !'
         else if (password !== confirmPassword) newErrors.confirmPassword = 'Password dose not match'
 
