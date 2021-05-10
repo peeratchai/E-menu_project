@@ -328,3 +328,7 @@ div.ant-row.ant-form-item {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
+
+.ant-message {
+  z-index: 99999 !important;
+}

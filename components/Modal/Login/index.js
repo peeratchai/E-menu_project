@@ -140,6 +140,14 @@ export default function LoginModal(props) {
                 const { email, password } = form
                 let response = await authentication.signinWithEmail(email, password)
                 let accessToken = response.data.accessToken
+                try {
+                    response = await authentication.getProfile(accessToken)
+                    let profile = response.data
+                    console.log(profile)
+                    localStorage.setItem('profile', JSON.stringify(profile))
+                } catch (error) {
+                    console.log(error)
+                }
                 localStorage.setItem('accessToken', accessToken)
                 localStorage.setItem('islogin', true)
                 props.onHide()
@@ -231,7 +239,7 @@ export default function LoginModal(props) {
                                         <Form.Group>
                                             <Row xs={2}>
                                                 <Col>
-                                                    <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(true) }} label="Remember me" />
+                                                    <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(!isRememberMe) }} label="Remember me" />
                                                 </Col>
                                                 <Col style={{ textAlign: "right" }}>
                                                     <a href="#" onClick={() => { changeTab('forgotPassword') }}>Forgot password?</a>

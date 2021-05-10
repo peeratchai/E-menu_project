@@ -61,6 +61,34 @@ module.exports = {
                 source: '/api/promotion/newspaper',
                 destination: API_URL + '/promotion/newspaper',
             },
+            {
+                source: '/api/add_promotion',
+                destination: API_URL + '/promotion',
+            },
+            {
+                source: '/api/upload_image',
+                destination: API_URL + '/uploads',
+            },
+            {
+                source: '/api/add_category',
+                destination: API_URL + '/menu-category',
+            },
+            {
+                source: '/api/get/menu-category/restaurant_id/:restaurant_id',
+                destination: API_URL + '/menu-category/restaurant_id/:restaurant_id',
+            },
+            {
+                source: '/api/update_category/:categoryId',
+                destination: API_URL + '/menu-category/:categoryId',
+            },
+            {
+                source: '/api/delete_category/:categoryId',
+                destination: API_URL + '/menu-category/:categoryId',
+            },
+            {
+                source: '/api/add_menu',
+                destination: API_URL + '/menu',
+            }
         ]
     },
 

@@ -1,5 +1,5 @@
 import { Row, Col, Form, Button } from 'react-bootstrap'
-import { Select, Checkbox } from 'antd';
+import { Select, Checkbox, Space } from 'antd';
 import React from 'react'
 import { StarOutlined, FireOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
@@ -23,6 +23,25 @@ export default function WebFilter(props) {
         sort_by: null
     })
 
+    const [options, setOptions] = React.useState([
+        {
+            label: `Cash`,
+            value: 'Cash',
+        },
+        {
+            label: `Credit Card`,
+            value: 'Credit Card',
+        },
+        {
+            label: `Open now`,
+            value: 'Open now',
+        },
+        {
+            label: `Have Parking`,
+            value: 'Have Parking',
+        }
+    ]);
+
     const setform = (fieldName, value) => {
         setForm({
             ...form,
@@ -30,6 +49,22 @@ export default function WebFilter(props) {
         })
     }
 
+    const [value, setValue] = React.useState([]);
+    const filterProps = {
+        showArrow: true,
+        mode: 'multiple',
+        style: {
+            width: '100%',
+        },
+        value,
+        options,
+        onChange: (newValue) => {
+            console.log(newValue)
+            setValue(newValue);
+        },
+        placeholder: 'Select Item...',
+        maxTagCount: 'responsive',
+    };
 
     return (
         <div className={styles.banner}>
@@ -47,7 +82,7 @@ export default function WebFilter(props) {
                 </Row>
 
                 <Row style={{ marginBottom: "2rem" }}>
-                    <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
+                    <Col md={3} style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
                         <div style={{ padding: "16px 20px" }}>
                             <Row style={{ fontSize: "16px" }}>
                                 <Col>
@@ -56,45 +91,32 @@ export default function WebFilter(props) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Group >
-                                        <Form.Control className={'myfilter'} as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
-                                            <option value="">-</option>
-                                            <option value="Breads">Breads</option>
-                                            <option value="Rice">Rice</option>
-                                            <option value="Meat">Meat</option>
-                                            <option value="Pasta">Pasta</option>
-                                            <option value="Noodles">Noodles</option>
-                                            <option value="Vegetables">Vegetables</option>
-                                            <option value="Fruit">Fruit</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    {/* <Select
+                                    <Select
                                         showSearch
                                         style={{ width: '100%' }}
-                                        placeholder="Search to Select"
+                                        placeholder="Select a foodtype"
                                         optionFilterProp="children"
                                         filterOption={(input, option) =>
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
+                                        onChange={(value) => setform('food_type', value)}
                                         className={'myfilter'}
                                     >
-                                        <Option value="0">-</Option>
-                                        <Option value="1">Breads</Option>
-                                        <Option value="2">Rice</Option>
-                                        <Option value="3">Meat</Option>
-                                        <Option value="4">Pasta</Option>
-                                        <Option value="5">Noodles</Option>
-                                        <Option value="6">Vegetables</Option>
-                                        <Option value="7">Fruit</Option>
-                                    </Select> */}
+                                        <Option value="">-</Option>
+                                        <Option value="Breads">Breads</Option>
+                                        <Option value="Rice">Rice</Option>
+                                        <Option value="Meat">Meat</Option>
+                                        <Option value="Pasta">Pasta</Option>
+                                        <Option value="Noodles">Noodles</Option>
+                                        <Option value="Vegetables">Vegetables</Option>
+                                        <Option value="Fruit">Fruit</Option>
+                                    </Select>
+
                                 </Col>
                             </Row>
                         </div>
                     </Col>
-                    <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
+                    {/* <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
                         <div style={{ padding: "16px 20px" }}>
                             <Row style={{ fontSize: "16px" }}>
                                 <Col>
@@ -110,31 +132,11 @@ export default function WebFilter(props) {
                                             <option value="Credit Card">Credit Cards</option>
                                         </Form.Control>
                                     </Form.Group>
-                                    {/* <Select
-                                        showSearch
-                                        mode="multiple"
-                                        showArrow={true}
-                                        style={{ width: '100%' }}
-                                        placeholder="Search to Select"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
-                                        className={'myfilter'}
-
-                                    >
-                                        <Option value="0">-</Option>
-                                        <Option value="1">Cash</Option>
-                                        <Option value="2">Credit Cards</Option>
-                                    </Select> */}
                                 </Col>
                             </Row>
                         </div>
-                    </Col>
-                    <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
+                    </Col> */}
+                    <Col md={3} style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
                         <div style={{ padding: "16px 20px" }}>
                             <Row style={{ fontSize: "16px" }}>
                                 <Col>
@@ -144,53 +146,35 @@ export default function WebFilter(props) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Group >
-                                        <Form.Control className={'myfilter'} as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                            <option value="">-</option>
-                                            <option value="1">1 กิโลเมตร</option>
-                                            <option value="2">2 กิโลเมตร</option>
-                                            <option value="5">5 กิโลเมตร</option>
-                                            <option value="10">10 กิโลเมตร</option>
-                                            <option value="20">20 กิโลเมตร</option>
-                                            <option value="40">40 กิโลเมตร</option>
-                                            <option value="60">60 กิโลเมตร</option>
-                                            <option value="80">80 กิโลเมตร</option>
-                                            <option value="100">100 กิโลเมตร</option>
-                                            <option value="250">250 กิโลเมตร</option>
-                                            <option value="500">500 กิโลเมตร</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    {/* <Select
+                                    <Select
                                         showSearch
                                         style={{ width: '100%' }}
-                                        placeholder="Search to Select"
+                                        placeholder="Select a distance"
                                         optionFilterProp="children"
                                         filterOption={(input, option) =>
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
+                                        onChange={(value) => setform('distance', value)}
                                         className={'myfilter'}
                                     >
-                                        <Option value="0">-</Option>
+                                        <Option value="">-</Option>
                                         <Option value="1">1 กิโลเมตร</Option>
                                         <Option value="2">2 กิโลเมตร</Option>
-                                        <Option value="3">5 กิโลเมตร</Option>
-                                        <Option value="4">10 กิโลเมตร</Option>
-                                        <Option value="5">20 กิโลเมตร</Option>
-                                        <Option value="6">40 กิโลเมตร</Option>
-                                        <Option value="7">60 กิโลเมตร</Option>
-                                        <Option value="8">80 กิโลเมตร</Option>
-                                        <Option value="9">100 กิโลเมตร</Option>
-                                        <Option value="10">250 กิโลเมตร</Option>
-                                        <Option value="11">500 กิโลเมตร</Option>
-                                    </Select> */}
+                                        <Option value="5">5 กิโลเมตร</Option>
+                                        <Option value="10">10 กิโลเมตร</Option>
+                                        <Option value="20">20 กิโลเมตร</Option>
+                                        <Option value="40">40 กิโลเมตร</Option>
+                                        <Option value="60">60 กิโลเมตร</Option>
+                                        <Option value="80">80 กิโลเมตร</Option>
+                                        <Option value="100">100 กิโลเมตร</Option>
+                                        <Option value="250">250 กิโลเมตร</Option>
+                                        <Option value="500">500 กิโลเมตร</Option>
+                                    </Select>
                                 </Col>
                             </Row>
                         </div>
                     </Col>
-                    <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px" }}>
+                    <Col md={5} style={{ padding: "0", backgroundColor: "white", borderRadius: "2px" }}>
                         <div style={{ padding: "16px 20px" }}>
                             <Row style={{ fontSize: "16px" }}>
                                 <Col>
@@ -200,20 +184,25 @@ export default function WebFilter(props) {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
-                                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <div>
-                                        <Button style={{ textAlign: "center", width: "50%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
-                                            <SearchIcon /> Search
-                                        </Button>
-                                    </div>
+                                    {/* <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
+                                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox> */}
+                                    <Space
+                                        direction="vertical"
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Select {...filterProps} className={'myfilter'} />
+                                    </Space>
                                 </Col>
                             </Row>
                         </div>
+                    </Col>
+
+                    <Col md={1} >
+                        <Button style={{ textAlign: "center", width: "100%", height: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
+                            <SearchIcon />
+                        </Button>
                     </Col>
                 </Row>
 

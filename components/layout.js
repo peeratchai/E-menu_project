@@ -239,7 +239,7 @@ export default function Layout({ children, containerType, searchFunc, page, menu
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                setlogin={(boolean) => (setIsLogin(boolean), console.log(boolean))}
+                setlogin={setIsLogin}
             />
         </div >
     )

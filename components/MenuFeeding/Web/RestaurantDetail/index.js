@@ -16,7 +16,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import AddMenuModal from '../../../Modal/AddMenuModal'
+import OrderMenuModal from '../../../Modal/OrderMenuModal'
 import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
 
@@ -428,7 +428,7 @@ export default function RestaurantDetailWeb(props) {
                     </Card.Body>
                 </Card>
             </div >
-            <AddMenuModal
+            <OrderMenuModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}

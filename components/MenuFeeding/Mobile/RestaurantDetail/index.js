@@ -16,7 +16,7 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import AddMenuModal from '../../../Modal/AddMenuModal'
+import OrderMenuModal from '../../../Modal/OrderMenuModal'
 import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
 
@@ -128,27 +128,39 @@ export default function RestaurantDetailMobile(props) {
 
     const renderMenuList = (restaurantDetail) => {
         let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
-            let menucard = category.menus.map((menu, menuIndex) =>
-                <Col xs={6} className={styles.menu_card} key={menu.name + menuIndex} onClick={() => (setMenuSelected(menu), setModalShow(true))}>
-                    <Cardantd
-                        bodyStyle={{ padding: "5px" }}
-                        cover={
-                            <img
-                                alt="example"
-                                src={menu.image_url}
-                                style={{ height: '120px' }}
-                            />
-                        }
-                        actions={[
-                            <b>{menu.price + " Baht"}</b>
-                        ]}
-                    >
-                        <Meta
-                            title={menu.name}
-                            description="This is the description"
-                        />
-                    </Cardantd>
-                </Col>
+            let styleCard = styles.menu_card
+
+            let menucard = category.menus.map((menu, menuIndex) => {
+                if (menuIndex > 0) {
+                    styleCard = styleCard + " " + styles.borderTop
+                }
+                return (
+                    <Col xs={12} className={styleCard} key={menu.name + menuIndex} onClick={() => (setMenuSelected(menu), setModalShow(true))}>
+                        <Row style={{ height: "100%" }}>
+                            <Col xs={9}>
+                                <Row>
+                                    <Col style={{ fontSize: "14px", fontWeight: "bold" }}>
+                                        {menu.name}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col style={{ fontSize: "12px" }} xs={8}>
+                                        {menu.description}
+                                    </Col>
+                                </Row>
+                                <Row style={{ marginTop: "10px", fontWeight: "bold" }}>
+                                    <Col>
+                                        {menu.price + " Baht"}
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
+                                <Image src={menu.image_url} rounded style={{ height: "100%" }} />
+                            </Col>
+                        </Row>
+                    </Col>
+                )
+            }
             )
 
             return (
@@ -321,7 +333,7 @@ export default function RestaurantDetailMobile(props) {
                     </Card.Body>
                 </Card>
             </Container>
-            <AddMenuModal
+            <OrderMenuModal
                 show={modalShow}
                 onHide={() => (setModalShow(false), checkMenuFromBasket())}
                 menu_detail={menuSelected}

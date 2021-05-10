@@ -5,18 +5,14 @@
 .bannerText {
   padding: 0 10px;
   text-align: center;
-  -ms-transform: rotate(20deg);
-  transform: rotate(-30deg);
   position: relative;
-  top: 50%;
-  margin: auto;
-  color: black;
+  top: 5%;
+  color: white;
   font-weight: 600;
-  background-color: white;
-  opacity: 0.7;
-  font-size: 1.5rem;
-  border-radius: 5px;
-  width: 70%;
+  background-color: #ff4a4f;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  width: 40%;
 }
-
-
