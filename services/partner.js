@@ -108,6 +108,56 @@ const partnerSerivce = {
 
         return response.data
     },
+    editMenu: async (data, menuId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                // 'Content-Type': 'x-www-form-urlencoded'
+            }
+        }
+
+        let formData = new FormData()
+        formData.append("restaurant", data.restaurant);
+        formData.append("menu_category", data.menu_category);
+        formData.append("name", data.name);
+        formData.append("description", data.description);
+        formData.append("price", data.price);
+        formData.append("image", data.image);
+        formData.append("is_active", data.is_active);
+        console.log(data)
+
+        let response = await axios.patch('/api/edit_menu/' + menuId, data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    deletedMenu: async (menuId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.delete('/api/delete_menu/' + menuId, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
     addMenu: async (data) => {
         let accessToken = await checkLogin()
         let config = {
@@ -119,7 +169,7 @@ const partnerSerivce = {
         let formData = new FormData()
         formData.append("restaurant", data.restaurant);
         formData.append("menu_category", data.menu_category);
-        formData.append("name", data.menuName);
+        formData.append("name", data.name);
         formData.append("description", data.description);
         formData.append("price", data.price);
         formData.append("image", data.image);

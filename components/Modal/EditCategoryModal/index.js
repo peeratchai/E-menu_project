@@ -4,10 +4,11 @@ import { Form, Button, Modal, Container } from 'react-bootstrap'
 
 export default function EditCategoryModal(props) {
     const { onHide, edit_category, category } = props
-    const [categoryName, setCategoryName] = React.useState(category.name);
+    const [categoryName, setCategoryName] = React.useState({ name: '' });
 
     useEffect(() => {
-        if (props) {
+        if (category !== undefined) {
+            console.log(props)
             setCategoryName(category.name)
         }
     }, [props])

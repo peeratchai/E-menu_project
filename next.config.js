@@ -88,7 +88,15 @@ module.exports = {
             {
                 source: '/api/add_menu',
                 destination: API_URL + '/menu',
-            }
+            },
+            {
+                source: '/api/edit_menu/:menuId',
+                destination: API_URL + '/menu/:menuId',
+            },
+            {
+                source: '/api/delete_menu/:menuId',
+                destination: API_URL + '/menu/:menuId',
+            },
         ]
     },
 

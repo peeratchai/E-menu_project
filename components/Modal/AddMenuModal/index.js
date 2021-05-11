@@ -90,19 +90,6 @@ export default function AddMenuModal(props) {
                         </Col>
                         <Col sm={6}>
                             <Form onSubmit={saveMenu}>
-                                {/* <Form.Group controlId="promoted.contents">
-                                    <Form.Label >Promoted contents</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        onChange={(e) => set_form('menuName', e.target.value)}
-                                        rows={4}
-                                        isInvalid={!!errors.menuName}
-                                        value={menu_form.menuName}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.menuName}
-                                    </Form.Control.Feedback>
-                                </Form.Group> */}
                                 <Form.Group >
                                     <Form.Label>Menu Name</Form.Label>
                                     <Form.Control
