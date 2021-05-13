@@ -113,7 +113,7 @@ const partnerSerivce = {
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
-                // 'Content-Type': 'x-www-form-urlencoded'
+                'Content-Type': 'multipart/form-data'
             }
         }
 
@@ -127,7 +127,7 @@ const partnerSerivce = {
         formData.append("is_active", data.is_active);
         console.log(data)
 
-        let response = await axios.patch('/api/edit_menu/' + menuId, data, config)
+        let response = await axios.patch('/api/edit_menu/' + menuId, formData, config)
             .then(function (response) {
                 console.log(response)
                 return response

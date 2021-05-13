@@ -59,8 +59,8 @@ export default function Menu({ restaurant_id }) {
     }
 
     const onChangeMenuStatus = (checked, menu) => {
-        console.log('checked', checked)
-        console.log('menu', menu)
+        // console.log('checked', checked)
+        // console.log('menu', menu)
         let menuId = menu.id
         let data = {
             //// remark : restaurant === restaurant id
@@ -73,6 +73,7 @@ export default function Menu({ restaurant_id }) {
             image: null,
             is_active: checked
         }
+        console.log(data)
         setSpinLoading(true)
         partnerService.editMenu(data, menuId).then(() => {
             getAllMenu()
@@ -284,7 +285,7 @@ export default function Menu({ restaurant_id }) {
             image: menuImageFormData,
             is_active: true
         }
-        // console.log(data)
+        console.log(data)
         setSpinLoading(true)
         partnerService.editMenu(data, menuId).then(() => {
             getAllMenu()

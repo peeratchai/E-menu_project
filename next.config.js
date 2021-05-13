@@ -1,5 +1,9 @@
 
-const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
+// dev env.
+// const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
+
+// localhost env.
+const API_URL = 'http://localhost:8080'
 
 module.exports = {
     async redirects() {

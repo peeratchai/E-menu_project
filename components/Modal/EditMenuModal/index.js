@@ -21,7 +21,6 @@ export default function EditMenuModal(props) {
     })
     useEffect(() => {
         if (menu !== undefined) {
-            console.log(menu)
             setMenuForm({
                 menuName: menu.name,
                 description: menu.description,

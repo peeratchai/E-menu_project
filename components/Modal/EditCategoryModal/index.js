@@ -8,7 +8,6 @@ export default function EditCategoryModal(props) {
 
     useEffect(() => {
         if (category !== undefined) {
-            console.log(props)
             setCategoryName(category.name)
         }
     }, [props])
