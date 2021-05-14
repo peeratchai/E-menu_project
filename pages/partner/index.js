@@ -18,14 +18,7 @@ const { Option } = Select;
 
 
 
-function getBase64Antd(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
+
 
 export default function Partner() {
     const isMobileResolution = useMediaQuery(768)
@@ -515,7 +508,9 @@ export default function Partner() {
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="profile">
-                                            <Profile />
+                                            <Profile
+                                                restaurant_id={restaurantId}
+                                            />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="setting">
                                             <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>

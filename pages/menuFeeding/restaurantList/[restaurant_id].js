@@ -36,8 +36,7 @@ export default function Restaurant({ props }) {
                     pathname: "/menuFeeding"
                 })
             } else {
-                let accessToken = await checkLogin()
-                let restaurantDetail = await getRestaurantDetail(accessToken, restaurantId)
+                let restaurantDetail = await getRestaurantDetail(restaurantId)
                 await getAddressOnGoogleMaps(restaurantDetail)
                 // setRestaurantDetail(restaurantDetail)
             }
@@ -68,8 +67,8 @@ export default function Restaurant({ props }) {
 
     }
 
-    const getRestaurantDetail = async (accessToken, restaurantId) => {
-        let response = await restaurantService.getRestaurantById(accessToken, restaurantId)
+    const getRestaurantDetail = async (restaurantId) => {
+        let response = await restaurantService.getRestaurantById(restaurantId)
         return response.data
     }
 

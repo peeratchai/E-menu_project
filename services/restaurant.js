@@ -1,4 +1,5 @@
 const axios = require('axios');
+import checkLogin from './checkLogin'
 
 const restaurantService = {
     getLocationList: async function (accessToken) {
@@ -40,7 +41,8 @@ const restaurantService = {
         return response
     },
 
-    getRestaurantById: async function (accessToken, restaurantId) {
+    getRestaurantById: async function (restaurantId) {
+        let accessToken = await checkLogin()
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + accessToken
