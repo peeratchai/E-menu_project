@@ -101,6 +101,10 @@ module.exports = {
                 source: '/api/delete_menu/:menuId',
                 destination: API_URL + '/menu/:menuId',
             },
+            {
+                source: '/api/update_restaurant_detail/:restaurantId',
+                destination: API_URL + '/restaurant/:restaurantId',
+            },
         ]
     },
 

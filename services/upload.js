@@ -1,7 +1,9 @@
 const axios = require('axios')
+import checkLogin from './checkLogin'
 
 const uploadService = {
-    uploadImage: async (imageFile, accessToken) => {
+    uploadImage: async (imageFile) => {
+        let accessToken = await checkLogin()
         console.log('formData', imageFile)
         let formData = new FormData()
         formData.append("image", imageFile);

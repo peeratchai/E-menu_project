@@ -12,59 +12,18 @@ import LocationModal from '../../../Modal/Location'
 
 const { Option } = Select;
 
-export default function WebProfileComponent(props) {
-    let { restaurant_details, restaurant_form, spin_loading, restaurant_banner_fileList } = props
+export default function MobileProfileComponent(props) {
+    let { restaurant_form, spin_loading } = props
     let { check_before_upload, update_restaurant_details } = props
     const defaultImage = "data:image/png;base64,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"
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
     const [previewImage, setPreviewImage] = React.useState('');
     const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState(defaultImage);
-    const [priceMinSearch, setPriceMinSearch] = React.useState(0);
-    const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
     const [restaurantForm, setRestaurantForm] = React.useState(restaurant_form);
     const [formErrors, setFormErrors] = React.useState({});
-    const [haveParking, setHaveParking] = React.useState(false);
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
-    const [paymentOptions, setPaymentOptions] = React.useState([]);
     const [showLocationModal, setShowLocationModal] = React.useState(false)
-    // const [businessHour, setBusinessHour] = React.useState([
-    //     {
-    //         "day": "Monday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Tuesday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Wednesday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Thursday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Friday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Saturday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     },
-    //     {
-    //         "day": "Sunday",
-    //         "opening_time": "10:00",
-    //         "closing_time": "22:00",
-    //     }
-    // ]);
 
     const handleCancel = () => {
         setPreviewVisible(false)
@@ -111,22 +70,34 @@ export default function WebProfileComponent(props) {
         let newBusinessHour = [...restaurantForm.business_hour]
         newBusinessHour[indexOfBusinessHour][timeType] = newTime
         setRestaurantDetail('business_hour', newBusinessHour)
-        console.log('newBusinessHour',newBusinessHour)
+        console.log('newBusinessHour', newBusinessHour)
     }
 
     const format = 'HH:mm'
-    let BusinessHourComponent = restaurantForm.business_hour.map((businessHour, index) => {
-        return (
-            <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
-                <Col xs={3}>
-                    {businessHour.day}
-                </Col>
-                <Col xs={9}>
-                    <TimePicker value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
-                </Col>
-            </Row>
-        )
-    })
+    const sortBusinessHourArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    let BusinessHourComponent, businessHour
+    if (restaurantForm.business_hour.length > 0) {
+        BusinessHourComponent = sortBusinessHourArray.map((day, index) => {
+            businessHour = restaurantForm.business_hour.filter((businessHour) => businessHour.day === day)
+            businessHour = businessHour[0]
+            return (
+                <>
+                    <Row style={{ marginBottom: "5px" }}>
+                        <Col>
+                            {businessHour.day}
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
+                        <Col>
+                            <TimePicker value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
+                        </Col>
+                    </Row>
+                </>
+            )
+        })
+    }
+
 
     const [optionsOfPayment, setOptionsOfPayment] = React.useState([
         {
@@ -187,7 +158,7 @@ export default function WebProfileComponent(props) {
     }
 
     const saveProfile = () => {
-        // console.log(restaurantForm)
+        //  console.log(restaurantForm)
         update_restaurant_details(restaurantForm)
     }
 
@@ -227,10 +198,10 @@ export default function WebProfileComponent(props) {
             <div className={styles.tab}>
                 <Row>
                     {/* Left section */}
-                    <Col sm={6}>
+                    <Col xd={12}>
                         {/* Upload restaurants logo */}
-                        <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingLeft: "18px", paddingBottom: "10px" }}>
-                            <Row style={{ marginBottom: "10px" }}>
+                        <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingBottom: "10px" }}>
+                            <Row style={{ marginBottom: "10px", paddingLeft: "18px" }}>
                                 <Col>
                                     <div>
                                         <b>Restaurant Logo</b>
@@ -284,7 +255,7 @@ export default function WebProfileComponent(props) {
                                 </Col>
                             </Row>
                         </div>
-                        <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px" }}>
+                        <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px", borderBottom: "1px solid #DEDEDE", marginBottom: "10px" }}>
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
@@ -299,106 +270,105 @@ export default function WebProfileComponent(props) {
                             onCancel={handleCancel}
                             previewImage={previewImage}
                         />
-                    </Col>
-                    {/* Right section */}
-                    <Col sm={6}>
-                        <Row style={{ marginBottom: "10px" }}>
-                            <Col>
-                                <div>
-                                    <b>Restaurant Details</b>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Form>
-                            <Form.Group controlId="restaurantName">
-                                <Form.Label>Restaurant Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('name', e.target.value)}
-                                    isInvalid={!!formErrors.name}
-                                    value={restaurantForm.name}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {formErrors.name}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="restaurantName">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('description', e.target.value)}
-                                    value={restaurantForm.description}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="location">
-                                <Form.Label>Location <Button onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('location', e.target.value)}
-                                    value={restaurantForm.location}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="phoneNumber">
-                                <Form.Label>Phone Number</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('phone', e.target.value)}
-                                    value={restaurantForm.phone}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="webSiteUrl">
-                                <Form.Label>Website URL</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('website', e.target.value)}
-                                    value={restaurantForm.website}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="facebookURL">
-                                <Form.Label>Facebook URL</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('facebook', e.target.value)}
-                                    value={restaurantForm.facebook}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="twitter">
-                                <Form.Label>Twitter URL</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) => setRestaurantDetail('instragram', e.target.value)}
-                                    value={restaurantForm.instragram}
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Payment Option</Form.Label>
-                                <Space
-                                    direction="vertical"
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <Select {...filterProps} />
-                                </Space>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Parking</Form.Label>
-                                <Form.Check type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
-                            </Form.Group>
-                            <Form.Group controlId="priceRange">
-                                <Form.Label>Price Range (Generated by system)</Form.Label>
-                                <br />
-                                {/* Price range is generated by system */}
-                                <Slider range value={[restaurantForm.price_from, restaurantForm.price_to]} disabled={true} />
-                                <div className={utilStyles.font_size_sm}>From {restaurantForm.price_from} to {restaurantForm.price_to} baht</div>
-                            </Form.Group>
+                        <div style={{ padding: "0 18px" }}>
+                            <Row style={{ marginBottom: "10px" }}>
+                                <Col>
+                                    <div>
+                                        <b>Restaurant Details</b>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Form style={{ marginBottom: "15px" }}>
+                                <Form.Group controlId="restaurantName">
+                                    <Form.Label>Restaurant Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('name', e.target.value)}
+                                        isInvalid={!!formErrors.name}
+                                        value={restaurantForm.name}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formErrors.name}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group controlId="restaurantName">
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('description', e.target.value)}
+                                        value={restaurantForm.description}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="location">
+                                    <Form.Label>Location <Button onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('location', e.target.value)}
+                                        value={restaurantForm.location}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="phoneNumber">
+                                    <Form.Label>Phone Number</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('phone', e.target.value)}
+                                        value={restaurantForm.phone}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="webSiteUrl">
+                                    <Form.Label>Website URL</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('website', e.target.value)}
+                                        value={restaurantForm.website}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="facebookURL">
+                                    <Form.Label>Facebook URL</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('facebook', e.target.value)}
+                                        value={restaurantForm.facebook}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="twitter">
+                                    <Form.Label>Twitter URL</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setRestaurantDetail('instragram', e.target.value)}
+                                        value={restaurantForm.instragram}
+                                    />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Payment Option</Form.Label>
+                                    <Space
+                                        direction="vertical"
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Select {...filterProps} />
+                                    </Space>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Parking</Form.Label>
+                                    <Form.Check type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
+                                </Form.Group>
+                                <Form.Group controlId="priceRange">
+                                    <Form.Label>Price Range (Generated by system)</Form.Label>
+                                    <br />
+                                    {/* Price range is generated by system */}
+                                    <Slider range min={0} max={restaurantForm.price_to > 500 ? restaurantForm.price_to : 500} value={[restaurantForm.price_from, restaurantForm.price_to]} disabled={true} />
+                                    <div className={utilStyles.font_size_sm}>From {restaurantForm.price_from} to {restaurantForm.price_to} baht</div>
+                                </Form.Group>
 
-                            <div style={{ textAlign: "right" }}>
-                                <Button variant="primary" onClick={() => saveProfile()}>
-                                    Save
-                            </Button>
-                            </div>
-                        </Form>
+                                <div style={{ textAlign: "right" }}>
+                                    <Button variant="primary" onClick={() => saveProfile()}>
+                                        Save
+                                    </Button>
+                                </div>
+                            </Form>
+                        </div>
                     </Col>
                 </Row>
             </div>

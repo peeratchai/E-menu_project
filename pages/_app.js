@@ -2,6 +2,12 @@ import '../styles/global.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AnimatePresence } from "framer-motion";
 import Head from 'next/head'
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
+Geocode.setLanguage("th");
+Geocode.setLocationType("ROOFTOP");
+Geocode.enableDebug();
 
 const handExitComplete = () => {
     if (typeof window !== "undefined") {
@@ -32,6 +38,10 @@ export default function App({ Component, pageProps }) {
                 rel="stylesheet"
                 key="google-font-cabin"
             />
+            <script
+                type="text/javascript"
+                src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
+            ></script>
         </Head>
         <style global jsx>{`
         body {

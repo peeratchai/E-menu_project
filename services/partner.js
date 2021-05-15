@@ -2,7 +2,8 @@ const axios = require('axios')
 import checkLogin from './checkLogin'
 
 const partnerSerivce = {
-    addPromotion: async (data, accessToken) => {
+    addPromotion: async (data) => {
+        let accessToken = await checkLogin()
         let formData = new FormData()
         formData.append("restaurant", data.restaurant);
         formData.append("promote_content", data.promote_content);

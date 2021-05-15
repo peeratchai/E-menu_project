@@ -332,3 +332,26 @@ div.ant-row.ant-form-item {
 .ant-message {
   z-index: 99999 !important;
 }
+.pac-container {
+  z-index: 99999 !important;
+}
+
+.pac-target-input {
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.rcw-conversation-container.active {
+  width: 370px !important;
+}
+
+.rcw-widget-container {
+  bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 20px 20px 0 !important;
+  position: fixed !important;
+  right: 0 !important;
+  z-index: 1040 !important;
+  width: auto !important;
+}

@@ -2,6 +2,7 @@ import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import useMediaQuery from '../../../utils/utils';
 import WebComponent from './Web'
+import MobileComponent from './Mobile'
 import AddCategoryModal from '../../Modal/AddCategoryModal'
 import EditCategoryModal from '../../Modal/EditCategoryModal'
 import AddMenuModal from '../../Modal/AddMenuModal'
@@ -9,6 +10,7 @@ import EditMenuModal from '../../Modal/EditMenuModal'
 import { Space, Switch, message, Popconfirm } from 'antd';
 import { Button } from 'react-bootstrap'
 import partnerService from '../../../services/partner'
+import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export default function Menu({ restaurant_id }) {
     const isMobileResolution = useMediaQuery(768)
@@ -108,8 +110,9 @@ export default function Menu({ restaurant_id }) {
         },
         {
             title: 'Action',
-            key: 'action',
-            render: (category, record) => {
+            key: 'webAction',
+            responsive: ['sm'],
+            render: (category) => {
                 // console.log('category', category)
                 return (
                     <Space size="middle">
@@ -123,6 +126,29 @@ export default function Menu({ restaurant_id }) {
                             cancelText="No"
                         >
                             <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
+                        </Popconfirm>
+                    </Space >
+                )
+            },
+        },
+        {
+            title: 'Action',
+            key: 'mobileAction',
+            responsive: ['xs'],
+            render: (category) => {
+                // console.log('category', category)
+                return (
+                    <Space size="middle">
+                        <Switch checked={category.is_active} onChange={(checked) => onChangeStatusCategory(checked, category)} />
+                        <Button style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setSelectedCategory(category), setAddMenuModalShow(true))}><PlusOutlined /></Button>
+                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => showEditCategoryModal(category)} ><EditOutlined /></Button>
+                        <Popconfirm
+                            title="Are you sure to delete this task?"
+                            onConfirm={() => confirmDeleteCategory(category)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}><DeleteOutlined /></Button>
                         </Popconfirm>
                     </Space >
                 )
@@ -167,7 +193,7 @@ export default function Menu({ restaurant_id }) {
 
     if (isMobileResolution) {
         menuComponent = (
-            <WebComponent
+            <MobileComponent
                 category={category}
                 columns_table={categoryColumnsTable}
                 // expanded_row_render={expandedRowRender}
