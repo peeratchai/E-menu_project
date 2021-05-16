@@ -1,0 +1,20 @@
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #dedede;
+}
+
+.tableNumber {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-weight: 600;
+}
+
+.tab {
+  margin-top: 15px;
+}

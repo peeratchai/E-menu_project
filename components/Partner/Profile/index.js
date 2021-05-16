@@ -44,30 +44,35 @@ export default function Profile({ restaurant_id }) {
 
     const getRestaurantDetails = async () => {
         setLoading(true)
-        let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
-        let restaurantDetail = responseRestaurantDetail.data
-        let restaurantForm = {
-            business_hour: restaurantDetail.business_hour,
-            facebook: restaurantDetail.facebook,
-            description: restaurantDetail.description,
-            description_eng: restaurantDetail.description_eng,
-            have_parking: restaurantDetail.have_parking,
-            image_url: restaurantDetail.image_url,
-            instragram: restaurantDetail.instragram,
-            location: restaurantDetail.location,
-            name: restaurantDetail.name,
-            Line: restaurantDetail.line,
-            name_eng: restaurantDetail.name_eng,
-            payment_option: restaurantDetail.payment_option,
-            phone: restaurantDetail.phone,
-            price_from: restaurantDetail.price_from,
-            price_to: restaurantDetail.price_to,
-            restaurant_pictures: restaurantDetail.restaurant_pictures,
-            website: restaurantDetail.website,
-            restaurant_id: restaurant_id
+        try {
+            let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
+            let restaurantDetail = responseRestaurantDetail.data
+            let restaurantForm = {
+                business_hour: restaurantDetail.business_hour,
+                facebook: restaurantDetail.facebook,
+                description: restaurantDetail.description,
+                description_eng: restaurantDetail.description_eng,
+                have_parking: restaurantDetail.have_parking,
+                image_url: restaurantDetail.image_url,
+                instragram: restaurantDetail.instragram,
+                location: restaurantDetail.location,
+                name: restaurantDetail.name,
+                Line: restaurantDetail.line,
+                name_eng: restaurantDetail.name_eng,
+                payment_option: restaurantDetail.payment_option,
+                phone: restaurantDetail.phone,
+                price_from: restaurantDetail.price_from,
+                price_to: restaurantDetail.price_to,
+                restaurant_pictures: restaurantDetail.restaurant_pictures,
+                website: restaurantDetail.website,
+                restaurant_id: restaurant_id
+            }
+            setLoading(false)
+            setRestaurantForm(restaurantForm)
+        } catch (error) {
+            message.error('Cannot connect to server.')
         }
-        setLoading(false)
-        setRestaurantForm(restaurantForm)
+
     }
 
     const updateRestaurantDetails = async (restaurantForm) => {

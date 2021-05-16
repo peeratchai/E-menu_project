@@ -140,7 +140,7 @@ const partnerSerivce = {
 
         return response.data
     },
-    deletedMenu: async (menuId) => {
+    deleteMenu: async (menuId) => {
         let accessToken = await checkLogin()
         let config = {
             headers: {
@@ -177,6 +177,165 @@ const partnerSerivce = {
         formData.append("is_active", data.is_active);
 
         let response = await axios.post('/api/add_menu', formData, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+
+    getZoneByRestaurantId: async (restaurantId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.get('/api/get_zone_by_restaurantId/' + restaurantId, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+
+    addZone: async (data) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.post('/api/add_zone', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    editZone: async (data, zoneId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.patch('/api/edit_zone/' + zoneId, data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    deleteZone: async (zoneId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.delete('/api/delete_zone/' + zoneId, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    getTableByRestaurantId: async (restaurantId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.get('/api/get_table_by_restaurantId/' + restaurantId, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+
+    addTable: async (data) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.post('/api/add_table', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    editTable: async (data, tableId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.patch('/api/edit_table/' + tableId, data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    deleteTable: async (tableId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.delete('/api/delete_table/' + tableId, config)
             .then(function (response) {
                 console.log(response)
                 return response

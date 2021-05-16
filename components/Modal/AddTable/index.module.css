@@ -1,0 +1,23 @@
+.selected {
+  border: 2px solid orange;
+}
+.notSelected {
+  border: 1px solid #dedede;
+}
+
+.btnTableSize {
+  text-align: center;
+  padding: 10px;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btnTableType {
+  text-align: center;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.tableSelected {
+  background-color: #eef7f6;
+}

@@ -97,7 +97,7 @@ export default function Menu({ restaurant_id }) {
 
     const deleteMenu = (menu) => {
         setSpinLoading(true)
-        partnerService.deletedMenu(menu.id).then(() => {
+        partnerService.deleteMenu(menu.id).then(() => {
             getAllMenu()
         })
     }

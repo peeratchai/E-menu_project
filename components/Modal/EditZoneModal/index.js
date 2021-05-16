@@ -2,25 +2,24 @@ import React, { useEffect } from 'react'
 import { Form, Button, Modal, Container } from 'react-bootstrap'
 
 
-export default function EditCategoryModal(props) {
-    const { onHide, edit_category, category } = props
-    const [categoryName, setCategoryName] = React.useState({ name: '' });
+export default function EditZoneModal(props) {
+    const { zone, onHide, edit_zone = '' } = props
+    const [zoneName, setZoneName] = React.useState('');
 
     useEffect(() => {
-        if (category !== undefined) {
-            setCategoryName(category.name)
+        if (zone !== undefined) {
+            setZoneName(zone.name)
         }
     }, [props])
 
-    const editCategory = () => {
-        console.log('categoryName ->', categoryName)
-        let editedCategory = category
-        editedCategory.name = categoryName
-        setCategoryName("")
-        edit_category(editedCategory)
+    const editZone = () => {
+        console.log('zoneName ->', zoneName)
+        let editedZone = { ...zone }
+        editedZone.name = zoneName
+        setZoneName("")
+        edit_zone(editedZone)
         onHide()
     }
-
     return (
 
         <Modal
@@ -31,25 +30,25 @@ export default function EditCategoryModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    Edit Category
+                    New Zone
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Container>
                     <Form>
-                        <Form.Group controlId="categoryName">
+                        <Form.Group controlId="zoneName">
                             <Form.Control
                                 type="text"
-                                placeholder="Enter Category Name"
-                                value={categoryName}
-                                onChange={e => setCategoryName(e.target.value)}
+                                placeholder="Enter Zone Name"
+                                value={zoneName}
+                                onChange={e => setZoneName(e.target.value)}
                             />
                         </Form.Group>
                     </Form>
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => editCategory()}>
+                <Button onClick={() => editZone()}>
                     Save
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>

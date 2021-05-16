@@ -28,9 +28,6 @@ export default function LocationModal(props) {
         let lng = splitLocation[1].split(')')
         lng = lng[0]
 
-        console.log(parseFloat(lat))
-        console.log(parseFloat(lng))
-
         if (isNaN(parseFloat(lat))) {
             lat = 0
         } else {

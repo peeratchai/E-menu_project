@@ -37,7 +37,7 @@ export default function WebComponent(props) {
             {
                 title: 'Action',
                 key: 'action',
-                render: (menu, record) => (
+                render: (menu) => (
                     <Space size="middle">
                         <Switch defaultChecked checked={menu.is_active} onChange={(checked) => on_change_menu_status(checked, menu)} />
                         <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => showEditmenuModal(menu)}>Edit</Button>
