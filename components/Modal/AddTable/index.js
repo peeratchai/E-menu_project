@@ -8,20 +8,20 @@ import React from 'react'
 export default function AddTableModal(props) {
 
     const [tableName, setTableName] = React.useState('');
-    const [tableSize, setTableSize] = React.useState('เล็ก');
+    const [tableSize, setTableSize] = React.useState('small');
     const [tableType, setTableType] = React.useState('square');
     const tableImages = {
-        'เล็ก': {
+        'small': {
             'square': 'images/table-square-S.png',
             'triangle': 'images/table-triangle-S.png',
             'rectangle': 'images/table-rectangle-S.png',
         },
-        'กลาง': {
+        'medium': {
             'square': 'images/table-square-M.png',
             'triangle': 'images/table-triangle-M.png',
             'rectangle': 'images/table-rectangle-M.png',
         },
-        'ใหญ่': {
+        'large': {
             'square': 'images/table-square-L.png',
             'triangle': 'images/table-triangle-L.png',
             'rectangle': 'images/table-rectangle-L.png',
@@ -83,18 +83,18 @@ export default function AddTableModal(props) {
                     </Row>
                     <Row>
                         <Col>
-                            <div onClick={() => setTableSize('เล็ก')} className={tableSize == 'เล็ก' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize} >
-                                เล็ก
+                            <div onClick={() => setTableSize('small')} className={tableSize == 'small' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize} >
+                                small
                             </div>
                         </Col>
                         <Col>
-                            <div onClick={() => setTableSize('กลาง')} className={tableSize == 'กลาง' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize}>
-                                กลาง
+                            <div onClick={() => setTableSize('medium')} className={tableSize == 'medium' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize}>
+                                medium
                             </div>
                         </Col>
                         <Col>
-                            <div onClick={() => setTableSize('ใหญ่')} className={tableSize == 'ใหญ่' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize}>
-                                ใหญ่
+                            <div onClick={() => setTableSize('large')} className={tableSize == 'large' ? styles.selected + ' ' + styles.btnTableSize : styles.notSelected + ' ' + styles.btnTableSize}>
+                                large
                             </div>
                         </Col>
                     </Row>

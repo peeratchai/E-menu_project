@@ -32,12 +32,14 @@ export default function RestaurantManagement({ restaurant_id, current_tab }) {
         RestaurantManagementComponent = (
             <WebComponent
                 zone={zone}
+                get_zone={getZone}
             />
         )
     } else {
         RestaurantManagementComponent = (
             <WebComponent
                 zone={zone}
+                get_zone={getZone}
             />
         )
     }
