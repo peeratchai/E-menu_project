@@ -14,5 +14,7 @@ module.exports = {
     async rewrites() {
         return rountingApi
     },
-
+    future: {
+        webpack5: true,
+    },
 }

@@ -13,7 +13,6 @@ export default function OrderMenuModal(props) {
     const [specialInstruction, setSpecialInstruction] = React.useState(null);
     const [count, setCount] = React.useState(1);
     const [total, setTotal] = React.useState(100);
-    const [price, setPrice] = React.useState(100);
     const [menuDetail, setMenuDetail] = React.useState({
         name: "",
         price: 0,
@@ -31,19 +30,27 @@ export default function OrderMenuModal(props) {
 
     const saveMenu = () => {
         let basket = window.localStorage.getItem('basket');
+        let restaurantId = props.restaurant_id
+        let order = {
+            ...menuDetail,
+            specialInstruction: specialInstruction,
+            count: count,
+            total: total
+        }
         if (basket === undefined || basket === null) {
-            let key = menuDetail.name
-            let menu = { [key]: menuDetail }
-            console.log(menu)
-            window.localStorage.setItem('basket', menu);
+            let key = order.name
+            let menu = { 'restaurantId': restaurantId, 'order': [order] }
+            window.localStorage.setItem('basket', JSON.stringify(menu));
         } else {
-            let key = menuDetail.name
-            let menu = { [key]: menuDetail }
-            basket = { ...basket, menu }
-            window.localStorage.setItem('basket', basket);
+            basket = JSON.parse(basket)
+            let key = order.name
+            let oldOrder = basket.order
+            basket = { 'restaurantId': restaurantId, 'order': [...oldOrder, order] }
+            window.localStorage.setItem('basket', JSON.stringify(basket));
         }
         console.log('specialInstruction ->', specialInstruction)
         console.log('count ->', count)
+        setCount(1)
         props.onHide()
     }
 
@@ -179,7 +186,7 @@ export default function OrderMenuModal(props) {
                             <Button onClick={() => { saveMenu() }}>
                                 Submit
                                 </Button>
-                            <Button onClick={props.onHide}>Close</Button>
+                            <Button onClick={() => (setCount(1), props.onHide)}>Close</Button>
                         </Modal.Footer>
                     </>
                 )

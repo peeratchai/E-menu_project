@@ -101,7 +101,7 @@ export default function WebPromotionlist(props) {
                     </div>
                     <div className={utilStyles.font_size_sm}>
                         {newspaperDetail.title}
-                        {/* Opening : 8.00 am - 17.30 pm */}
+                        {newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
             </Link>

@@ -3,12 +3,19 @@ import styles from './index.module.css'
 import { Row, Col, Image, Button, Tab, Tabs, Modal } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 
 export default function ViewOrderModal(props) {
 
-    const [tableNumber, setTableNumber] = React.useState(props.tableNumber)
+    const { table_selected } = props
+    const [tableNumber, setTableNumber] = React.useState()
+
+    useEffect(() => {
+        if (table_selected) {
+            setTableNumber(table_selected.tableNumber)
+        }
+    }, [props])
 
     return (
 

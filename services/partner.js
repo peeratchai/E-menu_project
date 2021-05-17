@@ -347,6 +347,25 @@ const partnerSerivce = {
 
         return response.data
     },
+    addOrder: async (data) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let response = await axios.post('/api/add_order', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
 }
 
 export default partnerSerivce

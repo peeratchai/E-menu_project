@@ -82,6 +82,7 @@ export default function Restaurant({ props }) {
                         location_name={locationName}
                         location_id={locationId}
                         location_lat_long={locationLatLong}
+                        restaurant_id={restaurantId}
                     />
                 ) : (
                     // Mobile Version
@@ -90,6 +91,7 @@ export default function Restaurant({ props }) {
                         location_name={locationName}
                         location_id={locationId}
                         location_lat_long={locationLatLong}
+                        restaurant_id={restaurantId}
                     />
                 )
             }

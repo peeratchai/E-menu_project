@@ -337,6 +337,7 @@ export default function RestaurantDetailMobile(props) {
                 show={modalShow}
                 onHide={() => (setModalShow(false), checkMenuFromBasket())}
                 menu_detail={menuSelected}
+                restaurant_id={props.restaurant_id}
             />
             <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
