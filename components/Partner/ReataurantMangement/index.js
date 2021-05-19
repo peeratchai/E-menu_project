@@ -10,7 +10,7 @@ export default function RestaurantManagement({ restaurant_id, current_tab }) {
     const [table, setTable] = React.useState([])
 
     useEffect(() => {
-        if (restaurant_id !== undefined) {
+        if (restaurant_id) {
             getZone()
         }
         if (current_tab === 'restaurantManagement') {
@@ -33,6 +33,7 @@ export default function RestaurantManagement({ restaurant_id, current_tab }) {
             <WebComponent
                 zone={zone}
                 get_zone={getZone}
+                restaurant_id={restaurant_id}
             />
         )
     } else {
@@ -40,6 +41,7 @@ export default function RestaurantManagement({ restaurant_id, current_tab }) {
             <WebComponent
                 zone={zone}
                 get_zone={getZone}
+                restaurant_id={restaurant_id}
             />
         )
     }

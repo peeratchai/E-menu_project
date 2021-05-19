@@ -9,6 +9,7 @@ import 'antd/dist/antd.css';
 import { message } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import partnerSerivce from '../../services/partner'
+import EmptyComponent from '../../components/Empty'
 
 export default function CheckoutPage() {
     const isMobileResolution = useMediaQuery(768)
@@ -34,42 +35,57 @@ export default function CheckoutPage() {
     }, [])
 
     const reduceOrderMenu = (menuIndex) => {
-        let oldOrder = basketData.order
-        let newOrder = [...oldOrder]
+        let existingOrder = basketData.order
+        let newTotal = basketData.total
+        let newOrder = [...existingOrder]
         let newBasket = { ...basketData }
-        if (newOrder[menuIndex].count === 1) {
-            newOrder.splice(menuIndex, 1)
+        let newTotalPrice = totalPrice
 
+        newTotal = newTotal - newOrder[menuIndex].price
+
+        if (newOrder[menuIndex].count === 1) {
+            newTotalPrice = newTotalPrice - newOrder[menuIndex].price
+            setTotalPrice(newTotalPrice)
+            newOrder.splice(menuIndex, 1)
+            let newCountMenuItems = countMenuItems
+            newCountMenuItems = newCountMenuItems - 1
+            setCountMenuItems(newCountMenuItems)
         } else {
             newOrder[menuIndex].count = newOrder[menuIndex].count - 1
             newOrder[menuIndex].total = newOrder[menuIndex].total - newOrder[menuIndex].price
+            newTotalPrice = newTotalPrice - newOrder[menuIndex].price
+            setTotalPrice(newTotalPrice)
         }
 
-        let newCountMenuItems = countMenuItems
-        newCountMenuItems = newCountMenuItems - 1
-        let newTotalPrice = totalPrice
-        newTotalPrice = newTotalPrice - newOrder[menuIndex].price
-        setTotalPrice(newTotalPrice)
-        setCountMenuItems(newCountMenuItems)
         newBasket.order = newOrder
+        newBasket.total = newTotal
+        console.log('newBasket', newBasket)
         setBasketData({ ...newBasket })
+
+        if (newOrder.length === 0) {
+            window.localStorage.removeItem('basket')
+        } else {
+            window.localStorage.setItem('basket', JSON.stringify(newBasket))
+        }
+
     }
 
     const AddOrderMenu = (menuIndex) => {
-        let oldOrder = basketData.order
-        let newOrder = [...oldOrder]
+        let existingOrder = basketData.order
+        let newTotal = basketData.total
+        let newOrder = [...existingOrder]
         let newBasket = { ...basketData }
         newOrder[menuIndex].count = newOrder[menuIndex].count + 1
         newOrder[menuIndex].total = newOrder[menuIndex].total + newOrder[menuIndex].price
-        let newCountMenuItems = countMenuItems
-        newCountMenuItems = newCountMenuItems + 1
+        newTotal = newTotal + newOrder[menuIndex].price
         let newTotalPrice = totalPrice
         newTotalPrice = newTotalPrice + newOrder[menuIndex].price
         setTotalPrice(newTotalPrice)
-        setCountMenuItems(newCountMenuItems)
         newBasket.order = newOrder
-        console.log(newBasket)
+        newBasket.total = newTotal
         setBasketData({ ...newBasket })
+        window.localStorage.setItem('basket', JSON.stringify(newBasket))
+
     }
 
     const onCheckOutOrder = async () => {
@@ -93,7 +109,7 @@ export default function CheckoutPage() {
 
             let data = {
                 "restaurant": restaurantId,
-                "restaurant_table": "020a9d42-f055-4aef-8375-75af5f896d73",
+                "restaurant_table": "6c409206-cd90-4d28-8aec-08a2c8eea038",
                 "user": userId,
                 "order_items": order_items
             }
@@ -101,14 +117,19 @@ export default function CheckoutPage() {
             let response = await partnerSerivce.addOrder(data)
             console.log('response', response)
             message.success('Check out order successful.')
+            localStorage.removeItem("basket")
             setConfirmModalVisible(false)
+
+            router.push({
+                pathname: "/orderHistory"
+            })
         } else {
             message.error('Please login before check out order and try agian.')
         }
 
     }
 
-    let MenuListComponent = basketData.order && basketData.order.map((menu, index) => {
+    let MenuListComponentMobile = basketData.order && basketData.order.map((menu, index) => {
         return (
             <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={menu.id}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
@@ -127,7 +148,49 @@ export default function CheckoutPage() {
                     </Row>
                     <Row >
                         <Col xs={4} style={{ margin: "auto" }}>
-                            <b>{menu.total}</b>
+                            <b>{menu.price}</b>
+                        </Col>
+                        <Col xs={8} style={{ textAlign: "right" }}>
+                            <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
+                                <Row>
+                                    <Col >
+                                        <MinusOutlined onClick={() => reduceOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
+                                    </Col>
+                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
+                                        {menu.count}
+                                    </Col>
+                                    <Col>
+                                        <PlusOutlined onClick={() => AddOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
+                                    </Col>
+                                </Row>
+                            </Button>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+        )
+    })
+
+    let MenuListComponentWeb = basketData.order && basketData.order.map((menu, index) => {
+        return (
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={menu.id}>
+                <Col xs={4} style={{ paddingRight: "0px", height: "150px" }}>
+                    <Image src={menu.image_url} rounded style={{ height: "100%" }} />
+                </Col>
+                <Col xs={8}>
+                    <Row>
+                        <Col>
+                            <b>{menu.name}</b>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
+                            * {menu.specialInstruction}
+                        </Col>
+                    </Row>
+                    <Row >
+                        <Col xs={4} style={{ margin: "auto" }}>
+                            <b>{menu.price}</b>
                         </Col>
                         <Col xs={8} style={{ textAlign: "right" }}>
                             <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
@@ -158,45 +221,9 @@ export default function CheckoutPage() {
                     <>
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>
-                                {MenuListComponent}
-                                {/* <br />
-                                <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
-                                        <Image src='/images/food4.jpg' rounded style={{ height: "100%" }} />
-                                    </Col>
-                                    <Col xs={8}>
-                                        <Row>
-                                            <Col>
-                                                <b>ยำปลาหมึก</b>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
-                                                * เผ็ดน้อย
-                                        </Col>
-                                        </Row>
-                                        <Row >
-                                            <Col xs={4} style={{ margin: "auto" }}>
-                                                <b>฿ 80</b>
-                                            </Col>
-                                            <Col xs={8} style={{ textAlign: "right" }}>
-                                                <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
-                                                    <Row>
-                                                        <Col >
-                                                            <MinusOutlined style={{ fontSize: "12px", color: "#DEDEDE" }} />
-                                                        </Col>
-                                                        <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
-                                                            1
-                                                    </Col>
-                                                        <Col>
-                                                            <PlusOutlined style={{ fontSize: "12px", color: "#DEDEDE" }} />
-                                                        </Col>
-                                                    </Row>
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row> */}
+                                {
+                                    countMenuItems > 0 ? MenuListComponentMobile : <EmptyComponent />
+                                }
                             </Container>
                         </Layout >
                         {
@@ -206,9 +233,9 @@ export default function CheckoutPage() {
                                         <Row>
                                             <Col>
                                                 {countMenuItems} รายการ
-                                    </Col>
+                                                </Col>
                                             <Col style={{ textAlign: "right" }}>
-                                                <b>฿ {totalPrice}</b>
+                                                <b> {totalPrice} ฿</b>
                                             </Col>
                                         </Row>
                                         <br />
@@ -226,9 +253,18 @@ export default function CheckoutPage() {
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
-                                                <div className={styles.checkout_button} >
+                                                0 รายการ
+                                            </Col>
+                                            <Col style={{ textAlign: "right" }}>
+                                                <b>฿ </b>
+                                            </Col>
+                                        </Row>
+                                        <br />
+                                        <Row>
+                                            <Col>
+                                                <Button className={styles.checkout_button} >
                                                     ไม่มีรายการอาหาร
-                                                </div>
+                                        </Button>
                                             </Col>
                                         </Row>
                                     </div>
@@ -242,7 +278,68 @@ export default function CheckoutPage() {
                             check_out_order={onCheckOutOrder}
                         />
                     </>
-                ) : null
+                ) : (
+                    <>
+                        <Layout>
+                            <Container className={utilStyles.container}>
+                                {
+                                    countMenuItems > 0 ? MenuListComponentWeb : <EmptyComponent />
+                                }
+                            </Container>
+                        </Layout >
+                        {
+                            countMenuItems > 0 ? (
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                    <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
+                                        <Row>
+                                            <Col>
+                                                {countMenuItems} รายการ
+                                                </Col>
+                                            <Col style={{ textAlign: "right" }}>
+                                                <b> {totalPrice} ฿</b>
+                                            </Col>
+                                        </Row>
+                                        <br />
+                                        <Row>
+                                            <Col>
+                                                <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
+                                                    สั่ง {countMenuItems} รายการ
+                                        </Button>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                    <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
+                                        <Row>
+                                            <Col>
+                                                0 รายการ
+                                            </Col>
+                                            <Col style={{ textAlign: "right" }}>
+                                                <b>฿ </b>
+                                            </Col>
+                                        </Row>
+                                        <br />
+                                        <Row>
+                                            <Col>
+                                                <Button className={styles.checkout_button} >
+                                                    ไม่มีรายการอาหาร
+                                        </Button>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </div>
+                            )
+                        }
+
+                        <ConfirmOrderModal
+                            show={confirmModalVisible}
+                            onHide={() => setConfirmModalVisible(false)}
+                            check_out_order={onCheckOutOrder}
+                        />
+                    </>
+                )
             }
         </>
     )

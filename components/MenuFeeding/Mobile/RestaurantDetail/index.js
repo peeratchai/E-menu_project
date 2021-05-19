@@ -40,7 +40,7 @@ export default function RestaurantDetailMobile(props) {
     const [locationLatLong, setLocationLatLong] = React.useState("");
     const [menuSelected, setMenuSelected] = React.useState()
     const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
-    const [menu_in_basket, setMenu_in_basket] = React.useState()
+    const [basket, setBasket] = React.useState({ 'order': [], 'total': 0 })
     const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
     const [restaurantDetail, setRestaurantDetail] = React.useState({
         name: "",
@@ -104,13 +104,14 @@ export default function RestaurantDetailMobile(props) {
     }, [props])
 
     const checkMenuFromBasket = () => {
-        let basket = window.localStorage.getItem('basket');
-        console.log(basket)
-        if (basket !== undefined && basket !== null) {
-            console.log('have menu in basket')
-            setMenu_in_basket(basket)
+        let existingBasket = window.localStorage.getItem('basket');
+        if (existingBasket) {
+            existingBasket = JSON.parse(existingBasket)
+            setBasket(existingBasket)
             setHave_menu_in_basket(true)
         }
+
+        setModalShow(false)
     }
 
     const setRestaurantBanner = (restaurant_detail) => {
@@ -125,6 +126,12 @@ export default function RestaurantDetailMobile(props) {
         ))
         setRestaurantBannerPicture(restaurantBanner)
     }
+
+    const linkToCheckOutOrder = () => [
+        router.push({
+            pathname: "/checkout"
+        })
+    ]
 
     const renderMenuList = (restaurantDetail) => {
         let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
@@ -169,7 +176,7 @@ export default function RestaurantDetailMobile(props) {
                     </div>
                     <Row className={styles.category_section} >
                         <Col xs={12}>
-                            <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
+                            <div className={utilStyles.fontTitleMobile + " " + styles.categoryHeader}>
                                 {category.name}
                             </div>
                         </Col>
@@ -205,7 +212,7 @@ export default function RestaurantDetailMobile(props) {
     ))
 
     return (
-        <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={menu_in_basket}>
+        <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={basket}>
             <Container className={utilStyles.container_sm}>
                 <Breadcrumb>
                     {
@@ -335,22 +342,22 @@ export default function RestaurantDetailMobile(props) {
             </Container>
             <OrderMenuModal
                 show={modalShow}
-                onHide={() => (setModalShow(false), checkMenuFromBasket())}
+                onHide={() => checkMenuFromBasket()}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
             />
-            <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
+            <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
                     <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#ff4a4f", borderRadius: "5px", color: "white" }}>
                         <Row>
                             <Col>
                                 <div stlye={{ textAlign: "left", paddingLeft: "10px" }}>
-                                    Basket : 1 Item
+                                    Basket : {basket.order.length} Item
                                 </div>
                             </Col>
                             <Col>
                                 <div style={{ textAlign: "right", paddingRight: "10px" }}>
-                                    189 Baht
+                                    {basket.total} Baht
                             </div>
                             </Col>
                         </Row>

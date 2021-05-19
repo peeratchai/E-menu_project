@@ -9,7 +9,7 @@ import partnerSerivce from '../../../../services/partner'
 import { mappingTableImage } from '../../../../masterData/mappingTableImage'
 
 export default function WebComponent(props) {
-    const { zone } = props
+    const { zone, restaurant_id } = props
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -31,8 +31,13 @@ export default function WebComponent(props) {
         // 50 is padding top and bottom
         setContainerHeight(containerHeight - 50)
         if (Array.isArray(zone)) {
-            setZoneSelected(zone[0])
-            ratioTableImages(containerWidth, containerHeight, zone[0]);
+            if (zone.length > 0) {
+                setZoneSelected(zone[0])
+                ratioTableImages(containerWidth, containerHeight, zone[0]);
+            } else {
+                message.warning('Zone not found.')
+            }
+
         }
     }, [props])
 
@@ -200,6 +205,10 @@ export default function WebComponent(props) {
         }
     }
 
+    const onChangeZone = (e) => {
+        setZoneSelected(e.target.value)
+    }
+
     return (
         <div className={styles.tab}>
             <Row>
@@ -209,7 +218,7 @@ export default function WebComponent(props) {
                             <Form.Control
                                 as="select"
                                 custom
-                                onChange={(e) => setZoneSelected(e.target.value)}
+                                onChange={(e) => onChangeZone(e)}
                             >
                                 {zoneDropdown}
                             </Form.Control>
@@ -243,7 +252,8 @@ export default function WebComponent(props) {
                 show={viewOrderModalShow}
                 onHide={() => setViewOrderModalShow(false)}
                 table_selected={tableSelected}
+                restaurant_id={restaurant_id}
             />
-        </div>
+        </div >
     )
 }

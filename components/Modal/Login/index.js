@@ -3,6 +3,7 @@ import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import React, { useEffect } from 'react'
 import { message } from 'antd';
 import authentication from '../../../services/authentication'
+import profileService from '../../../services/profile'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
@@ -114,8 +115,7 @@ export default function LoginModal(props) {
                 let accessToken = response.data.accessToken
                 localStorage.setItem('accessToken', accessToken)
                 try {
-                    response = await authentication.getProfile(accessToken)
-                    let profile = response.data
+                    let profile = await profileService.getProfile(accessToken)
                     localStorage.setItem('profile', profile)
                 } catch (error) {
                     console.log(error)
@@ -141,8 +141,7 @@ export default function LoginModal(props) {
                 let response = await authentication.signinWithEmail(email, password)
                 let accessToken = response.data.accessToken
                 try {
-                    response = await authentication.getProfile(accessToken)
-                    let profile = response.data
+                    let profile = await profileService.getProfile(accessToken)
                     console.log(profile)
                     localStorage.setItem('profile', JSON.stringify(profile))
                 } catch (error) {

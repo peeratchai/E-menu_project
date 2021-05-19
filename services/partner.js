@@ -9,6 +9,8 @@ const partnerSerivce = {
         formData.append("promote_content", data.promote_content);
         formData.append("title", data.title);
         formData.append("image", data.image);
+        formData.append("image_url", null);
+        formData.append("status", 'pending');
 
         let config = {
             headers: {
@@ -355,6 +357,87 @@ const partnerSerivce = {
             }
         }
         let response = await axios.post('/api/add_order', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    getOrderByfilter: async (data) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + await accessToken,
+            }
+        }
+        let response = await axios.post('/api/get_order_by_filter', data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+
+    takeOrder: async (orderId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+        let data = {}
+
+        let response = await axios.patch('/api/take_order/' + orderId, data, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    completeOrder: async (orderId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.patch('/api/complete_order/' + orderId, config)
+            .then(function (response) {
+                console.log(response)
+                return response
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response.data
+    },
+    cancelOrder: async (orderId) => {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }
+
+        let response = await axios.patch('/api/cancel_order/' + orderId, config)
             .then(function (response) {
                 console.log(response)
                 return response

@@ -51,6 +51,7 @@ export default function WebFilter(props) {
 
     const [value, setValue] = React.useState([]);
     const filterProps = {
+        allowClear: true,
         showArrow: true,
         mode: 'multiple',
         style: {
@@ -62,7 +63,7 @@ export default function WebFilter(props) {
             console.log(newValue)
             setValue(newValue);
         },
-        placeholder: 'Select Item...',
+        placeholder: 'Select Filters...',
         maxTagCount: 'responsive',
     };
 

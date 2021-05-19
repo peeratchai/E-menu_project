@@ -131,5 +131,37 @@ module.exports = {
             source: '/api/add_order',
             destination: API_URL + '/order',
         },
+        {
+            source: '/api/get_order_by_filter',
+            destination: API_URL + '/order/search_by_filter',
+        },
+        {
+            source: '/api/take_order/:orderId',
+            destination: API_URL + '/order-item/take_order/:orderId',
+        },
+        {
+            source: '/api/complete_order/:orderId',
+            destination: API_URL + '/order-item/complete_order/:orderId',
+        },
+        {
+            source: '/api/cancel_order/:orderId',
+            destination: API_URL + '/order-item/cancel_order/:orderId',
+        },
+        {
+            source: '/api/get_order_history/:userId',
+            destination: API_URL + '/order/history/:userId',
+        },
+        {
+            source: '/api/get_order/:orderId',
+            destination: API_URL + '/order/:orderId',
+        },
+        {
+            source: '/api/edit_user_profile',
+            destination: API_URL + '/profile',
+        },
+        {
+            source: '/api/admin/profile/users',
+            destination: API_URL + '/profile/users',
+        },
     ]
 }

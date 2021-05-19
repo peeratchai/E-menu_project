@@ -6,21 +6,96 @@ import { Row, Col, Form, Image, Button, Modal, Container, Tabs } from 'react-boo
 import useMediaQuery from "../../utils/utils";
 import { useRouter } from 'next/router'
 import 'antd/dist/antd.css';
-import { Card, InputNumber, Skeleton } from 'antd';
+import { Card, InputNumber, message, Skeleton } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import orderService from '../../services/orderHistory'
+import EmptyComponent from '../../components/Empty'
+import moment from 'moment'
 
 export default function OrderHistory() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
 
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
-    const viewOrder = (orderId) => {
+    const [orderHistory, setOrderHistory] = React.useState([]);
+    const [haveOrderHistory, setHaveOrderHistory] = React.useState(false);
+    const [profile, setProfile] = React.useState();
+    const viewOrder = (order) => {
         router.push({
             pathname: "/orderHistory/orderDetails",
-            query: { oid: orderId }
+            query: { order: JSON.stringify(order) }
         })
     }
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            let profile = window.localStorage.getItem('profile')
+            if (profile) {
+                profile = JSON.parse(profile)
+                setProfile(profile)
+                getOrderHistory(profile)
+            }
+        }
+    }, [])
+
+    const getOrderHistory = async (profile) => {
+        console.log('profile', profile)
+        let profileId = profile.id
+        let orderHistory = await orderService.getOrderHistoryByUserId(profileId)
+        if (orderHistory) {
+            if (orderHistory.length > 0) {
+                setOrderHistory(orderHistory)
+                setHaveOrderHistory(true)
+            }
+        } else {
+            message.error('Cannot get order history.')
+        }
+
+    }
+
+    let OrderHistoryComponent = orderHistory.map((order) => {
+
+        return (
+            <>
+                <Row style={{ height: "4rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} onClick={() => viewOrder(order)}>
+                    <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
+                        <Image src={order.restaurant.image_url} rounded style={{ height: "100%" }} />
+                    </Col>
+                    <Col xs={9}>
+                        <Row>
+                            <Col style={{ fontSize: "14px" }}>
+                                <LocationOnIcon style={{ fontSize: "12px" }} /> {order.restaurant.name}
+                            </Col>
+                            <Col >
+                                <div style={{ textAlign: "right", fontSize: "12px", margin: "auto" }}>
+                                    {moment(order.order_date).format('DD MMM YYYY')}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{ fontSize: "12px" }} xs={8}>
+                                {order.status}
+                            </Col>
+                            <Col xs={4}>
+                                <div style={{ textAlign: "right", fontSize: "12px" }}>
+                                    {moment(order.order_date).format('hh:mm A')}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{ fontSize: "14px" }}>
+                                <div style={{ textAlign: "right" }}>
+                                    <b>Total : 240 ฿</b>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <br />
+            </>
+        )
+    })
 
     return (
         <>
@@ -29,76 +104,9 @@ export default function OrderHistory() {
                     <>
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>
-                                <Row style={{ height: "4rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} onClick={() => viewOrder(1)}>
-                                    <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
-                                        <Image src='/images/restaurant1.jpg' rounded style={{ height: "100%" }} />
-                                    </Col>
-                                    <Col xs={9}>
-                                        <Row>
-                                            <Col style={{ fontSize: "14px" }}>
-                                                Completed
-                                            </Col>
-                                            <Col >
-                                                <div style={{ textAlign: "right", fontSize: "12px", margin: "auto" }}>
-                                                    7 MAR 2021
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={{ fontSize: "12px" }} xs={8}>
-                                                <LocationOnIcon style={{ fontSize: "12px" }} /> Katsuya (คัตสึยะ) เมกา บางนา
-                                            </Col>
-                                            <Col xs={4}>
-                                                <div style={{ textAlign: "right", fontSize: "12px" }}>
-                                                    5:26 PM
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={{ fontSize: "14px" }}>
-                                                <div style={{ textAlign: "right" }}>
-                                                    <b>Total : 240 ฿</b>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <br />
-                                <Row style={{ height: "4rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
-                                        <Image src='/images/restaurant2.jpg' rounded style={{ height: "100%" }} />
-                                    </Col>
-                                    <Col xs={9}>
-                                        <Row>
-                                            <Col style={{ fontSize: "14px" }}>
-                                                Completed
-                                            </Col>
-                                            <Col >
-                                                <div style={{ textAlign: "right", fontSize: "12px", margin: "auto" }}>
-                                                    6 MAR 2021
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={{ fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} xs={8}>
-                                                <LocationOnIcon style={{ fontSize: "12px" }} /> แสงชัยโภชนา (Saengchai Pochana)dwdwdw
-                                            </Col>
-                                            <Col xs={4}>
-                                                <div style={{ textAlign: "right", fontSize: "12px" }}>
-                                                    8:52 PM
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row >
-                                            <Col style={{ fontSize: "14px" }}>
-                                                <div style={{ textAlign: "right" }}>
-                                                    <b>Total : 150 ฿</b>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <br />
+                                {
+                                    haveOrderHistory ? OrderHistoryComponent : <EmptyComponent />
+                                }
                             </Container>
                         </Layout >
 
@@ -107,7 +115,22 @@ export default function OrderHistory() {
                             onHide={() => setConfirmModalVisible(false)}
                         />
                     </>
-                ) : null
+                ) : (
+                    <>
+                        <Layout >
+                            <Container className={utilStyles.container}>
+                                {
+                                    haveOrderHistory ? OrderHistoryComponent : <EmptyComponent />
+                                }
+                            </Container>
+                        </Layout >
+
+                        <ConfirmOrderModal
+                            show={confirmModalVisible}
+                            onHide={() => setConfirmModalVisible(false)}
+                        />
+                    </>
+                )
             }
         </>
     )

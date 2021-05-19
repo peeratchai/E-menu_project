@@ -49,27 +49,6 @@ const authentication = {
         return response
     },
 
-    getProfile: async function (accessToken) {
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        }
-
-        let response = await axios.get('/api/profile/get', config)
-            .then(function (response) {
-                console.log(response)
-                return response
-            })
-            .catch(function (error) {
-                console.log(error)
-                return error
-            });
-
-        return response
-    },
-
-
     requestResetPassword: async function (email) {
         let config = {
             headers: {

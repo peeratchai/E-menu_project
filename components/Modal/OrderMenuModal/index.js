@@ -24,7 +24,6 @@ export default function OrderMenuModal(props) {
         if (props.menu_detail !== undefined) {
             setMenuDetail(props.menu_detail)
             setTotal(props.menu_detail.price)
-            console.log(menuDetail)
         }
     }, [props])
 
@@ -37,23 +36,43 @@ export default function OrderMenuModal(props) {
             count: count,
             total: total
         }
-        if (basket === undefined || basket === null) {
-            let key = order.name
-            let menu = { 'restaurantId': restaurantId, 'order': [order] }
+        if (!basket) {
+            let menu = { 'restaurantId': restaurantId, 'order': [order], 'total': total }
             window.localStorage.setItem('basket', JSON.stringify(menu));
         } else {
             basket = JSON.parse(basket)
-            let key = order.name
-            let oldOrder = basket.order
-            basket = { 'restaurantId': restaurantId, 'order': [...oldOrder, order] }
+            let existingOrder = basket.order
+            let totalAllOrder = basket.total + total
+            let existingMenu = existingOrder.filter((order) => order.id === menuDetail.id)
+            if (existingMenu.length > 0) {
+                existingMenu = existingMenu[0]
+                existingMenu.count = existingMenu.count + count
+                existingMenu.total = existingMenu.total + total
+                existingMenu.specialInstruction = specialInstruction
+
+                existingOrder.map((order) => {
+                    if (order.id === existingMenu.id) {
+                        order = existingMenu
+                    }
+                })
+                basket = { 'restaurantId': restaurantId, 'order': [...existingOrder], 'total': totalAllOrder }
+            } else {
+                basket = { 'restaurantId': restaurantId, 'order': [...existingOrder, order], 'total': totalAllOrder }
+            }
             window.localStorage.setItem('basket', JSON.stringify(basket));
         }
         console.log('specialInstruction ->', specialInstruction)
         console.log('count ->', count)
         setCount(1)
+        setSpecialInstruction('')
         props.onHide()
     }
 
+    const closeModal = () => {
+        setCount(1)
+        setSpecialInstruction('')
+        props.onHide()
+    }
     return (
 
         <Modal
@@ -101,7 +120,7 @@ export default function OrderMenuModal(props) {
                                         </Row>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col>
-                                                รวม : {total}
+                                                ราคา : {menuDetail.price}
                                             </Col>
                                         </Row>
 
@@ -123,8 +142,8 @@ export default function OrderMenuModal(props) {
                         <Modal.Footer>
                             <Button onClick={() => { saveMenu() }}>
                                 Submit
-                        </Button>
-                            <Button onClick={props.onHide}>Close</Button>
+                            </Button>
+                            <Button onClick={() => { closeModal() }}>Close</Button>
                         </Modal.Footer>
                     </>
                 ) : (
@@ -163,7 +182,7 @@ export default function OrderMenuModal(props) {
                                         </Row>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col>
-                                                รวม : {total}
+                                                ราคา : {menuDetail.price}
                                             </Col>
                                         </Row>
 
@@ -185,8 +204,8 @@ export default function OrderMenuModal(props) {
                         <Modal.Footer>
                             <Button onClick={() => { saveMenu() }}>
                                 Submit
-                                </Button>
-                            <Button onClick={() => (setCount(1), props.onHide)}>Close</Button>
+                            </Button>
+                            <Button onClick={() => { closeModal() }}>Close</Button>
                         </Modal.Footer>
                     </>
                 )

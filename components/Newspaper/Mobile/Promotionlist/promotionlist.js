@@ -39,7 +39,9 @@ export default function MobilePromotionlist(props) {
                     </div>
                     <div className={utilStyles.fontMobileSM}>
                         {newspaperDetail.title}
-                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
+                    <div className={utilStyles.fontMobileSM}>
+                        {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
             </Link>
@@ -69,7 +71,9 @@ export default function MobilePromotionlist(props) {
                     </div>
                     <div className={utilStyles.fontMobileSM}>
                         {newspaperDetail.title}
-                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
+                    <div className={utilStyles.fontMobileSM}>
+                        {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
             </Link>

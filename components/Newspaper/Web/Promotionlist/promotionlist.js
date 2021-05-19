@@ -21,32 +21,37 @@ export default function WebPromotionlist(props) {
     const renderPromotionsCard = (newspaper_list) => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]
-        let column1 = column1Array && column1Array.map((newspaperDetail) => (
-            <Link
-                href={{
-                    pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
-                }}
-            >
-                <div className={styles.colCard} >
-                    <div className={utilStyles.parent_zoom_bgImg}>
-                        <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
-                            <div className={styles.bannerText}>
-                                {newspaperDetail.promote_content}
+        let column1 = column1Array && column1Array.map((newspaperDetail) => {
+            console.log('newspaperDetail', newspaperDetail)
+            return (
+                <Link
+                    href={{
+                        pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
+                        query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                    }}
+                >
+                    <div className={styles.colCard} >
+                        <div className={utilStyles.parent_zoom_bgImg}>
+                            <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
+                                <div className={styles.bannerText}>
+                                    {newspaperDetail.promote_content}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className={utilStyles.fontContent}>
-                        <b>{newspaperDetail.restaurant.name}</b>
+                        <div className={utilStyles.fontContent}>
+                            <b>{newspaperDetail.restaurant.name}</b>
+                        </div>
+                        <div className={utilStyles.font_size_sm}>
+                            {newspaperDetail.title}
+                        </div>
+                        <div className={utilStyles.font_size_sm}>
+                            {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
+                        </div>
                     </div>
-                    <div className={utilStyles.font_size_sm}>
-                        {newspaperDetail.title}
-                        {/* Opening : 8.00 am - 17.30 pm */}
-                    </div>
-                </div>
-            </Link>
-        ))
+                </Link>
+            )
+        })
 
         let column2Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 1)
 
@@ -71,7 +76,9 @@ export default function WebPromotionlist(props) {
                     </div>
                     <div className={utilStyles.font_size_sm}>
                         {newspaperDetail.title}
-                        {/* Opening : 8.00 am - 17.30 pm */}
+                    </div>
+                    <div className={utilStyles.font_size_sm}>
+                        {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
             </Link>
@@ -101,7 +108,9 @@ export default function WebPromotionlist(props) {
                     </div>
                     <div className={utilStyles.font_size_sm}>
                         {newspaperDetail.title}
-                        {newspaperDetail.price_from + " - " + newspaperDetail.price_to}
+                    </div>
+                    <div className={utilStyles.font_size_sm}>
+                        {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
             </Link>

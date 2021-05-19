@@ -29,6 +29,7 @@
     "react-geocode": "^0.2.3",
     "react-google-autocomplete": "^2.1.2",
     "react-google-maps": "^9.4.5",
+    "react-highlight-words": "^0.17.0",
     "react-md-spinner": "^1.0.0",
     "suneditor-react": "^2.16.3"
   }

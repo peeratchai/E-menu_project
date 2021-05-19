@@ -46,7 +46,7 @@ export default function Restaurant({ props }) {
 
     const getAddressOnGoogleMaps = async (restaurantDetail) => {
         let point, substringPotion, splitPotion, latLong, lat, lng
-        point = 'POINT(13.724035849919018 100.57927717448996)';
+        point = restaurantDetail.location;
         substringPotion = point.substring(5)
         splitPotion = substringPotion.split('(').join('').split(')');
         latLong = splitPotion[0].split(' ')

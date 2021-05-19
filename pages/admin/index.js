@@ -14,9 +14,10 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import useMediaQuery from "../../utils/utils";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import DirectMessageAdmin from '../../components/DirectMessageAdmin/index'
+import DirectMessageAdmin from '../../components/DirectMessageAdmin'
 import { SearchOutlined } from '@ant-design/icons';
 import termAgreement from '../../utils/termAgreement.json'
+import AccountManagement from '../../components/Admin/AccountManagement'
 
 const { Option } = Select;
 
@@ -1121,7 +1122,7 @@ export default function Admin() {
                                                         <Form.Group as={Row} controlId="formPlaintextEmail">
                                                             <Form.Label column sm="2">
                                                                 Message
-                                            </Form.Label>
+                                                        </Form.Label>
                                                             <Col sm="10">
                                                                 <SunEditor
                                                                     onChange={(content) => console.log(content)}
@@ -1171,10 +1172,11 @@ export default function Admin() {
                                                 <Table columns={columnsApprovePromotion} dataSource={dataApprovePromotionTable} scroll={{ x: 'max-content' }} />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="accountManagement">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                {/* <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                                                     Account Management
                                                 </div>
-                                                <Table columns={columnsAccount} dataSource={dataAccount} scroll={{ x: 'max-content' }} />
+                                                <Table columns={columnsAccount} dataSource={dataAccount} scroll={{ x: 'max-content' }} /> */}
+                                                <AccountManagement />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="foodData">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
@@ -1199,8 +1201,6 @@ export default function Admin() {
                                     </Col>
                                 </Row>
                             </Tab.Container>
-
-
                         </>
                     ) : (
                         //Mobile Version
@@ -2558,7 +2558,6 @@ function ViewOrderModal(props) {
     );
 }
 
-//Modal : View order each table
 function EditProfile(props) {
     const isMobileResolution = useMediaQuery(768)
 
