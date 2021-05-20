@@ -6,6 +6,7 @@ import React, { useEffect } from 'react'
 import partnerSerivce from '../../../services/partner'
 import AddZoneModal from '../../../components/Modal/AddZoneModal'
 import EditZoneModal from '../../../components/Modal/EditZoneModal'
+import EditTableModal from '../../../components/Modal/EditTable'
 
 export default function ZoneManagement({ restaurant_id, current_tab }) {
 
@@ -14,7 +15,8 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
     const [showAddZoneModal, setShowAddZoneModal] = React.useState(false)
     const [showEditZoneModal, setShowEditZoneModal] = React.useState(false)
     const [zoneSelected, setZoneSelected] = React.useState([])
-
+    const [editTableModalShow, setEditTableModalShow] = React.useState(false);
+    const [tableSelected, setTableSelected] = React.useState();
     useEffect(() => {
         if (restaurant_id !== undefined) {
             getZone()
@@ -89,6 +91,34 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
         },
     ];
 
+    const onEditTable = (table) => {
+        setTableSelected(table)
+        setEditTableModalShow(true)
+    }
+
+    const editTable = async (table) => {
+        setEditTableModalShow(false)
+        console.log('table', table)
+        let data = {
+            "zone": zoneSelected.id,
+            "name": table.name,
+            "type": table.type,
+            "size": table.size,
+            "position_x": table.position_x,
+            "position_y": table.position_y,
+            "is_active": table.is_active
+        }
+        console.log(data)
+        let response = await partnerSerivce.editTable(data, table.id)
+        console.log(response)
+        if (response) {
+            getZone()
+            message.success('Edit table successful.')
+        } else {
+            message.error('Cannot edit table.')
+        }
+    }
+
     const expandedRowRender = (record) => {
         const columns = [
             { title: 'No', dataIndex: 'index', key: 'index' },
@@ -99,7 +129,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
                 render: (table) => (
                     <Space size="middle">
                         <Switch defaultChecked checked={zone.is_active} onChange={(checked) => onChangeTableStatus(checked, zone)} />
-                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => setShowEditTableModal(table)}>Edit</Button>
+                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => onEditTable(table)}>Edit</Button>
                         <Popconfirm
                             title="Are you sure to delete this table?"
                             onConfirm={() => confirmDeleteTable(table)}
@@ -194,6 +224,12 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
                 onHide={() => setShowEditZoneModal(false)}
                 edit_zone={editZone}
                 zone={zoneSelected}
+            />
+            <EditTableModal
+                show={editTableModalShow}
+                onHide={() => setEditTableModalShow(false)}
+                table_selected={tableSelected}
+                edit_table={editTable}
             />
         </>
     );

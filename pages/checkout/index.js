@@ -173,8 +173,8 @@ export default function CheckoutPage() {
 
     let MenuListComponentWeb = basketData.order && basketData.order.map((menu, index) => {
         return (
-            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={menu.id}>
-                <Col xs={4} style={{ paddingRight: "0px", height: "150px" }}>
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px", height: "120px" }} key={menu.id}>
+                <Col xs={4} style={{ paddingRight: "0px",height: "100%" }}>
                     <Image src={menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>

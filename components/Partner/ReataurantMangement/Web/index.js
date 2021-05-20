@@ -20,8 +20,6 @@ export default function WebComponent(props) {
     const [viewOrderModalShow, setViewOrderModalShow] = React.useState(false);
     const [dragging, setDragging] = React.useState(false);
     const [zoneSelected, setZoneSelected] = React.useState();
-    const [initialTable, setInitialTable] = React.useState(3);
-    const [TableManagementComponent, setTableManagementComponent] = React.useState();
 
     useEffect(() => {
         let containerWidth = refTableManagement.current.offsetWidth
@@ -33,7 +31,7 @@ export default function WebComponent(props) {
         if (Array.isArray(zone)) {
             if (zone.length > 0) {
                 setZoneSelected(zone[0])
-                ratioTableImages(containerWidth, containerHeight, zone[0]);
+                ratioTableImages(zone[0]);
             } else {
                 message.warning('Zone not found.')
             }
@@ -41,7 +39,7 @@ export default function WebComponent(props) {
         }
     }, [props])
 
-    const ratioTableImages = (width, height, zone) => {
+    const ratioTableImages = (zone) => {
 
         let tablesInZone = zone.restaurant_tables
         let tableImage
@@ -63,9 +61,12 @@ export default function WebComponent(props) {
         setTable(tablesInZone)
     }
 
-    let zoneDropdown = zone && zone.map((zone) => (
-        <option value={zone}>{zone.name}</option>
-    ))
+    let zoneDropdown = zone && zone.map((zone) => {
+        return (
+            <option value={zone.id}>{zone.name}</option>
+        )
+    }
+    )
 
     const onClickTable = (tableData) => {
         // your code
@@ -165,7 +166,7 @@ export default function WebComponent(props) {
             onDrag={() => setDragging(true)}
             onStop={(event, data) => onStop(event, data, table, tableIndex)}
         >
-            <div style={{ width: containerWidth / 10, height: containerHeight / 5, cursor: "pointer", backgroundImage: `url(${table.image})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: 'contain' }}  >
+            <div style={{ position: "absolute", width: containerWidth / 10, height: containerHeight / 5, cursor: "pointer", backgroundImage: `url(${table.image})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: 'contain' }}  >
                 <div className={styles.tableNumber} >
                     {table.name}
                 </div>
@@ -206,7 +207,11 @@ export default function WebComponent(props) {
     }
 
     const onChangeZone = (e) => {
-        setZoneSelected(e.target.value)
+        let zoneId = e.target.value
+        let zoneDetails = zone.find(zone => zone.id === zoneId)
+        console.log(zoneDetails)
+        setZoneSelected(zoneDetails)
+        ratioTableImages(zoneDetails)
     }
 
     return (

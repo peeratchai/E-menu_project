@@ -3,13 +3,25 @@ import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Modal, Container } from 'react-bootstrap'
 import { message } from 'antd'
 import 'antd/dist/antd.css';
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function AddTableModal(props) {
+export default function EditTableModal(props) {
 
+    const { table_selected } = props
+    const { edit_table } = props
+    console.log(table_selected)
     const [tableName, setTableName] = React.useState('');
     const [tableSize, setTableSize] = React.useState('small');
     const [tableType, setTableType] = React.useState('square');
+
+    useEffect(() => {
+        if (table_selected) {
+            setTableName(table_selected.name)
+            setTableSize(table_selected.size)
+            setTableType(table_selected.type)
+        }
+    }, [props])
+
     const tableImages = {
         'small': {
             'square': 'images/table-square-S.png',
@@ -28,7 +40,7 @@ export default function AddTableModal(props) {
         }
     }
 
-    const onAddTable = () => {
+    const onSave = () => {
         if (tableName === '') {
             message.error('Please input table name.')
         } else {
@@ -37,13 +49,16 @@ export default function AddTableModal(props) {
                 "name": tableName,
                 "type": tableType,
                 "size": tableSize,
-                "position_x": "0",
-                "position_y": "0",
+                "position_x": table_selected.position_x,
+                "position_y": table_selected.position_y,
+                "id": table_selected.id,
+                "zone": table_selected.zone,
+                "is_active": table_selected.is_active
             }
-            props.add_table(tableData)
-            props.onHide()
+            edit_table(tableData)
         }
     }
+
 
     return (
 
@@ -55,7 +70,7 @@ export default function AddTableModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    Add new table
+                    Edit table
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -118,8 +133,8 @@ export default function AddTableModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => { onAddTable() }}>
-                    Add
+                <Button onClick={() => { onSave() }}>
+                    Save
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>

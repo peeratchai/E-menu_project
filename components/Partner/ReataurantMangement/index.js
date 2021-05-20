@@ -1,6 +1,8 @@
 import useMediaQuery from "../../../utils/utils";
 import React, { useEffect } from 'react'
 import WebComponent from './web'
+import MobileComponent from "./Mobile";
+
 import partnerSerivce from '../../../services/partner'
 
 export default function RestaurantManagement({ restaurant_id, current_tab }) {
@@ -30,7 +32,7 @@ export default function RestaurantManagement({ restaurant_id, current_tab }) {
     let RestaurantManagementComponent
     if (isMobileResolution) {
         RestaurantManagementComponent = (
-            <WebComponent
+            <MobileComponent
                 zone={zone}
                 get_zone={getZone}
                 restaurant_id={restaurant_id}

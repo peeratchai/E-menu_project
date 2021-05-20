@@ -319,7 +319,7 @@ export default function RestaurantDetailWeb(props) {
                             )
                     }
 
-                    <Breadcrumb.Item active>{restaurant}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{restaurantDetail.name}</Breadcrumb.Item>
                 </Breadcrumb >
                 <Carousel>
                     {restaurantBannerPicture}

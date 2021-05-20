@@ -317,7 +317,7 @@ const partnerSerivce = {
                 'Authorization': 'Bearer ' + accessToken,
             }
         }
-
+        console.log(data,tableId)
         let response = await axios.patch('/api/edit_table/' + tableId, data, config)
             .then(function (response) {
                 console.log(response)
@@ -416,8 +416,9 @@ const partnerSerivce = {
                 'Authorization': 'Bearer ' + accessToken,
             }
         }
+        let data = {}
 
-        let response = await axios.patch('/api/complete_order/' + orderId, config)
+        let response = await axios.patch('/api/complete_order/' + orderId, data, config)
             .then(function (response) {
                 console.log(response)
                 return response
@@ -436,8 +437,8 @@ const partnerSerivce = {
                 'Authorization': 'Bearer ' + accessToken,
             }
         }
-
-        let response = await axios.patch('/api/cancel_order/' + orderId, config)
+        let data = {}
+        let response = await axios.patch('/api/cancel_order/' + orderId, data, config)
             .then(function (response) {
                 console.log(response)
                 return response
