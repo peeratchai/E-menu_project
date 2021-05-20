@@ -14,8 +14,6 @@ export default function ViewOrderModal(props) {
 
     const { table_selected, restaurant_id } = props
     const [loading, setLoading] = React.useState(false);
-    const [zoneIdSelected, setZoneIdSelected] = React.useState()
-    const [zoneIdSelectedArray, setZoneIdSelectedArray] = React.useState([])
     const [orders, setOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
     const [haveNewOrder, setHaveNewOrder] = React.useState(false)
@@ -30,42 +28,86 @@ export default function ViewOrderModal(props) {
     useEffect(() => {
         if (restaurant_id && table_selected) {
             getOrder()
-            setZoneIdSelected(table_selected.zoneId)
-            setZoneIdSelectedArray([table_selected.zoneId])
         }
-    }, [props])
+    }, [table_selected])
 
     const getOrder = async () => {
         setLoading(true)
         let zoneIdArray = []
-        if (zoneIdSelectedArray.length === 0) {
-            zoneIdArray.push(table_selected.zoneId)
-        } else {
-            zoneIdArray = [...zoneIdSelectedArray]
-        }
+        zoneIdArray.push(table_selected.zoneId)
         let data = {
             "restaurant": restaurant_id,
             "restaurant_table": null,
             "zone": zoneIdArray
         }
         console.log(data)
-        let order = await partnerService.getOrderByfilter(data)
-        if (order) {
-            setOrders(order)
+        let orders = await partnerService.getOrderByfilter(data)
+        if (orders) {
+            console.log('order', orders)
+            setInitailNewOrder(orders)
+            setInitailInOrder(orders)
+            setInitailCompletedOrder(orders)
+
+            setOrders(orders)
             setLoading(false)
         } else {
             message.error('An error has occurred.Please try again.')
         }
     }
 
+    const setInitailNewOrder = (orders) => {
+        let haveNewOrder = false
+        orders.map((order) => {
+            if (order.new_orders.length > 0) {
+                haveNewOrder = true
+            }
+        })
+
+        if (!haveNewOrder) {
+            setNewOrderSelected({})
+            setTableNewOrderSelectedNumber(undefined)
+        }
+        setHaveNewOrder(haveNewOrder)
+    }
+
+    const setInitailInOrder = (orders) => {
+        let haveOrderInProcess = false
+        orders.map((order) => {
+            if (order.in_orders.length > 0) {
+                haveOrderInProcess = true
+            }
+        })
+
+        if (!haveOrderInProcess) {
+            setInOrderSelected({})
+            setTableInOrderSelectedNumber(undefined)
+        }
+        setHaveOrderInProcess(haveOrderInProcess)
+    }
+
+    const setInitailCompletedOrder = (orders) => {
+        let haveOrderCompleted = false
+        orders.map((order) => {
+            if (order.completed_orders.length > 0) {
+                haveOrderCompleted = true
+            }
+        })
+
+        if (!haveOrderCompleted) {
+            setCompletedOrderSelected({})
+            setTableCompletedOrderSelectedNumber(undefined)
+        }
+        setHaveOrderCompleted(haveOrderCompleted)
+    }
+
     let newOrderTableListComponent = orders && orders.map((order) => {
         let tableList = order.new_orders.map((newOrder) => {
             if (newOrder.order_items.length > 0) {
-                if (tableNewOrderSelectedNumber === undefined) {
-                    setTableNewOrderSelectedNumber(newOrder.id)
-                    setNewOrderSelected(newOrder)
-                    setHaveNewOrder(true)
-                }
+                // if (tableNewOrderSelectedNumber === undefined) {
+                //     setTableNewOrderSelectedNumber(newOrder.id)
+                //     setNewOrderSelected(newOrder)
+                //     setHaveNewOrder(true)
+                // }
                 return (
                     <>
                         <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
@@ -85,7 +127,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                                {moment(newOrder.order_date).format('hh:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -199,7 +241,7 @@ export default function ViewOrderModal(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>
@@ -278,11 +320,11 @@ export default function ViewOrderModal(props) {
     let inOrderTableList = orders && orders.map((order) => {
         let tableList = order.in_orders.map((inOrder) => {
             if (inOrder.order_items.length > 0) {
-                if (tableInOrderSelectedNumber === undefined) {
-                    setTableInOrderSelectedNumber(inOrder.id)
-                    setInOrderSelected(inOrder)
-                    setHaveOrderInProcess(true)
-                }
+                // if (tableInOrderSelectedNumber === undefined) {
+                //     setTableInOrderSelectedNumber(inOrder.id)
+                //     setInOrderSelected(inOrder)
+                //     setHaveOrderInProcess(true)
+                // }
                 return (
                     <>
                         {/* Table list */}
@@ -328,7 +370,7 @@ export default function ViewOrderModal(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>
@@ -408,11 +450,11 @@ export default function ViewOrderModal(props) {
     let completedOrderTableList = orders && orders.map((order) => {
         let tableList = order.completed_orders.map((completedOrder) => {
             if (completedOrder.order_items.length > 0) {
-                if (tableCompletedOrderSelectedNumber === undefined) {
-                    setTableCompletedOrderSelectedNumber(completedOrder.id)
-                    setCompletedOrderSelected(completedOrder)
-                    setHaveOrderCompleted(true)
-                }
+                // if (tableCompletedOrderSelectedNumber === undefined) {
+                //     setTableCompletedOrderSelectedNumber(completedOrder.id)
+                //     setCompletedOrderSelected(completedOrder)
+                //     setHaveOrderCompleted(true)
+                // }
                 return (
                     <>
                         {/* Table list */}
@@ -433,7 +475,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(completedOrder.order_date).add(7, 'hours').format('HH:MM:SS - DD/MMM/YYYY')}
+                                                {moment(completedOrder.order_date).format('HH:MM:SS - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -457,7 +499,7 @@ export default function ViewOrderModal(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>

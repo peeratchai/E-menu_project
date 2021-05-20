@@ -128,7 +128,6 @@ export default function WebComponent(props) {
             position_y: position_y
         };
         tables[tableIndex] = tempTable;
-        console.log('new tables', tables)
         setTable(tables)
 
     }
