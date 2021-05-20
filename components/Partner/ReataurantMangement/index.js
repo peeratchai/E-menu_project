@@ -1,6 +1,6 @@
 import useMediaQuery from "../../../utils/utils";
 import React, { useEffect } from 'react'
-import WebComponent from './web'
+import WebComponent from './Web'
 import MobileComponent from "./Mobile";
 
 import partnerSerivce from '../../../services/partner'
