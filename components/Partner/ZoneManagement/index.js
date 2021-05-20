@@ -100,7 +100,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
         setEditTableModalShow(false)
         console.log('table', table)
         let data = {
-            "zone": zoneSelected.id,
+            "zone": table.zone,
             "name": table.name,
             "type": table.type,
             "size": table.size,
@@ -109,6 +109,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
             "is_active": table.is_active
         }
         console.log(data)
+        console.log('zoneSelected',zoneSelected)
         let response = await partnerSerivce.editTable(data, table.id)
         console.log(response)
         if (response) {

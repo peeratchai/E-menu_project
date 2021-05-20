@@ -43,7 +43,6 @@ export default function WebComponent(props) {
 
         let tablesInZone = zone.restaurant_tables
         let tableImage
-        console.log('before', tablesInZone)
         if (Array.isArray(tablesInZone)) {
             tablesInZone.map((table, index) => {
                 tableImage = mappingTableImage.filter((mappingData) => mappingData.size === table.size && mappingData.type === table.type)
@@ -56,7 +55,6 @@ export default function WebComponent(props) {
                 table.zoneId = zone.id
             })
         }
-        console.log('after', tablesInZone)
 
         setTable(tablesInZone)
     }
