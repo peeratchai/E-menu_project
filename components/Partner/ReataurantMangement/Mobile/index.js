@@ -53,29 +53,65 @@ export default function MobileComponent(props) {
         console.log(data)
         let order = await partnerService.getOrderByfilter(data)
         if (order) {
-            setNewOrderSelected({})
-            setInOrderSelected({})
-            setCompletedOrderSelected({})
-            setTableNewOrderSelectedNumber(undefined)
-            setTableInOrderSelectedNumber(undefined)
-            setTableCompletedOrderSelectedNumber(undefined)
-            setHaveNewOrder(false)
-            setHaveOrderInProcess(false)
-            setHaveOrderCompleted(false)
+            setInitailNewOrder(orders)
+            setInitailInOrder(orders)
+            setInitailCompletedOrder(orders)
             setOrders(order)
             setLoading(false)
         } else {
             message.error('An error has occurred.Please try again.')
         }
     }
+
+
+    const setInitailNewOrder = (orders) => {
+        let haveNewOrder = false
+        orders.map((order) => {
+            if (order.new_orders.length > 0) {
+                haveNewOrder = true
+            }
+        })
+
+        if (!haveNewOrder) {
+            setNewOrderSelected({})
+            setTableNewOrderSelectedNumber(undefined)
+        }
+        setHaveNewOrder(haveNewOrder)
+    }
+
+    const setInitailInOrder = (orders) => {
+        let haveOrderInProcess = false
+        orders.map((order) => {
+            if (order.in_orders.length > 0) {
+                haveOrderInProcess = true
+            }
+        })
+
+        if (!haveOrderInProcess) {
+            setInOrderSelected({})
+            setTableInOrderSelectedNumber(undefined)
+        }
+        setHaveOrderInProcess(haveOrderInProcess)
+    }
+
+    const setInitailCompletedOrder = (orders) => {
+        let haveOrderCompleted = false
+        orders.map((order) => {
+            if (order.completed_orders.length > 0) {
+                haveOrderCompleted = true
+            }
+        })
+
+        if (!haveOrderCompleted) {
+            setCompletedOrderSelected({})
+            setTableCompletedOrderSelectedNumber(undefined)
+        }
+        setHaveOrderCompleted(haveOrderCompleted)
+    }
+
     let newOrderTableListComponent = orders && orders.map((order) => {
         let tableList = order.new_orders.map((newOrder) => {
             if (newOrder.order_items.length > 0) {
-                if (tableNewOrderSelectedNumber === undefined) {
-                    setTableNewOrderSelectedNumber(newOrder.id)
-                    setNewOrderSelected(newOrder)
-                    setHaveNewOrder(true)
-                }
                 return (
                     <>
                         <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
@@ -279,11 +315,6 @@ export default function MobileComponent(props) {
     let inOrderTableList = orders && orders.map((order) => {
         let tableList = order.in_orders.map((inOrder) => {
             if (inOrder.order_items.length > 0) {
-                if (tableInOrderSelectedNumber === undefined) {
-                    setTableInOrderSelectedNumber(inOrder.id)
-                    setInOrderSelected(inOrder)
-                    setHaveOrderInProcess(true)
-                }
                 return (
                     <>
                         {/* Table list */}
@@ -416,11 +447,6 @@ export default function MobileComponent(props) {
     let completedOrderTableList = orders && orders.map((order) => {
         let tableList = order.completed_orders.map((completedOrder) => {
             if (completedOrder.order_items.length > 0) {
-                if (tableCompletedOrderSelectedNumber === undefined) {
-                    setTableCompletedOrderSelectedNumber(completedOrder.id)
-                    setCompletedOrderSelected(completedOrder)
-                    setHaveOrderCompleted(true)
-                }
                 return (
                     <>
                         {/* Table list */}
