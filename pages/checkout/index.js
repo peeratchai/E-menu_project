@@ -107,9 +107,18 @@ export default function CheckoutPage() {
                 })
             })
 
+            // Test localhost
+            // let data = {
+            //     "restaurant": restaurantId,
+            //     "restaurant_table": "6c409206-cd90-4d28-8aec-08a2c8eea038",
+            //     "user": userId,
+            //     "order_items": order_items
+            // }
+
+            // Test dev
             let data = {
                 "restaurant": restaurantId,
-                "restaurant_table": "6c409206-cd90-4d28-8aec-08a2c8eea038",
+                "restaurant_table": "2531c5d9-ad32-4087-8bbe-79d70e62d517",
                 "user": userId,
                 "order_items": order_items
             }
@@ -174,7 +183,7 @@ export default function CheckoutPage() {
     let MenuListComponentWeb = basketData.order && basketData.order.map((menu, index) => {
         return (
             <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px", height: "120px" }} key={menu.id}>
-                <Col xs={4} style={{ paddingRight: "0px",height: "100%" }}>
+                <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
                     <Image src={menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
