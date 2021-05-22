@@ -137,6 +137,11 @@ export default function RestaurantDetailWeb(props) {
         }
     }
 
+    const onClickCategory = (index) => {
+        toggleClassSelectedCategory(index)
+        scrollToCategorySection(index)
+    }
+
     const activeCategory = () => {
 
         let widthCategoryNav = refCategoryNav.current.offsetWidth
@@ -149,9 +154,9 @@ export default function RestaurantDetailWeb(props) {
 
         let tempCategoryNav = categoryList.map((category, index) =>
         (
-            <div ref={(elementRef) => refEachCategory.current[index] = elementRef} className={setClassNameCategoryNav(category, index) + " " + utilStyles.font_size_md + " " + styles.category_nav} key={category.categoryName + index} onClick={() => (toggleClassSelectedCategory(index), scrollToCategorySection(index))}>
-                {category.categoryName}
-            </div>
+            <div ref={(elementRef) => refEachCategory.current[index] = elementRef} className={setClassNameCategoryNav(category, index) + " " + utilStyles.font_size_md + " " + styles.category_nav} key={category.categoryName + index} onClick={() => onClickCategory(index)}>
+                { category.categoryName}
+            </div >
         ))
 
         setWidthCategoryList(widthCategoryList)

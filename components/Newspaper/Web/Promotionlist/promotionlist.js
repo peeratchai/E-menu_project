@@ -22,7 +22,6 @@ export default function WebPromotionlist(props) {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]
         let column1 = column1Array && column1Array.map((newspaperDetail) => {
-            console.log('newspaperDetail', newspaperDetail)
             return (
                 <Link
                     href={{

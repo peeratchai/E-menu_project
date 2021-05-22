@@ -27,7 +27,7 @@ export default function Layout({ children, containerType, searchFunc, page, menu
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
     const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
-    const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(false)
+    const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(0)
     ////
 
     const setStyleOfContainer = (containerType) => {
@@ -69,17 +69,15 @@ export default function Layout({ children, containerType, searchFunc, page, menu
     useEffect(() => {
         let loginStatus = false
         if (typeof window !== 'undefined') {
-            // console.log('menuInBasket', menuInBasket)
             const { addResponseMessage, renderCustomComponent } = require('react-chat-widget');
             loginStatus = window.localStorage.getItem('islogin');
-            // let basket = window.localStorage.getItem('basket');
-            // if (basket !== null) {
-            //     let menuList = Object.keys(basket)
-            //     console.log('menuList', menuList)
-            //     console.log('menuList.length', menuList.length)
-            //     setTotal_menu_in_basket(menuList.length)
-            //     setHave_menu_in_basket(true)
-            // }
+            let basket = window.localStorage.getItem('basket');
+            if (basket !== null) {
+                basket = JSON.parse(basket)
+                let order = basket.order
+                setTotal_menu_in_basket(order.length)
+                setHave_menu_in_basket(true)
+            }
             renderCustomComponent(CustomTimeStampFragmentAdmin)
             renderCustomComponent(CustomTimeStampFragment)
         }
@@ -112,22 +110,16 @@ export default function Layout({ children, containerType, searchFunc, page, menu
     const generateButtonNavbar = () => {
         let buttonNavbar
         if (page === 'restaurantDetails') {
-            if (have_menu_in_basket) {
-                buttonNavbar = (
-                    <ActiveLink activeClassName="active" href="/newspaper">
+            buttonNavbar = (
+                <ActiveLink activeClassName="active" href="/newspaper">
+                    <>
                         <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
-                        <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
-                    </ActiveLink>
-                )
-            } else {
-                buttonNavbar = (
-                    <ActiveLink activeClassName="active" href="/newspaper">
-                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
-                        <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
-                    </ActiveLink>
-                )
-            }
-
+                        <Badge count={total_menu_in_basket} size="small">
+                            <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
+                        </Badge>
+                    </>
+                </ActiveLink>
+            )
         } else {
 
             if (searchFunc === undefined) {
