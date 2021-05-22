@@ -3,7 +3,7 @@
 export default function changeFormatFilter(filterForm) {
     let ObjectfilterForm = Object.keys(filterForm)
     let filterResponse = {}
-    ObjectfilterForm.map((filter) => {
+    ObjectfilterForm.forEach((filter) => {
         switch (filter) {
             case 'price_to_price_from':
                 let split = filterForm.price_to_price_from.split(" ")

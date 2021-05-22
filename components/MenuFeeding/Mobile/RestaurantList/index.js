@@ -2,7 +2,6 @@ import Layout from '../../../layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card, Breadcrumb } from 'react-bootstrap'
-import styles from './index.module.css'
 import Link from 'next/link'
 import { Select } from 'antd';
 import 'antd/dist/antd.css';

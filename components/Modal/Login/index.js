@@ -40,11 +40,9 @@ export default function LoginModal(props) {
         let passwordEncode = window.localStorage.getItem('password');
         let email = Buffer.from(emailEncode, 'base64').toString()
         let password = Buffer.from(passwordEncode, 'base64').toString()
-        console.log(email)
         setEmail(email)
         setPassword(password)
         setForm({ 'email': email, 'password': password })
-        console.log(form)
     }
 
     const setField = (field, value) => {
@@ -182,6 +180,11 @@ export default function LoginModal(props) {
                 console.log(error)
             }
         }
+    }
+
+    const onChangeToLoginTab = () => {
+        changeTab('login')
+        setRememberMeValue()
     }
 
     return (
@@ -355,7 +358,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (changeTab('login'), setRememberMeValue())}>Login</span>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab}>Login</span>
                                     </div>
                                 </Col>
                             </Row>

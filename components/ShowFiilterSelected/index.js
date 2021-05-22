@@ -26,7 +26,6 @@ export default function ShowFiilterSelected(props) {
                 let price_from = split[0]
                 let price_to = split[1]
                 return (price_from + " - " + price_to + " baht")
-                break;
             case 'price_to':
                 if (filterData.price_from === null) {
                     return ("0 - " + value + " baht")
@@ -38,13 +37,13 @@ export default function ShowFiilterSelected(props) {
                 if (value === true) {
                     return 'Open now'
                 } else {
-                    break;
+                    return null;
                 }
             case 'have_parking':
                 if (value === true) {
                     return 'Have parking'
                 } else {
-                    break;
+                    return null;
                 }
             default: return value
         }

@@ -44,9 +44,9 @@ export default function WebComponent(props) {
         let tablesInZone = zone.restaurant_tables
         let tableImage
         if (Array.isArray(tablesInZone)) {
-            tablesInZone.map((table, index) => {
-                tableImage = mappingTableImage.filter((mappingData) => mappingData.size === table.size && mappingData.type === table.type)
-                table.image = tableImage[0].image
+            tablesInZone.forEach((table, index) => {
+                tableImage = mappingTableImage.find((mappingData) => mappingData.size === table.size && mappingData.type === table.type)
+                table.image = tableImage.image
                 table.tableNumber = index + 1
                 table.position_x = parseFloat(table.position_x)
                 table.position_y = parseFloat(table.position_y)

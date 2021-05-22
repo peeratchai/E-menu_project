@@ -118,7 +118,7 @@ export default function Profile({ restaurant_id }) {
                 }))
                 console.log('imageUrlArray', imageUrlArray)
 
-                imageUrlArray.map((imageUrl) => {
+                imageUrlArray.forEach((imageUrl) => {
                     restaurant_pictures.push({
                         "restaurant": restaurant_id,
                         "title": null,

@@ -107,13 +107,13 @@ export default function OrderMenuModal(props) {
                                                 <span>
                                                     จำนวน : &nbsp;
                                                 </span>
-                                                <Button className={utilStyles.btn} onClick={() => { count > 1 ? (setCount((count - 1)), setTotal((total - menuDetail.price))) : null }} >
+                                                <Button className={utilStyles.btn} onClick={() => (count > 1 ? (setCount((count - 1)), setTotal((total - menuDetail.price))) : null)} >
                                                     <RemoveIcon />
                                                 </Button>
                                                 <span style={{ margin: "0 15px" }}>
                                                     {count}
                                                 </span>
-                                                <Button className={utilStyles.btn} onClick={() => { setCount(count + 1), setTotal((total + menuDetail.price)) }} >
+                                                <Button className={utilStyles.btn} onClick={() => (setCount(count + 1), setTotal((total + menuDetail.price)))} >
                                                     <AddIcon />
                                                 </Button>
                                             </Col>
@@ -169,13 +169,13 @@ export default function OrderMenuModal(props) {
                                                 <span>
                                                     จำนวน : &nbsp;
                                                 </span>
-                                                <Button className={utilStyles.btnMobile} onClick={() => { count > 1 ? (setCount((count - 1)), setTotal((total - menuDetail.price))) : null }} >
+                                                <Button className={utilStyles.btnMobile} onClick={() => (count > 1 ? (setCount((count - 1)), setTotal((total - menuDetail.price))) : null)} >
                                                     <RemoveIcon />
                                                 </Button>
                                                 <span style={{ margin: "0 15px" }}>
                                                     {count}
                                                 </span>
-                                                <Button className={utilStyles.btnMobile} onClick={() => { setCount(count + 1), setTotal((total + menuDetail.price)) }} >
+                                                <Button className={utilStyles.btnMobile} onClick={() => (setCount(count + 1), setTotal((total + menuDetail.price)))} >
                                                     <AddIcon />
                                                 </Button>
                                             </Col>

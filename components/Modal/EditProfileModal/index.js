@@ -57,7 +57,7 @@ export default function EditProfileModal(props) {
         }
     ]
 
-    const handleChange = (info) => {
+    const handleChangeProfileImage = (info) => {
         if (info.file.status === 'uploading') {
             return;
         }
@@ -211,7 +211,7 @@ export default function EditProfileModal(props) {
                                 <Upload
                                     showUploadList={false}
                                     beforeUpload={beforeUpload}
-                                    onChange={(e) => handleChange(e, 'RestaurantLogo')}
+                                    onChange={(e) => handleChangeProfileImage(e)}
                                     style={{ width: "100%" }}
                                 // onPreview={(e) => onPreview(e)}
                                 >

@@ -143,7 +143,7 @@ export default function Admin() {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => { setFoodDataModalShow(true), setFoodItemSelectedForEdit(record) }}>
+                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => (setFoodDataModalShow(true), setFoodItemSelectedForEdit(record))}>
                         Edit
                     </Tag>
                     <DeleteConfirmModal onOK={deleteFoodItem} />
