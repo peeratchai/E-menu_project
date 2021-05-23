@@ -14,7 +14,7 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import Promote from '../../components/Partner/Promote'
 import Menu from '../../components/Partner/Menu'
 import Profile from '../../components/Partner/Profile'
-import RestaurantManagement from '../../components/Partner/ReataurantMangement'
+import RestaurantManagement from '../../components/Partner/RestaurantManagement'
 import ZoneManagement from '../../components/Partner/ZoneManagement'
 const { Option } = Select;
 
@@ -63,7 +63,7 @@ export default function Partner() {
                 {
                     !isMobileResolution ? (
                         //PC Version
-                        <Tab.Container id="left-tabs-management-admin" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
+                        <Tab.Container id="left-tabs-management-partner" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
                             <Row>
                                 <Col sm={2}>
                                     <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>

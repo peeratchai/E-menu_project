@@ -41,6 +41,26 @@ const restaurantService = {
         return response
     },
 
+    getAllRestaurant: async function () {
+        let accessToken = await checkLogin()
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }
+        let response = await axios.get('/api/restaurant/all', config)
+            .then(function (response) {
+                console.log(response)
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
+    },
+
     getRestaurantById: async function (restaurantId) {
         let accessToken = await checkLogin()
         let config = {

@@ -12,7 +12,8 @@ import EmptyComponent from '../../Empty'
 
 export default function ViewOrderModal(props) {
 
-    const { table_selected, restaurant_id } = props
+    const { table_selected, restaurant_id, zone_details } = props
+    const [zoneDetails, setZoneDetails] = React.useState({ name: '' })
     const [loading, setLoading] = React.useState(false);
     const [orders, setOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
@@ -28,6 +29,7 @@ export default function ViewOrderModal(props) {
     useEffect(() => {
         if (restaurant_id && table_selected) {
             getOrder()
+            setZoneDetails(zone_details)
         }
     }, [table_selected])
 
@@ -565,7 +567,7 @@ export default function ViewOrderModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    All Orders
+                    All Orders in {zoneDetails.name}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

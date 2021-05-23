@@ -3,7 +3,7 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Tab, Modal, Container, Nav, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm, TimePicker } from 'antd';
+import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm, TimePicker, Spin } from 'antd';
 import { PlusOutlined, UploadOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
@@ -18,7 +18,9 @@ import DirectMessageAdmin from '../../components/DirectMessageAdmin'
 import { SearchOutlined } from '@ant-design/icons';
 import termAgreement from '../../utils/termAgreement.json'
 import AccountManagement from '../../components/Admin/AccountManagement'
-
+import RestaurantManagement from '../../components/Partner/RestaurantMangement'
+import SelectRestaurant from '../../components/SelectRestaurant'
+import restaurantService from '../../services/restaurant'
 const { Option } = Select;
 
 function getBase64(img, callback) {
@@ -51,6 +53,10 @@ function beforeUpload(file) {
 
 export default function Admin() {
     const isMobileResolution = useMediaQuery(768)
+    const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
+    const [restaurantId, setRestaurantId] = React.useState();
+    const [restaurantList, setRestaurantList] = React.useState([]);
+    const [loadingRestaurantList, setLoadingRestaurantList] = React.useState(false);
 
     const [promoteImageUrl, setPromoteImageUrl] = React.useState("data:image/png;base64,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");
     const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState("data:image/png;base64,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");
@@ -88,6 +94,18 @@ export default function Admin() {
     const [editMasterDataModalShow, setEditMasterDataModalShow] = React.useState(false);
     var searchInput = React.createRef();
 
+    useEffect(() => {
+        getRestaurantList()
+    }, [])
+
+    const getRestaurantList = async () => {
+        setLoadingRestaurantList(true)
+        let restaurantList = await restaurantService.getAllRestaurant();
+        if (restaurantList) {
+            setLoadingRestaurantList(false)
+            setRestaurantList(restaurantList)
+        }
+    }
 
     const deleteFoodItem = () => {
         console.log('Deleted food item.')
@@ -404,43 +422,7 @@ export default function Admin() {
     ]
 
 
-    useEffect(() => {
-        if (!isMobileResolution) {
-            let containerWidth = refTableManagement.current.offsetWidth
-            setContainerWidth(containerWidth)
-            let containerHeight = refTableManagement.current.offsetHeight
-            console.log(containerWidth)
-            console.log(refTableManagement.current.offsetHeight)
-            ratioTableImages(containerWidth, containerHeight);
-        }
-    }, [])
 
-    const ratioTableImages = (width, height) => {
-        let realWidth = width / 10
-        // let realHeight = height / 10
-        setTable(
-            [
-                {
-                    tableNumber: 1,
-                    tableImage: '/images/table-triangle-M.png',
-                    x: 0,
-                    y: 0
-                },
-                {
-                    tableNumber: 2,
-                    tableImage: '/images/table-square-M.png',
-                    x: realWidth + 15,
-                    y: -realWidth
-                },
-                {
-                    tableNumber: 3,
-                    tableImage: '/images/table-square-L.png',
-                    x: (realWidth * 2) + 15,
-                    y: -(realWidth * 2)
-                }
-            ]
-        )
-    }
 
     const [columns, setColumns] = React.useState([
         {
@@ -645,8 +627,8 @@ export default function Admin() {
         console.log(value)
     }
 
-    function onChangeRestaurantName(value) {
-        console.log(`selected ${value}`);
+    function onChangeRestaurant(restaurantId) {
+        setRestaurantId(restaurantId)
     }
 
     function onSearchRestaurantName(val) {
@@ -669,6 +651,10 @@ export default function Admin() {
 
         // }
         console.log('checked = ', checkedValues);
+    }
+
+    const onChangeTab = (key) => {
+        setCurrentTab(key)
     }
 
     return (
@@ -700,12 +686,12 @@ export default function Admin() {
                                 </Select>
                             </div> */}
 
-                            <Tab.Container id="left-tabs-example" defaultActiveKey="tableManagement">
+                            <Tab.Container id="left-tabs-management-admin" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
                                 <Row>
                                     <Col sm={2}>
                                         <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="tableManagement">Table Management</Nav.Link>
+                                                <Nav.Link eventKey="restaurantManagement">Table Management</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="promote">Promote</Nav.Link>
@@ -738,50 +724,17 @@ export default function Admin() {
                                     </Col>
                                     <Col sm={10}>
                                         <Tab.Content>
-                                            <Tab.Pane eventKey="tableManagement">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                    Restaurant Name : &nbsp;
-                                                        <Select
-                                                        showSearch
-                                                        style={{ width: 400 }}
-                                                        placeholder="Select a restaurant name"
-                                                        optionFilterProp="children"
-                                                        onChange={() => onChangeRestaurantName}
-                                                        onSearch={() => onSearchRestaurantName}
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
-                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
-                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
-                                                        <Option value="The Old English Pub">The Old English Pub</Option>
-                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
-                                                    </Select>
-                                                </div>
-                                                <div className={styles.tab}>
-                                                    <Row>
-                                                        <Col xs={10}>
-                                                            <Form>
-                                                                <Form.Group controlId="areaName">
-                                                                    <Form.Control type="text" placeholder="ชื่อบริเวณ" />
-                                                                </Form.Group>
-                                                            </Form>
-                                                        </Col>
-                                                        <Col xs={2} style={{ textAlign: "right" }}>
-                                                            <Button type="primary" onClick={() => setAddTableModalShow(true)}>
-                                                                Add
-                                                            </Button>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col style={{ height: "30rem" }} ref={refTableManagement}>
-                                                            <div className={styles.container2}>
-                                                                {tableManagement}
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
+                                            <Tab.Pane eventKey="restaurantManagement">
+                                                <Spin spinning={loadingRestaurantList} tip="Loading...">
+                                                    <SelectRestaurant
+                                                        onChangeRestaurant={onChangeRestaurant}
+                                                        restauran_list={restaurantList}
+                                                    />
+                                                    <RestaurantManagement
+                                                        restaurant_id={restaurantId}
+                                                        current_tab={currentTab}
+                                                    />
+                                                </Spin>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="promote">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>

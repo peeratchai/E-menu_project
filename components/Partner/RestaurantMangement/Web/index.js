@@ -22,6 +22,7 @@ export default function WebComponent(props) {
     const [zoneSelected, setZoneSelected] = React.useState();
 
     useEffect(() => {
+        console.log('table')
         let containerWidth = refTableManagement.current.offsetWidth
         // 50 is padding left and right
         setContainerWidth(containerWidth - 50)
@@ -32,12 +33,13 @@ export default function WebComponent(props) {
             if (zone.length > 0) {
                 setZoneSelected(zone[0])
                 ratioTableImages(zone[0]);
+                message.warning('Loading zone successful.')
             } else {
+                setTable([])
                 message.warning('Zone not found.')
             }
-
         }
-    }, [props])
+    }, [zone])
 
     const ratioTableImages = (zone) => {
 
@@ -88,20 +90,6 @@ export default function WebComponent(props) {
         } else {
             let realPosition_y = ((containerHeight * position_y) / 100) - ((containerHeight / 5) / 2)
             return realPosition_y
-        }
-    }
-    const calulatePercentagePositionX = (position_x) => {
-        if (position_x <= 0) {
-            return 0
-        } else {
-            return ((position_x + ((containerWidth / 10) / 2)) * 100) / containerWidth
-        }
-    }
-    const calulatePercentagePositionY = (position_y) => {
-        if (position_y <= 0) {
-            return 0
-        } else {
-            return ((position_y + ((containerHeight / 10) / 2)) * 100) / containerHeight
         }
     }
 
@@ -255,6 +243,7 @@ export default function WebComponent(props) {
                 onHide={() => setViewOrderModalShow(false)}
                 table_selected={tableSelected}
                 restaurant_id={restaurant_id}
+                zone_details={zoneSelected}
             />
         </div >
     )
