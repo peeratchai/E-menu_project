@@ -1,10 +1,7 @@
-import utilStyles from '../../../styles/utils.module.css'
-import { Row, Col, Form, Button } from 'react-bootstrap'
+
 import 'antd/dist/antd.css';
-import { Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import partnerSerivce from '../../../services/partner'
-import checkLogin from '../../../services/checkLogin'
 import React, { useEffect } from 'react'
 import WebComponent from './Web'
 import MobileComponent from './Mobile'

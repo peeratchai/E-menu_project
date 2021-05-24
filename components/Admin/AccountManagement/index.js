@@ -3,13 +3,13 @@ import 'antd/dist/antd.css';
 import { Table, Space, Switch, Tag, Input, Button, message, Spin } from 'antd';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
-import EditProfileModal from '../../Modal/EditProfileModal'
+import AdminEditProfileModal from '../../Modal/AdminEditProfileModal'
 import Highlighter from 'react-highlight-words';
 import adminService from '../../../services/admin'
 import profileService from '../../../services/profile'
 
-export default function AccountManagement() {
-
+export default function AccountManagement(props) {
+    const { restaurant_list } = props
     const [edifProfileModalShow, setEdifProfileModalShow] = React.useState();
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
@@ -17,6 +17,7 @@ export default function AccountManagement() {
     const [userProfilesData, setUserProfilesData] = React.useState();
     const [profileSelected, setProfileSelected] = React.useState();
     const [loading, setLoading] = React.useState(false);
+
     var searchInput = React.createRef();
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -39,10 +40,22 @@ export default function AccountManagement() {
         let allProfile = await adminService.getProfileUser()
         setUserProfiles(allProfile)
         let userProfilesData = []
+        let restaurant_employee = null
+        let restaurant_name = null
+
         allProfile.map((profile, index) => {
+            if (profile.restaurant_employee !== null) {
+                restaurant_employee = profile.restaurant_employee.restaurant.id
+                restaurant_name = profile.restaurant_employee.restaurant.name
+            } else {
+                restaurant_employee = null
+                restaurant_name = null
+            }
+
             userProfilesData.push({
                 No: index + 1,
                 key: profile.id + index,
+                email: profile.email,
                 first_name: profile.first_name,
                 last_name: profile.last_name,
                 gender: profile.gender,
@@ -51,7 +64,9 @@ export default function AccountManagement() {
                 username: profile.username,
                 avatar_url: profile.avatar_url,
                 phone_number: profile.phone_number,
-                is_active: profile.is_active
+                is_active: profile.is_active,
+                restaurant_employee: restaurant_employee,
+                restaurant_name: restaurant_name
             })
         })
         setUserProfilesData(userProfilesData)
@@ -123,11 +138,24 @@ export default function AccountManagement() {
             key: 'No',
         },
         {
+            title: 'Username',
+            dataIndex: 'username',
+            key: 'username',
+            ...getColumnSearchProps('username'),
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            ...getColumnSearchProps('email'),
+        },
+        {
             title: 'First name',
             dataIndex: 'first_name',
             key: 'first_name',
             ...getColumnSearchProps('first_name'),
-        }, {
+        },
+        {
             title: 'Last name',
             dataIndex: 'last_name',
             key: 'last_name',
@@ -155,6 +183,13 @@ export default function AccountManagement() {
             ],
             onFilter: (value, record) => record.Type.includes(value),
             ellipsis: true,
+            render: (roles) => {
+                return (
+                    <div>
+                        {roles}
+                    </div>
+                )
+            }
         },
         {
             title: 'Action',
@@ -181,6 +216,7 @@ export default function AccountManagement() {
             phone_number: profile.phone_number,
             avatar: profile.avatar_url,
             roles: profile.roles,
+            restaurant_employee: profile.restaurant_employee,
             is_active: checked
         }
 
@@ -205,10 +241,11 @@ export default function AccountManagement() {
             <Spin spinning={loading} tip="Loading...">
                 <Table columns={columnsAccount} dataSource={userProfilesData} scroll={{ x: 'max-content' }} />
             </Spin>
-            <EditProfileModal
+            <AdminEditProfileModal
                 show={edifProfileModalShow}
                 onHide={() => setEdifProfileModalShow(false)}
                 profile={profileSelected}
+                restaurant_list={restaurant_list}
                 get_all_user_profile={getAllUserProfile}
             />
         </>

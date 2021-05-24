@@ -21,6 +21,9 @@ import AccountManagement from '../../components/Admin/AccountManagement'
 import RestaurantManagement from '../../components/Partner/RestaurantMangement'
 import SelectRestaurant from '../../components/SelectRestaurant'
 import restaurantService from '../../services/restaurant'
+import Promote from '../../components/Partner/Promote'
+import Menu from '../../components/Partner/Menu'
+import Profile from '../../components/Partner/Profile'
 const { Option } = Select;
 
 function getBase64(img, callback) {
@@ -737,299 +740,33 @@ export default function Admin() {
                                                 </Spin>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="promote">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                    Restaurant Name : &nbsp;
-                                                        <Select
-                                                        showSearch
-                                                        style={{ width: 400 }}
-                                                        placeholder="Select a restaurant name"
-                                                        optionFilterProp="children"
-                                                        onChange={() => onChangeRestaurantName}
-                                                        onSearch={() => onSearchRestaurantName}
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
-                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
-                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
-                                                        <Option value="The Old English Pub">The Old English Pub</Option>
-                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
-                                                    </Select>
-                                                </div>
-                                                <div className={styles.tab}>
-                                                    <Row>
-                                                        <Col sm={6}>
-                                                            <Row>
-                                                                <Col>
-                                                                    <img src={promoteImageUrl} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
-                                                                </Col>
-                                                            </Row>
-                                                            <br />
-                                                            <Row>
-                                                                <Col>
-                                                                    <Upload
-                                                                        showUploadList={false}
-                                                                        beforeUpload={beforeUpload}
-                                                                        onChange={(e) => handleChange(e, 'PromoteImage')}
-                                                                        style={{ width: "100%" }}
-                                                                    // onPreview={(e) => onPreview(e)}
-                                                                    >
-                                                                        <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
-                                                                    </Upload>
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                        <Col sm={6}>
-                                                            <Form>
-                                                                <Form.Group controlId="exampleForm.ControlTextarea1">
-                                                                    <Form.Label className={utilStyles.cardTitle}>Promoted contents</Form.Label>
-                                                                    <Form.Control as="textarea" rows={4} />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="banner.text">
-                                                                    <Form.Label >Banner Text</Form.Label>
-                                                                    <Form.Control as="textarea" rows={2} />
-                                                                </Form.Group>
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    <Button type="primary">
-                                                                        Post
-                                                                    </Button>
-                                                                </div>
-                                                            </Form>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
+                                                <Spin spinning={loadingRestaurantList} tip="Loading...">
+                                                    <SelectRestaurant
+                                                        onChangeRestaurant={onChangeRestaurant}
+                                                        restauran_list={restaurantList}
+                                                    />
+                                                    <Promote
+                                                        restaurant_id={restaurantId}
+                                                    />
+                                                </Spin>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="menu">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                    Restaurant Name : &nbsp;
-                                                    <Select
-                                                        showSearch
-                                                        style={{ width: 400 }}
-                                                        placeholder="Select a restaurant name"
-                                                        optionFilterProp="children"
-                                                        onChange={() => onChangeRestaurantName}
-                                                        onSearch={() => onSearchRestaurantName}
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
-                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
-                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
-                                                        <Option value="The Old English Pub">The Old English Pub</Option>
-                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
-                                                    </Select>
-                                                </div>
-                                                <div className={styles.tab}>
-                                                    <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                                                        <Button className={utilStyles.fontContent} onClick={() => setCategoryModalShow(true)} type="primary">Add Category</Button>
-                                                    </div>
-                                                    <Table columns={columnsTable} dataSource={category} scroll={{ x: 'max-content' }} expandable={{ expandedRowRender }} />
-                                                </div>
+                                                <SelectRestaurant
+                                                    onChangeRestaurant={onChangeRestaurant}
+                                                    restauran_list={restaurantList}
+                                                />
+                                                <Menu
+                                                    restaurant_id={restaurantId}
+                                                />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="profile">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                    Restaurant Name : &nbsp;
-                                                    <Select
-                                                        showSearch
-                                                        style={{ width: 400 }}
-                                                        placeholder="Select a restaurant name"
-                                                        optionFilterProp="children"
-                                                        onChange={() => onChangeRestaurantName}
-                                                        onSearch={() => onSearchRestaurantName}
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        <Option value="The Royal Oak Restaurant">The Royal Oak Restaurant</Option>
-                                                        <Option value="ฮันทส์เเมน ผับ">ฮันทส์เเมน ผับ</Option>
-                                                        <Option value="ฟิชเจอรัลด์">ฟิชเจอรัลด์</Option>
-                                                        <Option value="The Old English Pub">The Old English Pub</Option>
-                                                        <Option value="Chequers British Pub">Chequers British Pub</Option>
-                                                    </Select>
-                                                </div>
-                                                <div className={styles.tab}>
-                                                    <Row>
-                                                        {/* Left section */}
-                                                        <Col sm={6}>
-                                                            {/* Upload restaurants logo */}
-                                                            <div style={{ borderBottom: "1px solid #DEDEDE", marginBottom: "10px", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col>
-                                                                        <div>
-                                                                            <b>Restaurant Logo</b>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ textAlign: "center" }}>
-                                                                    <Col>
-                                                                        <Row>
-                                                                            <Col>
-                                                                                <img src={restaurantLogoUrl} alt="avatar" style={{ width: '100%', height: '10rem', border: "1px solid #555", borderRadius: "5px", objectFit: "contain" }} />
-                                                                            </Col>
-                                                                        </Row>
-                                                                        <br />
-                                                                        <Row>
-                                                                            <Col>
-                                                                                <Upload
-                                                                                    showUploadList={false}
-                                                                                    beforeUpload={beforeUpload}
-                                                                                    onChange={(e) => handleChange(e, 'RestaurantLogo')}
-                                                                                    style={{ width: "100%" }}
-                                                                                // onPreview={(e) => onPreview(e)}
-                                                                                >
-                                                                                    <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
-                                                                                </Upload>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </Col>
-                                                                </Row>
-                                                            </div>
-                                                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col>
-                                                                        <div>
-                                                                            <b>Restaurant Banner Picture</b>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row>
-                                                                    <Col>
-                                                                        <Upload
-                                                                            listType="picture-card"
-                                                                            fileList={restaurantfileList}
-                                                                            onPreview={(e) => handlePreview(e)}
-                                                                            onChange={(e) => handleChangeUploadRestaurant(e)}
-                                                                            className="upload-restaurant-list"
-                                                                        >
-                                                                            {restaurantfileList.length > 3 ? null : uploadButton}
-                                                                        </Upload>
-                                                                    </Col>
-                                                                </Row>
-                                                            </div>
-                                                            <div style={{ marginTop: "20px", paddingLeft: "18px", paddingBottom: "10px" }}>
-                                                                <Row style={{ marginBottom: "15px" }}>
-                                                                    <Col>
-                                                                        <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Monday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Tuesday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Wednesday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Thursday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Friday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Saturday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row style={{ marginBottom: "10px" }}>
-                                                                    <Col xs={3}>
-                                                                        Sunday
-                                                                </Col>
-                                                                    <Col xs={9}>
-                                                                        <TimePicker onChange={(e) => console.log(e)} /> - <TimePicker onChange={(e) => console.log(e)} />
-                                                                    </Col>
-                                                                </Row>
-                                                            </div>
-                                                            <AntdModal
-                                                                previewVisible={previewVisible}
-                                                                previewTitle={previewTitle}
-                                                                footer={null}
-                                                                onCancel={handleCancel}
-                                                                previewImage={previewImage}
-                                                            />
-                                                        </Col>
-                                                        {/* Right section */}
-                                                        <Col sm={6}>
-                                                            <Row style={{ marginBottom: "10px" }}>
-                                                                <Col>
-                                                                    <div>
-                                                                        <b>Restaurant Details</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Form>
-                                                                <Form.Group controlId="restaurantName">
-                                                                    <Form.Label>Restaurant Name</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Enter Restaurant Name" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="location">
-                                                                    <Form.Label>Location</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Location" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="phoneNumber">
-                                                                    <Form.Label>Phone Number</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Phone Number" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="webSiteUrl">
-                                                                    <Form.Label>Website URL</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Phone Number" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="facebookURL">
-                                                                    <Form.Label>Facebook URL</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Phone Number" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="twitter">
-                                                                    <Form.Label>Twitter URL</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Phone Number" />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="priceRange">
-                                                                    <Form.Label>Price Range (Generated by system)</Form.Label>
-                                                                    <br />
-                                                                    {/* Price range is generated by system */}
-                                                                    <Slider range defaultValue={[priceMinSearch, priceMaxSearch]} max={4000} disabled={true} />
-                                                                    <div className={utilStyles.fontContent}>From {priceMinSearch} to {priceMaxSearch} baht</div>
-                                                                </Form.Group>
-
-                                                                <div style={{ textAlign: "right" }}>
-                                                                    <Button type="primary" >
-                                                                        Save
-                                                                    </Button>
-                                                                </div>
-                                                            </Form>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
+                                                <SelectRestaurant
+                                                    onChangeRestaurant={onChangeRestaurant}
+                                                    restauran_list={restaurantList}
+                                                />
+                                                <Profile
+                                                    restaurant_id={restaurantId}
+                                                />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="email">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
@@ -1129,7 +866,9 @@ export default function Admin() {
                                                     Account Management
                                                 </div>
                                                 <Table columns={columnsAccount} dataSource={dataAccount} scroll={{ x: 'max-content' }} /> */}
-                                                <AccountManagement />
+                                                <AccountManagement
+                                                    restaurant_list={restaurantList}
+                                                />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="foodData">
                                                 <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>

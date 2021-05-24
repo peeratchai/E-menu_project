@@ -14,15 +14,16 @@ import LocationModal from '../../../Modal/Location'
 export default function WebProfileComponent(props) {
     let { restaurant_form, spin_loading } = props
     let { check_before_upload, update_restaurant_details } = props
-    const defaultImage = "data:image/png;base64,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"
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
     const [previewImage, setPreviewImage] = React.useState('');
-    const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState(defaultImage);
+    const [restaurantLogoUrl, setRestaurantLogoUrl] = React.useState();
     const [restaurantForm, setRestaurantForm] = React.useState(restaurant_form);
     const [formErrors, setFormErrors] = React.useState({});
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
     const [showLocationModal, setShowLocationModal] = React.useState(false)
+    const [businessHour, setBusinessHour] = React.useState(false)
+    const dayArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     const handleCancel = () => {
         setPreviewVisible(false)
@@ -32,9 +33,16 @@ export default function WebProfileComponent(props) {
         if (restaurant_form !== null) {
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
+            // setInitialBusinessHourValue(restaurant_form.business_hour)
             setRestaurantLogoUrl(restaurant_form.image_url)
         }
     }, [props])
+
+    // const setInitialBusinessHourValue = (business_hour) => {
+    //     business_hour.forEach((businessHour) => {
+
+    //     })
+    // }
 
     const setDefaultRestaurantBannerImage = (restaurantBannerFileList) => {
         let cuurnetRestaurantBannerFileList = []
@@ -64,26 +72,33 @@ export default function WebProfileComponent(props) {
         }
     };
 
-    const onChageBusinessHour = (newTime, indexOfBusinessHour, timeType) => {
+    const onChageBusinessHour = (newTime, day, timeType) => {
         let newBusinessHour = [...restaurantForm.business_hour]
-        newBusinessHour[indexOfBusinessHour][timeType] = newTime
+        newBusinessHour.map((businessHour) => {
+            if (businessHour.day === day) {
+                businessHour[timeType] = newTime
+            }
+        })
         setRestaurantDetail('business_hour', newBusinessHour)
         console.log('newBusinessHour', newBusinessHour)
     }
 
     const format = 'HH:mm'
-    let BusinessHourComponent = restaurantForm.business_hour.map((businessHour, index) => {
+    let BusinessHourDay
+    let BusinessHourComponent = dayArray.map((day, index) => {
+        BusinessHourDay = restaurantForm.business_hour.find((businessHour) => businessHour.day === day)
         return (
-            <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
+            <Row style={{ marginBottom: "10px" }} key={BusinessHourDay.day + index}>
                 <Col xs={3}>
-                    {businessHour.day}
+                    {BusinessHourDay.day}
                 </Col>
                 <Col xs={9}>
-                    <TimePicker value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
+                    <TimePicker value={moment(BusinessHourDay.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker value={moment(BusinessHourDay.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
                 </Col>
             </Row>
         )
     })
+
 
     const [optionsOfPayment, setOptionsOfPayment] = React.useState([
         {

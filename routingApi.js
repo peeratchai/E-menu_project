@@ -164,6 +164,10 @@ module.exports = {
             destination: API_URL + '/profile',
         },
         {
+            source: '/api/admin_edit_user_profile',
+            destination: API_URL + '/profile/user-role',
+        },
+        {
             source: '/api/admin/profile/users',
             destination: API_URL + '/profile/users',
         },
