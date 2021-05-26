@@ -19,6 +19,9 @@ const newspaperService = {
             });
 
         return response
+
+        // return await sendRequest.get('/api/promotion')
+
     },
 
     getNewspaperListBySearch: async function (accessToken, filterForm) {

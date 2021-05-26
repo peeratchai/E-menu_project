@@ -136,8 +136,7 @@ export default function LoginModal(props) {
         } else {
             try {
                 const { email, password } = form
-                let response = await authentication.signinWithEmail(email, password)
-                let accessToken = response.data.accessToken
+                let accessToken = await authentication.signinWithEmail(email, password)
                 try {
                     let profile = await profileService.getProfile(accessToken)
                     console.log(profile)

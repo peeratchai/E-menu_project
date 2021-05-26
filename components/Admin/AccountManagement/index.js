@@ -55,6 +55,7 @@ export default function AccountManagement(props) {
             userProfilesData.push({
                 No: index + 1,
                 key: profile.id + index,
+                userId: profile.id,
                 email: profile.email,
                 first_name: profile.first_name,
                 last_name: profile.last_name,
@@ -184,9 +185,10 @@ export default function AccountManagement(props) {
             onFilter: (value, record) => record.Type.includes(value),
             ellipsis: true,
             render: (roles) => {
+
                 return (
                     <div>
-                        {roles}
+                        {roles.join(' , ')}
                     </div>
                 )
             }

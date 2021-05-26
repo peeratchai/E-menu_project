@@ -22,7 +22,6 @@ export default function WebProfileComponent(props) {
     const [formErrors, setFormErrors] = React.useState({});
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
     const [showLocationModal, setShowLocationModal] = React.useState(false)
-    const [businessHour, setBusinessHour] = React.useState(false)
     const dayArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     const handleCancel = () => {
@@ -130,7 +129,7 @@ export default function WebProfileComponent(props) {
             reader.onerror = error => reject(error);
         });
     }
-    const filterProps = {
+    const paymentProps = {
         showArrow: true,
         mode: 'multiple',
         style: {
@@ -139,7 +138,6 @@ export default function WebProfileComponent(props) {
         value: restaurantForm.payment_option,
         options: optionsOfPayment,
         onChange: (paymentOptions) => {
-            setPaymentOptions(paymentOptions)
             setRestaurantDetail('payment_option', paymentOptions);
         },
         placeholder: 'Select payment options...',
@@ -348,7 +346,7 @@ export default function WebProfileComponent(props) {
                                         width: '100%',
                                     }}
                                 >
-                                    <Select {...filterProps} />
+                                    <Select {...paymentProps} />
                                 </Space>
                             </Form.Group>
                             <Form.Group>

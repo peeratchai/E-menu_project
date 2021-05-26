@@ -35,18 +35,16 @@ const authentication = {
             password: password
         }
 
-        console.log(data)
-        let response = await axios.post('/api/auth/signin-with-email', data, config)
+        return await axios.post('/api/auth/signin-with-email', data, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data.accessToken
             })
             .catch(function (error) {
                 console.log(error)
                 return error
             });
 
-        return response
     },
 
     requestResetPassword: async function (email) {

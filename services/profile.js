@@ -29,7 +29,7 @@ const profileService = {
 
         return response
     },
-    adminEditUserProfile: async (data) => {
+    adminEditUserProfile: async (data, userId) => {
         let accessToken = await checkLogin()
         let config = {
             headers: {
@@ -49,13 +49,14 @@ const profileService = {
         formData.append("avatar_url", null);
         formData.append("is_active", data.is_active);
         formData.append("restaurant_employee", data.restaurant_employee);
-        formData.append("roles ", JSON.stringify(data.roles));
+        // formData.append("roles", JSON.stringify(data.roles));
+        formData.append("roles", data.roles);
 
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
 
-        let response = await axios.patch('/api/admin_edit_user_profile', formData, config)
+        let response = await axios.patch('/api/admin_edit_user_profile/' + userId, formData, config)
             .then(function (response) {
                 console.log(response)
                 return response

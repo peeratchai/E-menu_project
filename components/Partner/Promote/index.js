@@ -38,32 +38,35 @@ export default function Promote(props) {
 
     const addPromotion = async (event) => {
         event.preventDefault();
-        const newErrors = findAddPromotionFormErrors()
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
+        if (restaurantId === undefined) {
+            message.warning('Please select restaurant.')
         } else {
-            const { promotedContents, bannerText, promotedImage } = promoteForm
-            let data = {
-                // restaurant === restaurantId
-                restaurant: restaurantId,
-                promote_content: promotedContents,
-                title: bannerText,
-                image: promotedImage
+            const newErrors = findAddPromotionFormErrors()
+            if (Object.keys(newErrors).length > 0) {
+                setErrors(newErrors)
+            } else {
+                const { promotedContents, bannerText, promotedImage } = promoteForm
+                let data = {
+                    // restaurant === restaurantId
+                    restaurant: restaurantId,
+                    promote_content: promotedContents,
+                    title: bannerText,
+                    image: promotedImage
+                }
+                try {
+                    let response = await partnerSerivce.addPromotion(data)
+                    console.log(response)
+                    message.success('Promote promotion successful.')
+                    setPromoteImageUrl(defaultImage)
+                    setPromoteForm({
+                        promotedContents: '',
+                        bannerText: '',
+                        promotedImage: ''
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
             }
-            try {
-                let response = await partnerSerivce.addPromotion(data)
-                console.log(response)
-                message.success('Promote promotion successful.')
-                setPromoteImageUrl(defaultImage)
-                setPromoteForm({
-                    promotedContents: '',
-                    bannerText: '',
-                    promotedImage: ''
-                })
-            } catch (error) {
-                console.log(error)
-            }
-
         }
     }
 

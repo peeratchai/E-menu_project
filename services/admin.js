@@ -1,5 +1,6 @@
 const axios = require('axios');
 import checkLogin from './checkLogin'
+import sendRequest from './sendRequest'
 
 const adminService = {
     getProfileUser: async () => {
@@ -22,7 +23,17 @@ const adminService = {
             });
 
         return response
+    },
+
+    getAllPromotions: async () => {
+        return await sendRequest.get('/api/get/all_promotion')
+    },
+
+    changePromotionStatus: async (promotionId, data) => {
+        return await sendRequest.patch('/api/change_promotion_status/' + promotionId, data)
     }
+
+
 }
 
 export default adminService

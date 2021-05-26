@@ -164,12 +164,20 @@ module.exports = {
             destination: API_URL + '/profile',
         },
         {
-            source: '/api/admin_edit_user_profile',
-            destination: API_URL + '/profile/user-role',
+            source: '/api/admin_edit_user_profile/:userId',
+            destination: API_URL + '/profile/user-role/:userId',
         },
         {
             source: '/api/admin/profile/users',
             destination: API_URL + '/profile/users',
         },
+        {
+            source: '/api/get/all_promotion',
+            destination: API_URL + '/promotion'
+        },
+        {
+            source: '/api/change_promotion_status/:promotionId',
+            destination: API_URL + '/promotion/update_status/:promotionId'
+        }
     ]
 }
