@@ -178,6 +178,22 @@ module.exports = {
         {
             source: '/api/change_promotion_status/:promotionId',
             destination: API_URL + '/promotion/update_status/:promotionId'
+        },
+        {
+            source: '/api/add_business_district',
+            destination: API_URL + '/location'
+        },
+        {
+            source: '/api/edit_business_district/:businessDistrictId',
+            destination: API_URL + '/location/:businessDistrictId'
+        },
+        {
+            source: '/api/get/all_profile',
+            destination: API_URL + '/profile/users'
+        },
+        {
+            source: '/api/send_email',
+            destination: API_URL + '/mail'
         }
     ]
 }

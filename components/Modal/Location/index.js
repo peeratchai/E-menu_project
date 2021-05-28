@@ -10,7 +10,10 @@ import Maps from '../../Maps'
 export default function LocationModal(props) {
 
     let { restaurant_location } = props
-    const [markerPosition, setMarkerPosition] = React.useState()
+    const [markerPosition, setMarkerPosition] = React.useState({
+        lat: 13.7320194,
+        lng: 100.5745218
+    })
     const [restaurantLocation, setRestaurantLocation] = React.useState({
         lat: 13.7320194,
         lng: 100.5745218

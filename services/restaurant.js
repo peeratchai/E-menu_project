@@ -141,19 +141,11 @@ const restaurantService = {
         formData.append("image", restaurantForm.image);
         formData.append("is_active", true);
         formData.append("Line", restaurantForm.Line);
-
-        // for (let i = 0; i < restaurantForm.business_hour.length; i++) {
-        //     formData.append("business_hour[]", JSON.stringify(restaurantForm.business_hour[i]));
-        // }
+        formData.append("business_district", restaurantForm.business_district);
         formData.append("business_hour", JSON.stringify(restaurantForm.business_hour));
 
-
         if (restaurantForm.restaurant_pictures.length > 0) {
-            // for (let i = 0; i < restaurantForm.banner; i++) {
-            //     formData.append("banner", restaurantForm.banner[i]);
-            //     formData.append("restaurant_pictures", null);
 
-            // }
             formData.append("banner", null);
             formData.append("restaurant_pictures", JSON.stringify(restaurantForm.restaurant_pictures));
 
@@ -168,6 +160,7 @@ const restaurantService = {
                 'Content-Type': 'multipart/form-data'
             }
         }
+
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }

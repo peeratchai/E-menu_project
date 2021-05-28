@@ -13,17 +13,16 @@ const uploadService = {
                 'Content-Type': 'multipart/form-data'
             }
         }
-        let response = await axios.post('/api/upload_image', formData, config)
+        return await axios.post('/api/upload_image', formData, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data
             })
             .catch(function (error) {
                 console.log(error)
                 return error
             });
 
-        return response.data
     }
 }
 

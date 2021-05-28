@@ -6,7 +6,7 @@ export default function AddCategoryModal(props) {
     const { onHide, add_category } = props
     const [categoryName, setCategoryName] = React.useState('');
 
-    const saveMenu = () => {
+    const addCategory = () => {
         console.log('categoryName ->', categoryName)
         setCategoryName("")
         add_category(categoryName)
@@ -41,7 +41,7 @@ export default function AddCategoryModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => saveMenu()}>
+                <Button onClick={() => addCategory()}>
                     Submit
                 </Button>
                 <Button onClick={props.onHide}>Close</Button>

@@ -193,6 +193,14 @@ export default function MobileProfileComponent(props) {
         setRestaurantDetail('location', location)
         setShowLocationModal(false)
     }
+
+    let businessDistrictDropdown = business_district && business_district.map((businessDistrict) => {
+        return (
+            <Option value={businessDistrict.id}>{businessDistrict.name}</Option>
+        )
+    }
+    )
+
     return (
         <Spin spinning={spin_loading} tip="Loading...">
             <div className={styles.tab}>
@@ -306,6 +314,24 @@ export default function MobileProfileComponent(props) {
                                         onChange={(e) => setRestaurantDetail('location', e.target.value)}
                                         value={restaurantForm.location}
                                     />
+                                </Form.Group>
+                                <Form.Group controlId="businessDistrict">
+                                    <Form.Label>Business District</Form.Label>
+                                    <div>
+                                        <Select
+                                            showSearch
+                                            style={{ width: '100%' }}
+                                            placeholder="Select a business district"
+                                            optionFilterProp="children"
+                                            onChange={(value) => setRestaurantDetail('business_district', value)}
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            value={restaurantForm.business_district}
+                                        >
+                                            {businessDistrictDropdown}
+                                        </Select>
+                                    </div>
                                 </Form.Group>
                                 <Form.Group controlId="phoneNumber">
                                     <Form.Label>Phone Number</Form.Label>

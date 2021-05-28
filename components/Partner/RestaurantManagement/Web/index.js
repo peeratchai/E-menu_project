@@ -22,7 +22,6 @@ export default function WebComponent(props) {
     const [zoneSelected, setZoneSelected] = React.useState();
 
     useEffect(() => {
-        console.log('table')
         let containerWidth = refTableManagement.current.offsetWidth
         // 50 is padding left and right
         setContainerWidth(containerWidth - 50)
@@ -36,7 +35,6 @@ export default function WebComponent(props) {
                 message.warning('Loading zone successful.')
             } else {
                 setTable([])
-                message.warning('Zone not found.')
             }
         }
     }, [zone])
@@ -97,19 +95,12 @@ export default function WebComponent(props) {
 
         let position_x = data.x
         let position_y = data.y
-        console.log(position_x)
-        console.log(position_y)
         if (!dragging) {
             onClickTable(tableData)
         }
         setDragging(false)
 
         let tables = [...table]
-        // let tempTable = {
-        //     ...tables[tableIndex],
-        //     position_x: calulatePercentagePositionX(position_x),
-        //     position_y: calulatePercentagePositionY(position_y)
-        // };
         let tempTable = {
             ...tables[tableIndex],
             position_x: position_x,
@@ -130,9 +121,7 @@ export default function WebComponent(props) {
             "position_y": tableData.position_y,
             "is_active": true
         }
-        console.log(data)
         let response = await partnerSerivce.addTable(data)
-        console.log(response)
         if (response) {
             get_zone()
             message.success('Add new table successful.')
@@ -169,7 +158,6 @@ export default function WebComponent(props) {
                 tablesOnChangeData.push(table)
             }
         })
-        console.log('tablesOnChangeData', tablesOnChangeData)
 
         if (tablesOnChangeData.length > 0) {
             await Promise.all(tablesOnChangeData.map(async (table) => {
@@ -194,7 +182,6 @@ export default function WebComponent(props) {
     const onChangeZone = (e) => {
         let zoneId = e.target.value
         let zoneDetails = zone.find(zone => zone.id === zoneId)
-        console.log(zoneDetails)
         setZoneSelected(zoneDetails)
         ratioTableImages(zoneDetails)
     }

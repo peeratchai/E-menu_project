@@ -10,9 +10,10 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import moment from 'moment';
 import LocationModal from '../../../Modal/Location'
 
+const { Option } = Select;
 
 export default function WebProfileComponent(props) {
-    let { restaurant_form, spin_loading } = props
+    let { restaurant_form, spin_loading, business_district } = props
     let { check_before_upload, update_restaurant_details } = props
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
@@ -32,16 +33,9 @@ export default function WebProfileComponent(props) {
         if (restaurant_form !== null) {
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
-            // setInitialBusinessHourValue(restaurant_form.business_hour)
             setRestaurantLogoUrl(restaurant_form.image_url)
         }
     }, [props])
-
-    // const setInitialBusinessHourValue = (business_hour) => {
-    //     business_hour.forEach((businessHour) => {
-
-    //     })
-    // }
 
     const setDefaultRestaurantBannerImage = (restaurantBannerFileList) => {
         let cuurnetRestaurantBannerFileList = []
@@ -190,6 +184,14 @@ export default function WebProfileComponent(props) {
         setRestaurantDetail('location', location)
         setShowLocationModal(false)
     }
+
+    let businessDistrictDropdown = business_district && business_district.map((businessDistrict) => {
+        return (
+            <Option value={businessDistrict.id}>{businessDistrict.name}</Option>
+        )
+    }
+    )
+
     return (
         <Spin spinning={spin_loading} tip="Loading...">
             <div className={styles.tab}>
@@ -305,6 +307,24 @@ export default function WebProfileComponent(props) {
                                     onChange={(e) => setRestaurantDetail('location', e.target.value)}
                                     value={restaurantForm.location}
                                 />
+                            </Form.Group>
+                            <Form.Group controlId="businessDistrict">
+                                <Form.Label>Business District</Form.Label>
+                                <div>
+                                    <Select
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Select a business district"
+                                        optionFilterProp="children"
+                                        onChange={(value) => setRestaurantDetail('business_district', value)}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        value={restaurantForm.business_district}
+                                    >
+                                        {businessDistrictDropdown}
+                                    </Select>
+                                </div>
                             </Form.Group>
                             <Form.Group controlId="phoneNumber">
                                 <Form.Label>Phone Number</Form.Label>

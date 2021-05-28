@@ -10,21 +10,21 @@ import Draggable from "react-draggable";
 import AntdModal from "../../components/AntdModal"
 import { DeleteConfirmModal } from "../../components/AntdModal"
 import { EditableTable } from '../../components/TableAntdesign/tableAntdesign';
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import useMediaQuery from "../../utils/utils";
-import SunEditor from 'suneditor-react';
-import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import DirectMessageAdmin from '../../components/DirectMessageAdmin'
 import { SearchOutlined } from '@ant-design/icons';
 import termAgreement from '../../utils/termAgreement.json'
 import AccountManagement from '../../components/Admin/AccountManagement'
-import RestaurantManagement from '../../components/Partner/RestaurantMangement'
+import RestaurantManagement from '../../components/Partner/RestaurantManagement'
 import SelectRestaurant from '../../components/SelectRestaurant'
 import restaurantService from '../../services/restaurant'
 import Promote from '../../components/Partner/Promote'
 import Menu from '../../components/Partner/Menu'
 import Profile from '../../components/Partner/Profile'
-import ApprovePromotions from '../../components/ApprovePromotions'
+import ApprovePromotions from '../../components/Admin/ApprovePromotions'
+import BusinessDistrictManagement from '../../components/Admin/BusinessDistrictManagement'
+import SendEmail from '../../components/Admin/SendEmail'
+
 const { Option } = Select;
 
 function getBase64(img, callback) {
@@ -601,14 +601,7 @@ export default function Admin() {
     const handleImageUploadError = (errorMessage, result) => {
         console.log(errorMessage, result)
     }
-    function onChangeCheckbox(checkedValues) {
-        // if(checkBoxAllEmail == 'All users'){
 
-        // }else{
-
-        // }
-        console.log('checked = ', checkedValues);
-    }
 
     const onChangeTab = (key) => {
         setCurrentTab(key)
@@ -649,6 +642,9 @@ export default function Admin() {
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="accountManagement">Account Management</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="businessDistrict">Business District Management</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="foodData">Food Data</Nav.Link>
@@ -702,88 +698,7 @@ export default function Admin() {
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="email">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
-                                                    Email
-                                                </div>
-                                                <div className={styles.tab}>
-                                                    <div style={{ textAlign: "right", marginBottom: "15px" }}>
-                                                        <Checkbox.Group options={options} onChange={(checkedValues) => onChangeCheckbox(checkedValues)} />
-                                                    </div>
-                                                    <Form>
-                                                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                            <Form.Label column sm="2">
-                                                                From
-                                            </Form.Label>
-                                                            <Col sm="10">
-                                                                <Form.Control defaultValue="" />
-                                                            </Col>
-                                                        </Form.Group>
-                                                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                            <Form.Label column sm="2">
-                                                                To
-                                            </Form.Label>
-                                                            <Col sm="10">
-                                                                <Form.Control defaultValue="" />
-                                                            </Col>
-                                                        </Form.Group>
-                                                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                            <Form.Label column sm="2">
-                                                                CC
-                                            </Form.Label>
-                                                            <Col sm="10">
-                                                                <Form.Control defaultValue="" />
-                                                            </Col>
-                                                        </Form.Group>
-                                                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                            <Form.Label column sm="2">
-                                                                Subject
-                                            </Form.Label>
-                                                            <Col sm="10">
-                                                                <Form.Control defaultValue="" />
-                                                            </Col>
-                                                        </Form.Group>
-                                                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                                                            <Form.Label column sm="2">
-                                                                Message
-                                                        </Form.Label>
-                                                            <Col sm="10">
-                                                                <SunEditor
-                                                                    onChange={(content) => console.log(content)}
-                                                                    onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
-                                                                    // onImageUploadBefore={(files, info, uploadHandler) => handleImageUploadBefore(files, info, uploadHandler)}
-                                                                    onImageUploadError={(errorMessage, result) => handleImageUploadError(errorMessage, result)}
-                                                                    setOptions={{
-                                                                        height: 200,
-                                                                        buttonList: [[
-                                                                            'align',
-                                                                            'font',
-                                                                            'fontColor',
-                                                                            'fontSize',
-                                                                            'formatBlock',
-                                                                            'hiliteColor',
-                                                                            'horizontalRule',
-                                                                            'lineHeight',
-                                                                            'list',
-                                                                            'paragraphStyle',
-                                                                            'table',
-                                                                            'template',
-                                                                            'textStyle',
-                                                                            /** Dialog */
-                                                                            'image',
-                                                                            'link']]// Or Array of button list, eg. [['font', 'align'], ['image']]
-                                                                    }}
-                                                                />
-                                                            </Col>
-                                                        </Form.Group>
-
-
-                                                        <div style={{ textAlign: "right" }}>
-                                                            <Button type="primary" >
-                                                                Send Email
-                                                            </Button>
-                                                        </div>
-                                                    </Form>
-                                                </div>
+                                                <SendEmail />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="directMessage">
                                                 <DirectMessageAdmin />
@@ -796,6 +711,11 @@ export default function Admin() {
                                             <Tab.Pane eventKey="accountManagement">
                                                 <AccountManagement
                                                     restaurant_list={restaurantList}
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="businessDistrict">
+                                                <BusinessDistrictManagement
+                                                    current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="foodData">

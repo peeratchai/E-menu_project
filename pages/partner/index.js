@@ -24,7 +24,7 @@ export default function Partner() {
     const [tableNumber, setTableNumber] = React.useState('1');
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [restaurantId, setRestaurantId] = React.useState();
-    const [currentTab, setCurrentTab] = React.useState();
+    const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
 
     useEffect(() => {
 

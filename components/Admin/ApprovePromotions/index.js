@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import ViewPromoteModal from '../Modal/ViewPromoteModal'
+import ViewPromoteModal from '../../Modal/ViewPromoteModal'
 import { Table, Space, Tag, Tabs, Spin, Popconfirm, message } from 'antd';
-import adminService from '../../services/admin'
+import adminService from '../../../services/admin'
 
 const { TabPane } = Tabs;
 
