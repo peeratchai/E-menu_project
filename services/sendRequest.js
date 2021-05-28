@@ -56,6 +56,18 @@ const sendRequest = {
             });
 
     },
+
+    postNonToken: async function (api_url, data) {
+        return await axios.post(api_url, data)
+            .then(function (response) {
+                console.log(response)
+                return response.data
+            })
+            .catch(function (error) {
+                return error.response.status
+            });
+    },
+
     post: async function (api_url, data) {
         let accessToken = await checkLogin()
         let config = {

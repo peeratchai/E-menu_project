@@ -152,7 +152,7 @@ export default function UserProfile() {
                                 <Col sm={6}>
                                     <Row>
                                         <Col>
-                                            <img src={profileImage} alt="avatar" style={{ width: '100%', height: '16rem', border: "1px solid #555", borderRadius: "5px" }} />
+                                            <img src={profileImage} alt="avatar" style={{ width: '100%', height: '25rem', border: "1px solid #555", borderRadius: "5px" }} />
                                         </Col>
                                     </Row>
                                     <br />
@@ -240,7 +240,7 @@ export default function UserProfile() {
                                                 {errors.phoneNumber}
                                             </Form.Control.Feedback>
                                         </Form.Group>
-                                        <Row style={{ marginBottom: ".5rem" }}>
+                                        {/* <Row style={{ marginBottom: ".5rem" }}>
                                             <Col>
                                                 Sync with Facebook or Line
                                             </Col>
@@ -250,7 +250,7 @@ export default function UserProfile() {
                                                 <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
                                                 <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                             </Col>
-                                        </Row>
+                                        </Row> */}
 
                                         <div style={{ textAlign: "right" }}>
                                             <Button variant="danger" style={{ marginRight: "15px" }}>

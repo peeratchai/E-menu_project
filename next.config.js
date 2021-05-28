@@ -17,4 +17,7 @@ module.exports = {
     future: {
         webpack5: true,
     },
+    env: {
+        REACT_APP_FACEBOOK_APP_ID: '259379829306113',
+    },
 }

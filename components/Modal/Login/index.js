@@ -7,6 +7,9 @@ import profileService from '../../../services/profile'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
 
 export default function LoginModal(props) {
     const [form, setForm] = React.useState({})
@@ -29,6 +32,72 @@ export default function LoginModal(props) {
             }
         }
     }, [])
+
+    const signinWithSocial = async (email, userID) => {
+        let data = {
+            "email": email,
+            "social_id": userID
+        }
+
+        return await authentication.signinWithSocial(data)
+    }
+
+    const signupWithSocial = async (signupForm) => {
+        return await authentication.signupWithSocial(signupForm)
+    }
+
+    const responseFacebook = async (response) => {
+        console.log(response);
+        if (response.id) {
+            console.log('login success');
+            const { email, userID, picture, accessToken } = response
+            let responseSignin = await signinWithSocial(email, userID)
+            console.log('responseSignin', responseSignin);
+
+            if (responseSignin === 401) {
+                let api_url = `https://graph.facebook.com/${userID}?fields=first_name,last_name&access_token=${accessToken}`
+                const { first_name, last_name } = await authentication.getUserProfileFacebook(api_url)
+
+                let signupForm = {
+                    "email": email,
+                    "social_id": userID,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "avatar": picture.data.url
+                }
+
+                let responseSignup = await signupWithSocial(signupForm)
+                if (responseSignup) {
+                    let accessToken = responseSignup.accessToken
+                    let profile = await profileService.getProfile(accessToken)
+                    console.log(profile)
+                    localStorage.setItem('profile', JSON.stringify(profile))
+                    localStorage.setItem('accessToken', accessToken)
+                    props.onHide()
+                    props.setlogin(true)
+                    message.success('Sign-in successful.')
+                } else {
+                    message.error('Cannot sign-up with social.')
+                }
+
+            } else {
+
+                let accessToken = responseSignin.accessToken
+                console.log('accessToken',accessToken)
+                let profile = await profileService.getProfile(accessToken)
+                console.log(profile)
+                localStorage.setItem('profile', JSON.stringify(profile))
+                localStorage.setItem('accessToken', accessToken)
+                props.onHide()
+                props.setlogin(true)
+                message.success('Sign-in successful.')
+            }
+
+            localStorage.setItem('islogin', true)
+        } else {
+            console.log('error');
+        }
+    }
 
     const changeTab = (tabName) => {
         setTab(tabName)
@@ -266,7 +335,14 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <FacebookLogin
+                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                            fields="name,email,picture.height(400).width(300)"
+                                            callback={responseFacebook}
+                                            render={renderProps => (
+                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                            )}
+                                        />
                                         <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
@@ -349,7 +425,14 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <FacebookLogin
+                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                            fields="name,email,picture.height(400).width(300)"
+                                            callback={responseFacebook}
+                                            render={renderProps => (
+                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                            )}
+                                        />
                                         <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>

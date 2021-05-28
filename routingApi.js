@@ -194,6 +194,14 @@ module.exports = {
         {
             source: '/api/send_email',
             destination: API_URL + '/mail'
+        },
+        {
+            source: '/api/auth/signin-with-social',
+            destination: API_URL + '/auth/signin-with-social'
+        },
+        {
+            source: '/api/auth/signup-with-social',
+            destination: API_URL + '/auth/signup-with-social'
         }
     ]
 }

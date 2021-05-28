@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+import sendRequest from './sendRequest'
 const authentication = {
     signupWithEmail: async function (email, password) {
         let config = {
@@ -114,6 +114,17 @@ const authentication = {
             });
 
         return response
+    },
+
+    getUserProfileFacebook: async function (api_url) {
+        return await sendRequest.get(api_url)
+    },
+
+    signinWithSocial: async function (data) {
+        return await sendRequest.postNonToken('/api/auth/signin-with-social', data)
+    },
+    signupWithSocial: async function (data) {
+        return await sendRequest.postNonToken('/api/auth/signup-with-social', data)
     }
 }
 
