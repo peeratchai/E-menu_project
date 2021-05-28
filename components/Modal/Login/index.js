@@ -41,7 +41,7 @@ export default function LoginModal(props) {
             if (responseSignin === 401) {
                 let signupForm = {
                     "email": email,
-                    "social_id": userID,
+                    "social_id": userId,
                     "first_name": null,
                     "last_name": null,
                     "avatar": pictureUrl
