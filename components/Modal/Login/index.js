@@ -38,6 +38,7 @@ export default function LoginModal(props) {
             console.log(email)
 
             let responseSignin = await signinWithSocial(email, userId)
+            console.log('responseSignin', responseSignin)
             if (responseSignin === 401) {
                 let signupForm = {
                     "email": email,
@@ -74,7 +75,7 @@ export default function LoginModal(props) {
                 message.success('Sign-in successful.')
             }
         } else {
-            liff.login();
+            liff.login({ redirectUri: "http://localhost:3000/newspaper" });
         }
     };
 
