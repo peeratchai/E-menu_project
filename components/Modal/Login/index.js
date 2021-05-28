@@ -49,6 +49,8 @@ export default function LoginModal(props) {
                 }
 
                 let responseSignup = await signupWithSocial(signupForm)
+                console.log('responseSignup', responseSignup)
+
                 if (responseSignup) {
                     let accessToken = responseSignup.accessToken
                     let profile = await profileService.getProfile(accessToken)
@@ -74,6 +76,9 @@ export default function LoginModal(props) {
                 props.setlogin(true)
                 message.success('Sign-in successful.')
             }
+
+            localStorage.setItem('islogin', true)
+
         } else {
             liff.login();
         }
