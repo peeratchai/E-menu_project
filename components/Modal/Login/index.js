@@ -75,7 +75,7 @@ export default function LoginModal(props) {
                 message.success('Sign-in successful.')
             }
         } else {
-            liff.login({ redirectUri: "https://e-menu-project-mock-up-76kwoqc9g-markpeeratchai.vercel.app/" });
+            liff.login();
         }
     };
 
