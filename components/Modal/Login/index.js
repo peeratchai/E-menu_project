@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
-const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
-
 export default function LoginModal(props) {
     const [form, setForm] = React.useState({})
     const [email, setEmail] = React.useState("");
@@ -21,6 +19,64 @@ export default function LoginModal(props) {
     const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
+
+    const signInwithLine = async () => {
+        const liff = window.liff;
+
+        await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
+            throw err;
+        });
+        if (liff.isLoggedIn()) {
+            let token = await liff.getIDToken();
+            console.log(token)
+
+            let profile = await liff.getProfile();
+            const { displayName, pictureUrl, userId } = profile
+            console.log(profile)
+
+            const email = await liff.getDecodedIDToken().email;
+            console.log(email)
+
+            let responseSignin = await signinWithSocial(email, userId)
+            if (responseSignin === 401) {
+                let signupForm = {
+                    "email": email,
+                    "social_id": userID,
+                    "first_name": null,
+                    "last_name": null,
+                    "avatar": pictureUrl
+                }
+
+                let responseSignup = await signupWithSocial(signupForm)
+                if (responseSignup) {
+                    let accessToken = responseSignup.accessToken
+                    let profile = await profileService.getProfile(accessToken)
+                    console.log(profile)
+                    localStorage.setItem('profile', JSON.stringify(profile))
+                    localStorage.setItem('accessToken', accessToken)
+                    props.onHide()
+                    props.setlogin(true)
+                    message.success('Sign-in successful.')
+                } else {
+                    message.error('Cannot sign-up with social.')
+                }
+
+            } else {
+
+                let accessToken = responseSignin.accessToken
+                console.log('accessToken', accessToken)
+                let profile = await profileService.getProfile(accessToken)
+                console.log(profile)
+                localStorage.setItem('profile', JSON.stringify(profile))
+                localStorage.setItem('accessToken', accessToken)
+                props.onHide()
+                props.setlogin(true)
+                message.success('Sign-in successful.')
+            }
+        } else {
+            liff.login();
+        }
+    };
 
     useEffect(() => {
         if (typeof window !== 'undefined' && tab !== 'register' && email === "") {
@@ -33,10 +89,10 @@ export default function LoginModal(props) {
         }
     }, [])
 
-    const signinWithSocial = async (email, userID) => {
+    const signinWithSocial = async (email, userId) => {
         let data = {
             "email": email,
-            "social_id": userID
+            "social_id": userId
         }
 
         return await authentication.signinWithSocial(data)
@@ -83,7 +139,7 @@ export default function LoginModal(props) {
             } else {
 
                 let accessToken = responseSignin.accessToken
-                console.log('accessToken',accessToken)
+                console.log('accessToken', accessToken)
                 let profile = await profileService.getProfile(accessToken)
                 console.log(profile)
                 localStorage.setItem('profile', JSON.stringify(profile))
@@ -343,7 +399,7 @@ export default function LoginModal(props) {
                                                 <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
                                             )}
                                         />
-                                        <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
                             </Row>
@@ -433,7 +489,7 @@ export default function LoginModal(props) {
                                                 <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
                                             )}
                                         />
-                                        <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
                             </Row>

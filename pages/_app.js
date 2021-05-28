@@ -42,6 +42,7 @@ export default function App({ Component, pageProps }) {
                 type="text/javascript"
                 src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
             ></script>
+            <script src="https://static.line-scdn.net/liff/edge/2.1/liff.js"></script>
         </Head>
         <style global jsx>{`
         body {

@@ -32,6 +32,7 @@
     "react-google-maps": "^9.4.5",
     "react-highlight-words": "^0.17.0",
     "react-md-spinner": "^1.0.0",
+    "reactjs-line-login": "^1.2.3",
     "suneditor-react": "^2.16.3"
   }
 }
