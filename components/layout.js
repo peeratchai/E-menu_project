@@ -11,7 +11,7 @@ import LoginModal from './Modal/Login'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import 'react-chat-widget/lib/styles.css';
 import dynamic from 'next/dynamic';
-React.useLayoutEffect = React.useEffect
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 
 const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget), {
@@ -218,14 +218,18 @@ export default function Layout({ children, containerType, searchFunc, page, menu
                 {children}
             </div>
 
-            <Widget
+            <MessengerCustomerChat
+                pageId="112842050546604"
+                appId="259379829306113"
+            />
+            {/* <Widget
                 // titleAvatar={<MenuBookIcon />}
                 handleNewUserMessage={handleNewUserMessage}
                 // profileAvatar={logo}
                 title='My E-menu Live Chat'
                 subtitle='Ready to help you'
                 handleNewUserMessage={(newMessage) => handleNewUserMessage(newMessage)}
-            />
+            /> */}
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}

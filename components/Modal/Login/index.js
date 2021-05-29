@@ -40,12 +40,15 @@ export default function LoginModal(props) {
             let responseSignin = await signinWithSocial(email, userId)
             console.log('responseSignin', responseSignin)
             if (responseSignin === 401) {
+                //// Don't have a account 
                 let signupForm = {
                     "email": email,
+                    "username": email,
                     "social_id": userId,
                     "first_name": null,
                     "last_name": null,
-                    "avatar": pictureUrl
+                    "avatar": pictureUrl,
+                    "signup_type": 'line'
                 }
 
                 let responseSignup = await signupWithSocial(signupForm)
@@ -65,6 +68,7 @@ export default function LoginModal(props) {
                 }
 
             } else {
+                //// Have already a account 
 
                 let accessToken = responseSignin.accessToken
                 console.log('accessToken', accessToken)
@@ -122,10 +126,12 @@ export default function LoginModal(props) {
 
                 let signupForm = {
                     "email": email,
+                    "username": email,
                     "social_id": userID,
                     "first_name": first_name,
                     "last_name": last_name,
-                    "avatar": picture.data.url
+                    "avatar": picture.data.url,
+                    "signup_type": 'facebook'
                 }
 
                 let responseSignup = await signupWithSocial(signupForm)
