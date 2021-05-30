@@ -9,7 +9,6 @@ export default function EditTableModal(props) {
 
     const { table_selected } = props
     const { edit_table } = props
-    console.log(table_selected)
     const [tableName, setTableName] = React.useState('');
     const [tableSize, setTableSize] = React.useState('small');
     const [tableType, setTableType] = React.useState('square');

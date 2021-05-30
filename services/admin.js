@@ -30,8 +30,9 @@ const adminService = {
         return await sendRequest.get('/api/get/all_promotion')
     },
 
-    changePromotionStatus: async (promotionId, data) => {
-        return await sendRequest.patch('/api/change_promotion_status/' + promotionId, data)
+    updatePromotionStatus: async (promotionId, data) => {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update_promotion_status/' + promotionId, data, ContentType)
     },
 
     getAllLocation: async function () {
@@ -62,7 +63,76 @@ const adminService = {
     },
     SendEmail: async function (data) {
         return await sendRequest.post('/api/send_email', data)
+    },
+    addMasterFoodCategory: async function (data) {
+        return await sendRequest.post('/api/add-master-food-category', data)
+    },
+    getMasterFoodCategory: async function () {
+        return await sendRequest.get('/api/get/master-food-category')
+    },
+    updateMasterFoodCategory: async function (foodCategoryId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-master-food-category/' + foodCategoryId, data, ContentType)
+    },
+    deleteMasterFoodCategory: async function (foodCategoryId) {
+        return await sendRequest.delete('/api/delete-master-food-category/' + foodCategoryId)
+    },
+    addMasterNational: async function (data) {
+        return await sendRequest.post('/api/add-master-national', data)
+    },
+    getMasterNational: async function () {
+        return await sendRequest.get('/api/get/master-national')
+    },
+    updateMasterNational: async function (nationalId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-master-national/' + nationalId, data, ContentType)
+    },
+    deleteMasterNational: async function (nationalId) {
+        return await sendRequest.delete('/api/delete-master-national/' + nationalId)
+    },
+    addMasterFoodKind: async function (data) {
+        return await sendRequest.post('/api/add-master-food-kind', data)
+    },
+    getMasterFoodKind: async function () {
+        return await sendRequest.get('/api/get/master-food-kind')
+    },
+    updateMasterFoodKind: async function (foodKindId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-master-foodKind/' + foodKindId, data, ContentType)
+    },
+    deleteMasterFoodKind: async function (foodKindId) {
+        return await sendRequest.delete('/api/delete-master-foodKind/' + foodKindId)
+    },
+    addMasterSubKind: async function (data) {
+        return await sendRequest.post('/api/add-master-sub-kind', data)
+    },
+    getMasterSubKind: async function () {
+        return await sendRequest.get('/api/get/master-sub-kind')
+    },
+    updateMasterSubKind: async function (subKindIdId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-master-subKind/' + subKindIdId, data, ContentType)
+    },
+    deleteMasterSubKind: async function (subKindIdId) {
+        return await sendRequest.delete('/api/delete-master-subKind/' + subKindIdId)
+    },
+    addMasterCookMethod: async function (data) {
+        return await sendRequest.post('/api/add-master-cook-method', data)
+    },
+    getMasterCookMethod: async function () {
+        return await sendRequest.get('/api/get/master-cook-method')
+    },
+    updateMasterCookMethod: async function (cookMethodIdId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-master-cookMethod/' + cookMethodIdId, data, ContentType)
+    },
+    deleteMasterCookMethod: async function (cookMethodIdId) {
+        return await sendRequest.delete('/api/delete-master-cookMethod/' + cookMethodIdId)
+    },
+    getAllMenu: async function () {
+        return await sendRequest.get('/api/get/menu')
     }
+
 }
 
 export default adminService

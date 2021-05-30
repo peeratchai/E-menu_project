@@ -12,9 +12,9 @@ import { Button } from 'react-bootstrap'
 import partnerService from '../../../services/partner'
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
-export default function Menu({ restaurant_id }) {
+export default function Menu(props) {
+    const { restaurant_id, current_tab } = props
     const isMobileResolution = useMediaQuery(768)
-
     const [category, setCategory] = React.useState([]);
     const [addCategoryModal, setAddCategoryModal] = React.useState(false);
     const [editCategoryModal, setEditCategoryModal] = React.useState(false);
@@ -34,14 +34,16 @@ export default function Menu({ restaurant_id }) {
     const [errors, setErrors] = React.useState({});
 
     useEffect(() => {
-        if (restaurant_id !== undefined) {
+
+        if (restaurant_id && current_tab === 'menu') {
             getAllMenu()
         }
-    }, [restaurant_id])
+    }, [props])
 
     const getAllMenu = async () => {
         setSpinLoading(true)
         let category = await partnerService.getCategoryByRestaurantId(restaurant_id);
+
         setCategory(category)
         setSpinLoading(false)
     }

@@ -1,6 +1,7 @@
 
 const { rountingApi } = require('./routingApi')
 
+
 module.exports = {
     async redirects() {
         return [

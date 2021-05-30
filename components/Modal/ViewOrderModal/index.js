@@ -59,91 +59,87 @@ export default function ViewOrderModal(props) {
 
     const setInitailNewOrder = (orders) => {
         let haveNewOrder = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.new_orders.length > 0) {
-                haveNewOrder = true
+                checkOrder = order.new_orders.find((order) => order.status === 'New Order')
+                if (checkOrder) {
+                    // if checkOrder has value so it has new order
+                    haveNewOrder = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveNewOrder) {
             setNewOrderSelected({})
             setTableNewOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].new_orders.find((order) => order.status === 'New Order')
+            setNewOrderSelected(firstOrder)
+            setTableNewOrderSelectedNumber(firstOrder.id)
         }
         setHaveNewOrder(haveNewOrder)
     }
 
     const setInitailInOrder = (orders) => {
         let haveOrderInProcess = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.in_orders.length > 0) {
-                haveOrderInProcess = true
+                checkOrder = order.new_orders.find((order) => order.status === 'In Order')
+                if (checkOrder) {
+                    // if checkOrder has value so it has order in process
+                    haveOrderInProcess = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveOrderInProcess) {
             setInOrderSelected({})
             setTableInOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].in_orders.find((order) => order.status === 'In Order')
+            setInOrderSelected(firstOrder)
+            setTableInOrderSelectedNumber(firstOrder.id)
         }
         setHaveOrderInProcess(haveOrderInProcess)
     }
 
     const setInitailCompletedOrder = (orders) => {
         let haveOrderCompleted = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.completed_orders.length > 0) {
-                haveOrderCompleted = true
+                checkOrder = order.new_orders.find((order) => order.status === 'Completed')
+                if (checkOrder) {
+                    // if checkOrder has value so it has completed order
+                    haveOrderCompleted = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveOrderCompleted) {
             setCompletedOrderSelected({})
             setTableCompletedOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].completed_orders.find((order) => order.status === 'Completed')
+            setCompletedOrderSelected(firstOrder)
+            setTableCompletedOrderSelectedNumber(firstOrder.id)
         }
         setHaveOrderCompleted(haveOrderCompleted)
     }
-
-    let newOrderTableListComponent = orders && orders.map((order) => {
-        let tableList = order.new_orders.map((newOrder) => {
-            if (newOrder.order_items.length > 0) {
-                // if (tableNewOrderSelectedNumber === undefined) {
-                //     setTableNewOrderSelectedNumber(newOrder.id)
-                //     setNewOrderSelected(newOrder)
-                //     setHaveNewOrder(true)
-                // }
-                return (
-                    <>
-                        <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
-                                        </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>{newOrder.total} THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date).format('hh:mm:ss - DD/MMM/YYYY')}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-
-        })
-
-        return tableList
-    })
 
     const confirmTakeOrder = async (order_items, index) => {
         console.log('order_items', order_items)
@@ -234,6 +230,44 @@ export default function ViewOrderModal(props) {
         }
     }
 
+    let newOrderTableListComponent = orders && orders.map((order) => {
+        let tableList = order.new_orders.map((newOrder) => {
+            if (newOrder.order_items.length > 0) {
+                return (
+                    <>
+                        <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col>
+                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                        &nbsp;&nbsp; {order.name}
+                                        </Col>
+                                        <Col>
+                                            <div style={{ textAlign: "right" }}>
+                                                <b>{newOrder.total} THB</b>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                {moment(newOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    </>
+                )
+            }
+
+        })
+
+        return tableList
+    })
+
     const renderNewOrderList = () => {
         if (newOrderSelected.order_items) {
             let menuList = newOrderSelected.order_items.map((order_items, index) => {
@@ -322,11 +356,6 @@ export default function ViewOrderModal(props) {
     let inOrderTableList = orders && orders.map((order) => {
         let tableList = order.in_orders.map((inOrder) => {
             if (inOrder.order_items.length > 0) {
-                // if (tableInOrderSelectedNumber === undefined) {
-                //     setTableInOrderSelectedNumber(inOrder.id)
-                //     setInOrderSelected(inOrder)
-                //     setHaveOrderInProcess(true)
-                // }
                 return (
                     <>
                         {/* Table list */}
@@ -347,7 +376,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(inOrder.order_date).add(7, 'hours').format('HH:MM:SS - DD/MMM/YYYY')}
+                                                {moment(inOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -477,7 +506,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(completedOrder.order_date).format('HH:MM:SS - DD/MMM/YYYY')}
+                                                {moment(completedOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>

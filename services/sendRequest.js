@@ -48,10 +48,10 @@ const sendRequest = {
                             return response.data
                         })
                         .catch(function (error) {
-                            return error
+                            return error.response.status
                         })
                 } else {
-                    return error
+                    return error.response.status
                 }
             });
 
@@ -78,7 +78,7 @@ const sendRequest = {
         return await axios.post(api_url, data, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data
             })
             .catch(async function (error) {
                 let status = error.response.status
@@ -103,12 +103,12 @@ const sendRequest = {
             });
     },
 
-    patch: async (api_url, data) => {
+    patch: async (api_url, data, ContentType = 'multipart/form-data') => {
         let accessToken = await checkLogin()
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': ContentType
             }
         }
         return await axios.patch(api_url, data, config)
@@ -148,17 +148,35 @@ const sendRequest = {
                 'Authorization': 'Bearer ' + accessToken,
             }
         }
-        let response = await axios.delete(api_url, config)
+        return await axios.delete(api_url, config)
             .then(function (response) {
                 console.log(response)
-                return response
+                return response.data
             })
-            .catch(function (error) {
-                console.log(error)
-                return error
+            .catch(async function (error) {
+                let status = error.response.status
+                if (status === 401) {
+                    console.log('Token is expire.')
+                    let newAccessToken = await reLogin()
+                    let config = {
+                        headers: {
+                            'Authorization': 'Bearer ' + newAccessToken
+                        }
+                    }
+                    return await axios.patch(api_url, data, config)
+                        .then(function (response) {
+                            return response.data
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                            return error
+                        })
+                } else {
+                    console.log(error)
+                    return error
+                }
             });
 
-        return response.data
     },
 
 }

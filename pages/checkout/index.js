@@ -108,20 +108,20 @@ export default function CheckoutPage() {
             })
 
             // Test localhost
-            // let data = {
-            //     "restaurant": restaurantId,
-            //     "restaurant_table": "6c409206-cd90-4d28-8aec-08a2c8eea038",
-            //     "user": userId,
-            //     "order_items": order_items
-            // }
-
-            // Test dev
             let data = {
                 "restaurant": restaurantId,
-                "restaurant_table": "2531c5d9-ad32-4087-8bbe-79d70e62d517",
+                "restaurant_table": "6c409206-cd90-4d28-8aec-08a2c8eea038",
                 "user": userId,
                 "order_items": order_items
             }
+
+            // Test dev
+            // let data = {
+            //     "restaurant": restaurantId,
+            //     "restaurant_table": "2531c5d9-ad32-4087-8bbe-79d70e62d517",
+            //     "user": userId,
+            //     "order_items": order_items
+            // }
             console.log('data', data)
             let response = await partnerSerivce.addOrder(data)
             console.log('response', response)

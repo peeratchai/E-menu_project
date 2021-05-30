@@ -1,9 +1,9 @@
 
 // dev env.
-const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
+// const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
 
 // localhost env.
-// const API_URL = 'http://localhost:8080'
+const API_URL = 'http://localhost:8080'
 
 module.exports = {
     rountingApi: [
@@ -202,6 +202,94 @@ module.exports = {
         {
             source: '/api/auth/signup-with-social',
             destination: API_URL + '/auth/signup-with-social'
+        },
+        {
+            source: '/api/get_order_by_period',
+            destination: API_URL + '/order/dashboard'
+        },
+        {
+            source: '/api/add-master-food-category',
+            destination: API_URL + '/food-category'
+        },
+        {
+            source: '/api/get/master-food-category',
+            destination: API_URL + '/food-category'
+        },
+        {
+            source: '/api/update-master-food-category/:foodCategoryId',
+            destination: API_URL + '/food-category/:foodCategoryId'
+        },
+        {
+            source: '/api/delete-master-food-category/:foodCategoryId',
+            destination: API_URL + '/food-category/:foodCategoryId'
+        },
+        {
+            source: '/api/add-master-national',
+            destination: API_URL + '/national'
+        },
+        {
+            source: '/api/get/master-national',
+            destination: API_URL + '/national'
+        },
+        {
+            source: '/api/update-master-national/:nationalId',
+            destination: API_URL + '/national/:nationalId'
+        },
+        {
+            source: '/api/delete-master-national/:nationalId',
+            destination: API_URL + '/national/:nationalId'
+        },
+        {
+            source: '/api/add-master-food-kind',
+            destination: API_URL + '/food-kind'
+        },
+        {
+            source: '/api/get/master-food-kind',
+            destination: API_URL + '/food-kind'
+        },
+        {
+            source: '/api/update-master-food-kind/:foodKindId',
+            destination: API_URL + '/food-kind/:foodKindId'
+        },
+        {
+            source: '/api/delete-master-food-kind/:foodKindId',
+            destination: API_URL + '/food-kind/:foodKindId'
+        },
+        {
+            source: '/api/add-master-sub-kind',
+            destination: API_URL + '/sub-kind'
+        },
+        {
+            source: '/api/get/master-sub-kind',
+            destination: API_URL + '/sub-kind'
+        },
+        {
+            source: '/api/update-master-sub-kind/:subKindId',
+            destination: API_URL + '/sub-kind/:subKindId'
+        },
+        {
+            source: '/api/delete-master-sub-kind/:subKindId',
+            destination: API_URL + '/sub-kind/:subKindId'
+        },
+        {
+            source: '/api/add-master-cook-method',
+            destination: API_URL + '/cook-method'
+        },
+        {
+            source: '/api/get/master-cook-method',
+            destination: API_URL + '/cook-method'
+        },
+        {
+            source: '/api/update-master-cook-method/:cookMethodId',
+            destination: API_URL + '/cook-method/:cookMethodId'
+        },
+        {
+            source: '/api/delete-master-cook-method/:cookMethodId',
+            destination: API_URL + '/cook-method/:cookMethodId'
+        },
+        {
+            source: '/api/get/menu',
+            destination: API_URL + '/menu'
         }
     ]
 }

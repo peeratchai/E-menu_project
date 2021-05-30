@@ -28,10 +28,8 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
 
     const getZone = async () => {
         setLoading(true)
-        let awaitZone = partnerSerivce.getZoneByRestaurantId(restaurant_id)
-
-        let allZone = await awaitZone
-        if (allZone) {
+        let allZone = await partnerSerivce.getZoneByRestaurantId(restaurant_id)
+        if (allZone !== 500) {
             allZone.map((zone, zoneIndex) => {
                 zone.index = (zoneIndex + 1)
                 zone.key = zone.name + zoneIndex
@@ -76,7 +74,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
             key: 'action',
             render: (zone) => (
                 <Space size="middle">
-                    <Switch defaultChecked checked={zone.is_active} onChange={(checked) => onChangeZoneStatus(checked, zone)} />
+                    <Switch checked={zone.is_active} onChange={(checked) => onChangeZoneStatus(checked, zone)} />
                     <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setZoneSelected(zone), setShowEditZoneModal(true))}>Edit</Button>
                     <Popconfirm
                         title="Are you sure to delete this zone?"
@@ -109,7 +107,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
             "is_active": table.is_active
         }
         console.log(data)
-        console.log('zoneSelected',zoneSelected)
+        console.log('zoneSelected', zoneSelected)
         let response = await partnerSerivce.editTable(data, table.id)
         console.log(response)
         if (response) {

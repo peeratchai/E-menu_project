@@ -4,6 +4,7 @@ import WebComponent from './Web'
 import MobileComponent from "./Mobile";
 
 import partnerSerivce from '../../../services/partner'
+import { message } from "antd";
 
 export default function RestaurantManagement(props) {
     const { restaurant_id, current_tab } = props
@@ -11,8 +12,8 @@ export default function RestaurantManagement(props) {
     const [zone, setZone] = React.useState([])
 
     useEffect(() => {
-        console.log('restaurant_id',restaurant_id)
-        console.log('current_tab',current_tab)
+        console.log('restaurant_id', restaurant_id)
+        console.log('current_tab', current_tab)
         if (restaurant_id && current_tab === 'restaurantManagement') {
             getZone()
         }
@@ -20,8 +21,11 @@ export default function RestaurantManagement(props) {
 
     const getZone = async () => {
         let zone = await partnerSerivce.getZoneByRestaurantId(restaurant_id)
-        console.log('zone', zone)
-        setZone(zone)
+        if (zone === 500) {
+            message.error('Cannot access to database.')
+        } else {
+            setZone(zone)
+        }
     }
 
     let RestaurantManagementComponent

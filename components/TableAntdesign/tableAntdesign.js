@@ -42,6 +42,7 @@ const EditableCell = ({
   const save = async () => {
     try {
       const values = await form.validateFields();
+      console.log('values', values)
       toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
@@ -96,7 +97,8 @@ export const EditableTable = (props) => {
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
     setDataSource(newData);
-    props.edit(newData);
+    const newDataItem = row
+    props.edit(newData, newDataItem);
   };
 
   const components = {

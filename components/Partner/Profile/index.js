@@ -7,8 +7,8 @@ import restaurantService from '../../../services/restaurant'
 import uploadService from '../../../services/upload'
 import adminService from '../../../services/admin'
 import { message } from 'antd';
-export default function Profile({ restaurant_id }) {
-
+export default function Profile(props) {
+    const { restaurant_id, current_tab } = props
     const isMobileResolution = useMediaQuery(768)
     const [restaurantDetails, setRestaurantDetails] = React.useState();
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
@@ -77,16 +77,15 @@ export default function Profile({ restaurant_id }) {
     })
     const [loading, setLoading] = React.useState(false)
     useEffect(() => {
-        if (restaurant_id !== undefined) {
+        if (restaurant_id && current_tab === 'profile') {
             getRestaurantDetails()
             getAllBusinessDistrict()
         }
-    }, [restaurant_id])
+    }, [props])
 
     const getAllBusinessDistrict = async () => {
         let businessDistrict = await adminService.getAllLocation()
         setBusinessDistrict(businessDistrict)
-        console.log('businessDistrict', businessDistrict)
     }
 
     const getRestaurantDetails = async () => {
@@ -95,7 +94,6 @@ export default function Profile({ restaurant_id }) {
             let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
             let restaurantDetail = responseRestaurantDetail.data
             let businessHour
-            console.log('restaurantDetail', restaurantDetail)
             if (restaurantDetail.business_hour.length > 0) {
                 businessHour = restaurantDetail.business_hour
             } else {
