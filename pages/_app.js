@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AnimatePresence } from "framer-motion";
 import Head from 'next/head'
 import Geocode from "react-geocode";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router'
 
 Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
 Geocode.setLanguage("th");
@@ -31,6 +33,33 @@ const handExitComplete = () => {
 };
 
 export default function App({ Component, pageProps }) {
+    const router = useRouter()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            console.log(window.localStorage.getItem('version'))
+            let newVersion = '31.05.2021.19:54'
+            let currentVersion = window.localStorage.getItem('version')
+            if (currentVersion) {
+                if (currentVersion !== newVersion) {
+                    localStorage.clear();
+                    window.localStorage.setItem('version', newVersion)
+                    window.location.reload();
+                    router.push({
+                        pathname: "/"
+                    })
+                }
+            } else {
+                localStorage.clear();
+                window.localStorage.setItem('version', newVersion)
+                window.location.reload();
+                router.push({
+                    pathname: "/"
+                })
+            }
+        }
+    }, [])
+
     return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
         <Head>
             <link

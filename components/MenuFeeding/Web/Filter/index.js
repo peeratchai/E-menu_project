@@ -4,11 +4,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import React, { useEffect } from 'react'
 import styles from './index.module.css'
 import GoogleMapReact from 'google-map-react';
-import { Slider, Select, Checkbox } from 'antd';
+import { Slider, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
-import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
-const { Option } = Select;
 
 export default function Filter(props) {
 
@@ -26,26 +24,20 @@ export default function Filter(props) {
         have_parking: false,
         sort_by: null
     })
-    const [defaultCenterMaps, setDefaultCenterMaps] = React.useState({ lat: 13.8537968, lng: 100.3764991 });
+    const defaultCenterMaps = { lat: 13.8537968, lng: 100.3764991 }
 
     const onChangePriceFilter = (value) => {
-        // console.log('value: ', value);
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
         let price_from = value[0]
         let price_to = value[1]
 
         setform('price_to_price_from', price_from + " " + price_to)
-        // setform('price_from', price_from)
     }
 
     useEffect(() => {
-        // console.log(form)
-        if (props.center_location_LatLong !== undefined) {
-            const { center_location_LatLong, location_restaurant_in_maps } = props
-            let { lat, lng } = changeFormatLatLong(center_location_LatLong)
-            // console.log(lat, lng)
-            setDefaultCenterMaps({ lat: parseFloat(lat), lng: parseFloat(lng) })
+        if (location_restaurant_in_maps) {
+            const { location_restaurant_in_maps } = props
             setLocationInMaps(location_restaurant_in_maps)
         }
     }, [props])
@@ -76,11 +68,6 @@ export default function Filter(props) {
                     }}
                     defaultZoom={11}
                 >
-                    {/* <AnyReactComponent
-                        lat={13.7559731}
-                        lng={100.5608889}
-                        text="My Marker"
-                    /> */}
                     {pointInMaps}
                 </GoogleMapReact>
             </div>

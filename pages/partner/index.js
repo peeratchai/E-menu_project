@@ -26,6 +26,7 @@ export default function Partner() {
     const [tableNumber, setTableNumber] = React.useState('1');
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [restaurantId, setRestaurantId] = React.useState();
+    const [restaurantName, setRestaurantName] = React.useState();
     const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
 
     useEffect(() => {
@@ -36,7 +37,9 @@ export default function Partner() {
                 console.log('profile', JSON.parse(profile))
                 profile = JSON.parse(profile)
                 let restaurantId = profile.restaurant_employee.restaurant.id
+                let restaurantName = profile.restaurant_employee.restaurant.name
                 setRestaurantId(restaurantId)
+                setRestaurantName(restaurantName)
             }
         }
 
@@ -98,6 +101,7 @@ export default function Partner() {
                                             <RestaurantManagement
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
+                                                restaurant_name={restaurantName}
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="dashboard">
@@ -157,6 +161,7 @@ export default function Partner() {
                                     <RestaurantManagement
                                         restaurant_id={restaurantId}
                                         current_tab={currentTab}
+                                        restaurant_name={restaurantName}
                                     />
                                 ) : null
                             }

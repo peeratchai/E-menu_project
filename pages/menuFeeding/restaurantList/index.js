@@ -18,15 +18,14 @@ Geocode.enableDebug();
 export default function RestaurantList() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName, locationLatLong } = router.query;
+    const { locationId, locationName } = router.query;
     const [restaurantList, setRestaurantList] = React.useState([]);
 
     useEffect(async () => {
         if (!router.isReady) {
             // console.log('not ready')
         } else {
-            console.log(locationLatLong)
-            if (locationId === undefined || locationName === undefined || locationLatLong === undefined) {
+            if (locationId === undefined || locationName === undefined) {
                 router.push({
                     pathname: "/menuFeeding"
                 })
@@ -82,7 +81,6 @@ export default function RestaurantList() {
                         restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
-                        location_lat_long={locationLatLong}
                     />
                 ) : (
                     //Mobile Version
@@ -90,7 +88,6 @@ export default function RestaurantList() {
                         restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
-                        location_lat_long={locationLatLong}
                     />
                 )
             }

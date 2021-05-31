@@ -25,22 +25,18 @@ export default function RestaurantListWeb(props) {
     const [restaurantList, setRestaurantList] = React.useState(null);
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
-    const [locationLatLong, setLocationLatLong] = React.useState("");
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
-    const [centerLocationLatLong, setCenterLocationLatLong] = React.useState();
 
     useEffect(() => {
         if (props.restaurant_list.length !== 0) {
             // setRestaurantList(props.restaurant_list)
-            const { restaurant_list, location_name, location_id, location_lat_long } = props
+            const { restaurant_list, location_name, location_id } = props
 
             if (restaurantList === null) {
-                setCenterLocationLatLong(location_lat_long)
                 setLocationName(location_name)
                 setLocationId(location_id)
-                setLocationLatLong(location_lat_long)
                 setTotalResult(restaurant_list.length)
                 setRestaurantList(restaurant_list)
                 renderRestaurantCard(restaurant_list)
@@ -77,7 +73,7 @@ export default function RestaurantListWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList/' + restaurantDetails.name,
-                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id, locationLatLong: locationLatLong },
+                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id },
                         }}
                     >
                         <Card>
@@ -164,7 +160,6 @@ export default function RestaurantListWeb(props) {
                     <Filter
                         onSearch={(form) => onSearch(form)}
                         location_restaurant_in_maps={locationInMaps}
-                        center_location_LatLong={centerLocationLatLong}
                     />
                 </Col>
                 {/* List Restaurant */}

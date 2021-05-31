@@ -1,6 +1,6 @@
 
 import 'antd/dist/antd.css';
-import { Table, Space, Tag, Button } from 'antd';
+import { Table, Space, Tag, Button, message, Spin } from 'antd';
 import React, { useEffect } from 'react'
 import EditMasterDataModal from '../../Modal/EditMasterDataModal'
 import EditFoodDataModal from '../../Modal/EditFoodDataModal'
@@ -13,6 +13,12 @@ export default function FoodDataManagement(props) {
     const [editMasterDataModalShow, setEditMasterDataModalShow] = React.useState(false);
     const [foodDataModalShow, setFoodDataModalShow] = React.useState(false);
     const [foodItemSelectedForEdit, setFoodItemSelectedForEdit] = React.useState();
+    const [masterfoodCategory, setMasterFoodCategory] = React.useState([]);
+    const [masterNational, setMasterNational] = React.useState([]);
+    const [masterFoodKind, setMasterFoodKind] = React.useState([]);
+    const [masterSubKind, setMasterSubKind] = React.useState([]);
+    const [masterCookMethod, setMasterCookMethod] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
     const columnsFoodData = [
         {
             title: 'No',
@@ -62,92 +68,84 @@ export default function FoodDataManagement(props) {
         {
             title: 'Action',
             key: 'action',
-            render: (text, record) => (
+            render: (foodData) => (
                 <Space size="middle">
-                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => (setFoodDataModalShow(true), setFoodItemSelectedForEdit(record))}>
+                    <Tag color="green" key={foodData.id} style={{ cursor: "pointer" }} onClick={() => (setFoodDataModalShow(true), setFoodItemSelectedForEdit(foodData))}>
                         Edit
                     </Tag>
-                    <DeleteConfirmModal onOK={deleteFoodItem} />
+                    <DeleteConfirmModal onOK={() => deleteFoodItem(foodData.id)} />
                 </Space>
             ),
         }
     ]
-    const [dataFood, setDataFood] = React.useState([
-        {
-            key: "1",
-            No: "1",
-            nameThai: 'พิซซ่าเกาหลีทะเล',
-            nameEnglish: 'Haemul Pajeon',
-            price: 180,
-            category: null,
-            national: null,
-            foodKind: null,
-            subKind: null,
-            cookMethod: null
-        },
-        {
-            key: "2",
-            No: "2",
-            nameThai: 'ผัดวุ้นเส้น',
-            nameEnglish: 'Japchae',
-            price: 150,
-            category: null,
-            national: null,
-            foodKind: null,
-            subKind: null,
-            cookMethod: null
-        },
-        {
-            key: "3",
-            No: "3",
-            nameThai: 'เกี๊ยวซ่าเกาหลี',
-            nameEnglish: 'Mandu',
-            price: 120,
-            category: 'Appetizers',
-            national: 'Korea',
-            foodKind: 'Dumplings',
-            subKind: 'Pork',
-            cookMethod: 'Deep fried/Boiled'
-        },
-        {
-            key: "4",
-            No: "4",
-            nameThai: 'ปลาหมึกทอด',
-            nameEnglish: 'Calamari',
-            price: 110,
-            category: 'Appetizers',
-            national: 'Korea',
-            foodKind: 'Fried snack',
-            subKind: 'Squid',
-            cookMethod: 'Deep fried'
-        },
-        {
-            key: "5",
-            No: "5",
-            nameThai: 'ไก่ทอดซอสกระเทียม',
-            nameEnglish: 'Soy Garlic Chicken',
-            price: 100,
-            category: 'Appetizers',
-            national: 'Korea',
-            foodKind: 'Fried snack',
-            subKind: 'Chicken',
-            cookMethod: 'Deep fried'
-        }
-    ]);
+    const [foodDataList, setFoodDataList] = React.useState([]);
 
     useEffect(() => {
         if (current_tab === 'foodData') {
-            // getAllMenu()
+            getAllMenu()
+            getMasterData()
         }
     }, [props])
 
     const getAllMenu = async () => {
-        let allMenu = await adminService.getAllMenu()
-        console.log('allMenu', allMenu)
+        let foodDataList = []
+        setLoading(true)
+        adminService.getAllMenu().then((allMenu) => {
+            setLoading(false)
+            console.log(allMenu)
+            allMenu.forEach((menu, menuIndex) => {
+                foodDataList.push({
+                    key: menu.id,
+                    id: menu.id,
+                    No: menuIndex + 1,
+                    nameThai: menu.name,
+                    nameEnglish: menu.name,
+                    price: menu.price,
+                    category: menu.category,
+                    national: menu.national,
+                    foodKind: menu.food_kind,
+                    subKind: menu.sub_kind,
+                    cookMethod: menu.cook_method
+                })
+            })
+
+            setFoodDataList(foodDataList)
+        }).catch((error) => {
+            console.log('error', error)
+        })
     }
 
-    const deleteFoodItem = () => {
-        console.log('Deleted food item.')
+    const getMasterData = async () => {
+        let awaitMasterFoodCategory = adminService.getMasterFoodCategory()
+        let awaitMasterNational = adminService.getMasterNational()
+        let awaitMasterFoodKind = adminService.getMasterFoodKind()
+        let awaitMasterSubKind = adminService.getMasterSubKind()
+        let awaitMasterCookMethod = adminService.getMasterCookMethod()
+
+        let masterFoodCategory = await awaitMasterFoodCategory
+        let masterNational = await awaitMasterNational
+        let masterFoodKind = await awaitMasterFoodKind
+        let masterSubKind = await awaitMasterSubKind
+        let masterCookMethod = await awaitMasterCookMethod
+
+        setMasterFoodCategory(masterFoodCategory.filter((foodCategory) => foodCategory.is_active === true))
+        setMasterNational(masterNational.filter((national) => national.is_active === true))
+        setMasterFoodKind(masterFoodKind.filter((foodKind) => foodKind.is_active === true))
+        setMasterSubKind(masterSubKind.filter((subKind) => subKind.is_active === true))
+        setMasterCookMethod(masterCookMethod.filter((cookMethod) => cookMethod.is_active === true))
+    }
+
+    const deleteFoodItem = (foodDataId) => {
+        console.log('Deleted food item.', foodDataId)
+
+        adminService.deleteMenu(foodDataId).then((response) => {
+            console.log('response', response)
+            getAllMenu()
+            message.success('Delete food item successful.')
+        }).catch((error) => {
+            console.log('error', error)
+            message.error('Cannot delete food item! Please try again.')
+        })
     }
 
     return (
@@ -160,17 +158,26 @@ export default function FoodDataManagement(props) {
                     Edit master data
                 </Button>
             </div>
-            <Table columns={columnsFoodData} dataSource={dataFood} scroll={{ x: 'max-content' }} />
+            <Spin spinning={loading} tip="Loading...">
+                <Table columns={columnsFoodData} dataSource={foodDataList} scroll={{ x: 'max-content' }} />
+            </Spin>
             <EditMasterDataModal
                 show={editMasterDataModalShow}
                 onHide={() => setEditMasterDataModalShow(false)}
                 title='Edit master data'
+                get_master_data={getMasterData}
             />
             <EditFoodDataModal
                 show={foodDataModalShow}
                 onHide={() => setFoodDataModalShow(false)}
                 title='Edit food data'
                 food_item_selected={foodItemSelectedForEdit}
+                master_food_category={masterfoodCategory}
+                master_national={masterNational}
+                master_food_kind={masterFoodKind}
+                master_sub_kind={masterSubKind}
+                master_cook_method={masterCookMethod}
+                get_all_menu={getAllMenu}
             />
         </>
     )

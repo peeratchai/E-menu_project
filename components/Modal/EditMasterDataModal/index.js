@@ -8,6 +8,8 @@ const { Option } = Select;
 
 export default function EditMasterDataModal(props) {
 
+    const { get_master_data } = props
+
     const [categoryName, setCategoryName] = React.useState();
     const [masterData, setMasterData] = React.useState([]);
     const [dataSelected, setDataSelected] = React.useState("Category");
@@ -39,6 +41,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -52,6 +55,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -65,6 +69,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -78,6 +83,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -91,6 +97,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -117,6 +124,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -130,6 +138,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -143,6 +152,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -156,6 +166,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -169,6 +180,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                get_master_data()
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -275,7 +287,7 @@ export default function EditMasterDataModal(props) {
         }
     };
 
-    const onChangeData = async (dataSelected) => {
+    const onChangeDataType = async (dataSelected) => {
         console.log('search:', dataSelected);
 
         if (dataSelected === 'Category') {
@@ -433,10 +445,10 @@ export default function EditMasterDataModal(props) {
                             <Select
                                 showSearch
                                 style={{ width: 200, marginRight: "10px" }}
-                                placeholder="Select a data to manage"
+                                placeholder="Select a data type to handle"
                                 optionFilterProp="children"
                                 value={dataSelected}
-                                onChange={(e) => onChangeData(e)}
+                                onChange={(value) => onChangeDataType(value)}
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }

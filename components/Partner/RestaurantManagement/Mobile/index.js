@@ -15,7 +15,6 @@ export default function MobileComponent(props) {
 
     const [loading, setLoading] = React.useState(false);
     const [zoneSelected, setZoneSelected] = React.useState()
-    const [zoneIdSelectedArray, setZoneIdSelectedArray] = React.useState([])
     const [orders, setOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
     const [haveNewOrder, setHaveNewOrder] = React.useState(false)
@@ -32,8 +31,6 @@ export default function MobileComponent(props) {
             if (zone.length > 0) {
                 setZoneSelected(zone[0])
                 getOrder(zone[0])
-            } else {
-                message.warning('Zone not found.')
             }
         }
     }, [props])
@@ -43,109 +40,111 @@ export default function MobileComponent(props) {
         setLoading(true)
         let zoneIdArray = []
         zoneIdArray.push(zone.id)
-        setZoneIdSelectedArray(zoneIdArray)
-
         let data = {
             "restaurant": restaurant_id,
             "restaurant_table": null,
             "zone": zoneIdArray
         }
         console.log(data)
-        let order = await partnerService.getOrderByfilter(data)
-        if (order) {
+        partnerService.getOrderByfilter(data).then((orders) => {
+            console.log('order', orders)
             setInitailNewOrder(orders)
             setInitailInOrder(orders)
             setInitailCompletedOrder(orders)
-            setOrders(order)
+            setOrders(orders)
             setLoading(false)
-        } else {
+        }).catch((error) => {
+            console.log(error)
             message.error('An error has occurred.Please try again.')
-        }
+        })
     }
 
 
     const setInitailNewOrder = (orders) => {
         let haveNewOrder = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.new_orders.length > 0) {
-                haveNewOrder = true
+                checkOrder = order.new_orders.find((order) => order.status === 'New Order')
+                if (checkOrder) {
+                    // if checkOrder has value so it has new order
+                    haveNewOrder = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveNewOrder) {
             setNewOrderSelected({})
             setTableNewOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].new_orders.find((order) => order.status === 'New Order')
+            setNewOrderSelected(firstOrder)
+            setTableNewOrderSelectedNumber(firstOrder.id)
         }
         setHaveNewOrder(haveNewOrder)
     }
 
     const setInitailInOrder = (orders) => {
         let haveOrderInProcess = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.in_orders.length > 0) {
-                haveOrderInProcess = true
+                checkOrder = order.new_orders.find((order) => order.status === 'In Order')
+                if (checkOrder) {
+                    // if checkOrder has value so it has order in process
+                    haveOrderInProcess = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveOrderInProcess) {
             setInOrderSelected({})
             setTableInOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].in_orders.find((order) => order.status === 'In Order')
+            setInOrderSelected(firstOrder)
+            setTableInOrderSelectedNumber(firstOrder.id)
         }
         setHaveOrderInProcess(haveOrderInProcess)
     }
 
     const setInitailCompletedOrder = (orders) => {
         let haveOrderCompleted = false
-        orders.map((order) => {
+        let IndexOfFirstOrder = 0
+        let firstOrder, checkOrder
+        orders.map((order, index) => {
             if (order.completed_orders.length > 0) {
-                haveOrderCompleted = true
+                checkOrder = order.new_orders.find((order) => order.status === 'Completed')
+                if (checkOrder) {
+                    // if checkOrder has value so it has completed order
+                    haveOrderCompleted = true
+                    if (IndexOfFirstOrder === 0) {
+                        IndexOfFirstOrder = index
+                    }
+                }
             }
         })
 
         if (!haveOrderCompleted) {
             setCompletedOrderSelected({})
             setTableCompletedOrderSelectedNumber(undefined)
+        } else {
+            firstOrder = orders[IndexOfFirstOrder].completed_orders.find((order) => order.status === 'Completed')
+            setCompletedOrderSelected(firstOrder)
+            setTableCompletedOrderSelectedNumber(firstOrder.id)
         }
         setHaveOrderCompleted(haveOrderCompleted)
     }
 
-    let newOrderTableListComponent = orders && orders.map((order) => {
-        let tableList = order.new_orders.map((newOrder) => {
-            if (newOrder.order_items.length > 0) {
-                return (
-                    <>
-                        <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
-                                        </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>{newOrder.total} THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
 
-        })
-
-        return tableList
-    })
 
     const confirmTakeOrder = async (order_items, index) => {
         console.log('order_items', order_items)
@@ -219,6 +218,44 @@ export default function MobileComponent(props) {
             message.error('Cannot cancel order.Please try again.')
         }
     }
+
+    let newOrderTableListComponent = orders && orders.map((order) => {
+        let tableList = order.new_orders.map((newOrder) => {
+            if (newOrder.order_items.length > 0) {
+                return (
+                    <>
+                        <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col>
+                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                                        &nbsp;&nbsp; {order.name}
+                                        </Col>
+                                        <Col>
+                                            <div style={{ textAlign: "right" }}>
+                                                <b>{newOrder.total} THB</b>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                                {moment(newOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    </>
+                )
+            }
+
+        })
+
+        return tableList
+    })
 
     const renderNewOrderList = () => {
         if (newOrderSelected.order_items) {

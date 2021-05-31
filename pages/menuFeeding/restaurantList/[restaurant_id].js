@@ -1,48 +1,42 @@
 
-import utilStyles from '../../../styles/utils.module.css'
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
-import styles from './index.module.css'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
+import { Spin } from 'antd'
 import useMediaQuery from "../../../utils/utils";
 import RestaurantDetailMobile from '../../../components/MenuFeeding/Mobile/RestaurantDetail'
 import RestaurantDetailWeb from '../../../components/MenuFeeding/Web/RestaurantDetail'
 import restaurantService from '../../../services/restaurant'
-import checkLogin from '../../../services/checkLogin'
 import Geocode from "react-geocode";
 
-Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
-Geocode.setLanguage("th");
-// Geocode.setRegion("es");
-Geocode.setLocationType("ROOFTOP");
-Geocode.enableDebug();
-
-
-export default function Restaurant({ props }) {
+export default function Restaurant() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName, restaurantId, locationLatLong } = router.query;
+    const { locationId, locationName, restaurantId, tableId } = router.query;
     ////Set State
     const [restaurantDetail, setRestaurantDetail] = React.useState()
-
-    useEffect(async () => {
-        if (!router.isReady) {
-            // console.log('not ready')
-        } else {
-
-            console.log(restaurantId, locationLatLong)
-            if (restaurantId === undefined || locationLatLong === undefined) {
+    const [loading, setLoading] = React.useState(false)
+    useEffect(() => {
+        if (router.isReady) {
+            if (restaurantId === undefined) {
                 router.push({
                     pathname: "/menuFeeding"
                 })
             } else {
-                let restaurantDetail = await getRestaurantDetail(restaurantId)
-                await getAddressOnGoogleMaps(restaurantDetail)
-                // setRestaurantDetail(restaurantDetail)
+                setLoading(true)
+                getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
+                    await getAddressOnGoogleMaps(restaurantDetail)
+                }).catch((error) => {
+                    console.log('error', error)
+                })
             }
         }
     }, [router.isReady])
 
+    const getRestaurantDetail = async (restaurantId) => {
+        let response = await restaurantService.getRestaurantById(restaurantId)
+        return response.data
+    }
 
     const getAddressOnGoogleMaps = async (restaurantDetail) => {
         let point, substringPotion, splitPotion, latLong, lat, lng
@@ -63,17 +57,12 @@ export default function Restaurant({ props }) {
         );
         restaurantDetail.googleMapsAddress = address
         setRestaurantDetail(restaurantDetail)
-        console.log('restaurantDetail', restaurantDetail)
+        setLoading(false)
 
-    }
-
-    const getRestaurantDetail = async (restaurantId) => {
-        let response = await restaurantService.getRestaurantById(restaurantId)
-        return response.data
     }
 
     return (
-        <>
+        <Spin spinning={loading} tip="Loading...">
             {
                 !isMobileResolution ? (
                     // PC Version
@@ -81,8 +70,8 @@ export default function Restaurant({ props }) {
                         restaurant_detail={restaurantDetail}
                         location_name={locationName}
                         location_id={locationId}
-                        location_lat_long={locationLatLong}
                         restaurant_id={restaurantId}
+                        table_id={tableId}
                     />
                 ) : (
                     // Mobile Version
@@ -90,11 +79,11 @@ export default function Restaurant({ props }) {
                         restaurant_detail={restaurantDetail}
                         location_name={locationName}
                         location_id={locationId}
-                        location_lat_long={locationLatLong}
                         restaurant_id={restaurantId}
+                        table_id={tableId}
                     />
                 )
             }
-        </>
+        </Spin>
     )
 }

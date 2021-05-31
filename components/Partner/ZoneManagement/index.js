@@ -7,6 +7,7 @@ import partnerSerivce from '../../../services/partner'
 import AddZoneModal from '../../../components/Modal/AddZoneModal'
 import EditZoneModal from '../../../components/Modal/EditZoneModal'
 import EditTableModal from '../../../components/Modal/EditTable'
+import ViewTableQRCode from '../../Modal/ViewTableQRCode';
 
 export default function ZoneManagement({ restaurant_id, current_tab }) {
 
@@ -16,32 +17,35 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
     const [showEditZoneModal, setShowEditZoneModal] = React.useState(false)
     const [zoneSelected, setZoneSelected] = React.useState([])
     const [editTableModalShow, setEditTableModalShow] = React.useState(false);
-    const [tableSelected, setTableSelected] = React.useState();
+    const [tableSelected, setTableSelected] = React.useState({ name: '', id: '', size: 'small', type: 'square' });
+    const [viewTableQRCodeModalShow, setViewTableQRCodeModalShow] = React.useState(false);
+    const [restaurantName, setRestaurantName] = React.useState();
+
     useEffect(() => {
-        if (restaurant_id !== undefined) {
+        if (restaurant_id && current_tab === 'zone') {
             getZone()
         }
-        if (current_tab === 'zone') {
-            getZone()
-        }
-    }, [restaurant_id, current_tab])
+    }, [current_tab])
 
     const getZone = async () => {
         setLoading(true)
-        let allZone = await partnerSerivce.getZoneByRestaurantId(restaurant_id)
-        if (allZone !== 500) {
+        partnerSerivce.getZoneByRestaurantId(restaurant_id).then((allZone) => {
+            console.log('allZone', allZone)
             allZone.map((zone, zoneIndex) => {
+                if (zoneIndex === 0) {
+                    setRestaurantName(zone.restaurant.name)
+                }
+
                 zone.index = (zoneIndex + 1)
                 zone.key = zone.name + zoneIndex
             })
             setZone(allZone)
             setLoading(false)
-        } else {
+        }).catch((error) => {
+            console.log(error)
             message.error('An error has occurred. Please try again.')
             setLoading(false)
-        }
-
-
+        })
     }
 
     const confirmDeleteZone = async (zone) => {
@@ -94,6 +98,11 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
         setEditTableModalShow(true)
     }
 
+    const onViewQRCode = (table) => {
+        setTableSelected(table)
+        setViewTableQRCodeModalShow(true)
+    }
+
     const editTable = async (table) => {
         setEditTableModalShow(false)
         console.log('table', table)
@@ -137,6 +146,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
                         >
                             <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button>
                         </Popconfirm>
+                        <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => onViewQRCode(table)}>QR Code</Button>
                     </Space>
                 ),
             },
@@ -229,6 +239,13 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
                 onHide={() => setEditTableModalShow(false)}
                 table_selected={tableSelected}
                 edit_table={editTable}
+            />
+            <ViewTableQRCode
+                show={viewTableQRCodeModalShow}
+                onHide={() => setViewTableQRCodeModalShow(false)}
+                table_selected={tableSelected}
+                restaurant_name={restaurantName}
+                restaurant_id={restaurant_id}
             />
         </>
     );

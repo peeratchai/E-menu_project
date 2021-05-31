@@ -3,7 +3,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card } from 'react-bootstrap'
 import Link from 'next/link'
-import React, { useEffect,useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import styles from './index.module.css'
 import { Select, message } from 'antd';
 import MobileFilterRestaurantList from '../Filter'
@@ -20,7 +20,8 @@ export default function LocationListMobile() {
     const [modalShow, setModalShow] = React.useState(false);
     const [totalResult, setTotalResult] = React.useState(0);
     const [filter, setFilter] = React.useState({});
-    useLayoutEffect(async () => {
+    
+    useEffect(async () => {
         if (typeof window !== 'undefined') {
             try {
                 let accessToken = await checkLogin()
@@ -51,7 +52,6 @@ export default function LocationListMobile() {
         let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
         setFilter(filterForm)
         console.log(locationListByFilter)
-        // setLocationList(locationListByFilter)
     }
 
     const searchFunc = () => {

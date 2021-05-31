@@ -98,10 +98,10 @@ const adminService = {
     },
     updateMasterFoodKind: async function (foodKindId, data) {
         let ContentType = 'application/json'
-        return await sendRequest.patch('/api/update-master-foodKind/' + foodKindId, data, ContentType)
+        return await sendRequest.patch('/api/update-master-food-kind/' + foodKindId, data, ContentType)
     },
     deleteMasterFoodKind: async function (foodKindId) {
-        return await sendRequest.delete('/api/delete-master-foodKind/' + foodKindId)
+        return await sendRequest.delete('/api/delete-master-food-kind/' + foodKindId)
     },
     addMasterSubKind: async function (data) {
         return await sendRequest.post('/api/add-master-sub-kind', data)
@@ -111,10 +111,10 @@ const adminService = {
     },
     updateMasterSubKind: async function (subKindIdId, data) {
         let ContentType = 'application/json'
-        return await sendRequest.patch('/api/update-master-subKind/' + subKindIdId, data, ContentType)
+        return await sendRequest.patch('/api/update-master-sub-kind/' + subKindIdId, data, ContentType)
     },
     deleteMasterSubKind: async function (subKindIdId) {
-        return await sendRequest.delete('/api/delete-master-subKind/' + subKindIdId)
+        return await sendRequest.delete('/api/delete-master-sub-kind/' + subKindIdId)
     },
     addMasterCookMethod: async function (data) {
         return await sendRequest.post('/api/add-master-cook-method', data)
@@ -124,14 +124,21 @@ const adminService = {
     },
     updateMasterCookMethod: async function (cookMethodIdId, data) {
         let ContentType = 'application/json'
-        return await sendRequest.patch('/api/update-master-cookMethod/' + cookMethodIdId, data, ContentType)
+        return await sendRequest.patch('/api/update-master-cook-method/' + cookMethodIdId, data, ContentType)
     },
     deleteMasterCookMethod: async function (cookMethodIdId) {
-        return await sendRequest.delete('/api/delete-master-cookMethod/' + cookMethodIdId)
+        return await sendRequest.delete('/api/delete-master-cook-method/' + cookMethodIdId)
     },
     getAllMenu: async function () {
         return await sendRequest.get('/api/get/menu')
-    }
+    },
+    updateFoodData: async function (foodDataId, data) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update-food-data/' + foodDataId, data, ContentType)
+    },
+    deleteMenu: async (menuId) => {
+        return await sendRequest.delete('/api/delete_menu/' + menuId)
+    },
 
 }
 

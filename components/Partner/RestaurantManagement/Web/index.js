@@ -1,15 +1,17 @@
 import styles from './index.module.css'
 import { Row, Col, Form, Button } from 'react-bootstrap'
-import { message } from 'antd'
+import { message, Popover } from 'antd'
 import React, { useEffect } from 'react'
 import Draggable from "react-draggable";
 import AddTableModal from '../../../Modal/AddTable'
 import ViewOrderModal from '../../../Modal/ViewOrderModal'
 import partnerSerivce from '../../../../services/partner'
 import { mappingTableImage } from '../../../../masterData/mappingTableImage'
+import utilStyles from '../../../../styles/utils.module.css'
+import Link from 'next/link'
 
 export default function WebComponent(props) {
-    const { zone, restaurant_id } = props
+    const { zone, restaurant_id, restaurant_name } = props
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -32,7 +34,7 @@ export default function WebComponent(props) {
             if (zone.length > 0) {
                 setZoneSelected(zone[0])
                 ratioTableImages(zone[0]);
-                message.warning('Loading zone successful.')
+                message.success('Loading zone successful.')
             } else {
                 setTable([])
             }
@@ -95,9 +97,9 @@ export default function WebComponent(props) {
 
         let position_x = data.x
         let position_y = data.y
-        if (!dragging) {
-            onClickTable(tableData)
-        }
+        // if (!dragging) {
+        //     onClickTable(tableData)
+        // }
         setDragging(false)
 
         let tables = [...table]
@@ -131,6 +133,24 @@ export default function WebComponent(props) {
 
     }
 
+    const contentTablePopover = (tableData) => {
+        return (
+            <div>
+                <a className={utilStyles.font_size_sm} style={{ lineHeight: 2 }} onClick={() => onClickTable(tableData)}>View All Order</a>
+                <br />
+                <Link
+                    href={{
+                        pathname: '/menuFeeding/restaurantList/' + restaurant_name,
+                        query: { restaurantId: restaurant_id, tableId: tableData.id },
+                    }}
+                >
+                    <a className={utilStyles.font_size_sm} style={{ lineHeight: 2 }}>Take new order</a>
+                </Link>
+            </div>
+        )
+    }
+
+
 
     let tableManagement = table.map((table, tableIndex) =>
         <Draggable
@@ -141,10 +161,13 @@ export default function WebComponent(props) {
             onStop={(event, data) => onStop(event, data, table, tableIndex)}
         >
             <div style={{ position: "absolute", width: containerWidth / 10, height: containerHeight / 5, cursor: "pointer", backgroundImage: `url(${table.image})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: 'contain' }}  >
-                <div className={styles.tableNumber} >
-                    {table.name}
-                </div>
+                <Popover placement="topLeft" title={table.name} content={contentTablePopover(table)} trigger="click">
+                    <div className={styles.tableNumber} >
+                        {table.name}
+                    </div>
+                </Popover>
             </div>
+
         </Draggable >
     )
 
@@ -214,7 +237,7 @@ export default function WebComponent(props) {
                 </Col>
             </Row>
             <Row>
-                <Col style={{ height: "30rem" }} ref={refTableManagement}>
+                <Col style={{ height: "35rem" }} ref={refTableManagement}>
                     <div className={styles.container}>
                         {tableManagement}
                     </div>

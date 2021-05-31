@@ -1,22 +1,18 @@
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Button, Modal, Form } from 'react-bootstrap'
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './index.module.css'
 import { StarOutlined, FireOutlined } from '@ant-design/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
-import changeFormatLatLong from '../../../../services/chaneformatLatLong'
-
-const { Option } = Select;
 
 //Modal filter for mobile resolution
 export default function MobileFilterRestaurantList(props) {
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
-    // const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [form, setForm] = React.useState({
         what: '',
         where: '',
@@ -28,18 +24,7 @@ export default function MobileFilterRestaurantList(props) {
         have_parking: false,
         sort_by: null
     })
-    // const [defaultCenterMaps, setDefaultCenterMaps] = React.useState({ lat: 13.8537968, lng: 100.3764991 });
 
-    useLayoutEffect(() => {
-
-        if (props.center_location_LatLong !== undefined) {
-            const { center_location_LatLong, location_restaurant_in_maps } = props
-            let { lat, lng } = changeFormatLatLong(center_location_LatLong)
-            // console.log(lat, lng)
-            setDefaultCenterMaps({ lat: parseFloat(lat), lng: parseFloat(lng) })
-            setLocationInMaps(location_restaurant_in_maps)
-        }
-    }, [props])
 
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])

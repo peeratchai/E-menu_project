@@ -6,6 +6,7 @@ import React, { useEffect } from 'react'
 import useMediaQuery from "../../../utils/utils";
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { message } from 'antd';
 
 export default function OrderMenuModal(props) {
 
@@ -28,44 +29,50 @@ export default function OrderMenuModal(props) {
     }, [props])
 
     const saveMenu = () => {
-        let basket = window.localStorage.getItem('basket');
-        let restaurantId = props.restaurant_id
-        let order = {
-            ...menuDetail,
-            specialInstruction: specialInstruction,
-            count: count,
-            total: total
-        }
-        if (!basket) {
-            let menu = { 'restaurantId': restaurantId, 'order': [order], 'total': total }
-            window.localStorage.setItem('basket', JSON.stringify(menu));
-        } else {
-            basket = JSON.parse(basket)
-            let existingOrder = basket.order
-            let totalAllOrder = basket.total + total
-            let existingMenu = existingOrder.filter((order) => order.id === menuDetail.id)
-            if (existingMenu.length > 0) {
-                existingMenu = existingMenu[0]
-                existingMenu.count = existingMenu.count + count
-                existingMenu.total = existingMenu.total + total
-                existingMenu.specialInstruction = specialInstruction
-
-                existingOrder.map((order) => {
-                    if (order.id === existingMenu.id) {
-                        order = existingMenu
-                    }
-                })
-                basket = { 'restaurantId': restaurantId, 'order': [...existingOrder], 'total': totalAllOrder }
-            } else {
-                basket = { 'restaurantId': restaurantId, 'order': [...existingOrder, order], 'total': totalAllOrder }
+        if (props.table_id && props.restaurant_id) {
+            let basket = window.localStorage.getItem('basket');
+            let restaurantId = props.restaurant_id
+            let tableId = props.table_id
+            let order = {
+                ...menuDetail,
+                specialInstruction: specialInstruction,
+                count: count,
+                total: total
             }
-            window.localStorage.setItem('basket', JSON.stringify(basket));
+            if (!basket) {
+                let menu = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [order], 'total': total }
+                window.localStorage.setItem('basket', JSON.stringify(menu));
+            } else {
+                basket = JSON.parse(basket)
+                let existingOrder = basket.order
+                let totalAllOrder = basket.total + total
+                let existingMenu = existingOrder.filter((order) => order.id === menuDetail.id)
+                if (existingMenu.length > 0) {
+                    existingMenu = existingMenu[0]
+                    existingMenu.count = existingMenu.count + count
+                    existingMenu.total = existingMenu.total + total
+                    existingMenu.specialInstruction = specialInstruction
+
+                    existingOrder.map((order) => {
+                        if (order.id === existingMenu.id) {
+                            order = existingMenu
+                        }
+                    })
+                    basket = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [...existingOrder], 'total': totalAllOrder }
+                } else {
+                    basket = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [...existingOrder, order], 'total': totalAllOrder }
+                }
+                window.localStorage.setItem('basket', JSON.stringify(basket));
+            }
+            console.log('specialInstruction ->', specialInstruction)
+            console.log('count ->', count)
+            setCount(1)
+            setSpecialInstruction('')
+            props.onHide()
+        } else {
+            message.error('Please scan qr code again.')
         }
-        console.log('specialInstruction ->', specialInstruction)
-        console.log('count ->', count)
-        setCount(1)
-        setSpecialInstruction('')
-        props.onHide()
+
     }
 
     const closeModal = () => {

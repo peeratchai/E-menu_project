@@ -27,7 +27,6 @@ export default function RestaurantListMobile(props) {
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantList, setRestaurantList] = React.useState(null);
-    const [locationLatLong, setLocationLatLong] = React.useState("");
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
     const [filter, setFilter] = React.useState({});
@@ -50,12 +49,11 @@ export default function RestaurantListMobile(props) {
     useEffect(() => {
         if (props.restaurant_list.length !== 0) {
             // setRestaurantList(props.restaurant_list)
-            const { restaurant_list, location_name, location_id, location_lat_long } = props
+            const { restaurant_list, location_name, location_id } = props
 
             if (restaurantList === null) {
                 setLocationName(location_name)
                 setLocationId(location_id)
-                setLocationLatLong(location_lat_long)
                 setTotalResult(restaurant_list.length)
                 setRestaurantList(restaurant_list)
                 renderRestaurantCard(restaurant_list)
@@ -74,7 +72,7 @@ export default function RestaurantListMobile(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList/' + restaurantDetails.name,
-                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id, locationLatLong: locationLatLong },
+                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id},
                         }}
                     >
                         <Card>

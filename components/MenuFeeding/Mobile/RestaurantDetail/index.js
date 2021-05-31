@@ -37,7 +37,6 @@ export default function RestaurantDetailMobile(props) {
     const [locationName, setLocationName] = React.useState()
     const [locationId, setLocationId] = React.useState()
     const [restaurantBannerPicture, setRestaurantBannerPicture] = React.useState()
-    const [locationLatLong, setLocationLatLong] = React.useState("");
     const [menuSelected, setMenuSelected] = React.useState()
     const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
     const [basket, setBasket] = React.useState({ 'order': [], 'total': 0 })
@@ -72,7 +71,7 @@ export default function RestaurantDetailMobile(props) {
 
     useEffect(() => {
         if (props && props.restaurant_detail !== undefined) {
-            let { restaurant_detail, location_id, location_name, location_lat_long } = props
+            let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
             restaurant_detail.menu_categories.map((category, index) => {
                 if (index === 0) {
@@ -83,7 +82,6 @@ export default function RestaurantDetailMobile(props) {
             })
 
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
-            setLocationLatLong(location_lat_long)
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
@@ -233,7 +231,7 @@ export default function RestaurantDetailMobile(props) {
                                     <Link
                                         href={{
                                             pathname: '/menuFeeding/restaurantList',
-                                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
+                                            query: { locationId: locationId, locationName: locationName },
                                         }}
                                         passHref
                                     >

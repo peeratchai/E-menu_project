@@ -26,8 +26,6 @@ const { Meta } = Cardantd;
 export default function RestaurantDetailWeb(props) {
 
     const router = useRouter()
-    const { restaurant } = router.query;
-
     ////Set State
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
     const [restaurantDetail, setRestaurantDetail] = React.useState({
@@ -55,7 +53,6 @@ export default function RestaurantDetailWeb(props) {
     const [menuSelected, setMenuSelected] = React.useState()
     const [lat, setLat] = React.useState(13.8537968);
     const [lng, setLng] = React.useState(100.3764991);
-    const [locationLatLong, setLocationLatLong] = React.useState("");
     const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
     ////Set Ref
     const refCategoryNav = React.useRef();
@@ -66,9 +63,10 @@ export default function RestaurantDetailWeb(props) {
 
     useEffect(() => {
         if (props && props.restaurant_detail !== undefined) {
-            let { restaurant_detail, location_id, location_name, location_lat_long } = props
+            let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
             restaurant_detail.menu_categories.map((category, index) => {
+                //// set initial isActive for button category 
                 if (index === 0) {
                     categoryList.push({ categoryName: category.name, isActive: true })
                 } else {
@@ -76,7 +74,6 @@ export default function RestaurantDetailWeb(props) {
                 }
             })
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
-            setLocationLatLong(location_lat_long)
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
@@ -313,7 +310,7 @@ export default function RestaurantDetailWeb(props) {
                                     <Link
                                         href={{
                                             pathname: '/menuFeeding/restaurantList',
-                                            query: { locationId: locationId, locationName: locationName, locationLatLong: locationLatLong },
+                                            query: { locationId: locationId, locationName: locationName },
                                         }}
                                         passHref
                                     >
@@ -437,7 +434,7 @@ export default function RestaurantDetailWeb(props) {
                 onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
-
+                table_id={props.table_id}
             />
         </Layout >
     )

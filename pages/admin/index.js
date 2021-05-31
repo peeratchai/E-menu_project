@@ -458,7 +458,7 @@ export default function Admin() {
                     !isMobileResolution ? (
                         //PC Version
                         <>
-                            <Tab.Container id="left-tabs-management-admin" defaultActiveKey="foodData" onSelect={onChangeTab}>
+                            <Tab.Container id="left-tabs-management-admin" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
                                 <Row>
                                     <Col sm={2}>
                                         <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>

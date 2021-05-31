@@ -20,5 +20,6 @@ module.exports = {
     },
     env: {
         REACT_APP_FACEBOOK_APP_ID: '259379829306113',
+        URL: 'http://localhost:3000'
     },
 }

@@ -180,14 +180,19 @@ export default function Menu(props) {
     }
 
     const handleAddCategory = async (categoryName) => {
-        let data = {
-            "restaurant": restaurant_id,
-            "name": categoryName
+        if (restaurant_id) {
+            let data = {
+                "restaurant": restaurant_id,
+                "name": categoryName
+            }
+            partnerService.addCategory(data).then(() => {
+                message.success('Add category successful.')
+                getAllMenu()
+            })
+        } else {
+            message.warning('Please select restaurant first.')
         }
-        partnerService.addCategory(data).then(() => {
-            message.success('Add category successful.')
-            getAllMenu()
-        })
+
     };
 
 
