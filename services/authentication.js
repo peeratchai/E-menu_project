@@ -1,6 +1,7 @@
 const axios = require('axios');
 import sendRequest from './sendRequest'
 const authentication = {
+
     signupWithEmail: async function (email, password) {
         let config = {
             headers: {
@@ -35,13 +36,14 @@ const authentication = {
             password: password
         }
 
-        return await axios.post('/api/auth/signin-with-email', data, config)
+        console.log('data', data)
+        await axios.post('/api/auth/signin-with-email', data, config)
             .then(function (response) {
-                console.log(response)
-                return response.data.accessToken
+                console.log('response.data', response.data)
+                return response
             })
             .catch(function (error) {
-                console.log(error)
+                console.log('error222222222',error)
                 return error
             });
 

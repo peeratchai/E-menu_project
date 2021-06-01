@@ -18,7 +18,6 @@ export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
     const [newspaperList, setNewspaperList] = React.useState();
-    const [accessToken, setAccessToken] = React.useState();
     const [filter, setFilter] = React.useState({});
 
     const searchFunc = () => {
@@ -27,14 +26,12 @@ export default function Newspaper() {
     }
 
     useEffect(async () => {
-        let accessToken = await checklogin()
-        let newspaperList = await getNewspaperlist(accessToken)
-        setAccessToken(accessToken)
+        let newspaperList = await getNewspaperlist()
         setNewspaperList(newspaperList)
     }, [])
 
-    const getNewspaperlist = async (accessToken) => {
-        let response = await newspaperService.getNewspaperList(accessToken);
+    const getNewspaperlist = async () => {
+        let response = await newspaperService.getNewspaperList();
         console.log('response', response)
         return response.data
     }

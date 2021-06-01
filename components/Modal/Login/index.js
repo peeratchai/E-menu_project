@@ -8,8 +8,13 @@ import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import checkUserPermission from '../../../lib/checkUserPermission'
+import fetchJson from '../../../lib/fetchJson'
 
 export default function LoginModal(props) {
+
+    const { mutateUser } = checkUserPermission()
+
     const [form, setForm] = React.useState({})
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState(null);
@@ -211,8 +216,6 @@ export default function LoginModal(props) {
 
     const findSigninFormErrors = () => {
         const { email, password } = form
-        console.log('email:', email)
-        console.log('password:', password)
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 
         const newErrors = {}
@@ -248,10 +251,13 @@ export default function LoginModal(props) {
                 console.log(email, password)
                 let response = await authentication.signupWithEmail(email, password)
                 let accessToken = response.data.accessToken
-                localStorage.setItem('accessToken', accessToken)
                 try {
                     let profile = await profileService.getProfile(accessToken)
-                    localStorage.setItem('profile', profile)
+                    localStorage.setItem('profile', JSON.stringify(profile))
+                    localStorage.setItem('accessToken', accessToken)
+                    localStorage.setItem('islogin', true)
+                    props.onHide()
+                    props.setlogin(true)
                 } catch (error) {
                     console.log(error)
                 }
@@ -271,32 +277,57 @@ export default function LoginModal(props) {
             console.log(form)
 
         } else {
+            const { email, password } = form
+
             try {
-                const { email, password } = form
-                let accessToken = await authentication.signinWithEmail(email, password)
-                try {
-                    let profile = await profileService.getProfile(accessToken)
-                    console.log(profile)
-                    localStorage.setItem('profile', JSON.stringify(profile))
-                } catch (error) {
-                    console.log(error)
-                }
-                localStorage.setItem('accessToken', accessToken)
-                localStorage.setItem('islogin', true)
-                props.onHide()
-                props.setlogin(true)
-                if (isRememberMe) {
-                    const b64EncodedEmail = Buffer.from(email).toString('base64')
-                    const b64EncodedPassword = Buffer.from(password).toString('base64')
-                    localStorage.setItem('email', b64EncodedEmail)
-                    localStorage.setItem('password', b64EncodedPassword)
-                    localStorage.setItem('isRememberMe', true)
-                }
+                await mutateUser(
+                    fetchJson('/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(form),
+                    })
+                ).then(async (response) => {
+                    let accessToken = response.accessToken
+                    props.onHide()
+                    props.setlogin(true)
+                    if (isRememberMe) {
+                        const b64EncodedEmail = Buffer.from(email).toString('base64')
+                        const b64EncodedPassword = Buffer.from(password).toString('base64')
+                        localStorage.setItem('email', b64EncodedEmail)
+                        localStorage.setItem('password', b64EncodedPassword)
+                        localStorage.setItem('isRememberMe', true)
+                    }
+                }).catch((error) => {
+                    console.log('error', error)
+                })
             } catch (error) {
-                const newErrors = {}
-                newErrors.password = 'Invalid your password or forgot password ?'
-                setErrors(newErrors)
+                console.error('An unexpected error happened:', error)
             }
+
+            // authentication.signinWithEmail(email, password).then(async (accessToken) => {
+            //     try {
+            //         let profile = await profileService.getProfile(accessToken)
+            //         console.log(profile)
+            //         localStorage.setItem('profile', JSON.stringify(profile))
+            //     } catch (error) {
+            //         console.log(error)
+            //     }
+            //     localStorage.setItem('accessToken', accessToken)
+            //     localStorage.setItem('islogin', true)
+            //     props.onHide()
+            //     props.setlogin(true)
+            //     if (isRememberMe) {
+            //         const b64EncodedEmail = Buffer.from(email).toString('base64')
+            //         const b64EncodedPassword = Buffer.from(password).toString('base64')
+            //         localStorage.setItem('email', b64EncodedEmail)
+            //         localStorage.setItem('password', b64EncodedPassword)
+            //         localStorage.setItem('isRememberMe', true)
+            //     }
+            // }).catch((error) => {
+            //     const newErrors = {}
+            //     newErrors.password = 'Invalid your password or forgot password ?'
+            //     setErrors(newErrors)
+            // })
         }
     }
 
@@ -508,7 +539,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab}>Login</span>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab()}>Login</span>
                                     </div>
                                 </Col>
                             </Row>

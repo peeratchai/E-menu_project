@@ -17,10 +17,15 @@ import Profile from '../../components/Partner/Profile'
 import RestaurantManagement from '../../components/Partner/RestaurantManagement'
 import ZoneManagement from '../../components/Partner/ZoneManagement'
 import Dashboard from '../../components/Partner/Dashboard'
-
+import PropTypes from 'prop-types'
+import withSession from '../../lib/session'
+const axios = require('axios')
 const { Option } = Select;
 
-export default function Partner() {
+
+
+const Partner = ({ user }) => {
+
     const isMobileResolution = useMediaQuery(768)
     const notDisplay = null
     const [tableNumber, setTableNumber] = React.useState('1');
@@ -30,19 +35,14 @@ export default function Partner() {
     const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
 
     useEffect(() => {
-
-        if (typeof window !== 'undefined') {
-            let profile = window.localStorage.getItem('profile');
-            if (profile !== undefined) {
-                console.log('profile', JSON.parse(profile))
-                profile = JSON.parse(profile)
-                let restaurantId = profile.restaurant_employee.restaurant.id
-                let restaurantName = profile.restaurant_employee.restaurant.name
-                setRestaurantId(restaurantId)
-                setRestaurantName(restaurantName)
-            }
+        console.log('user', user)
+        if (user) {
+            let profile = user.profile
+            let restaurantId = profile.restaurant_employee.restaurant.id
+            let restaurantName = profile.restaurant_employee.restaurant.name
+            setRestaurantId(restaurantId)
+            setRestaurantName(restaurantName)
         }
-
     }, [])
 
     const handleChangeMenu = value => {
@@ -420,3 +420,64 @@ export default function Partner() {
 
     )
 }
+
+
+export default Partner
+
+Partner.propTypes = {
+    user: PropTypes.shape({
+        isLoggedIn: PropTypes.bool,
+        login: PropTypes.string,
+        avatarUrl: PropTypes.string,
+    }),
+}
+
+export const getServerSideProps = withSession(async function ({ req, res }) {
+    let user = req.session.get('user')
+    const roles = ['employee', 'partner', 'admin']
+    let havePermission = false
+
+    if (user) {
+
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + user.accessToken,
+            }
+        }
+        let reponse = await axios.get('http://localhost:8080/profile', config)
+        let profile = reponse.data
+
+        profile.roles.forEach((userRole) => {
+            roles.forEach((role) => {
+                if (userRole === role) {
+                    havePermission = true
+                }
+            })
+        })
+
+        console.log('havePermission', havePermission)
+
+        if (!havePermission) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent: false,
+                },
+            }
+        } else {
+            user.profile = profile
+        }
+
+    } else {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: { user },
+    }
+})

@@ -31,12 +31,12 @@ export default function ViewTableQRCode(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    New Category
+                    View QR Code
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Container>
-                    <div>
+                    <div style={{ textAlign: "center" }}>
                         <QRCode
                             id="qrCodeEl"
                             value={process.env.URL + "/menuFeeding/restaurantList/" + restaurant_name + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id}
