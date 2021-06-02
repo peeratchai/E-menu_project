@@ -99,9 +99,14 @@ const authentication = {
                 'Content-Type': 'application/json'
             }
         }
+        // let data = {
+        //     email: 'guest_user@test.com',
+        //     password: '123'
+        // }
+
         let data = {
-            email: 'guest_user@test.com',
-            password: '123'
+            email: 'guest@test.com',
+            password: 'p@assword_guestuser'
         }
 
         console.log(data)
