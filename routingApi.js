@@ -152,8 +152,8 @@ module.exports = {
             destination: API_URL + '/order-item/cancel_order/:orderId',
         },
         {
-            source: '/api/get_order_history/:userId',
-            destination: API_URL + '/order/history/:userId',
+            source: '/api/get_order_history',
+            destination: API_URL + '/order/history',
         },
         {
             source: '/api/get_order/:orderId',

@@ -43,8 +43,10 @@ const OrderHistory = ({ user }) => {
 
     const getOrderHistory = async (profile) => {
         console.log('profile', profile)
-        let profileId = profile.id
-        let orderHistory = await orderService.getOrderHistoryByUserId(profileId)
+        let userId = profile.id
+        let orderHistory = await orderService.getOrderHistoryByUserId(userId)
+        console.log('orderHistory', orderHistory)
+
         if (orderHistory) {
             if (orderHistory.length > 0) {
                 setOrderHistory(orderHistory)
@@ -55,8 +57,11 @@ const OrderHistory = ({ user }) => {
         }
 
     }
+    let total
 
-    let OrderHistoryComponent = orderHistory.map((order) => {
+    let MobileOrderHistoryComponent = orderHistory.map((order) => {
+        total = 0
+        order.order_items.forEach((orderItem) => total += orderItem.total)
 
         return (
             <>
@@ -88,7 +93,52 @@ const OrderHistory = ({ user }) => {
                         <Row>
                             <Col style={{ fontSize: "14px" }}>
                                 <div style={{ textAlign: "right" }}>
-                                    <b>Total : 240 ฿</b>
+                                    <b>Total : {total} ฿</b>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <br />
+            </>
+        )
+    })
+
+    let WebOrderHistoryComponent = orderHistory.map((order) => {
+        total = 0
+        order.order_items.forEach((orderItem) => total += orderItem.total)
+
+        return (
+            <>
+                <Row style={{ height: "12rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px", cursor: "pointer" }} onClick={() => viewOrder(order)}>
+                    <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
+                        <Image src={order.restaurant.image_url} rounded style={{ height: "100%" }} />
+                    </Col>
+                    <Col xs={9} className={utilStyles.font_size_md}>
+                        <Row>
+                            <Col>
+                                <LocationOnIcon className={utilStyles.font_size_sm} /> {order.restaurant.name}
+                            </Col>
+                            <Col >
+                                <div style={{ textAlign: "right", margin: "auto" }}>
+                                    {moment(order.order_date).format('DD MMM YYYY')}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={8}>
+                                {order.status}
+                            </Col>
+                            <Col xs={4}>
+                                <div style={{ textAlign: "right" }} >
+                                    {moment(order.order_date).format('hh:mm A')}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col >
+                                <div style={{ textAlign: "right" }}>
+                                    <b>Total : {total} ฿</b>
                                 </div>
                             </Col>
                         </Row>
@@ -107,7 +157,7 @@ const OrderHistory = ({ user }) => {
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm}>
                                 {
-                                    haveOrderHistory ? OrderHistoryComponent : <EmptyComponent />
+                                    haveOrderHistory ? MobileOrderHistoryComponent : <EmptyComponent />
                                 }
                             </Container>
                         </Layout >
@@ -122,7 +172,7 @@ const OrderHistory = ({ user }) => {
                         <Layout >
                             <Container className={utilStyles.container}>
                                 {
-                                    haveOrderHistory ? OrderHistoryComponent : <EmptyComponent />
+                                    haveOrderHistory ? WebOrderHistoryComponent : <EmptyComponent />
                                 }
                             </Container>
                         </Layout >

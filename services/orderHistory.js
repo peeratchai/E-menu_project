@@ -9,8 +9,14 @@ const orderService = {
                 'Authorization': 'Bearer ' + accessToken
             }
         }
+        let data = {
+            "user": userId,
+            "status": "completed"
+        }
 
-        let response = await axios.get('/api/get_order_history/' + userId, config)
+        console.log('data',data)
+
+        let response = await axios.post('/api/get_order_history', data, config)
             .then(function (response) {
                 console.log(response)
                 return response.data
