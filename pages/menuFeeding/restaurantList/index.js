@@ -32,8 +32,7 @@ export default function RestaurantList() {
             } else {
                 console.log('restaurantList')
                 let accessToken = await checkLogin()
-                let restaurantList = await getRestaurant(accessToken);
-                console.log('restaurantList', restaurantList)
+                let restaurantList = await getRestaurant(accessToken, locationId);
                 await getAddressOnGoogleMaps(restaurantList)
             }
         }
@@ -67,7 +66,7 @@ export default function RestaurantList() {
 
     }
 
-    const getRestaurant = async (accessToken) => {
+    const getRestaurant = async (accessToken, locationId) => {
         let response = await restaurantService.getRestaurantSearchByLocation(accessToken, locationId);
         return response.data
     }

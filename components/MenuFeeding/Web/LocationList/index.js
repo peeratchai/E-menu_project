@@ -20,6 +20,7 @@ export default function LocationListWeb() {
 
     const [locationList, setLocationList] = React.useState([]);
     const [totalResult, setTotalResult] = React.useState(0);
+    const [locationInMaps, setLocationInMaps] = React.useState([]);
 
     useEffect(async () => {
         if (typeof window !== 'undefined') {
@@ -28,6 +29,7 @@ export default function LocationListWeb() {
                 let LocationList = await getLocationList(accessToken)
                 // console.log(LocationList)
                 setLocationList(LocationList)
+                setMaps(LocationList)
                 setTotalResult(LocationList.length)
             } catch (error) {
                 console.log(error)
@@ -44,6 +46,22 @@ export default function LocationListWeb() {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const setMaps = (LocationList) => {
+        let LocationInMaps = []
+        let point, substringPotion, splitPotion, latLong, lat, lng
+        LocationList.map((LocationDetail) => {
+            point = LocationDetail.location;
+            substringPotion = point.substring(5)
+            splitPotion = substringPotion.split('(').join('').split(')');
+            latLong = splitPotion[0].split(' ')
+            lat = latLong[0]
+            lng = latLong[1]
+            LocationInMaps.push({ lat: lat, lng: lng, name: LocationDetail.name })
+        })
+
+        setLocationInMaps(LocationInMaps)
     }
 
     const onSearch = async (filterForm) => {
@@ -85,6 +103,7 @@ export default function LocationListWeb() {
                     <Col xs={6} md={4}>
                         <Filter
                             onSearch={(filterForm) => onSearch(filterForm)}
+                            location_restaurant_in_maps={locationInMaps}
                         />
                     </Col>
 

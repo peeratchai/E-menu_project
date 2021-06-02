@@ -10,6 +10,7 @@ import PointInMaps from '../../../PointInMaps'
 
 export default function Filter(props) {
 
+    const { location_restaurant_in_maps } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState();
     const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
@@ -24,8 +25,7 @@ export default function Filter(props) {
         have_parking: false,
         sort_by: null
     })
-    const defaultCenterMaps = { lat: 13.8537968, lng: 100.3764991 }
-
+    const defaultCenterMaps = { lat: 13.7641482, lng: 100.5388393 }
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
@@ -37,8 +37,9 @@ export default function Filter(props) {
 
     useEffect(() => {
         if (location_restaurant_in_maps) {
-            const { location_restaurant_in_maps } = props
+            console.log('location_restaurant_in_maps', location_restaurant_in_maps)
             setLocationInMaps(location_restaurant_in_maps)
+
         }
     }, [props])
 
