@@ -12,21 +12,20 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import 'react-chat-widget/lib/styles.css';
 import dynamic from 'next/dynamic';
 import MessengerCustomerChat from 'react-messenger-customer-chat';
+import checkUserPermission from '../lib/checkUserPermission'
+import fetchJson from '../lib/fetchJson'
 
+export default function Layout(props) {
 
-const Widget = dynamic(() => import("react-chat-widget").then(mod => mod.Widget), {
-    ssr: false
-});
+    const { children, containerType, searchFunc, page, menuInBasket } = props
+    const { user, mutateUser } = checkUserPermission()
 
-export default function Layout({ children, containerType, searchFunc, page, menuInBasket }) {
     const router = useRouter()
-
     //// Set state
     const [modalShow, setModalShow] = React.useState(false);
     const [islogin, setIsLogin] = React.useState();
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
-    const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
     const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(0)
     ////
 
@@ -41,64 +40,32 @@ export default function Layout({ children, containerType, searchFunc, page, menu
         setContainerStyle(style)
     }
 
-    const CustomTimeStampFragment = () => {
-        return (
-            <div className='rcw-client'>
-                <div className='rcw-message-text'>
-                    <p>Help!</p>
-                </div>
-                <span class="rcw-timestamp">06:38</span>
-            </div>
-        )
-    }
-
-    const CustomTimeStampFragmentAdmin = () => {
-        return (
-            <>
-                <img src="/images/administrator_icon.png" class="rcw-avatar" alt="profile" />
-                <div className='rcw-response'>
-                    <div className='rcw-message-text'>
-                        <p>Hello</p>
-                    </div>
-                    <span class="rcw-timestamp">06:37</span>
-                </div>
-            </>
-        )
-    }
-
     useEffect(() => {
-        let loginStatus = false
+        console.log('user', user)
+        if (user) {
+            console.log('user login')
+            console.log('user.isLoggedIn', user.isLoggedIn)
+            setIsLogin(user.isLoggedIn)
+        }
         if (typeof window !== 'undefined') {
-            const { addResponseMessage, renderCustomComponent } = require('react-chat-widget');
-            loginStatus = window.localStorage.getItem('islogin');
             let basket = window.localStorage.getItem('basket');
             if (basket !== null) {
                 basket = JSON.parse(basket)
                 let order = basket.order
                 setTotal_menu_in_basket(order.length)
-                setHave_menu_in_basket(true)
             }
-            renderCustomComponent(CustomTimeStampFragmentAdmin)
-            renderCustomComponent(CustomTimeStampFragment)
         }
-        setIsLogin(loginStatus)
         setStyleOfContainer(containerType)
         generateButtonNavbar()
 
-    }, [containerType, page, islogin, menuInBasket])
+    }, [containerType, page, islogin, menuInBasket, user])
 
-    const signOut = () => {
-        let loginStatus
-        if (typeof window !== 'undefined') {
-            loginStatus = window.localStorage.setItem('islogin', false);
-        }
-        setIsLogin(loginStatus)
-    }
-
-
-
-    const handleNewUserMessage = (handleNewUserMessage) => {
-        console.log(handleNewUserMessage)
+    const signOut = async () => {
+        mutateUser(
+            await fetchJson('/api/logout', { method: 'POST' }),
+            false
+        )
+        window.localStorage.removeItem("accessToken")
     }
 
     const navToCheckout = () => {
@@ -180,7 +147,7 @@ export default function Layout({ children, containerType, searchFunc, page, menu
                             Login
                         </Nav.Item> */}
                         {
-                            islogin == 'true' ? (
+                            islogin === true ? (
                                 <NavDropdown title="Login" id="nav-dropdown">
                                     <NavDropdown.Item >
                                         <ActiveLink activeClassName="active" href="/userProfile">
@@ -222,14 +189,6 @@ export default function Layout({ children, containerType, searchFunc, page, menu
                 pageId="112842050546604"
                 appId="259379829306113"
             />
-            {/* <Widget
-                // titleAvatar={<MenuBookIcon />}
-                handleNewUserMessage={handleNewUserMessage}
-                // profileAvatar={logo}
-                title='My E-menu Live Chat'
-                subtitle='Ready to help you'
-                handleNewUserMessage={(newMessage) => handleNewUserMessage(newMessage)}
-            /> */}
             <LoginModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -238,4 +197,3 @@ export default function Layout({ children, containerType, searchFunc, page, menu
         </div >
     )
 }
-

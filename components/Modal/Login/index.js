@@ -61,10 +61,15 @@ export default function LoginModal(props) {
 
                 if (responseSignup) {
                     let accessToken = responseSignup.accessToken
-                    let profile = await profileService.getProfile(accessToken)
-                    console.log(profile)
-                    localStorage.setItem('profile', JSON.stringify(profile))
-                    localStorage.setItem('accessToken', accessToken)
+
+                    await mutateUser(
+                        fetchJson('/api/saveToken', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ accessToken: accessToken }),
+                        })
+                    )
+
                     props.onHide()
                     props.setlogin(true)
                     message.success('Sign-in successful.')
@@ -76,11 +81,15 @@ export default function LoginModal(props) {
                 //// Have already a account 
 
                 let accessToken = responseSignin.accessToken
-                console.log('accessToken', accessToken)
-                let profile = await profileService.getProfile(accessToken)
-                console.log(profile)
-                localStorage.setItem('profile', JSON.stringify(profile))
-                localStorage.setItem('accessToken', accessToken)
+                
+                await mutateUser(
+                    fetchJson('/api/saveToken', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken: accessToken }),
+                    })
+                )
+
                 props.onHide()
                 props.setlogin(true)
                 message.success('Sign-in successful.')
@@ -142,10 +151,14 @@ export default function LoginModal(props) {
                 let responseSignup = await signupWithSocial(signupForm)
                 if (responseSignup) {
                     let accessToken = responseSignup.accessToken
-                    let profile = await profileService.getProfile(accessToken)
-                    console.log(profile)
-                    localStorage.setItem('profile', JSON.stringify(profile))
-                    localStorage.setItem('accessToken', accessToken)
+                    await mutateUser(
+                        fetchJson('/api/saveToken', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ accessToken: accessToken }),
+                        })
+                    )
+
                     props.onHide()
                     props.setlogin(true)
                     message.success('Sign-in successful.')
@@ -156,11 +169,14 @@ export default function LoginModal(props) {
             } else {
 
                 let accessToken = responseSignin.accessToken
-                console.log('accessToken', accessToken)
-                let profile = await profileService.getProfile(accessToken)
-                console.log(profile)
-                localStorage.setItem('profile', JSON.stringify(profile))
-                localStorage.setItem('accessToken', accessToken)
+                await mutateUser(
+                    fetchJson('/api/saveToken', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken: accessToken }),
+                    })
+                )
+
                 props.onHide()
                 props.setlogin(true)
                 message.success('Sign-in successful.')
@@ -288,6 +304,7 @@ export default function LoginModal(props) {
                     })
                 ).then(async (response) => {
                     let accessToken = response.accessToken
+                    localStorage.setItem('accessToken', accessToken)
                     props.onHide()
                     props.setlogin(true)
                     if (isRememberMe) {
@@ -303,31 +320,6 @@ export default function LoginModal(props) {
             } catch (error) {
                 console.error('An unexpected error happened:', error)
             }
-
-            // authentication.signinWithEmail(email, password).then(async (accessToken) => {
-            //     try {
-            //         let profile = await profileService.getProfile(accessToken)
-            //         console.log(profile)
-            //         localStorage.setItem('profile', JSON.stringify(profile))
-            //     } catch (error) {
-            //         console.log(error)
-            //     }
-            //     localStorage.setItem('accessToken', accessToken)
-            //     localStorage.setItem('islogin', true)
-            //     props.onHide()
-            //     props.setlogin(true)
-            //     if (isRememberMe) {
-            //         const b64EncodedEmail = Buffer.from(email).toString('base64')
-            //         const b64EncodedPassword = Buffer.from(password).toString('base64')
-            //         localStorage.setItem('email', b64EncodedEmail)
-            //         localStorage.setItem('password', b64EncodedPassword)
-            //         localStorage.setItem('isRememberMe', true)
-            //     }
-            // }).catch((error) => {
-            //     const newErrors = {}
-            //     newErrors.password = 'Invalid your password or forgot password ?'
-            //     setErrors(newErrors)
-            // })
         }
     }
 

@@ -444,7 +444,7 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
                 'Authorization': 'Bearer ' + user.accessToken,
             }
         }
-        let reponse = await axios.get('http://localhost:8080/profile', config)
+        let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
         let profile = reponse.data
 
         profile.roles.forEach((userRole) => {

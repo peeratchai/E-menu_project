@@ -12,15 +12,18 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import orderService from '../../services/orderHistory'
 import EmptyComponent from '../../components/Empty'
 import moment from 'moment'
+import withSession from '../../lib/session'
+import PropTypes from 'prop-types'
 
-export default function OrderHistory() {
+const axios = require('axios')
+
+const OrderHistory = ({ user }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
 
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     const [orderHistory, setOrderHistory] = React.useState([]);
     const [haveOrderHistory, setHaveOrderHistory] = React.useState(false);
-    const [profile, setProfile] = React.useState();
     const viewOrder = (order) => {
         router.push({
             pathname: "/orderHistory/orderDetails",
@@ -29,15 +32,14 @@ export default function OrderHistory() {
     }
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            let profile = window.localStorage.getItem('profile')
-            if (profile) {
-                profile = JSON.parse(profile)
-                setProfile(profile)
-                getOrderHistory(profile)
-            }
+
+        console.log('OrderHistory -> user', user)
+        if (user) {
+            let profile = user.profile
+            getOrderHistory(profile)
         }
-    }, [])
+
+    }, [user])
 
     const getOrderHistory = async (profile) => {
         console.log('profile', profile)
@@ -187,3 +189,39 @@ function ConfirmOrderModal(props) {
         </Modal >
     );
 }
+
+
+export default OrderHistory
+
+OrderHistory.propTypes = {
+    user: PropTypes.shape({
+        isLoggedIn: PropTypes.bool,
+    }),
+}
+
+export const getServerSideProps = withSession(async function ({ req, res }) {
+    let user = req.session.get('user')
+    if (user) {
+
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + user.accessToken,
+            }
+        }
+        let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
+        let profile = reponse.data
+
+        if (profile) {
+            user.profile = profile
+
+        }
+        return {
+            props: { user }
+        }
+    } else {
+        return {
+            props: { user }
+        }
+    }
+
+})

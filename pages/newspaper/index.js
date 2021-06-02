@@ -33,7 +33,7 @@ export default function Newspaper() {
     const getNewspaperlist = async () => {
         let response = await newspaperService.getNewspaperList();
         console.log('response', response)
-        return response.data
+        return response
     }
 
     const onSearch = async (filterForm) => {

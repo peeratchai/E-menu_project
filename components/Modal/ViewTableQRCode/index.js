@@ -5,7 +5,6 @@ import QRCode from 'qrcode.react';
 
 export default function ViewTableQRCode(props) {
     const { table_selected, restaurant_name, restaurant_id } = props
-    console.log('table_selected', table_selected)
     const { onHide } = props
 
     const downloadQR = () => {

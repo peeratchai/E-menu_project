@@ -10,16 +10,28 @@ import { message } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import partnerSerivce from '../../services/partner'
 import EmptyComponent from '../../components/Empty'
+import PropTypes from 'prop-types'
+import withSession from '../../lib/session'
+const axios = require('axios')
 
-export default function CheckoutPage() {
+
+
+const CheckoutPage = ({ user }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const [basketData, setBasketData] = React.useState({ 'order': [] })
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     const [countMenuItems, setCountMenuItems] = React.useState(0);
     const [totalPrice, setTotalPrice] = React.useState(0);
+    const [userProfile, setUserProfile] = React.useState(0);
 
     useEffect(() => {
+        console.log('user', user)
+        if (user) {
+            if (user.profile) {
+                setUserProfile(user.profile)
+            }
+        }
         if (typeof window !== 'undefined') {
             let basket = window.localStorage.getItem('basket');
             basket = JSON.parse(basket)
@@ -32,7 +44,7 @@ export default function CheckoutPage() {
                 setTotalPrice(total_price)
             }
         }
-    }, [])
+    }, [user])
 
     const reduceOrderMenu = (menuIndex) => {
         let existingOrder = basketData.order
@@ -89,54 +101,48 @@ export default function CheckoutPage() {
     }
 
     const onCheckOutOrder = async () => {
-        let profile = window.localStorage.getItem('profile');
-        if (profile) {
-            profile = JSON.parse(profile)
-            let userId = profile.id
+
+        if (userProfile) {
+            let userId = userProfile.id
             console.log(userId)
             let restaurantId = basketData.restaurantId
-            let tableId = basketData.tableId
-            let order_items = []
-            let orders = basketData.order
-            orders.map((order) => {
-                order_items.push({
-                    "menu": order.id,
-                    "quantity": order.count,
-                    "price": order.price,
-                    "total": order.total,
-                    "special_instruction": order.specialInstruction
+            if (basketData.tableId) {
+                let tableId = basketData.tableId
+                let order_items = []
+                let orders = basketData.order
+                orders.map((order) => {
+                    order_items.push({
+                        "menu": order.id,
+                        "quantity": order.count,
+                        "price": order.price,
+                        "total": order.total,
+                        "special_instruction": order.specialInstruction
+                    })
                 })
-            })
 
-            // Test localhost
-            let data = {
-                "restaurant": restaurantId,
-                "restaurant_table": tableId,
-                "user": userId,
-                "order_items": order_items
+                let data = {
+                    "restaurant": restaurantId,
+                    "restaurant_table": tableId,
+                    "user": userId,
+                    "order_items": order_items
+                }
+
+                let response = await partnerSerivce.addOrder(data)
+                console.log('response', response)
+                message.success('Check out order successful.')
+                localStorage.removeItem("basket")
+                setConfirmModalVisible(false)
+
+                router.push({
+                    pathname: "/orderHistory"
+                })
+            } else {
+                message.error('Please scan qr code for check out menu.')
             }
 
-            // Test dev
-            // let data = {
-            //     "restaurant": restaurantId,
-            //     "restaurant_table": "2531c5d9-ad32-4087-8bbe-79d70e62d517",
-            //     "user": userId,
-            //     "order_items": order_items
-            // }
-            console.log('data', data)
-            let response = await partnerSerivce.addOrder(data)
-            console.log('response', response)
-            message.success('Check out order successful.')
-            localStorage.removeItem("basket")
-            setConfirmModalVisible(false)
-
-            router.push({
-                pathname: "/orderHistory"
-            })
         } else {
-            message.error('Please login before check out order and try agian.')
+            message.warning('User not found. Please login and try again.')
         }
-
     }
 
     let MenuListComponentMobile = basketData.order && basketData.order.map((menu, index) => {
@@ -406,3 +412,43 @@ function ConfirmOrderModal(props) {
         </Modal >
     );
 }
+
+
+export default CheckoutPage
+
+CheckoutPage.propTypes = {
+    user: PropTypes.shape({
+        isLoggedIn: PropTypes.bool,
+    }),
+}
+
+export const getServerSideProps = withSession(async function ({ req, res }) {
+    let user = req.session.get('user')
+    if (user) {
+
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + user.accessToken,
+            }
+        }
+        let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
+        let profile = reponse.data
+
+        if (profile) {
+            user.profile = profile
+            return {
+                props: { user },
+            }
+        }
+
+    } else {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+
+})
