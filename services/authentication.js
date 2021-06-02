@@ -43,7 +43,7 @@ const authentication = {
                 return response
             })
             .catch(function (error) {
-                console.log('error222222222',error)
+                console.log('error222222222', error)
                 return error
             });
 
@@ -100,8 +100,8 @@ const authentication = {
             }
         }
         let data = {
-            email: 'guest@test.com',
-            password: 'p@assword_guestuser'
+            email: 'guest_user@test.com',
+            password: '123'
         }
 
         console.log(data)

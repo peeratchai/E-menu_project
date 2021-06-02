@@ -118,7 +118,7 @@ export default function Profile(props) {
                 restaurant_pictures: restaurantDetail.restaurant_pictures,
                 website: restaurantDetail.website,
                 restaurant_id: restaurant_id,
-                business_district: restaurant_id.business_district
+                business_district: restaurantDetail.business_district.id
             }
             setLoading(false)
             setRestaurantForm(initialRestaurantForm)

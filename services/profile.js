@@ -3,13 +3,8 @@ import checkLogin from './checkLogin'
 
 
 const profileService = {
-    getProfile: async (accessToken) => {
-        let access_token
-        if (accessToken) {
-            access_token = accessToken
-        } else {
-            access_token = await checkLogin()
-        }
+    getProfile: async () => {
+        let access_token = await checkLogin()
 
         let config = {
             headers: {

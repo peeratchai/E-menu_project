@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from './layout.module.css'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { useRouter } from 'next/router'
-import { Badge } from 'antd';
+import { Badge, message } from 'antd';
 import ActiveLink from './ActiveLink'
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SearchIcon from '@material-ui/icons/Search';
@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import MessengerCustomerChat from 'react-messenger-customer-chat';
 import checkUserPermission from '../lib/checkUserPermission'
 import fetchJson from '../lib/fetchJson'
+import profileService from '../services/profile'
 
 export default function Layout(props) {
 
@@ -27,6 +28,7 @@ export default function Layout(props) {
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
     const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(0)
+    const [havePermission, setHavepermission] = React.useState(false)
     ////
 
     const setStyleOfContainer = (containerType) => {
@@ -46,6 +48,7 @@ export default function Layout(props) {
             console.log('user login')
             console.log('user.isLoggedIn', user.isLoggedIn)
             setIsLogin(user.isLoggedIn)
+            checkPermissionPartner(user)
         }
         if (typeof window !== 'undefined') {
             let basket = window.localStorage.getItem('basket');
@@ -60,12 +63,39 @@ export default function Layout(props) {
 
     }, [containerType, page, islogin, menuInBasket, user])
 
+    const checkPermissionPartner = (user) => {
+        let roles = ['employee', 'partner', 'admin']
+
+        profileService.getProfile().then((userProfile) => {
+            console.log('userProfile', userProfile)
+            let havePermission = false
+            userProfile.roles.forEach((userRole) => {
+                roles.forEach((role) => {
+                    if (userRole === role) {
+                        havePermission = true
+                    }
+                })
+            })
+
+            setHavepermission(havePermission)
+
+        }).catch(error => {
+            console.log('Layout,checkPermissionPartner,error', error)
+            message.error('Cannot get user profile.')
+        })
+
+
+
+    }
+
     const signOut = async () => {
         mutateUser(
             await fetchJson('/api/logout', { method: 'POST' }),
             false
         )
         window.localStorage.removeItem("accessToken")
+        setHavepermission(false)
+
     }
 
     const navToCheckout = () => {
@@ -168,13 +198,20 @@ export default function Layout(props) {
                             )
                         }
 
-                        <ActiveLink activeClassName="active" href="/partner">
-                            <a className="nav-link">Partner</a>
-                        </ActiveLink>
+                        {
+                            havePermission && (
+                                <>
+                                    <ActiveLink activeClassName="active" href="/partner">
+                                        <a className="nav-link">Partner</a>
+                                    </ActiveLink>
 
-                        <ActiveLink activeClassName="active" href="/admin">
-                            <a className="nav-link">Admin</a>
-                        </ActiveLink>
+                                    <ActiveLink activeClassName="active" href="/admin">
+                                        <a className="nav-link">Admin</a>
+                                    </ActiveLink>
+                                </>
+                            )
+                        }
+
                         <ActiveLink activeClassName="active" href="/checkout" >
                             <a className="nav-link" >Check out</a>
                         </ActiveLink>

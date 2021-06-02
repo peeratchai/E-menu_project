@@ -69,6 +69,7 @@ export default function LoginModal(props) {
                             body: JSON.stringify({ accessToken: accessToken }),
                         })
                     )
+                    localStorage.setItem('accessToken', accessToken)
 
                     props.onHide()
                     props.setlogin(true)
@@ -89,6 +90,7 @@ export default function LoginModal(props) {
                         body: JSON.stringify({ accessToken: accessToken }),
                     })
                 )
+                localStorage.setItem('accessToken', accessToken)
 
                 props.onHide()
                 props.setlogin(true)
@@ -158,6 +160,7 @@ export default function LoginModal(props) {
                             body: JSON.stringify({ accessToken: accessToken }),
                         })
                     )
+                    localStorage.setItem('accessToken', accessToken)
 
                     props.onHide()
                     props.setlogin(true)
@@ -176,7 +179,7 @@ export default function LoginModal(props) {
                         body: JSON.stringify({ accessToken: accessToken }),
                     })
                 )
-
+                localStorage.setItem('accessToken', accessToken)
                 props.onHide()
                 props.setlogin(true)
                 message.success('Sign-in successful.')
@@ -268,10 +271,15 @@ export default function LoginModal(props) {
                 let response = await authentication.signupWithEmail(email, password)
                 let accessToken = response.data.accessToken
                 try {
-                    let profile = await profileService.getProfile(accessToken)
-                    localStorage.setItem('profile', JSON.stringify(profile))
+                    await mutateUser(
+                        fetchJson('/api/saveToken', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ accessToken: accessToken }),
+                        })
+                    )
                     localStorage.setItem('accessToken', accessToken)
-                    localStorage.setItem('islogin', true)
+
                     props.onHide()
                     props.setlogin(true)
                 } catch (error) {
