@@ -204,7 +204,7 @@ export default function Dashboard(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                    <div style={{ textAlign: "right" }}>
                         <b>Total is {orderSelected.total} THB</b>
                     </div>
                 </>

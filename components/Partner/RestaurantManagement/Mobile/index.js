@@ -29,14 +29,14 @@ export default function MobileComponent(props) {
     useEffect(() => {
         if (Array.isArray(zone)) {
             if (zone.length > 0) {
+                console.log('zone', zone)
                 setZoneSelected(zone[0])
                 getOrder(zone[0])
             }
         }
     }, [props])
 
-    const getOrder = async (zone) => {
-        console.log('zone', zone)
+    const getOrder = async (zone = zoneSelected) => {
         setLoading(true)
         let zoneIdArray = []
         zoneIdArray.push(zone.id)
@@ -318,9 +318,13 @@ export default function MobileComponent(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
-                        <b>Total is {newOrderSelected.total} THB</b>
-                    </div>
+                    {
+                        menuList.length > 0 && (
+                            <div style={{ textAlign: "right" }}>
+                                <b>Total is {newOrderSelected.total} THB</b>
+                            </div>
+                        )
+                    }
                 </>
 
             )
@@ -449,9 +453,13 @@ export default function MobileComponent(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
-                        <b>Total is {inOrderSelected.total} THB</b>
-                    </div>
+                    {
+                        menuList.length > 0 && (
+                            <div style={{ textAlign: "right" }}>
+                                <b>Total is {inOrderSelected.total} THB</b>
+                            </div>
+                        )
+                    }
                 </>
 
             )
@@ -560,9 +568,13 @@ export default function MobileComponent(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
-                        <b>Total is {completedOrderSelected.total} THB</b>
-                    </div>
+                    {
+                        menuList.length > 0 && (
+                            <div style={{ textAlign: "right" }}>
+                                <b>Total is {completedOrderSelected.total} THB</b>
+                            </div>
+                        )
+                    }
                 </>
 
             )
@@ -624,21 +636,21 @@ export default function MobileComponent(props) {
             <Spin spinning={loading} tip="Loading...">
                 <Tabs defaultActiveKey="newOrder" id="orderStatus-tabs">
                     <Tab eventKey="newOrder" title="New order">
-                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                        <Row style={{ marginTop: "20px" }}>
                             {
                                 haveNewOrder ? NewOrderListComponent : <EmptyComponent />
                             }
                         </Row>
                     </Tab>
                     <Tab eventKey="inOrder" title="In Order">
-                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                        <Row style={{ marginTop: "20px" }}>
                             {
                                 haveOrderInProcess ? InOrderListComponent : <EmptyComponent />
                             }
                         </Row>
                     </Tab>
                     <Tab eventKey="completed" title="Completed">
-                        <Row style={{ height: "80vh", marginTop: "20px" }}>
+                        <Row style={{ marginTop: "20px" }}>
                             {
                                 haveOrderCompleted ? CompletedOrderListComponent : <EmptyComponent />
                             }

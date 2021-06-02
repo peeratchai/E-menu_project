@@ -34,17 +34,30 @@ const profileService = {
         }
 
         let formData = new FormData()
+        if (data.first_name !== null) {
+            formData.append("first_name", data.first_name);
+        }
+        if (data.last_name !== null) {
+            formData.append("last_name", data.last_name);
+        }
+        if (data.gender !== null) {
+            formData.append("gender", data.gender);
+        }
+        if (data.age !== null) {
+            formData.append("age", data.age);
+        }
+        if (data.phone_number !== null) {
+            formData.append("phone_number", data.phone_number);
+        }
+        if (data.avatar !== null) {
+            formData.append("avatar", data.avatar);
+        }
+        if (data.restaurant_employee !== null) {
+            formData.append("restaurant_employee", data.restaurant_employee);
+        }
         formData.append("username", data.username);
-        formData.append("first_name", data.first_name);
-        formData.append("last_name", data.last_name);
-        formData.append("gender", data.gender);
-        formData.append("age", data.age);
-        formData.append("phone_number", data.phone_number);
-        formData.append("avatar", data.avatar);
         formData.append("avatar_url", null);
         formData.append("is_active", data.is_active);
-        formData.append("restaurant_employee", data.restaurant_employee);
-        // formData.append("roles", JSON.stringify(data.roles));
         formData.append("roles", data.roles);
 
         for (var pair of formData.entries()) {

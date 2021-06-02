@@ -139,6 +139,18 @@ const adminService = {
     deleteMenu: async (menuId) => {
         return await sendRequest.delete('/api/delete_menu/' + menuId)
     },
+    addUserBan: async function (data) {
+        return await sendRequest.post('/api/add/ban-user', data)
+    },
+    getAllUserBan: async function () {
+        return await sendRequest.get('/api/get/ban-user')
+    },
+    deleteUserBan: async (userId) => {
+        return await sendRequest.delete('/api/delete/ban-user/' + userId)
+    },
+    getProfileAllUser: async () => {
+        return await sendRequest.get('/api/get/profile-all-user')
+    }
 
 }
 

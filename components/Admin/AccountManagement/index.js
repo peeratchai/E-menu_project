@@ -43,35 +43,38 @@ export default function AccountManagement(props) {
         let restaurant_employee = null
         let restaurant_name = null
 
-        allProfile.map((profile, index) => {
-            if (profile.restaurant_employee !== null) {
-                restaurant_employee = profile.restaurant_employee.restaurant.id
-                restaurant_name = profile.restaurant_employee.restaurant.name
-            } else {
-                restaurant_employee = null
-                restaurant_name = null
-            }
+        if (allProfile) {
+            allProfile.map((profile, index) => {
+                if (profile.restaurant_employee !== null) {
+                    restaurant_employee = profile.restaurant_employee.restaurant.id
+                    restaurant_name = profile.restaurant_employee.restaurant.name
+                } else {
+                    restaurant_employee = null
+                    restaurant_name = null
+                }
 
-            userProfilesData.push({
-                No: index + 1,
-                key: profile.id + index,
-                userId: profile.id,
-                email: profile.email,
-                first_name: profile.first_name,
-                last_name: profile.last_name,
-                gender: profile.gender,
-                age: profile.age,
-                roles: profile.roles,
-                username: profile.username,
-                avatar_url: profile.avatar_url,
-                phone_number: profile.phone_number,
-                is_active: profile.is_active,
-                restaurant_employee: restaurant_employee,
-                restaurant_name: restaurant_name
+                userProfilesData.push({
+                    No: index + 1,
+                    key: profile.id + index,
+                    userId: profile.id,
+                    email: profile.email,
+                    first_name: profile.first_name,
+                    last_name: profile.last_name,
+                    gender: profile.gender,
+                    age: profile.age,
+                    roles: profile.roles,
+                    username: profile.username,
+                    avatar_url: profile.avatar_url,
+                    phone_number: profile.phone_number,
+                    is_active: profile.is_active,
+                    restaurant_employee: restaurant_employee,
+                    restaurant_name: restaurant_name
+                })
             })
-        })
-        setUserProfilesData(userProfilesData)
-        setLoading(false)
+            setUserProfilesData(userProfilesData)
+            setLoading(false)
+        }
+
     }
 
     const getColumnSearchProps = (dataIndex) => ({
@@ -176,16 +179,7 @@ export default function AccountManagement(props) {
             title: 'Role',
             dataIndex: 'roles',
             key: 'roles',
-            filters: [
-                { text: 'customer', value: 'customer' },
-                { text: 'employee', value: 'employee' },
-                { text: 'parthner', value: 'parthner' },
-                { text: 'admin', value: 'admin' },
-            ],
-            onFilter: (value, record) => record.Type.includes(value),
-            ellipsis: true,
             render: (roles) => {
-
                 return (
                     <div>
                         {roles.join(' , ')}
@@ -226,8 +220,6 @@ export default function AccountManagement(props) {
 
         let responseProfile = await profileService.editUserProfile(data)
         if (responseProfile) {
-            // let profile = await profileService.getProfile()
-            // window.localStorage.setItem('profile', JSON.stringify(profile))
             getAllUserProfile()
             message.success('Edit profile successful.')
         } else {
@@ -239,6 +231,11 @@ export default function AccountManagement(props) {
         <>
             <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                 Account Management
+            </div>
+            <div style={{ textAlign: "right", marginBottom: "20px" }}>
+                <Button type='primary' onClick={() => setAddBusienssDistrictModalShow(true)}>
+                    New Business District
+                </Button>
             </div>
             <Spin spinning={loading} tip="Loading...">
                 <Table columns={columnsAccount} dataSource={userProfilesData} scroll={{ x: 'max-content' }} />

@@ -151,263 +151,65 @@ const Partner = ({ user }) => {
                                     <Option value="dashboard">Dashboard</Option>
                                     <Option value="promote">Promote</Option>
                                     <Option value="menu">Menu</Option>
+                                    <Option value="zone">Zone</Option>
                                     <Option value="profile">Profile</Option>
                                     <Option value="setting">Setting</Option>
                                 </Select>
                             </div>
 
                             {
-                                menuSelected == 'restaurantManagement' ? (
+                                menuSelected == 'restaurantManagement' && (
                                     <RestaurantManagement
                                         restaurant_id={restaurantId}
-                                        current_tab={currentTab}
+                                        current_tab={menuSelected}
                                         restaurant_name={restaurantName}
                                     />
-                                ) : null
+                                )
                             }
                             {
-                                menuSelected == 'dashboard' ? (
-                                    <div className={styles.tab}>
-                                        <Row style={{ minHeight: "80vh" }}>
-                                            <Col xs={12} style={{ borderRight: "1px solid #DEDEDE", maxHeight: "53vh", overflow: "auto" }}>
-                                                {/* Table list */}
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
-                                                    Period : &nbsp;
-                                                    <Select
-                                                        showSearch
-                                                        style={{ width: '70%' }}
-                                                        placeholder="Select period"
-                                                        optionFilterProp="children"
-                                                        onChange={() => onChangePeriod}
-                                                        onSearch={() => onSearchPeriod}
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        <Option value="5 Jan 2021">5 Jan 2021</Option>
-                                                        <Option value="4 Jan 2021">4 Jan 2021</Option>
-                                                        <Option value="3 Jan 2021">3 Jan 2021</Option>
-                                                        <Option value="2 Jan 2021">2 Jan 2021</Option>
-                                                        <Option value="1 Jan 2021">1 Jan 2021</Option>
-                                                    </Select>
-                                                </div>
-
-                                                <Row className={tableNumber == 1 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(1)}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col>
-                                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                                &nbsp;&nbsp; T1
-                                                            </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        <b>1,059 THB</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                    <b>Completed</b>
-                                                                </Col>
-                                                                <Col xs={8}>
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                                        14:14:59 - 20/03/2021
-                                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className={tableNumber == 2 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(2)}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col>
-                                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T2
-                                            </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        <b>860 THB</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                    <b>Completed</b>
-                                                                </Col >
-                                                                <Col xs={8}>
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                                        14:14:59 - 20/03/2021
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className={tableNumber == 3 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col>
-                                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T1
-                                            </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        <b>1530 THB</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                    <b>Completed</b>
-                                                                </Col >
-                                                                <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                                        14:14:59 - 20/03/2021
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className={tableNumber == 4 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col>
-                                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T1
-                                            </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        <b>1530 THB</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                    <b>Completed</b>
-                                                                </Col >
-                                                                <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                                        14:14:59 - 20/03/2021
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className={tableNumber == 5 ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => setTableNumber(3)}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col>
-                                                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                &nbsp;&nbsp; T1
-                                            </Col>
-                                                                <Col>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        <b>1530 THB</b>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col xs={4} style={{ fontSize: "14px" }}>
-                                                                    <b>Completed</b>
-                                                                </Col >
-                                                                <Col xs={8} >
-                                                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                                        14:14:59 - 20/03/2021
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12}>
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
-                                                    Order Details
-                                                </div>
-                                                <Row style={{ paddingBottom: "10px" }}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col xs={4}>
-                                                                    <Image src="/images/food1.jpg" rounded style={{ height: "100%" }} />
-                                                                </Col>
-                                                                <Col xs={8}>
-                                                                    <div>
-                                                                        <b>ผัดไทย</b>
-                                                                    </div>
-                                                                    <div>
-                                                                        <b>x 1</b>
-                                                                    </div>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        Price : 80 THB
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row style={{ paddingBottom: "10px" }}>
-                                                    <Col>
-                                                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                                            <Row >
-                                                                <Col xs={4}>
-                                                                    <Image src="/images/food5.jpg" rounded style={{ height: "100%" }} />
-                                                                </Col>
-                                                                <Col xs={8}>
-                                                                    <div>
-                                                                        <b>ยำปลาหมึก</b>
-                                                                    </div>
-                                                                    <div>
-                                                                        <b>x 2</b>
-                                                                    </div>
-                                                                    <div style={{ textAlign: "right" }}>
-                                                                        Price : 160 THB
-                                                </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                ) : null
+                                menuSelected == 'dashboard' && (
+                                    <Dashboard
+                                        restaurant_id={restaurantId}
+                                    />
+                                )
                             }
                             {
-                                menuSelected == 'promote' ? (
+                                menuSelected == 'promote' && (
                                     <Promote
                                         restaurant_id={restaurantId}
                                     />
-                                ) : notDisplay
+                                )
                             }
                             {
-                                menuSelected == 'menu' ? (
+                                menuSelected == 'menu' && (
                                     <Menu
                                         restaurant_id={restaurantId}
+                                        current_tab={menuSelected}
                                     />
-                                ) : null
+                                )
                             }
                             {
-                                menuSelected == 'profile' ? (
+                                menuSelected == 'profile' && (
                                     <Profile
                                         restaurant_id={restaurantId}
+                                        current_tab={menuSelected}
                                     />
-                                ) : null
+                                )
                             }
                             {
-                                menuSelected == 'setting' ? (
+                                menuSelected == 'profile' && (
+                                    <ZoneManagement
+                                        restaurant_id={restaurantId}
+                                        current_tab={menuSelected}
+                                    />
+                                )
+                            }
+                            {
+                                menuSelected == 'setting' && (
                                     <Card title="Term Agreements V.20.5.9.15" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
                                         {termAgreement.text}
                                     </Card>
-                                ) : null
+                                )
                             }
                         </>
                     )

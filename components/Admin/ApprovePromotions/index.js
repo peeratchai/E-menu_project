@@ -105,7 +105,7 @@ export default function ApprovePromotions(props) {
         let data = {
             status: 'approved'
         }
-        let response = await adminService.changePromotionStatus(promotionsId, data)
+        let response = await adminService.updatePromotionStatus(promotionsId, data)
         console.log('response', response)
         if (response) {
             message.success('Approve promotion successful.')
@@ -119,7 +119,7 @@ export default function ApprovePromotions(props) {
         let data = {
             status: 'reject'
         }
-        let response = await adminService.changePromotionStatus(promotionsId, data)
+        let response = await adminService.updatePromotionStatus(promotionsId, data)
         console.log('response', response)
         if (response) {
             message.success('Reject promotion successful.')

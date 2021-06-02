@@ -176,7 +176,7 @@ module.exports = {
             destination: API_URL + '/promotion'
         },
         {
-            source: '/api/change_promotion_status/:promotionId',
+            source: '/api/update_promotion_status/:promotionId',
             destination: API_URL + '/promotion/update_status/:promotionId'
         },
         {
@@ -294,6 +294,34 @@ module.exports = {
         {
             source: '/api/update-food-data/:foodDataId',
             destination: API_URL + '/menu/food-data/:foodDataId'
+        },
+        {
+            source: '/api/add/ban-user',
+            destination: API_URL + '/ban'
+        },
+        {
+            source: '/api/get/ban-user',
+            destination: API_URL + '/ban'
+        },
+        {
+            source: '/api/delete/ban-user/:userId',
+            destination: API_URL + '/ban/:userId'
+        },
+        {
+            source: '/api/send-message',
+            destination: API_URL + '/contact-us'
+        },
+        {
+            source: '/api/get-contact-us-message',
+            destination: API_URL + '/contact-us'
+        },
+        {
+            source: '/api/send-message/:contactUsId',
+            destination: API_URL + '/contact-us/:contactUsId'
+        },
+        {
+            source: '/api/get/profile-all-user',
+            destination: API_URL + '/profile/all_user'
         }
     ]
 }

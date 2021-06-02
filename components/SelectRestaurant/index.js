@@ -1,11 +1,13 @@
 import { Select } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react'
+import useMediaQuery from "../../utils/utils";
 
 const { Option } = Select;
 
 
 export default function SelectRestaurant(props) {
+    const isMobileResolution = useMediaQuery(768)
 
     const { restauran_list, onChangeRestaurant } = props
 
@@ -20,7 +22,7 @@ export default function SelectRestaurant(props) {
             Restaurant Name : &nbsp;
             <Select
                 showSearch
-                style={{ width: 400 }}
+                style={{ width: isMobileResolution ? '100%' : 400 }}
                 placeholder="Select a restaurant name"
                 optionFilterProp="children"
                 onChange={(e) => onChangeRestaurant(e)}

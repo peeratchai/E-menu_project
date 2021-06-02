@@ -82,7 +82,7 @@ export default function LoginModal(props) {
                 //// Have already a account 
 
                 let accessToken = responseSignin.accessToken
-                
+
                 await mutateUser(
                     fetchJson('/api/saveToken', {
                         method: 'POST',
@@ -322,6 +322,7 @@ export default function LoginModal(props) {
                         localStorage.setItem('password', b64EncodedPassword)
                         localStorage.setItem('isRememberMe', true)
                     }
+                    window.location.reload()
                 }).catch((error) => {
                     console.log('error', error)
                 })

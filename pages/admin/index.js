@@ -21,7 +21,9 @@ import Profile from '../../components/Partner/Profile'
 import ApprovePromotions from '../../components/Admin/ApprovePromotions'
 import BusinessDistrictManagement from '../../components/Admin/BusinessDistrictManagement'
 import SendEmail from '../../components/Admin/SendEmail'
-import FoodDataManagement from '../../components/Admin/FoodDataManagement';
+import FoodDataManagement from '../../components/Admin/FoodDataManagement'
+import BanUserManagement from '../../components/Admin/BanUserManagement'
+import ContactUsMessage from '../../components/Admin/ContactUsMessage'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 const axios = require('axios')
@@ -455,9 +457,6 @@ const Admin = () => {
                                                 <Nav.Link eventKey="email">Email</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="directMessage">Direct Message</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
                                                 <Nav.Link eventKey="approvePromotion">Approve Promotion</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
@@ -465,6 +464,12 @@ const Admin = () => {
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="businessDistrict">Business District Management</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="banUser">Ban user</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="viewContactUs">View Contact Us</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="foodData">Food Data</Nav.Link>
@@ -520,9 +525,6 @@ const Admin = () => {
                                             <Tab.Pane eventKey="email">
                                                 <SendEmail />
                                             </Tab.Pane>
-                                            <Tab.Pane eventKey="directMessage">
-                                                <DirectMessageAdmin />
-                                            </Tab.Pane>
                                             <Tab.Pane eventKey="approvePromotion">
                                                 <ApprovePromotions
                                                     current_tab={currentTab}
@@ -535,6 +537,16 @@ const Admin = () => {
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="businessDistrict">
                                                 <BusinessDistrictManagement
+                                                    current_tab={currentTab}
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="banUser">
+                                                <BanUserManagement
+                                                    current_tab={currentTab}
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="viewContactUs">
+                                                <ContactUsMessage
                                                     current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
@@ -570,6 +582,8 @@ const Admin = () => {
                                     <Option value="approvePromotion">Approve Promotion</Option>
                                     <Option value="accountManagement">Account Management</Option>
                                     <Option value="businessDistrict">BusinessDistrict</Option>
+                                    <Option value="banUser">Ban user</Option>
+                                    <Option value="viewContactUs">View Contact Us</Option>
                                     <Option value="foodData">Food Data Management</Option>
                                     <Option value="setting">Setting</Option>
                                 </Select>
@@ -584,7 +598,7 @@ const Admin = () => {
                                         />
                                         <RestaurantManagement
                                             restaurant_id={restaurantId}
-                                            current_tab={currentTab}
+                                            current_tab={menuSelected}
                                         />
                                     </Spin>
                                 ) : null
@@ -642,7 +656,7 @@ const Admin = () => {
                             {
                                 menuSelected == 'approvePromotion' ? (
                                     <ApprovePromotions
-                                        current_tab={currentTab}
+                                        current_tab={menuSelected}
                                     />
                                 ) : null
                             }
@@ -656,14 +670,28 @@ const Admin = () => {
                             {
                                 menuSelected == 'businessDistrict' ? (
                                     <BusinessDistrictManagement
-                                        current_tab={currentTab}
+                                        current_tab={menuSelected}
+                                    />
+                                ) : null
+                            }
+                            {
+                                menuSelected == 'banUser' ? (
+                                    <BanUserManagement
+                                        current_tab={menuSelected}
+                                    />
+                                ) : null
+                            }
+                            {
+                                menuSelected == 'viewContactUs' ? (
+                                    <ContactUsMessage
+                                        current_tab={menuSelected}
                                     />
                                 ) : null
                             }
                             {
                                 menuSelected == 'foodData' ? (
                                     <FoodDataManagement
-                                        current_tab={currentTab}
+                                        current_tab={menuSelected}
                                     />
                                 ) : null
                             }

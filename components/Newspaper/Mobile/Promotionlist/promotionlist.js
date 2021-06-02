@@ -16,7 +16,7 @@ export default function MobilePromotionlist(props) {
     }, [props])
 
     const renderPromotionsCard = (newspaper_list) => {
-        let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
+        let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 2 === 0)
         let heightArray = ["8rem", "12rem", "14rem"]
         let column1 = column1Array && column1Array.map((newspaperDetail) => (
             <Link
@@ -48,7 +48,7 @@ export default function MobilePromotionlist(props) {
 
         ))
 
-        let column2Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 1)
+        let column2Array = newspaper_list.filter((newspaperDetail, index) => index === 1 || index % 2 !== 0)
 
         let column2 = column2Array && column2Array.map((newspaperDetail) => (
             <Link
