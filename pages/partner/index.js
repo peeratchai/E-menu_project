@@ -17,6 +17,7 @@ import Profile from '../../components/Partner/Profile'
 import RestaurantManagement from '../../components/Partner/RestaurantManagement'
 import ZoneManagement from '../../components/Partner/ZoneManagement'
 import Dashboard from '../../components/Partner/Dashboard'
+import PromoteList from '../../components/Partner/PromoteList'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 const axios = require('axios')
@@ -82,6 +83,9 @@ const Partner = ({ user }) => {
                                             <Nav.Link eventKey="promote">Promote</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
+                                            <Nav.Link eventKey="promoteList">Promote List</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
                                             <Nav.Link eventKey="menu">Menu</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
@@ -112,6 +116,12 @@ const Partner = ({ user }) => {
                                         <Tab.Pane eventKey="promote">
                                             <Promote
                                                 restaurant_id={restaurantId}
+                                            />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="promoteList">
+                                            <PromoteList
+                                                restaurant_id={restaurantId}
+                                                current_tab={currentTab}
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="menu">
@@ -197,7 +207,7 @@ const Partner = ({ user }) => {
                                 )
                             }
                             {
-                                menuSelected == 'profile' && (
+                                menuSelected == 'zone' && (
                                     <ZoneManagement
                                         restaurant_id={restaurantId}
                                         current_tab={menuSelected}

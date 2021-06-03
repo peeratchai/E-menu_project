@@ -48,6 +48,18 @@ module.exports = {
             destination: API_URL + '/promotion',
         },
         {
+            source: '/api/edit/promotion/:promotionId',
+            destination: API_URL + '/promotion/:promotionId',
+        },
+        {
+            source: '/api/delete/promotion/:promotionId',
+            destination: API_URL + '/promotion/:promotionId',
+        },
+        {
+            source: '/api/get/promotion/restaurant_id/:restaurantId',
+            destination: API_URL + '/promotion/restaurant_id/:restaurantId',
+        },
+        {
             source: '/api/restaurant/search_by_filter',
             destination: API_URL + '/restaurant/search_by_filter',
         },

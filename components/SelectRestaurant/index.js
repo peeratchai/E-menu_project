@@ -9,7 +9,7 @@ const { Option } = Select;
 export default function SelectRestaurant(props) {
     const isMobileResolution = useMediaQuery(768)
 
-    const { restauran_list, onChangeRestaurant } = props
+    const { restauran_list, onChangeRestaurant, restaurant_id } = props
 
     let restauranList = restauran_list && restauran_list.map((restaurant, index) => {
         return (
@@ -29,6 +29,7 @@ export default function SelectRestaurant(props) {
                 filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                value={restaurant_id}
             >
                 {restauranList}
             </Select>

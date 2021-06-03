@@ -14,6 +14,25 @@ const partnerSerivce = {
 
         return await sendRequest.post('/api/add_promotion', formData)
     },
+    editPromotion: async (promotionId, data) => {
+        let formData = new FormData()
+        formData.append("restaurant", data.restaurant);
+        formData.append("promote_content", data.promote_content);
+        formData.append("title", data.title);
+        formData.append("image", data.image);
+        formData.append("image_url", data.image_url);
+        formData.append("status", data.status);
+
+        return await sendRequest.patch('/api/edit/promotion/' + promotionId, formData)
+    },
+
+    deletePromotion: async (promotionId) => {
+        return await sendRequest.delete('/api/delete/promotion/' + promotionId)
+    },
+
+    getPromotionsByRestaurant: async (restaurantId) => {
+        return await sendRequest.get('/api/get/promotion/restaurant_id/' + restaurantId)
+    },
 
     addCategory: async (data) => {
         return await sendRequest.post('/api/add_category', data)

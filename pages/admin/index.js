@@ -71,6 +71,8 @@ const Admin = () => {
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [searchedColumn, setSearchedColumn] = React.useState('');
     const [searchText, setSearchText] = React.useState('');
+    const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile"]
+
     var searchInput = React.createRef();
 
     useEffect(() => {
@@ -429,6 +431,7 @@ const Admin = () => {
         setCurrentTab(key)
     }
 
+
     return (
         <Layout containerType="center">
             <Container className={!isMobileResolution ? styles.container : utilStyles.container_sm + " " + utilStyles.background_white}>
@@ -481,12 +484,19 @@ const Admin = () => {
                                     </Col>
                                     <Col sm={10}>
                                         <Tab.Content>
-                                            <Tab.Pane eventKey="restaurantManagement">
-                                                <Spin spinning={loadingRestaurantList} tip="Loading...">
+                                            {
+                                                // check tab is restaurant feature?
+                                                restaurantfeature.indexOf(currentTab) > -1 && (
                                                     <SelectRestaurant
                                                         onChangeRestaurant={onChangeRestaurant}
                                                         restauran_list={restaurantList}
+                                                        restaurant_id={restaurantId}
                                                     />
+                                                )
+                                            }
+
+                                            <Tab.Pane eventKey="restaurantManagement">
+                                                <Spin spinning={loadingRestaurantList} tip="Loading...">
                                                     <RestaurantManagement
                                                         restaurant_id={restaurantId}
                                                         current_tab={currentTab}
@@ -495,31 +505,21 @@ const Admin = () => {
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="promote">
                                                 <Spin spinning={loadingRestaurantList} tip="Loading...">
-                                                    <SelectRestaurant
-                                                        onChangeRestaurant={onChangeRestaurant}
-                                                        restauran_list={restaurantList}
-                                                    />
                                                     <Promote
                                                         restaurant_id={restaurantId}
                                                     />
                                                 </Spin>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="menu">
-                                                <SelectRestaurant
-                                                    onChangeRestaurant={onChangeRestaurant}
-                                                    restauran_list={restaurantList}
-                                                />
                                                 <Menu
                                                     restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="profile">
-                                                <SelectRestaurant
-                                                    onChangeRestaurant={onChangeRestaurant}
-                                                    restauran_list={restaurantList}
-                                                />
                                                 <Profile
                                                     restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="email">
@@ -626,6 +626,7 @@ const Admin = () => {
                                         />
                                         <Menu
                                             restaurant_id={restaurantId}
+                                            current_tab={menuSelected}
                                         />
                                     </>
                                 ) : null
@@ -639,6 +640,7 @@ const Admin = () => {
                                         />
                                         <Profile
                                             restaurant_id={restaurantId}
+                                            current_tab={menuSelected}
                                         />
                                     </>
                                 ) : null

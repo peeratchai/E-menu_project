@@ -343,6 +343,7 @@ export default function RestaurantDetailMobile(props) {
                 onHide={() => checkMenuFromBasket()}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
+                table_id={props.table_id}
             />
             <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
