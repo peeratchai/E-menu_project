@@ -112,7 +112,8 @@ export default function AdminEditProfileModal(props) {
                 }
             }
 
-            setRestaurantName(profile.restaurant_name)
+            console.log('profile.restaurant_employee',profile.restaurant_employee)
+            setRestaurantName(profile.restaurant_employee)
             let restaurantList = []
             restaurant_list.forEach((restaurantDetails) => {
                 restaurantList.push({

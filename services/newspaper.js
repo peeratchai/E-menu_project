@@ -3,7 +3,11 @@ import sendRequest from './sendRequest'
 
 const newspaperService = {
     getNewspaperList: async function () {
-        return await sendRequest.get('/api/promotion')
+        return sendRequest.get('/api/promotion').then((response) => {
+            return response
+        }).catch(error => {
+            return error
+        })
     },
 
     getNewspaperListBySearch: async function (data) {

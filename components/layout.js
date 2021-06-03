@@ -28,7 +28,8 @@ export default function Layout(props) {
     const [containerStyle, setContainerStyle] = React.useState(null);
     const [buttonNavbar, setButtonNavbar] = React.useState();
     const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(0)
-    const [havePermission, setHavepermission] = React.useState(false)
+    const [isPartner, setIsPartner] = React.useState(false)
+    const [isAdmin, setIsAdmin] = React.useState(false)
     ////
 
     const setStyleOfContainer = (containerType) => {
@@ -45,10 +46,8 @@ export default function Layout(props) {
     useEffect(() => {
         console.log('user', user)
         if (user) {
-            console.log('user login')
-            console.log('user.isLoggedIn', user.isLoggedIn)
             setIsLogin(user.isLoggedIn)
-            checkPermissionPartner(user)
+            checkPermission(user)
         }
         if (typeof window !== 'undefined') {
             let basket = window.localStorage.getItem('basket');
@@ -63,29 +62,39 @@ export default function Layout(props) {
 
     }, [containerType, page, islogin, menuInBasket, user])
 
-    const checkPermissionPartner = (user) => {
+    const checkPermission = (user = null) => {
         let roles = ['employee', 'partner', 'admin']
+        let accessToken
+        if (user === null) {
+            accessToken = null
+        } else {
+            accessToken = user.accessToken
+        }
 
-        profileService.getProfile().then((userProfile) => {
+        profileService.getProfile(accessToken).then((userProfile) => {
             console.log('userProfile', userProfile)
-            let havePermission = false
+            let isPartner = false
+            let isAdmin = false
             userProfile.roles.forEach((userRole) => {
                 roles.forEach((role) => {
                     if (userRole === role) {
-                        havePermission = true
+                        if (role === 'employee' || role === 'partner') {
+                            isPartner = true
+                        }
+                        if (role === 'admin') {
+                            isAdmin = true
+                        }
                     }
                 })
             })
 
-            setHavepermission(havePermission)
+            setIsPartner(isPartner)
+            setIsAdmin(isAdmin)
 
         }).catch(error => {
-            console.log('Layout,checkPermissionPartner,error', error)
+            console.log('Layout,checkPermission,error', error)
             message.error('Cannot get user profile.')
         })
-
-
-
     }
 
     const signOut = async () => {
@@ -93,9 +102,9 @@ export default function Layout(props) {
             await fetchJson('/api/logout', { method: 'POST' }),
             false
         )
-        window.localStorage.removeItem("accessToken")
-        setHavepermission(false)
-
+        window.localStorage.removeItem('accessToken')
+        setIsPartner(false)
+        setIsAdmin(false)
     }
 
     const navToCheckout = () => {
@@ -199,16 +208,18 @@ export default function Layout(props) {
                         }
 
                         {
-                            havePermission && (
-                                <>
-                                    <ActiveLink activeClassName="active" href="/partner">
-                                        <a className="nav-link">Partner</a>
-                                    </ActiveLink>
+                            isPartner && (
+                                <ActiveLink activeClassName="active" href="/partner">
+                                    <a className="nav-link">Partner</a>
+                                </ActiveLink>
+                            )
+                        }
 
-                                    <ActiveLink activeClassName="active" href="/admin">
-                                        <a className="nav-link">Admin</a>
-                                    </ActiveLink>
-                                </>
+                        {
+                            isAdmin && (
+                                <ActiveLink activeClassName="active" href="/admin">
+                                    <a className="nav-link">Admin</a>
+                                </ActiveLink>
                             )
                         }
 
@@ -230,6 +241,7 @@ export default function Layout(props) {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 setlogin={setIsLogin}
+                check_permission={checkPermission}
             />
         </div >
     )

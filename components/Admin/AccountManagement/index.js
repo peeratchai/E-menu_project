@@ -42,7 +42,7 @@ export default function AccountManagement(props) {
         let userProfilesData = []
         let restaurant_employee = null
         let restaurant_name = null
-
+        console.log('allProfile',allProfile)
         if (allProfile) {
             allProfile.map((profile, index) => {
                 if (profile.restaurant_employee !== null) {
@@ -131,6 +131,7 @@ export default function AccountManagement(props) {
     })
 
     const onEditProfile = (profile) => {
+        console.log('profile',profile)
         setProfileSelected(profile)
         setEdifProfileModalShow(true)
     }
@@ -231,11 +232,6 @@ export default function AccountManagement(props) {
         <>
             <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                 Account Management
-            </div>
-            <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <Button type='primary' onClick={() => setAddBusienssDistrictModalShow(true)}>
-                    New Business District
-                </Button>
             </div>
             <Spin spinning={loading} tip="Loading...">
                 <Table columns={columnsAccount} dataSource={userProfilesData} scroll={{ x: 'max-content' }} />

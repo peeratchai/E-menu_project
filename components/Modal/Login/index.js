@@ -73,6 +73,7 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
+                    props.check_permission()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
@@ -164,6 +165,7 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
+                    props.check_permission()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
@@ -311,6 +313,7 @@ export default function LoginModal(props) {
                         body: JSON.stringify(form),
                     })
                 ).then(async (response) => {
+                    console.log('response', response)
                     let accessToken = response.accessToken
                     localStorage.setItem('accessToken', accessToken)
                     props.onHide()
@@ -322,7 +325,7 @@ export default function LoginModal(props) {
                         localStorage.setItem('password', b64EncodedPassword)
                         localStorage.setItem('isRememberMe', true)
                     }
-                    window.location.reload()
+                    props.check_permission()
                 }).catch((error) => {
                     console.log('error', error)
                 })

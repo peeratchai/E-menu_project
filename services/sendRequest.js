@@ -13,6 +13,7 @@ const reLogin = async () => {
         window.localStorage.setItem('accessToken', newAccessToken);
         return newAccessToken
     } catch (error) {
+        console.log('reLogin', error)
         let accessToken = await authentication.loginWithGuestUser()
         return accessToken
     }
@@ -48,10 +49,10 @@ const sendRequest = {
                             return response.data
                         })
                         .catch(function (error) {
-                            return error.response.status
+                            return error
                         })
                 } else {
-                    return error.response.status
+                    return error
                 }
             });
 

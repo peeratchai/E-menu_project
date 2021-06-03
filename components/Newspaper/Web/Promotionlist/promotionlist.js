@@ -12,7 +12,7 @@ export default function WebPromotionlist(props) {
 
     useEffect(() => {
         if (props.newspaper_list !== undefined) {
-            // console.log(props.newspaper_list)
+            console.log(props.newspaper_list)
             renderPromotionsCard(props.newspaper_list)
         }
     }, [props])

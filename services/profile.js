@@ -3,16 +3,21 @@ import checkLogin from './checkLogin'
 
 
 const profileService = {
-    getProfile: async () => {
-        let access_token = await checkLogin()
+    getProfile: async (access_token = null) => {
+        let accessToken
+        if (access_token === null) {
+            accessToken = await checkLogin()
+        } else {
+            accessToken = access_token
+        }
 
         let config = {
             headers: {
-                'Authorization': 'Bearer ' + access_token
+                'Authorization': 'Bearer ' + accessToken
             }
         }
 
-        let response = await axios.get('/api/profile/get', config)
+        return axios.get('/api/profile/get', config)
             .then(function (response) {
                 console.log(response)
                 return response.data
@@ -22,7 +27,6 @@ const profileService = {
                 return error
             });
 
-        return response
     },
     adminEditUserProfile: async (data, userId) => {
         let accessToken = await checkLogin()

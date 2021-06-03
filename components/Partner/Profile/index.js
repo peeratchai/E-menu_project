@@ -99,6 +99,10 @@ export default function Profile(props) {
             } else {
                 businessHour = restaurantForm.business_hour
             }
+            let businessDistrictId = null
+            if (restaurantDetail.business_district !== null) {
+                businessDistrictId = restaurantDetail.business_district.id
+            }
             let initialRestaurantForm = {
                 business_hour: businessHour,
                 facebook: restaurantDetail.facebook,
@@ -118,11 +122,12 @@ export default function Profile(props) {
                 restaurant_pictures: restaurantDetail.restaurant_pictures,
                 website: restaurantDetail.website,
                 restaurant_id: restaurant_id,
-                business_district: restaurantDetail.business_district.id
+                business_district: businessDistrictId
             }
             setLoading(false)
             setRestaurantForm(initialRestaurantForm)
         } catch (error) {
+            setLoading(false)
             console.log('error', error)
             message.error('Cannot connect to server.')
         }

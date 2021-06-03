@@ -246,7 +246,7 @@ Partner.propTypes = {
 
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
-    const roles = ['employee', 'partner', 'admin']
+    const roles = ['employee', 'partner']
     let havePermission = false
 
     if (user) {
@@ -269,15 +269,15 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
 
         console.log('havePermission', havePermission)
 
-        if (!havePermission) {
+        if (havePermission && profile.restaurant_employee !== null) {
+            user.profile = profile
+        } else {
             return {
                 redirect: {
                     destination: '/',
                     permanent: false,
                 },
             }
-        } else {
-            user.profile = profile
         }
 
     } else {

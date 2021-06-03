@@ -13,6 +13,7 @@ import React, { useEffect } from 'react'
 import newspaperService from '../../services/newspaper'
 import checklogin from '../../services/checkLogin'
 import changeFormatFilter from '../../services/changeFormatFilter'
+import { message } from 'antd';
 
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
@@ -26,20 +27,26 @@ export default function Newspaper() {
     }
 
     useEffect(async () => {
-        let newspaperList = await getNewspaperlist()
-        setNewspaperList(newspaperList)
+        getNewspaperlist()
     }, [])
 
     const getNewspaperlist = async () => {
-        let response = await newspaperService.getNewspaperList();
-        console.log('response', response)
-        return response
+        newspaperService.getNewspaperList().then((newspaperList) => {
+            console.log('getNewspaperlist error', newspaperList)
+            setNewspaperList(newspaperList)
+        }).catch(error => {
+            console.log('getNewspaperlist error', error)
+            if (error.response.status === 403) {
+                message.error('403 Forbidden Error')
+            }
+        })
+
     }
 
     const onSearch = async (filterForm) => {
         let filter = changeFormatFilter(filterForm)
         console.log('filter', filter)
-        let locationListSearchByFilter = await newspaperService.getNewspaperListBySearch(accessToken, filter)
+        let locationListSearchByFilter = await newspaperService.getNewspaperListBySearch(filter)
         setFilter(filterForm)
         console.log('locationListSearchByFilter', locationListSearchByFilter)
         setNewspaperList(locationListSearchByFilter)
