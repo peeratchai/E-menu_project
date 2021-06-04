@@ -1,6 +1,6 @@
 import styles from './index.module.css'
 import { Row, Col, Image, Button, Tab, Tabs, Form } from 'react-bootstrap'
-import { message, Popconfirm, Spin } from 'antd'
+import { message, Popconfirm, Spin, Select } from 'antd'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import partnerService from '../../../../services/partner'
@@ -8,13 +8,14 @@ import EmptyComponent from '../../../Empty'
 import utilStyles from '../../../../styles/utils.module.css'
 import moment from 'moment'
 import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import Link from 'next/link'
+
+const { Option } = Select
 
 export default function MobileComponent(props) {
-    const { zone, restaurant_id } = props
-    const { get_zone } = props
-
+    const { zone, restaurant_id, restaurant_name } = props
     const [loading, setLoading] = React.useState(false);
-    const [zoneSelected, setZoneSelected] = React.useState()
+    const [zoneSelected, setZoneSelected] = React.useState({ id: null })
     const [orders, setOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
     const [haveNewOrder, setHaveNewOrder] = React.useState(false)
@@ -25,6 +26,8 @@ export default function MobileComponent(props) {
     const [completedOrderSelected, setCompletedOrderSelected] = React.useState({})
     const [haveOrderCompleted, setHaveOrderCompleted] = React.useState(false)
     const [tableCompletedOrderSelectedNumber, setTableCompletedOrderSelectedNumber] = React.useState()
+    const [restaurantTable, setRestaurantTable] = React.useState([])
+    const [tableIdSelected, setTableIdSelected] = React.useState(null)
 
     useEffect(() => {
         if (Array.isArray(zone)) {
@@ -46,6 +49,10 @@ export default function MobileComponent(props) {
             "zone": zoneIdArray
         }
         console.log(data)
+
+        setRestaurantTable(zone.restaurant_tables)
+        setTableIdSelected(zone.restaurant_tables[0].id)
+
         partnerService.getOrderByfilter(data).then((orders) => {
             console.log('order', orders)
             setInitailNewOrder(orders)
@@ -605,38 +612,80 @@ export default function MobileComponent(props) {
     )
 
     let zoneDropdown = zone && zone.map((zone) => (
-        <option value={zone.id}>{zone.name}</option>
+        <Option value={zone.id}>{zone.name}</Option>
     ))
 
-    const onChangeZone = (e) => {
-        let zoneId = e.target.value
+    let tableDropdown = restaurantTable && restaurantTable.map((table) => (
+        <Option value={table.id}>{table.name}</Option>
+    ))
+
+    const onChangeZone = (zoneId) => {
         let zoneDetails = zone.find(zone => zone.id === zoneId)
         console.log(zoneDetails)
         setZoneSelected(zoneDetails)
         getOrder(zoneDetails)
     }
 
+    const onChangeTable = (tableId) => {
+        setTableIdSelected(tableId)
+    }
+
     return (
         <div className={styles.tab}>
-            <Row>
+            <Row style={{ marginBottom: "20px" }}>
                 <Col xs={12}>
                     <Form>
-                        <Form.Group controlId="zoneName">
-                            <Form.Control
-                                as="select"
-                                custom
-                                onChange={(e) => onChangeZone(e)}
-                            >
-                                {zoneDropdown}
-                            </Form.Control>
-                        </Form.Group>
+                        <Select
+                            onChange={(zoneId) => onChangeZone(zoneId)}
+                            value={zoneSelected.id}
+                            style={{ width: "100%" }}
+                        >
+                            {zoneDropdown}
+                        </Select>
+                        {/* <Form.Control
+                            as="select"
+                            custom
+                            onChange={(e) => onChangeZone(e)}
+                        >
+                            {zoneDropdown}
+                        </Form.Control> */}
+                        <Row style={{ marginTop: "15px" }}>
+                            <Col xs={8}>
+                                <Select
+                                    onChange={(tableId) => onChangeTable(tableId)}
+                                    value={tableIdSelected}
+                                    style={{ width: "100%" }}
+                                >
+                                    {tableDropdown}
+                                </Select>
+                                {/* <Form.Control
+                                    as="select"
+                                    custom
+                                    onChange={(e) => onChangeTable(e)}
+                                >
+                                    {tableDropdown}
+                                </Form.Control> */}
+
+                            </Col>
+                            <Col xs={4}>
+                                <Link
+                                    href={{
+                                        pathname: '/menuFeeding/restaurantList/' + restaurant_name,
+                                        query: { restaurantId: restaurant_id, tableId: tableIdSelected },
+                                    }}
+                                >
+                                    <a className={utilStyles.font_size_sm} style={{ lineHeight: 2 }}>Take new order</a>
+                                </Link>
+                                {/* <Button>Take order</Button> */}
+                            </Col>
+                        </Row>
                     </Form>
                 </Col>
             </Row>
             <Spin spinning={loading} tip="Loading...">
                 <Tabs defaultActiveKey="newOrder" id="orderStatus-tabs">
                     <Tab eventKey="newOrder" title="New order">
-                        <Row style={{ marginTop: "20px" }}>
+                        <Row style={{ marginTop: "20px", paddingBottom: "50px" }}>
                             {
                                 haveNewOrder ? NewOrderListComponent : <EmptyComponent />
                             }

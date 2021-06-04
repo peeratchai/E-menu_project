@@ -14,6 +14,7 @@ const { Option } = Select;
 //Modal filter for mobile resolution
 export default function MobileFilter(props) {
 
+    const { filter_master_data_list } = props
     const [form, setForm] = React.useState({
         food_type: '',
         payment_option: '',
@@ -35,6 +36,18 @@ export default function MobileFilter(props) {
         props.onHide()
     }
 
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
+        <option value={foodType.name}>{foodType.name}</option>
+    ))
+
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
+        <option value={distance.name}>{distance.name}</option>
+    ))
+
+    let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions) => (
+        <option value={peymentOptions.name}>{peymentOptions.name}</option>
+    ))
+
     return (
         <Modal
             {...props}
@@ -55,39 +68,10 @@ export default function MobileFilter(props) {
                             <div>
                                 <Form.Group >
                                     <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
-                                        <option value="" key="null">-</option>
-                                        <option value="Breads" key="Breads">Breads</option>
-                                        <option value="Rice" key="Rice">Rice</option>
-                                        <option value="Meat" key="Meat">Meat</option>
-                                        <option value="Pasta" key="Pasta">Pasta</option>
-                                        <option value="Noodles" key="Noodles">Noodles</option>
-                                        <option value="Vegetables" key="Vegetables">Vegetables</option>
-                                        <option value="Fruit" key="Fruit">Fruit</option>
+                                        <option value={null} key="null">-</option>
+                                        {FootTypeDropDown}
                                     </Form.Control>
                                 </Form.Group>
-
-                                {/* <Select
-                                    showSearch
-                                    style={{ width: '100%' }}
-                                    placeholder="Search to Select"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                    filterSort={(optionA, optionB) =>
-                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                    }
-
-                                >
-                                    <Option value="0">-</Option>
-                                    <Option value="1">Breads</Option>
-                                    <Option value="2">Rice</Option>
-                                    <Option value="3">Meat</Option>
-                                    <Option value="4">Pasta</Option>
-                                    <Option value="5">Noodles</Option>
-                                    <Option value="6">Vegetables</Option>
-                                    <Option value="7">Fruit</Option>
-                                </Select> */}
                             </div>
                         </Col>
                         <Col xs={12} className={styles.colPadding}>
@@ -102,31 +86,11 @@ export default function MobileFilter(props) {
                                 <Col>
                                     <Form.Group >
                                         <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                            <option value="">-</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Credit Card">Credit Cards</option>
+                                            <option value={null}>-</option>
+                                            {PeymentOptionsDropDown}
                                         </Form.Control>
                                     </Form.Group>
-                                    {/* <Select
-                                        showSearch
-                                        mode="multiple"
-                                        showArrow={true}
-                                        style={{ width: '100%' }}
-                                        placeholder="Search to Select"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
 
-
-                                    >
-                                        <Option value="0">-</Option>
-                                        <Option value="1">Cash</Option>
-                                        <Option value="2">Credit Cards</Option>
-                                    </Select> */}
                                 </Col>
                             </Row>
                         </Col>
@@ -143,18 +107,8 @@ export default function MobileFilter(props) {
                                 <Col>
                                     <Form.Group >
                                         <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                            <option value="">-</option>
-                                            <option value="1">1 กิโลเมตร</option>
-                                            <option value="2">2 กิโลเมตร</option>
-                                            <option value="5">5 กิโลเมตร</option>
-                                            <option value="10">10 กิโลเมตร</option>
-                                            <option value="20">20 กิโลเมตร</option>
-                                            <option value="40">40 กิโลเมตร</option>
-                                            <option value="60">60 กิโลเมตร</option>
-                                            <option value="80">80 กิโลเมตร</option>
-                                            <option value="100">100 กิโลเมตร</option>
-                                            <option value="250">250 กิโลเมตร</option>
-                                            <option value="500">500 กิโลเมตร</option>
+                                            <option value={null}>-</option>
+                                            {DistanceDropDown}
                                         </Form.Control>
                                     </Form.Group>
                                     {/* <Select

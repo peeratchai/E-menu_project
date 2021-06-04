@@ -2,13 +2,35 @@
 
 export default function changeFormatFilter(filterForm) {
     let ObjectfilterForm = Object.keys(filterForm)
-    let filterResponse = {}
+    let filterResponse = {
+        payment_option: null,
+        is_open_now: null,
+        have_parking: null
+    }
     ObjectfilterForm.forEach((filter) => {
         switch (filter) {
+            case 'filter':
+                console.log('filterForm.filter', filterForm.filter)
+                filterForm.filter.forEach((filterItem) => {
+                    if (filterItem === 'Cash' || filterItem === 'Credit Card') {
+                        if (filterResponse.payment_option === null) {
+                            filterResponse.payment_option = []
+                        }
+                        filterResponse.payment_option.push(filterItem)
+                    }
+                    if (filterItem === 'Open now') {
+                        filterResponse.is_open_now = true
+                    }
+                    if (filterItem === 'Have Parking') {
+                        filterResponse.have_parking = true
+                    }
+                })
+                break;
+
             case 'price_to_price_from':
                 let split = filterForm.price_to_price_from.split(" ")
                 let price_from = split[0]
-                console.log('price_from',price_from)
+                console.log('price_from', price_from)
                 let price_to = split[1]
                 if (price_to === "0") {
                     filterResponse.price_from = null
@@ -23,20 +45,6 @@ export default function changeFormatFilter(filterForm) {
                     filterResponse.distance = null
                 } else {
                     filterResponse.distance = filterForm.distance
-                }
-                break;
-            case 'is_open_now':
-                if (filterForm.is_open_now === false) {
-                    filterResponse.is_open_now = null
-                } else {
-                    filterResponse.is_open_now = filterForm.is_open_now
-                }
-                break;
-            case 'have_parking':
-                if (filterForm.have_parking === false) {
-                    filterResponse.have_parking = null
-                } else {
-                    filterResponse.have_parking = filterForm.have_parking
                 }
                 break;
             case 'what':
@@ -60,6 +68,22 @@ export default function changeFormatFilter(filterForm) {
                     filterResponse.food_type = filterForm.food_type
                 }
                 break;
+
+            //// For Mobile Version
+            case 'is_open_now':
+                if (filterForm.is_open_now === false) {
+                    filterResponse.is_open_now = null
+                } else {
+                    filterResponse.is_open_now = filterForm.is_open_now
+                }
+                break;
+            case 'have_parking':
+                if (filterForm.have_parking === false) {
+                    filterResponse.have_parking = null
+                } else {
+                    filterResponse.have_parking = filterForm.have_parking
+                }
+                break;
             case 'payment_option':
                 if (filterForm.payment_option === '') {
                     filterResponse.payment_option = null
@@ -67,6 +91,7 @@ export default function changeFormatFilter(filterForm) {
                     filterResponse.payment_option = filterForm.payment_option
                 }
                 break;
+            ////
             default: break;
         }
     })

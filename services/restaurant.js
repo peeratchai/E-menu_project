@@ -1,25 +1,10 @@
 const axios = require('axios');
 import checkLogin from './checkLogin'
+import sendRequest from './sendRequest'
 
 const restaurantService = {
-    getLocationList: async function (accessToken) {
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        }
-
-        let response = await axios.get('/api/location', config)
-            .then(function (response) {
-                console.log(response)
-                return response
-            })
-            .catch(function (error) {
-                console.log(error)
-                return error
-            });
-
-        return response
+    getLocationList: async function () {
+        return await sendRequest.get('/api/location')
     },
 
     getRestaurantSearchByLocation: async function (accessToken, locationID) {

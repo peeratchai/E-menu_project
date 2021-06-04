@@ -1,6 +1,6 @@
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { Select, Checkbox, Space } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StarOutlined, FireOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
 import utilStyles from '../../../../styles/utils.module.css'
@@ -12,6 +12,9 @@ const { Option } = Select;
 
 export default function WebFilter(props) {
 
+    const { filter_master_data_list } = props
+    const [filterOptions, setFilterOptions] = React.useState([]);
+    const [filterValue, setFilterValue] = React.useState();
     const [form, setForm] = React.useState({
         food_type: '',
         payment_option: '',
@@ -23,24 +26,34 @@ export default function WebFilter(props) {
         sort_by: null
     })
 
-    const [options, setOptions] = React.useState([
-        {
-            label: `Cash`,
-            value: 'Cash',
-        },
-        {
-            label: `Credit Card`,
-            value: 'Credit Card',
-        },
-        {
-            label: `Open now`,
+    useEffect(() => {
+        if (filter_master_data_list) {
+            setFilterOptionsFromMasterData()
+        }
+    }, [filter_master_data_list])
+
+    const setFilterOptionsFromMasterData = () => {
+        let filterOptions = [{
+            label: 'Open now',
             value: 'Open now',
         },
         {
-            label: `Have Parking`,
+            label: 'Have Parking',
             value: 'Have Parking',
-        }
-    ]);
+        }]
+
+        filter_master_data_list.peymentOptionsMasterData.forEach((peymentOptions) => {
+            filterOptions.push({
+                label: peymentOptions.name,
+                value: peymentOptions.name
+            })
+        })
+
+        console.log('filterOptions', filterOptions)
+
+        setFilterOptions(filterOptions)
+    }
+
 
     const setform = (fieldName, value) => {
         setForm({
@@ -49,23 +62,14 @@ export default function WebFilter(props) {
         })
     }
 
-    const [value, setValue] = React.useState([]);
-    const filterProps = {
-        allowClear: true,
-        showArrow: true,
-        mode: 'multiple',
-        style: {
-            width: '100%',
-        },
-        value,
-        options,
-        onChange: (newValue) => {
-            console.log(newValue)
-            setValue(newValue);
-        },
-        placeholder: 'Select Filters...',
-        maxTagCount: 'responsive',
-    };
+
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
+        <Option value={foodType.name}>{foodType.name}</Option>
+    ))
+
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
+        <Option value={distance.name}>{distance.name}</Option>
+    ))
 
     return (
         <div className={styles.banner}>
@@ -103,40 +107,14 @@ export default function WebFilter(props) {
                                         onChange={(value) => setform('food_type', value)}
                                         className={'myfilter'}
                                     >
-                                        <Option value="">-</Option>
-                                        <Option value="Breads">Breads</Option>
-                                        <Option value="Rice">Rice</Option>
-                                        <Option value="Meat">Meat</Option>
-                                        <Option value="Pasta">Pasta</Option>
-                                        <Option value="Noodles">Noodles</Option>
-                                        <Option value="Vegetables">Vegetables</Option>
-                                        <Option value="Fruit">Fruit</Option>
+                                        <Option value={null}>-</Option>
+                                        {FootTypeDropDown}
                                     </Select>
 
                                 </Col>
                             </Row>
                         </div>
                     </Col>
-                    {/* <Col style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
-                        <div style={{ padding: "16px 20px" }}>
-                            <Row style={{ fontSize: "16px" }}>
-                                <Col>
-                                    <b>Payment option </b>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <Form.Group >
-                                        <Form.Control className={'myfilter'} as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                            <option value="">-</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Credit Card">Credit Cards</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Col> */}
                     <Col md={3} style={{ padding: "0", backgroundColor: "white", borderRadius: "2px", borderRight: "1px solid #dee2e6" }}>
                         <div style={{ padding: "16px 20px" }}>
                             <Row style={{ fontSize: "16px" }}>
@@ -158,18 +136,8 @@ export default function WebFilter(props) {
                                         onChange={(value) => setform('distance', value)}
                                         className={'myfilter'}
                                     >
-                                        <Option value="">-</Option>
-                                        <Option value="1">1 กิโลเมตร</Option>
-                                        <Option value="2">2 กิโลเมตร</Option>
-                                        <Option value="5">5 กิโลเมตร</Option>
-                                        <Option value="10">10 กิโลเมตร</Option>
-                                        <Option value="20">20 กิโลเมตร</Option>
-                                        <Option value="40">40 กิโลเมตร</Option>
-                                        <Option value="60">60 กิโลเมตร</Option>
-                                        <Option value="80">80 กิโลเมตร</Option>
-                                        <Option value="100">100 กิโลเมตร</Option>
-                                        <Option value="250">250 กิโลเมตร</Option>
-                                        <Option value="500">500 กิโลเมตร</Option>
+                                        <Option value={null}>-</Option>
+                                        {DistanceDropDown}
                                     </Select>
                                 </Col>
                             </Row>
@@ -193,7 +161,20 @@ export default function WebFilter(props) {
                                             width: '100%',
                                         }}
                                     >
-                                        <Select {...filterProps} className={'myfilter'} />
+                                        <Select
+                                            allowClear={true}
+                                            showArrow={true}
+                                            mode='multiple'
+                                            style={{ width: '100%' }}
+                                            value={filterValue}
+                                            options={filterOptions}
+                                            onChange={(value) => {
+                                                setform('filter', value)
+                                                setFilterValue(value)
+                                            }}
+                                            placeholder='Select Filters...'
+                                            maxTagCount='responsive'
+                                            className={'myfilter'} />
                                     </Space>
                                 </Col>
                             </Row>

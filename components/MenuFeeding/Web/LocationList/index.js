@@ -4,48 +4,40 @@ import { Row, Col, Card, Button, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import styles from './index.module.css'
-import { message, Select, } from 'antd';
+import { message, Select, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import restaurantService from '../../../../services/restaurant'
 import checkLogin from '../../../../services/checkLogin'
 import Filter from '../Filter'
 import changeFormatFilter from '../../../../services/changeFormatFilter'
-
+import EmptyComponent from '../../../Empty'
 
 const { Option } = Select;
-
-
 
 export default function LocationListWeb() {
 
     const [locationList, setLocationList] = React.useState([]);
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
+    const [loading, setLoading] = React.useState(false)
 
     useEffect(async () => {
-        if (typeof window !== 'undefined') {
-            try {
-                let accessToken = await checkLogin()
-                let LocationList = await getLocationList(accessToken)
-                // console.log(LocationList)
-                setLocationList(LocationList)
-                setMaps(LocationList)
-                setTotalResult(LocationList.length)
-            } catch (error) {
-                console.log(error)
-                message.error('Something went wrong. please try again')
-            }
-        }
+        getLocationList()
     }, [])
 
-    const getLocationList = async (accessToken) => {
-        try {
-            let response = await restaurantService.getLocationList(accessToken)
-            let locationList = response.data
-            return locationList
-        } catch (error) {
+    const getLocationList = async () => {
+        setLoading(true)
+        restaurantService.getLocationList().then((LocationList) => {
+            setLocationList(LocationList)
+            setMaps(LocationList)
+            setTotalResult(LocationList.length)
+            setLoading(false)
+        }).catch(error => {
+            setLoading(false)
             console.log(error)
-        }
+            message.error('Cannot connect server.')
+        })
+
     }
 
     const setMaps = (LocationList) => {
@@ -74,7 +66,7 @@ export default function LocationListWeb() {
 
 
     const locationCard = locationList && locationList.map((locationDetails) => (
-        <Col xs={12} md={6} className={styles.colCard}>
+        <Col md={6} className={styles.colCard}>
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList',
@@ -131,9 +123,24 @@ export default function LocationListWeb() {
                                 </div>
                             </Col>
                         </Row>
-                        <Row>
-                            {locationCard}
-                        </Row>
+                        {/* <Row>
+                            <Spin spinning={loading} tip="Loading...">
+                                {locationCard}
+                            </Spin>
+                        </Row> */}
+                        <div style={{ width: "100%" }}>
+                            <Spin spinning={loading} tip="Loading...">
+                                <Row>
+                                    {
+                                        locationList.length > 0 ? (
+                                            locationCard
+                                        ) : (
+                                            <EmptyComponent />
+                                        )
+                                    }
+                                </Row>
+                            </Spin>
+                        </div>
                     </Col>
                 </Row>
             </div>

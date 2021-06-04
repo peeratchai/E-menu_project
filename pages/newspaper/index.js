@@ -11,15 +11,21 @@ import styles from './index.module.css'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import newspaperService from '../../services/newspaper'
-import checklogin from '../../services/checkLogin'
 import changeFormatFilter from '../../services/changeFormatFilter'
-import { message } from 'antd';
+import { message, Spin } from 'antd';
+import masterDataService from '../../services/masterData'
 
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
     const [newspaperList, setNewspaperList] = React.useState();
     const [filter, setFilter] = React.useState({});
+    const [loading, setLoading] = React.useState(false)
+    const [masterDataList, setMasterDataList] = React.useState({
+        foodTypeMasterData: [],
+        distanceMasterData: [],
+        peymentOptionsMasterData: []
+    })
 
     const searchFunc = () => {
         setModalShow(true)
@@ -27,12 +33,19 @@ export default function Newspaper() {
     }
 
     useEffect(async () => {
-        getNewspaperlist()
+        getInitialData()
     }, [])
 
+    const getInitialData = async () => {
+        setLoading(true)
+        await getNewspaperlist()
+        await getFilterMasterData()
+        setLoading(false)
+    }
+
     const getNewspaperlist = async () => {
+        setLoading(true)
         newspaperService.getNewspaperList().then((newspaperList) => {
-            console.log('getNewspaperlist error', newspaperList)
             setNewspaperList(newspaperList)
         }).catch(error => {
             console.log('getNewspaperlist error', error)
@@ -43,13 +56,37 @@ export default function Newspaper() {
 
     }
 
+    const getFilterMasterData = async () => {
+        let awaitFoodTypeMasterData = masterDataService.getFoodType()
+        let awaitDistanceMasterData = masterDataService.getDistance()
+        let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
+
+        let foodTypeMasterData = await awaitFoodTypeMasterData
+        let distanceMasterData = await awaitDistanceMasterData
+        let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+
+        let masterData = {
+            foodTypeMasterData: foodTypeMasterData,
+            distanceMasterData: distanceMasterData,
+            peymentOptionsMasterData: peymentOptionsMasterData
+        }
+        setMasterDataList(masterData)
+
+    }
+
     const onSearch = async (filterForm) => {
+        console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
         console.log('filter', filter)
-        let locationListSearchByFilter = await newspaperService.getNewspaperListBySearch(filter)
-        setFilter(filterForm)
-        console.log('locationListSearchByFilter', locationListSearchByFilter)
-        setNewspaperList(locationListSearchByFilter)
+        setLoading(true)
+        newspaperService.getNewspaperListBySearch(filter).then((promotions) => {
+            setLoading(false)
+            setFilter(filterForm)
+            setNewspaperList(promotions)
+        }).catch(error => {
+            setLoading(false)
+            console.log('onSearch', error)
+        })
     }
 
     let component
@@ -58,17 +95,20 @@ export default function Newspaper() {
         component = (
             <Layout containerType="mobile" search searchFunc={searchFunc}>
                 <Container className={utilStyles.container_sm}>
-                    <ShowFiilterSelected
-                        filter={filter}
-                    />
-                    <MobilePromotionlist
-                        newspaper_list={newspaperList}
-                    />
+                    <Spin spinning={loading} tip="Loading...">
+                        <ShowFiilterSelected
+                            filter={filter}
+                        />
+                        <MobilePromotionlist
+                            newspaper_list={newspaperList}
+                        />
+                    </Spin>
                 </Container>
                 <MobileFilter
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     onSearch={(form) => onSearch(form)}
+                    filter_master_data_list={masterDataList}
                 />
             </Layout>
         )
@@ -79,15 +119,18 @@ export default function Newspaper() {
             <Layout>
                 <WebFilter
                     onSearch={(form) => onSearch(form)}
+                    filter_master_data_list={masterDataList}
                 />
-                <div style={{ backgroundColor: "white" }}>
-                    <div className={styles.container} >
-                        <br />
-                        <WebPromotionlist
-                            newspaper_list={newspaperList}
-                        />
+                <Spin spinning={loading} tip="Loading...">
+                    <div style={{ backgroundColor: "white" }}>
+                        <div className={styles.container} >
+                            <br />
+                            <WebPromotionlist
+                                newspaper_list={newspaperList}
+                            />
+                        </div>
                     </div>
-                </div>
+                </Spin >
             </Layout >
         )
     }

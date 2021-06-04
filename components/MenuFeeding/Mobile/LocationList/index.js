@@ -5,14 +5,14 @@ import { Row, Col, Card } from 'react-bootstrap'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import styles from './index.module.css'
-import { Select, message } from 'antd';
+import { Select, message, Spin } from 'antd';
 import MobileFilterRestaurantList from '../Filter'
 import ShowFiilterSelected from '../../../ShowFiilterSelected'
 import restaurantService from '../../../../services/restaurant'
 import checkLogin from '../../../../services/checkLogin'
 import 'antd/dist/antd.css';
 import changeFormatFilter from '../../../../services/changeFormatFilter'
-
+import EmptyComponent from '../../../Empty'
 const { Option } = Select;
 
 export default function LocationListMobile() {
@@ -20,30 +20,24 @@ export default function LocationListMobile() {
     const [modalShow, setModalShow] = React.useState(false);
     const [totalResult, setTotalResult] = React.useState(0);
     const [filter, setFilter] = React.useState({});
-    
+    const [loading, setLoading] = React.useState(false)
+
     useEffect(async () => {
-        if (typeof window !== 'undefined') {
-            try {
-                let accessToken = await checkLogin()
-                let LocationList = await getLocationList(accessToken)
-                console.log(LocationList)
-                setLocationList(LocationList)
-                setTotalResult(LocationList.length)
-            } catch (error) {
-                console.log(error)
-                message.error('Something went wrong. please try again')
-            }
-        }
+        getLocationList()
     }, [])
 
-    const getLocationList = async (accessToken) => {
-        try {
-            let response = await restaurantService.getLocationList(accessToken)
-            let locationList = response.data
-            return locationList
-        } catch (error) {
+    const getLocationList = async () => {
+        setLoading(true)
+        restaurantService.getLocationList().then((LocationList) => {
+            setLocationList(LocationList)
+            setTotalResult(LocationList.length)
+            setLoading(false)
+        }).catch(error => {
+            setLoading(false)
             console.log(error)
-        }
+            message.error('Cannot connect server.')
+        })
+
     }
 
     const onSearch = async (filterForm) => {
@@ -118,9 +112,19 @@ export default function LocationListMobile() {
                     </Col>
                 </Row>
 
-                <Row>
-                    {locationCard}
-                </Row>
+                <div style={{ width: "100%" }}>
+                    <Spin spinning={loading} tip="Loading...">
+                        <Row>
+                            {
+                                locationList.length > 0 ? (
+                                    locationCard
+                                ) : (
+                                    <EmptyComponent />
+                                )
+                            }
+                        </Row>
+                    </Spin>
+                </div>
 
             </Container>
             <MobileFilterRestaurantList

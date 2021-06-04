@@ -1,7 +1,7 @@
 import Layout from '../../../layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import { Row, Col, Card, Image, Button, Breadcrumb } from 'react-bootstrap'
-import { Card as Cardantd } from 'antd';
+import { Card as Cardantd, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import styles from './index.module.css'
@@ -19,12 +19,14 @@ import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import OrderMenuModal from '../../../Modal/OrderMenuModal'
 import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
+import moment from 'moment'
 
 const { Meta } = Cardantd;
 
 
 export default function RestaurantDetailWeb(props) {
 
+    const { loading } = props
     const router = useRouter()
     ////Set State
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
@@ -37,7 +39,9 @@ export default function RestaurantDetailWeb(props) {
         business_hour: [],
         restaurant_pictures: [],
         price_from: "",
-        price_to: ""
+        price_to: "",
+        current_business_hour: { opening_time: null, closing_time: null }
+
     })
     const [modalShow, setModalShow] = React.useState(false);
     const [categoryNav, setCategoryNav] = React.useState();
@@ -326,109 +330,125 @@ export default function RestaurantDetailWeb(props) {
                 <Carousel>
                     {restaurantBannerPicture}
                 </Carousel>
-                <Card style={{ cursor: "auto" }}>
-                    <Card.Body>
-                        <Card.Title>{restaurantDetail.name}</Card.Title>
-                        <Card.Text className={styles.card_text}>
-                            <div className={styles.restaurant_details}>
-                                <Row>
-                                    <Col style={{ borderRight: "1px solid #dee2e6" }}>
-                                        Price <span style={{ color: "#74b100" }}><b>{restaurantDetail.price_from}-{restaurantDetail.price_to}</b></span> baht
+                <Spin spinning={loading} tip="Loading...">
+                    <Card style={{ cursor: "auto" }}>
+                        <Card.Body>
+                            <Card.Title>{restaurantDetail.name}</Card.Title>
+                            <Card.Text className={styles.card_text}>
+                                <div className={styles.restaurant_details}>
+                                    <Row>
+                                        <Col style={{ borderRight: "1px solid #dee2e6" }}>
+                                            Price <span style={{ color: "#74b100" }}><b>{restaurantDetail.price_from}-{restaurantDetail.price_to}</b></span> baht
                                     </Col>
-                                    <Col style={{ color: "#74b100" }}>
-                                        Open now!
-                                            </Col>
-                                </Row>
-                                <Row style={{ marginTop: "10px" }}>
-                                    <Col style={{ paddingBottom: "15px" }}>
-                                        {restaurantDetail.description}
+                                        <Col style={{ color: "#74b100" }}>
+                                            {
+                                                moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
+                                                    moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm') ? (
+                                                    'Open now!'
+                                                ) : (
+                                                    'Close now!'
+                                                )
+                                            }
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: "10px" }}>
+                                        <Col style={{ paddingBottom: "15px" }}>
+                                            {restaurantDetail.description}
+                                        </Col>
+                                    </Row>
+                                </div>
+                                <Row style={{ marginTop: "15px" }}>
+                                    <Col md={8}>
+                                        <div className={styles.nav_category_layout} >
+                                            <div className={styles.nav_category} ref={refCategoryNav}>
+                                                <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
+                                                    {categoryNav}
+                                                </div>
+                                                <Button className={styleButtonLeft} onClick={() => scrollCategoryNav('left')}>
+                                                    <LeftOutlined className={styles.nav_scroller_icon} />
+                                                </Button>
+                                                <Button className={styleButtonRight} onClick={() => scrollCategoryNav('right')}>
+                                                    <RightOutlined className={styles.nav_scroller_icon} />
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        {/* Menu list */}
+                                        <div className={styles.menu_list}>
+                                            {menuEachCategory}
+                                        </div>
+
+                                    </Col>
+
+                                    <Col md={4} className={utilStyles.font_size_md} style={{ marginTop: "20px" }}>
+                                        <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
+                                            <div style={{ width: "100%", height: "240px" }}>
+                                                <GoogleMapReact
+                                                    bootstrapURLKeys={{ key: 'AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw' }}
+                                                    center={{
+                                                        lat: lat,
+                                                        lng: lng,
+                                                    }}
+                                                    defaultZoom={11}
+                                                >
+                                                    <PointInMaps
+                                                        lat={lat}
+                                                        lng={lng}
+                                                        name={restaurantDetail.name}
+                                                    />
+                                                </GoogleMapReact>
+                                            </div>
+                                            <div style={{ padding: "1.25rem" }}>
+                                                <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                    <LocationOnIcon /> &nbsp; {restaurantDetail.googleMapsAddress}
+                                                </div>
+                                                <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                    <PhoneIcon /> &nbsp; {restaurantDetail.phone}
+                                                </div>
+                                                <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                                                    <LanguageIcon /> &nbsp; <a href="#">{restaurantDetail.website}</a>
+                                                </div>
+                                                <div style={{ padding: "10px 0" }}>
+                                                    <FacebookIcon style={{ color: "#3b5998", fontSize: "40px", marginRight: "5px" }} /> <TwitterIcon style={{ color: "#1da1f2", fontSize: "40px" }} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ backgroundColor: "#f0f2f3" }}>
+                                            <div style={{ padding: "1.25rem" }}>
+                                                <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }} >
+                                                    <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
+                                                </div>
+                                                <div style={{ padding: "15px 0" }}>
+                                                    <Row>
+                                                        <Col>
+                                                            <div>
+                                                                <b>Today</b>
+                                                            </div>
+                                                        </Col>
+                                                        <Col>
+                                                            <div style={{ textAlign: "right", color: "#74b100 " }}>
+                                                                {
+                                                                    moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
+                                                                        moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm') ? (
+                                                                        'Open now!'
+                                                                    ) : (
+                                                                        'Close now!'
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                                {business_hourHTML}
+                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
-                            </div>
-                            <Row style={{ marginTop: "15px" }}>
-                                <Col md={8}>
-                                    <div className={styles.nav_category_layout} >
-                                        <div className={styles.nav_category} ref={refCategoryNav}>
-                                            <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
-                                                {categoryNav}
-                                            </div>
-                                            <Button className={styleButtonLeft} onClick={() => scrollCategoryNav('left')}>
-                                                <LeftOutlined className={styles.nav_scroller_icon} />
-                                            </Button>
-                                            <Button className={styleButtonRight} onClick={() => scrollCategoryNav('right')}>
-                                                <RightOutlined className={styles.nav_scroller_icon} />
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    {/* Menu list */}
-                                    <div className={styles.menu_list}>
-                                        {menuEachCategory}
-                                    </div>
-
-                                </Col>
-
-                                <Col md={4} className={utilStyles.font_size_md} style={{ marginTop: "20px" }}>
-                                    <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
-                                        <div style={{ width: "100%", height: "240px" }}>
-                                            <GoogleMapReact
-                                                bootstrapURLKeys={{ key: 'AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw' }}
-                                                center={{
-                                                    lat: lat,
-                                                    lng: lng,
-                                                }}
-                                                defaultZoom={11}
-                                            >
-                                                <PointInMaps
-                                                    lat={lat}
-                                                    lng={lng}
-                                                    name={restaurantDetail.name}
-                                                />
-                                            </GoogleMapReact>
-                                        </div>
-                                        <div style={{ padding: "1.25rem" }}>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <LocationOnIcon /> &nbsp; {restaurantDetail.googleMapsAddress}
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <PhoneIcon /> &nbsp; {restaurantDetail.phone}
-                                            </div>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                <LanguageIcon /> &nbsp; <a href="#">{restaurantDetail.website}</a>
-                                            </div>
-                                            <div style={{ padding: "10px 0" }}>
-                                                <FacebookIcon style={{ color: "#3b5998", fontSize: "40px", marginRight: "5px" }} /> <TwitterIcon style={{ color: "#1da1f2", fontSize: "40px" }} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ backgroundColor: "#f0f2f3" }}>
-                                        <div style={{ padding: "1.25rem" }}>
-                                            <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }} >
-                                                <QueryBuilderIcon /> &nbsp; <b>OPENING HOURS</b>
-                                            </div>
-                                            <div style={{ padding: "15px 0" }}>
-                                                <Row>
-                                                    <Col>
-                                                        <div>
-                                                            <b>Today</b>
-                                                        </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div style={{ textAlign: "right", color: "#74b100 " }}>
-                                                            Open Now!
-                                                                    </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                            {business_hourHTML}
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </Spin>
             </div >
             <OrderMenuModal
                 show={modalShow}

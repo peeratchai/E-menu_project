@@ -17,7 +17,6 @@ export default function WebPromotionlist(props) {
         }
     }, [props])
 
-
     const renderPromotionsCard = (newspaper_list) => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]

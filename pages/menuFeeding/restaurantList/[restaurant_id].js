@@ -62,7 +62,7 @@ export default function Restaurant() {
     }
 
     return (
-        <Spin spinning={loading} tip="Loading...">
+        <>
             {
                 !isMobileResolution ? (
                     // PC Version
@@ -72,6 +72,7 @@ export default function Restaurant() {
                         location_id={locationId}
                         restaurant_id={restaurantId}
                         table_id={tableId}
+                        loading={loading}
                     />
                 ) : (
                     // Mobile Version
@@ -81,9 +82,10 @@ export default function Restaurant() {
                         location_id={locationId}
                         restaurant_id={restaurantId}
                         table_id={tableId}
+                        loading={loading}
                     />
                 )
             }
-        </Spin>
+        </>
     )
 }

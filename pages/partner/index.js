@@ -160,6 +160,7 @@ const Partner = ({ user }) => {
                                     <Option value="restaurantManagement">Restaurant Management</Option>
                                     <Option value="dashboard">Dashboard</Option>
                                     <Option value="promote">Promote</Option>
+                                    <Option value="promoteList">Promote List</Option>
                                     <Option value="menu">Menu</Option>
                                     <Option value="zone">Zone</Option>
                                     <Option value="profile">Profile</Option>
@@ -187,6 +188,14 @@ const Partner = ({ user }) => {
                                 menuSelected == 'promote' && (
                                     <Promote
                                         restaurant_id={restaurantId}
+                                    />
+                                )
+                            }
+                            {
+                                menuSelected == 'promoteList' && (
+                                    <PromoteList
+                                        restaurant_id={restaurantId}
+                                        current_tab={menuSelected}
                                     />
                                 )
                             }

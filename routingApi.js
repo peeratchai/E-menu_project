@@ -334,6 +334,18 @@ module.exports = {
         {
             source: '/api/get/profile-all-user',
             destination: API_URL + '/profile/all_user'
+        },
+        {
+            source: '/api/get/master_data/food-type',
+            destination: API_URL + '/master_data/food-type'
+        },
+        {
+            source: '/api/get/master_data/distance',
+            destination: API_URL + '/distance'
+        },
+        {
+            source: '/api/get/master_data/payment-option',
+            destination: API_URL + '/payment-option'
         }
     ]
 }
