@@ -64,6 +64,7 @@ const profileService = {
         formData.append("is_active", data.is_active);
         formData.append("roles", data.roles);
 
+        console.log(typeof (data.is_active))
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }

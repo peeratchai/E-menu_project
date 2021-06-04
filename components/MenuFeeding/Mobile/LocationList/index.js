@@ -13,6 +13,8 @@ import checkLogin from '../../../../services/checkLogin'
 import 'antd/dist/antd.css';
 import changeFormatFilter from '../../../../services/changeFormatFilter'
 import EmptyComponent from '../../../Empty'
+import masterDataService from '../../../../services/masterData'
+
 const { Option } = Select;
 
 export default function LocationListMobile() {
@@ -21,10 +23,24 @@ export default function LocationListMobile() {
     const [totalResult, setTotalResult] = React.useState(0);
     const [filter, setFilter] = React.useState({});
     const [loading, setLoading] = React.useState(false)
-
+    const [masterDataList, setMasterDataList] = React.useState({
+        foodTypeMasterData: [],
+        distanceMasterData: [],
+        peymentOptionsMasterData: []
+    })
+    
     useEffect(async () => {
-        getLocationList()
+        getInitialData()
+
     }, [])
+
+
+    const getInitialData = async () => {
+        setLoading(true)
+        await getLocationList()
+        await getFilterMasterData()
+        setLoading(false)
+    }
 
     const getLocationList = async () => {
         setLoading(true)
@@ -39,6 +55,25 @@ export default function LocationListMobile() {
         })
 
     }
+
+    const getFilterMasterData = async () => {
+        let awaitFoodTypeMasterData = masterDataService.getFoodType()
+        let awaitDistanceMasterData = masterDataService.getDistance()
+        let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
+
+        let foodTypeMasterData = await awaitFoodTypeMasterData
+        let distanceMasterData = await awaitDistanceMasterData
+        let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+
+        let masterData = {
+            foodTypeMasterData: foodTypeMasterData,
+            distanceMasterData: distanceMasterData,
+            peymentOptionsMasterData: peymentOptionsMasterData
+        }
+        setMasterDataList(masterData)
+
+    }
+
 
     const onSearch = async (filterForm) => {
         let filter = changeFormatFilter(filterForm)
@@ -131,6 +166,7 @@ export default function LocationListMobile() {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 on_search={(filterForm) => onSearch(filterForm)}
+                filter_master_data_list={masterDataList}
             />
         </Layout >
     )

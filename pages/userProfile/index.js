@@ -179,7 +179,7 @@ const UserProfile = ({ user }) => {
                                         <Row>
                                             <Col>
                                                 <Form.Group controlId="Name">
-                                                    <Form.Label>Fist name</Form.Label>
+                                                    <Form.Label>First Name</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={(e) => setProfileform('first_name', e.target.value)}
@@ -194,7 +194,7 @@ const UserProfile = ({ user }) => {
                                             </Col>
                                             <Col>
                                                 <Form.Group controlId="Name">
-                                                    <Form.Label>Last name</Form.Label>
+                                                    <Form.Label>Last Name</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={(e) => setProfileform('last_name', e.target.value)}
@@ -232,7 +232,7 @@ const UserProfile = ({ user }) => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group controlId="phone">
-                                            <Form.Label>Phone number</Form.Label>
+                                            <Form.Label>Phone Number</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 onChange={(e) => setProfileform('phoneNumber', e.target.value)}

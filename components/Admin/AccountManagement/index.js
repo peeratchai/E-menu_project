@@ -42,12 +42,18 @@ export default function AccountManagement(props) {
         let userProfilesData = []
         let restaurant_employee = null
         let restaurant_name = null
-        console.log('allProfile',allProfile)
+        console.log('allProfile', allProfile)
         if (allProfile) {
             allProfile.map((profile, index) => {
                 if (profile.restaurant_employee !== null) {
-                    restaurant_employee = profile.restaurant_employee.restaurant.id
-                    restaurant_name = profile.restaurant_employee.restaurant.name
+                    if (profile.restaurant_employee.restaurant) {
+                        try {
+                            restaurant_employee = profile.restaurant_employee.restaurant.id
+                            restaurant_name = profile.restaurant_employee.restaurant.name
+                        } catch (error) {
+                            console.log('profile.restaurant_employee', profile.restaurant_employee)
+                        }
+                    }
                 } else {
                     restaurant_employee = null
                     restaurant_name = null
@@ -131,7 +137,7 @@ export default function AccountManagement(props) {
     })
 
     const onEditProfile = (profile) => {
-        console.log('profile',profile)
+        console.log('profile', profile)
         setProfileSelected(profile)
         setEdifProfileModalShow(true)
     }
@@ -217,9 +223,8 @@ export default function AccountManagement(props) {
             is_active: checked
         }
 
-        console.log('data', data)
 
-        let responseProfile = await profileService.editUserProfile(data)
+        let responseProfile = await profileService.adminEditUserProfile(data, profile.userId)
         if (responseProfile) {
             getAllUserProfile()
             message.success('Edit profile successful.')

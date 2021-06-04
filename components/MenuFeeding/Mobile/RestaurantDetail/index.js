@@ -63,8 +63,6 @@ export default function RestaurantDetailMobile(props) {
 
     const categoryDropdownMobile = categoryList.map((category, index) => <Option value={category.categoryName} key={category.categoryName + index}>{category.categoryName}</Option>)
     const scrollindToCategorySectionMobile = (category) => {
-        console.log(refsCategory)
-        console.log(category)
         if (refsCategory.current[category] !== undefined) {
             refsCategory.current[category].scrollIntoView({ behavior: 'smooth' })
         }

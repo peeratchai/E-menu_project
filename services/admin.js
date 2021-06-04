@@ -61,7 +61,8 @@ const adminService = {
     getAllProfile: async function () {
         return await sendRequest.get('/api/get/all_profile')
     },
-    SendEmail: async function (data) {
+    sendEmail: async function (data) {
+        console.log('data', data)
         return await sendRequest.post('/api/send_email', data)
     },
     addMasterFoodCategory: async function (data) {

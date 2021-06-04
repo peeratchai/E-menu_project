@@ -2,7 +2,7 @@ import Layout from '../../../layout'
 import { Row, Col, Card, Button, Form, Breadcrumb } from 'react-bootstrap'
 import styles from './index.module.css'
 import Link from 'next/link'
-import { Slider, Select, Checkbox } from 'antd';
+import { Slider, Select, Checkbox, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -11,17 +11,19 @@ import restaurantService from '../../../../services/restaurant'
 import checkLogin from '../../../../services/checkLogin'
 import Geocode from "react-geocode";
 import changeFormatFilter from '../../../../services/changeFormatFilter'
+import EmptyComponent from '../../../Empty'
 
-Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
-Geocode.setLanguage("th");
-// Geocode.setRegion("es");
-Geocode.setLocationType("ROOFTOP");
-Geocode.enableDebug();
+// Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
+// Geocode.setLanguage("th");
+// // Geocode.setRegion("es");
+// Geocode.setLocationType("ROOFTOP");
+// Geocode.enableDebug();
 
 const { Option } = Select;
 
 export default function RestaurantListWeb(props) {
 
+    const { restaurant_list, location_name, location_id, loading, master_data_list } = props
     const [restaurantList, setRestaurantList] = React.useState(null);
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
@@ -30,11 +32,9 @@ export default function RestaurantListWeb(props) {
     const [locationInMaps, setLocationInMaps] = React.useState([]);
 
     useEffect(() => {
-        if (props.restaurant_list.length !== 0) {
-            // setRestaurantList(props.restaurant_list)
-            const { restaurant_list, location_name, location_id } = props
-
+        if (restaurant_list.length !== 0) {
             if (restaurantList === null) {
+                console.log('restaurant_list', restaurant_list)
                 setLocationName(location_name)
                 setLocationId(location_id)
                 setTotalResult(restaurant_list.length)
@@ -45,29 +45,36 @@ export default function RestaurantListWeb(props) {
                 setTotalResult(restaurantList.length)
                 setRestaurantList(restaurantList)
                 renderRestaurantCard(restaurantList)
-                setMaps(restaurantList)
             }
         }
-    }, [props, restaurantList])
+    }, [props])
 
     const setMaps = (restaurant_list) => {
         let LocationInMaps = []
         let point, substringPotion, splitPotion, latLong, lat, lng
-        restaurant_list.map((restaurantDetails) => {
-            point = restaurantDetails.location;
-            substringPotion = point.substring(5)
-            splitPotion = substringPotion.split('(').join('').split(')');
-            latLong = splitPotion[0].split(' ')
-            lat = latLong[0]
-            lng = latLong[1]
-            LocationInMaps.push({ lat: lat, lng: lng, name: restaurantDetails.name })
+
+        restaurant_list.map((restaurantDetails, index) => {
+            try {
+                point = restaurantDetails.location;
+                substringPotion = point.substring(5)
+                splitPotion = substringPotion.split('(').join('').split(')');
+                latLong = splitPotion[0].split(' ')
+                lat = latLong[0]
+                lng = latLong[1]
+                LocationInMaps.push({ lat: lat, lng: lng, name: restaurantDetails.name })
+            } catch (error) {
+                console.log('')
+            }
+
         })
 
         setLocationInMaps(LocationInMaps)
     }
 
-    const renderRestaurantCard = (restaurant_list) => {
-        let restaurantCard = restaurant_list && restaurant_list.map((restaurantDetails) => {
+
+
+    const renderRestaurantCard = (restaurantList) => {
+        let restaurantCard = restaurantList && restaurantList.map((restaurantDetails) => {
             return (
                 <Col md={6}>
                     <Link
@@ -141,6 +148,7 @@ export default function RestaurantListWeb(props) {
             return address
         })).then(() => {
             setRestaurantList(restaurantList)
+            setTotalResult(restaurantList.length)
         })
 
     }
@@ -160,6 +168,7 @@ export default function RestaurantListWeb(props) {
                     <Filter
                         onSearch={(form) => onSearch(form)}
                         location_restaurant_in_maps={locationInMaps}
+                        filter_master_data_list={master_data_list}
                     />
                 </Col>
                 {/* List Restaurant */}
@@ -186,9 +195,19 @@ export default function RestaurantListWeb(props) {
                             </div>
                         </Col>
                     </Row>
-                    <Row>
-                        {restaurantCard}
-                    </Row>
+                    <div style={{ width: "100%" }}>
+                        <Spin spinning={loading} tip="Loading...">
+                            <Row>
+                                {
+                                    restaurantList !== null && restaurantList.length > 0 ? (
+                                        restaurantCard
+                                    ) : (
+                                        <EmptyComponent />
+                                    )
+                                }
+                            </Row>
+                        </Spin>
+                    </div>
                 </Col>
             </Row>
         </Layout >

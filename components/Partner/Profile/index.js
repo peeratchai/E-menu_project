@@ -196,8 +196,8 @@ export default function Profile(props) {
             businessHour.push({
                 "restaurant": restaurant_id,
                 "day": business_hour.day,
-                "opening_time": parseFloat(business_hour.opening_time),
-                "closing_time": parseFloat(business_hour.closing_time)
+                "opening_time": parseFloat(business_hour.opening_time.split(":").join(".")),
+                "closing_time": parseFloat(business_hour.closing_time.split(":").join("."))
             })
         })
         dataForm.business_hour = businessHour

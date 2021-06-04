@@ -7,23 +7,8 @@ const restaurantService = {
         return await sendRequest.get('/api/location')
     },
 
-    getRestaurantSearchByLocation: async function (accessToken, locationID) {
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        }
-        let response = await axios.get('/api/restaurant/location_id/' + locationID, config)
-            .then(function (response) {
-                console.log(response)
-                return response
-            })
-            .catch(function (error) {
-                console.log(error)
-                return error
-            });
-
-        return response
+    getRestaurantSearchByLocation: async function (locationID) {
+        return await sendRequest.get('/api/restaurant/location_id/' + locationID)
     },
 
     getAllRestaurant: async function () {

@@ -281,11 +281,11 @@ input#whereSearch.form-control {
   color: red;
 }
 #orderStatus-tabs-tab-inOrder {
-  color: green;
+  color: gray;
 }
 
 #orderStatus-tabs-tab-completed {
-  color: gray;
+  color: green;
 }
 
 /* Edit cell table */

@@ -6,8 +6,7 @@ export default withSession(async (req, res) => {
   const { email, password } = await req.body
 
   try {
-    console.log('email', email)
-    console.log('password', password)
+
     let data = {
       "email": email,
       "password": password
@@ -17,13 +16,16 @@ export default withSession(async (req, res) => {
         'Content-Type': 'application/json'
       }
     }
-    let reponse = await axios.post(`${process.env.API_URL}/auth/signin-with-email`, data, config)
-    let accessToken = reponse.data.accessToken
-    const user = { isLoggedIn: true, accessToken: accessToken }
-    req.session.set('user', user)
-    await req.session.save()
-    res.json(user)
-
+    axios.post(`${process.env.API_URL}/auth/signin-with-email`, data, config).then(async (response) => {
+      let accessToken = response.data.accessToken
+      const user = { isLoggedIn: true, accessToken: accessToken }
+      req.session.set('user', user)
+      await req.session.save()
+      res.json(user)
+    }).catch(error => {
+      console.log('error', error.response.status)
+      res.status(error.response.status).json(error.response.status)
+    })
   } catch (error) {
     const { response: fetchResponse } = error
     res.status(fetchResponse?.status || 500).json(error.data)

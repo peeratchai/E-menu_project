@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router'
 import useMediaQuery from "../../../utils/utils";
-import { Select } from 'antd';
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import restaurantService from '../../../services/restaurant'
-import checkLogin from '../../../services/checkLogin'
 import RestaurantListWeb from '../../../components/MenuFeeding/Web/RestaurantList'
 import RestaurantListMobile from '../../../components/MenuFeeding/Mobile/RestaurantList'
 import Geocode from "react-geocode";
+import masterDataService from '../../../services/masterData'
 
 Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
 Geocode.setLanguage("th");
@@ -20,6 +19,12 @@ export default function RestaurantList() {
     const router = useRouter()
     const { locationId, locationName } = router.query;
     const [restaurantList, setRestaurantList] = React.useState([]);
+    const [loading, setLoading] = React.useState(false)
+    const [masterDataList, setMasterDataList] = React.useState({
+        foodTypeMasterData: [],
+        distanceMasterData: [],
+        peymentOptionsMasterData: []
+    })
 
     useEffect(async () => {
         if (!router.isReady) {
@@ -30,17 +35,42 @@ export default function RestaurantList() {
                     pathname: "/menuFeeding"
                 })
             } else {
-                console.log('restaurantList')
-                let accessToken = await checkLogin()
-                let restaurantList = await getRestaurant(accessToken, locationId);
-                await getAddressOnGoogleMaps(restaurantList)
+                getRestaurant(locationId);
+                getFilterMasterData()
             }
         }
     }, [router.isReady])
 
+    const getRestaurant = (locationId) => {
+        setLoading(true)
+        restaurantService.getRestaurantSearchByLocation(locationId).then(async (restaurantList) => {
+            setLoading(false)
+            await getAddressOnGoogleMaps(restaurantList)
+        }).catch(error => {
+            console.log('getRestaurant error', error)
+        })
+    }
+
+    const getFilterMasterData = async () => {
+        let awaitFoodTypeMasterData = masterDataService.getFoodType()
+        let awaitDistanceMasterData = masterDataService.getDistance()
+        let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
+
+        let foodTypeMasterData = await awaitFoodTypeMasterData
+        let distanceMasterData = await awaitDistanceMasterData
+        let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+
+        let masterData = {
+            foodTypeMasterData: foodTypeMasterData,
+            distanceMasterData: distanceMasterData,
+            peymentOptionsMasterData: peymentOptionsMasterData
+        }
+        setMasterDataList(masterData)
+    }
+
     const getAddressOnGoogleMaps = async (restaurantList) => {
         let point, substringPotion, splitPotion, latLong, lat, lng
-        Promise.all(restaurantList.map(async (restaurantDetails) => {
+        Promise.all(restaurantList.map(async (restaurantDetails, index) => {
             point = restaurantDetails.location;
             substringPotion = point.substring(5)
             splitPotion = substringPotion.split('(').join('').split(')');
@@ -51,25 +81,18 @@ export default function RestaurantList() {
                 (response) => {
                     const address = response.results[0].formatted_address;
                     return address
-                },
-                (error) => {
-                    console.error(error);
                 }
             );
             restaurantDetails.googleMapsAddress = address
-            console.log(address)
+            setRestaurantList([
+                ...restaurantList, 
+                [index].googleMapsAddress = address
+            ])
             return address
-        })).then(() => {
-            console.log(restaurantList)
-            setRestaurantList(restaurantList)
-        })
-
+        }))
     }
 
-    const getRestaurant = async (accessToken, locationId) => {
-        let response = await restaurantService.getRestaurantSearchByLocation(accessToken, locationId);
-        return response.data
-    }
+
 
     return (
         <>
@@ -80,6 +103,8 @@ export default function RestaurantList() {
                         restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
+                        loading={loading}
+                        master_data_list={masterDataList}
                     />
                 ) : (
                     //Mobile Version
@@ -87,6 +112,8 @@ export default function RestaurantList() {
                         restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
+                        loading={loading}
+                        master_data_list={masterDataList}
                     />
                 )
             }

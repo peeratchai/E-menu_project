@@ -10,7 +10,7 @@ import PointInMaps from '../../../PointInMaps'
 
 export default function Filter(props) {
 
-    const { location_restaurant_in_maps } = props
+    const { location_restaurant_in_maps, filter_master_data_list } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState();
     const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
@@ -37,9 +37,7 @@ export default function Filter(props) {
 
     useEffect(() => {
         if (location_restaurant_in_maps) {
-            console.log('location_restaurant_in_maps', location_restaurant_in_maps)
             setLocationInMaps(location_restaurant_in_maps)
-
         }
     }, [props])
 
@@ -57,6 +55,19 @@ export default function Filter(props) {
             name={location.name}
         />
     ))
+
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
+        <option value={foodType.name}>{foodType.name}</option>
+    ))
+
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
+        <option value={distance.name}>{distance.name}</option>
+    ))
+
+    let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions) => (
+        <option value={peymentOptions.name}>{peymentOptions.name}</option>
+    ))
+
 
     return (
         <div>
@@ -124,41 +135,11 @@ export default function Filter(props) {
                 </div>
                 <div style={{ marginTop: "10px" }}>
                     <Form.Group >
-                        <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
-                            <option value="">-</option>
-                            <option value="Breads">Breads</option>
-                            <option value="Rice">Rice</option>
-                            <option value="Meat">Meat</option>
-                            <option value="Pasta">Pasta</option>
-                            <option value="Noodles">Noodles</option>
-                            <option value="Vegetables">Vegetables</option>
-                            <option value="Fruit">Fruit</option>
+                        <Form.Control as="select" onChange={(e) => setform('food_type', e.target.value)}>
+                            <option value={null} key="null">-</option>
+                            {FootTypeDropDown}
                         </Form.Control>
                     </Form.Group>
-
-                    {/* <Select
-                        showSearch
-                        style={{ width: '100%' }}
-                        placeholder="Search to Select"
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        filterSort={(optionA, optionB) =>
-                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                        }
-                        defaultValue={null}
-                        onChange={(value) => setform('food_type', value)}
-                    >
-                        <Option value={null}>-</Option>
-                        <Option value="Breads">Breads</Option>
-                        <Option value="2">Rice</Option>
-                        <Option value="3">Meat</Option>
-                        <Option value="4">Pasta</Option>
-                        <Option value="5">Noodles</Option>
-                        <Option value="6">Vegetables</Option>
-                        <Option value="7">Fruit</Option>
-                    </Select> */}
                 </div>
 
                 <div style={{ marginTop: "10px" }}>
@@ -178,30 +159,11 @@ export default function Filter(props) {
                                             </div>
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
-                            <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                <option value="">-</option>
-                                <option value="Cash">Cash</option>
-                                <option value="Credit Card">Credit Cards</option>
+                            <Form.Control as="select" onChange={(e) => setform('payment_option', e.target.value)}>
+                                <option value={null}>-</option>
+                                {PeymentOptionsDropDown}
                             </Form.Control>
                         </Form.Group>
-                        {/* <Select
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="Search to Select"
-                            optionFilterProp="children"
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            filterSort={(optionA, optionB) =>
-                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                            }
-                            defaultValue={null}
-                            onChange={(value) => setform('payment_option', value)}
-                        >
-                            <Option value={null}>-</Option>
-                            <Option value="Cash">Cash</Option>
-                            <Option value="Credit Card">Credit Cards</Option>
-                        </Select> */}
                     </div>
                 </div>
 
@@ -211,48 +173,11 @@ export default function Filter(props) {
                                             </div>
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
-                            <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                <option value="">-</option>
-                                <option value="1">1 กิโลเมตร</option>
-                                <option value="2">2 กิโลเมตร</option>
-                                <option value="5">5 กิโลเมตร</option>
-                                <option value="10">10 กิโลเมตร</option>
-                                <option value="20">20 กิโลเมตร</option>
-                                <option value="40">40 กิโลเมตร</option>
-                                <option value="60">60 กิโลเมตร</option>
-                                <option value="80">80 กิโลเมตร</option>
-                                <option value="100">100 กิโลเมตร</option>
-                                <option value="250">250 กิโลเมตร</option>
-                                <option value="500">500 กิโลเมตร</option>
+                            <Form.Control as="select" onChange={(e) => setform('distance', e.target.value)}>
+                                <option value={null}>-</option>
+                                {DistanceDropDown}
                             </Form.Control>
                         </Form.Group>
-                        {/* <Select
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="Search to Select"
-                            optionFilterProp="children"
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            filterSort={(optionA, optionB) =>
-                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                            }
-                            defaultValue={null}
-                            onChange={(value) => setform('distance', value)}
-                        >
-                            <Option value={null}>-</Option>
-                            <Option value="1">1 กิโลเมตร</Option>
-                            <Option value="2">2 กิโลเมตร</Option>
-                            <Option value="3">5 กิโลเมตร</Option>
-                            <Option value="4">10 กิโลเมตร</Option>
-                            <Option value="5">20 กิโลเมตร</Option>
-                            <Option value="6">40 กิโลเมตร</Option>
-                            <Option value="7">60 กิโลเมตร</Option>
-                            <Option value="8">80 กิโลเมตร</Option>
-                            <Option value="9">100 กิโลเมตร</Option>
-                            <Option value="10">250 กิโลเมตร</Option>
-                            <Option value="11">500 กิโลเมตร</Option>
-                        </Select> */}
                     </div>
                 </div>
 

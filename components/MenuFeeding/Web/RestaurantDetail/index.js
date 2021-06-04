@@ -67,7 +67,6 @@ export default function RestaurantDetailWeb(props) {
 
     useEffect(() => {
         if (props && props.restaurant_detail !== undefined) {
-            console.log('restaurant_detail', props.restaurant_detail)
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
             restaurant_detail.menu_categories.map((category, index) => {

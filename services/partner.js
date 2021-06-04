@@ -67,6 +67,9 @@ const partnerSerivce = {
         return await sendRequest.delete('/api/delete_menu/' + menuId)
     },
     addMenu: async (data) => {
+
+        let ContentType = 'multipart/form-data'
+
         let formData = new FormData()
         formData.append("restaurant", data.restaurant);
         formData.append("menu_category", data.menu_category);
@@ -75,8 +78,11 @@ const partnerSerivce = {
         formData.append("price", data.price);
         formData.append("image", data.image);
         formData.append("is_active", data.is_active);
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
 
-        return await sendRequest.post('/api/add_menu', formData)
+        return await sendRequest.post('/api/add_menu', formData, ContentType)
 
     },
 
@@ -101,7 +107,8 @@ const partnerSerivce = {
         return await sendRequest.post('/api/add_table', data)
     },
     editTable: async (data, tableId) => {
-        return await sendRequest.patch('/api/edit_table/' + tableId, data)
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/edit_table/' + tableId, data, ContentType)
     },
     deleteTable: async (tableId) => {
         return await sendRequest.delete('/api/delete_table/' + tableId)

@@ -139,7 +139,7 @@ export default function BanUserManagement(props) {
         console.log('profile', profile)
         adminService.deleteUserBan(profile.userBanId).then((response) => {
             console.log('response', response)
-            message.error('Active user successful.')
+            message.success('Active user successful.')
             getAllUserBan()
         }).catch(error => {
             console.log('confirmDeleteUserBan error', error)

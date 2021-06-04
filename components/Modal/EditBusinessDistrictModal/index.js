@@ -20,7 +20,6 @@ export default function EditBusinessDistrictModal(props) {
     const [businessDistrictImage, setBusinessDistrictImage] = React.useState(defaultImage)
     const [errors, setErrors] = React.useState([])
     const [showLocationModal, setShowLocationModal] = React.useState(false)
-
     useEffect(() => {
         if (businessDistrictSelected) {
             setBusinessDistrictForm({
@@ -114,6 +113,11 @@ export default function EditBusinessDistrictModal(props) {
         reader.readAsDataURL(img);
     }
 
+    const closeModal = () => {
+        setBusinessDistrictImage(defaultImage)
+        onHide()
+    }
+
     return (
 
         <Modal
@@ -121,6 +125,7 @@ export default function EditBusinessDistrictModal(props) {
             dialogClassName="menuModal-70w"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            onHide={closeModal}
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>

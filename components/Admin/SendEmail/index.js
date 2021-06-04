@@ -95,16 +95,15 @@ export default function SendEmail() {
 
 
     const onFinish = async (values) => {
-        console.log('Success:', values);
         const { is_send_all_customer, is_send_all_restaurant } = emailForm
         const { mail_to, cc, subject, message } = values
-        let mail_toSTring
+        let mail_toString
         let cc_STring = null
 
         if (is_send_all_customer || is_send_all_restaurant) {
-            mail_toSTring = null
+            mail_toString = null
         } else {
-            mail_toSTring = mail_to.join(';')
+            mail_toString = mail_to.join(';')
         }
 
         if (cc.length > 0) {
@@ -112,7 +111,7 @@ export default function SendEmail() {
         }
 
         let dataForm = {
-            "mail_to": mail_toSTring,
+            "mail_to": mail_toString,
             "cc": cc_STring,
             "subject": subject,
             "message": message,
@@ -121,17 +120,19 @@ export default function SendEmail() {
         }
         console.log('dataForm:', dataForm);
 
-        let response = await adminService.SendEmail(dataForm)
-        console.log('response:', response);
-        responseStatus(response)
+        adminService.sendEmail(dataForm).then(() => {
+            sendEmailSuccessful()
+        }).catch(error => {
+            console.log('send email error:', error);
+            sendEmailNotSuccessful()
+        })
     };
 
-    const responseStatus = (response) => {
-        if (response) {
-            message.success('Send email successful.')
-        } else {
-            message.error('Cannot send email! Please try again.')
-        }
+    const sendEmailSuccessful = () => {
+        message.success('Send email successful.')
+    }
+    const sendEmailNotSuccessful = () => {
+        message.error('Cannot send email! Please try again.')
     }
 
 

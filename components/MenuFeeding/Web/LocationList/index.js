@@ -11,6 +11,7 @@ import checkLogin from '../../../../services/checkLogin'
 import Filter from '../Filter'
 import changeFormatFilter from '../../../../services/changeFormatFilter'
 import EmptyComponent from '../../../Empty'
+import masterDataService from '../../../../services/masterData'
 
 const { Option } = Select;
 
@@ -20,23 +21,49 @@ export default function LocationListWeb() {
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
+    const [masterDataList, setMasterDataList] = React.useState({
+        foodTypeMasterData: [],
+        distanceMasterData: [],
+        peymentOptionsMasterData: []
+    })
 
     useEffect(async () => {
-        getLocationList()
+        getInitialData()
     }, [])
 
-    const getLocationList = async () => {
+    const getInitialData = async () => {
         setLoading(true)
+        await getLocationList()
+        await getFilterMasterData()
+        setLoading(false)
+    }
+
+    const getLocationList = async () => {
         restaurantService.getLocationList().then((LocationList) => {
             setLocationList(LocationList)
             setMaps(LocationList)
             setTotalResult(LocationList.length)
-            setLoading(false)
         }).catch(error => {
-            setLoading(false)
             console.log(error)
             message.error('Cannot connect server.')
         })
+    }
+
+    const getFilterMasterData = async () => {
+        let awaitFoodTypeMasterData = masterDataService.getFoodType()
+        let awaitDistanceMasterData = masterDataService.getDistance()
+        let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
+
+        let foodTypeMasterData = await awaitFoodTypeMasterData
+        let distanceMasterData = await awaitDistanceMasterData
+        let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+
+        let masterData = {
+            foodTypeMasterData: foodTypeMasterData,
+            distanceMasterData: distanceMasterData,
+            peymentOptionsMasterData: peymentOptionsMasterData
+        }
+        setMasterDataList(masterData)
 
     }
 
@@ -57,11 +84,12 @@ export default function LocationListWeb() {
     }
 
     const onSearch = async (filterForm) => {
+        console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
+        console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
-        console.log(locationListByFilter)
-        // setLocationList(locationListByFilter)
+        setLocationList(locationListByFilter)
     }
 
 
@@ -96,6 +124,7 @@ export default function LocationListWeb() {
                         <Filter
                             onSearch={(filterForm) => onSearch(filterForm)}
                             location_restaurant_in_maps={locationInMaps}
+                            filter_master_data_list={masterDataList}
                         />
                     </Col>
 
@@ -123,11 +152,6 @@ export default function LocationListWeb() {
                                 </div>
                             </Col>
                         </Row>
-                        {/* <Row>
-                            <Spin spinning={loading} tip="Loading...">
-                                {locationCard}
-                            </Spin>
-                        </Row> */}
                         <div style={{ width: "100%" }}>
                             <Spin spinning={loading} tip="Loading...">
                                 <Row>

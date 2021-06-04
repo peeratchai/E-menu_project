@@ -69,14 +69,16 @@ const sendRequest = {
             });
     },
 
-    post: async function (api_url, data) {
+    post: async function (api_url, data, ContentType = 'application/json') {
         let accessToken = await checkLogin()
         console.log('accessToken', accessToken)
         let config = {
             headers: {
-                'Authorization': 'Bearer ' + accessToken
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': ContentType
             }
         }
+        console.log('config', ContentType)
         return await axios.post(api_url, data, config)
             .then(function (response) {
                 console.log(response)

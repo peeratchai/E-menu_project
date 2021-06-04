@@ -15,12 +15,16 @@ export default function LoginModal(props) {
 
     const { mutateUser } = checkUserPermission()
 
-    const [form, setForm] = React.useState({})
+    const [signinForm, setSigninForm] = React.useState({})
+    const [signupForm, setSignupForm] = React.useState({})
+    const [forgotForm, setForgotForm] = React.useState({})
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState(null);
     const [retypePassword, setRetypePassword] = React.useState(null);
     const [tab, setTab] = React.useState('login');
-    const [errors, setErrors] = React.useState({});
+    const [signinErrors, setSigninErrors] = React.useState({});
+    const [signupErrors, setSignupErrors] = React.useState({});
+    const [forgotErrors, setForgotErrors] = React.useState({});
     const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
@@ -195,7 +199,9 @@ export default function LoginModal(props) {
 
     const changeTab = (tabName) => {
         setTab(tabName)
-        setErrors({})
+        setSigninErrors({})
+        setSignupErrors({})
+        setForgotErrors({})
     }
 
     const setRememberMeValue = () => {
@@ -205,23 +211,48 @@ export default function LoginModal(props) {
         let password = Buffer.from(passwordEncode, 'base64').toString()
         setEmail(email)
         setPassword(password)
-        setForm({ 'email': email, 'password': password })
+        setSigninForm({ 'email': email, 'password': password })
     }
 
-    const setField = (field, value) => {
-        setForm({
-            ...form,
+    const setSigninField = (field, value) => {
+        setSigninForm({
+            ...signinForm,
             [field]: value
         })
         // Check and see if errors exist, and remove them from the error object:
-        if (!!errors[field]) setErrors({
-            ...errors,
+        if (!!signinErrors[field]) setSigninErrors({
+            ...signinErrors,
+            [field]: null
+        })
+    }
+
+
+    const setSignupField = (field, value) => {
+        setSignupForm({
+            ...signupForm,
+            [field]: value
+        })
+        // Check and see if errors exist, and remove them from the error object:
+        if (!!signupErrors[field]) setSignupErrors({
+            ...signupErrors,
+            [field]: null
+        })
+    }
+
+    const setForgotField = (field, value) => {
+        setForgotForm({
+            ...forgotForm,
+            [field]: value
+        })
+        // Check and see if errors exist, and remove them from the error object:
+        if (!!forgotErrors[field]) setForgotErrors({
+            ...forgotErrors,
             [field]: null
         })
     }
 
     const findSignupFormErrors = () => {
-        const { email, password, retypePassword } = form
+        const { email, password, retypePassword } = signupForm
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         const newErrors = {}
         // email errors
@@ -236,7 +267,7 @@ export default function LoginModal(props) {
     }
 
     const findSigninFormErrors = () => {
-        const { email, password } = form
+        const { email, password } = signinForm
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 
         const newErrors = {}
@@ -250,7 +281,7 @@ export default function LoginModal(props) {
     }
 
     const findResetPasswordFormErrors = () => {
-        const { email } = form
+        const { email } = forgotForm
         const newErrors = {}
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 
@@ -265,32 +296,28 @@ export default function LoginModal(props) {
         event.preventDefault();
         const newErrors = findSignupFormErrors()
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
+            setSignupErrors(newErrors)
         } else {
             try {
-                const { email, password } = form
+                const { email, password } = signupForm
                 console.log(email, password)
                 let response = await authentication.signupWithEmail(email, password)
                 let accessToken = response.data.accessToken
-                try {
-                    await mutateUser(
-                        fetchJson('/api/saveToken', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ accessToken: accessToken }),
-                        })
-                    )
-                    localStorage.setItem('accessToken', accessToken)
-
-                    props.onHide()
-                    props.setlogin(true)
-                } catch (error) {
-                    console.log(error)
-                }
+                await mutateUser(
+                    fetchJson('/api/saveToken', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken: accessToken }),
+                    })
+                )
+                localStorage.setItem('accessToken', accessToken)
+                props.onHide()
+                props.setlogin(true)
+                window.location.reload()
             } catch (error) {
                 const newErrors = {}
-                newErrors.email = 'Email already exists !'
-                setErrors(newErrors)
+                newErrors.email = 'Email already registered!'
+                setSignupErrors(newErrors)
             }
         }
     }
@@ -299,18 +326,17 @@ export default function LoginModal(props) {
         event.preventDefault();
         const newErrors = findSigninFormErrors()
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
-            console.log(form)
+            setSigninErrors(newErrors)
 
         } else {
-            const { email, password } = form
+            const { email, password } = signinForm
 
             try {
                 await mutateUser(
                     fetchJson('/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(form),
+                        body: JSON.stringify(signinForm),
                     })
                 ).then(async (response) => {
                     console.log('response', response)
@@ -327,7 +353,11 @@ export default function LoginModal(props) {
                     }
                     props.check_permission()
                 }).catch((error) => {
-                    console.log('error', error)
+                    if (error.data === 401) {
+                        const newErrors = {}
+                        newErrors.password = 'Password incorrect.'
+                        setSigninErrors(newErrors)
+                    }
                 })
             } catch (error) {
                 console.error('An unexpected error happened:', error)
@@ -339,10 +369,10 @@ export default function LoginModal(props) {
         event.preventDefault();
         const newErrors = findResetPasswordFormErrors()
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
+            setForgotErrors(newErrors)
         } else {
             try {
-                const { email } = form
+                const { email } = forgotForm
                 let response = await authentication.requestResetPassword(email)
                 message.success("Please check your email to reset password.")
                 props.onHide()
@@ -389,11 +419,11 @@ export default function LoginModal(props) {
                                                 type="text"
                                                 placeholder="Email"
                                                 defaultValue={email}
-                                                onChange={(e) => setField('email', e.target.value)}
-                                                isInvalid={!!errors.email}
+                                                onChange={(e) => setSigninField('email', e.target.value)}
+                                                isInvalid={!!signinErrors.email}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.email}
+                                                {signinErrors.email}
                                             </Form.Control.Feedback>
                                         </Form.Group>
 
@@ -402,11 +432,11 @@ export default function LoginModal(props) {
                                                 type="password"
                                                 placeholder="Password"
                                                 defaultValue={password}
-                                                onChange={(e) => setField('password', e.target.value)}
-                                                isInvalid={!!errors.password}
+                                                onChange={(e) => setSigninField('password', e.target.value)}
+                                                isInvalid={!!signinErrors.password}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.password}
+                                                {signinErrors.password}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group>
@@ -476,24 +506,22 @@ export default function LoginModal(props) {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Email Address"
-                                                value={email}
-                                                onChange={(e) => setField('email', e.target.value)}
-                                                isInvalid={!!errors.email}
+                                                onChange={(e) => setSignupField('email', e.target.value)}
+                                                isInvalid={!!signupErrors.email}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.email}
+                                                {signupErrors.email}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group controlId="validationPassword">
                                             <Form.Control
                                                 type="password"
                                                 placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => setField('password', e.target.value)}
-                                                isInvalid={!!errors.password}
+                                                onChange={(e) => setSignupField('password', e.target.value)}
+                                                isInvalid={!!signupErrors.password}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.password}
+                                                {signupErrors.password}
                                             </Form.Control.Feedback>
 
                                         </Form.Group>
@@ -502,11 +530,11 @@ export default function LoginModal(props) {
                                                 type="password"
                                                 placeholder="Retype Password"
                                                 value={retypePassword}
-                                                onChange={(e) => setField('retypePassword', e.target.value)}
-                                                isInvalid={!!errors.retypePassword}
+                                                onChange={(e) => setSignupField('retypePassword', e.target.value)}
+                                                isInvalid={!!signupErrors.retypePassword}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.retypePassword}
+                                                {signupErrors.retypePassword}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Button variant="primary" type="submit" className={styles.button} >
@@ -567,11 +595,11 @@ export default function LoginModal(props) {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Email"
-                                                onChange={(e) => setField('email', e.target.value)}
-                                                isInvalid={!!errors.email}
+                                                onChange={(e) => setForgotField('email', e.target.value)}
+                                                isInvalid={!!forgotErrors.email}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.email}
+                                                {forgotErrors.email}
                                             </Form.Control.Feedback>
 
                                         </Form.Group>

@@ -11,6 +11,8 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater';
 
 //Modal filter for mobile resolution
 export default function MobileFilterRestaurantList(props) {
+
+    const { filter_master_data_list } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
     const [form, setForm] = React.useState({
@@ -47,6 +49,19 @@ export default function MobileFilterRestaurantList(props) {
         props.on_search(form)
         props.onHide()
     }
+
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
+        <option value={foodType.name}>{foodType.name}</option>
+    ))
+
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
+        <option value={distance.name}>{distance.name}</option>
+    ))
+
+    let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions) => (
+        <option value={peymentOptions.name}>{peymentOptions.name}</option>
+    ))
+
 
     return (
         <Modal
@@ -88,41 +103,13 @@ export default function MobileFilterRestaurantList(props) {
                                 </div>
                                 <div>
                                     <Form.Group >
-                                        <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
-                                            <option value="" key="null">-</option>
-                                            <option value="Breads" key="Breads">Breads</option>
-                                            <option value="Rice" key="Rice">Rice</option>
-                                            <option value="Meat" key="Meat">Meat</option>
-                                            <option value="Pasta" key="Pasta">Pasta</option>
-                                            <option value="Noodles" key="Noodles">Noodles</option>
-                                            <option value="Vegetables" key="Vegetables">Vegetables</option>
-                                            <option value="Fruit" key="Fruit">Fruit</option>
+                                        <Form.Control as="select" onChange={(e) => setform('food_type', e.target.value)}>
+                                            <option value={null} key="null">-</option>
+                                            {FootTypeDropDown}
                                         </Form.Control>
                                     </Form.Group>
 
-                                    {/* <Select
-                                        style={{ width: '100%' }}
-                                        placeholder="Search to Select"
-                                        // optionFilterProp="children"
-                                        // filterOption={(input, option) =>
-                                        //     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        // }
-                                        // filterSort={(optionA, optionB) =>
-                                        //     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        // }
-                                        defaultValue="test"
-                                        onChange={(value) => setform('food_type', value)}
-                                        value={form.food_type}
-                                    >
-                                        <Option value="test">-</Option>
-                                        <Option value="Breads">Breads2</Option>
-                                        <Option value="Rice">Rice</Option>
-                                        <Option value="Meat">Meat</Option>
-                                        <Option value="Pasta">Pasta</Option>
-                                        <Option value="Noodles">Noodles</Option>
-                                        <Option value="Vegetables">Vegetables</Option>
-                                        <Option value="Fruit">Fruit</Option>
-                                    </Select> */}
+
                                 </div>
                             </Col>
                             <Col xs={12} className={styles.colPadding}>
@@ -152,32 +139,11 @@ export default function MobileFilterRestaurantList(props) {
                                     <Col>
                                         <Form.Group >
                                             <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                                <option value="">-</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Credit Card">Credit Cards</option>
+                                                <option value={null}>-</option>
+                                                {PeymentOptionsDropDown}
                                             </Form.Control>
                                         </Form.Group>
-                                        {/* <Select
-                                            showSearch
-                                            showArrow={true}
-                                            style={{ width: '100%' }}
-                                            placeholder="Search to Select"
-                                            optionFilterProp="children"
-                                            filterOption={(input, option) =>
-                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                            }
-                                            filterSort={(optionA, optionB) =>
-                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                            }
-                                            defaultValue=""
-                                            value={form.payment_option}
-                                            onChange={(value) => setform('payment_option', value)}
 
-                                        >
-                                            <Option value="">-</Option>
-                                            <Option value="Cash">Cash</Option>
-                                            <Option value="Credit Card">Credit Cards</Option>
-                                        </Select> */}
                                     </Col>
                                 </Row>
                             </Col>
@@ -194,48 +160,10 @@ export default function MobileFilterRestaurantList(props) {
                                     <Col>
                                         <Form.Group >
                                             <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                                <option value="">-</option>
-                                                <option value="1">1 กิโลเมตร</option>
-                                                <option value="2">2 กิโลเมตร</option>
-                                                <option value="5">5 กิโลเมตร</option>
-                                                <option value="10">10 กิโลเมตร</option>
-                                                <option value="20">20 กิโลเมตร</option>
-                                                <option value="40">40 กิโลเมตร</option>
-                                                <option value="60">60 กิโลเมตร</option>
-                                                <option value="80">80 กิโลเมตร</option>
-                                                <option value="100">100 กิโลเมตร</option>
-                                                <option value="250">250 กิโลเมตร</option>
-                                                <option value="500">500 กิโลเมตร</option>
+                                                <option value={null}>-</option>
+                                                {DistanceDropDown}
                                             </Form.Control>
                                         </Form.Group>
-                                        {/* <Select
-                                            showSearch
-                                            style={{ width: '100%' }}
-                                            placeholder="Search to Select"
-                                            optionFilterProp="children"
-                                            filterOption={(input, option) =>
-                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                            }
-                                            filterSort={(optionA, optionB) =>
-                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                            }
-                                            defaultValue=""
-                                            value={form.distance}
-                                            onChange={(value) => setform('distance', value)}
-                                        >
-                                            <Option value="">-</Option>
-                                            <Option value="1">1 กิโลเมตร</Option>
-                                            <Option value="2">2 กิโลเมตร</Option>
-                                            <Option value="3">5 กิโลเมตร</Option>
-                                            <Option value="4">10 กิโลเมตร</Option>
-                                            <Option value="5">20 กิโลเมตร</Option>
-                                            <Option value="6">40 กิโลเมตร</Option>
-                                            <Option value="7">60 กิโลเมตร</Option>
-                                            <Option value="8">80 กิโลเมตร</Option>
-                                            <Option value="9">100 กิโลเมตร</Option>
-                                            <Option value="10">250 กิโลเมตร</Option>
-                                            <Option value="11">500 กิโลเมตร</Option>
-                                        </Select> */}
                                     </Col>
                                 </Row>
                             </Col>

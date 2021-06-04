@@ -105,6 +105,7 @@ export default function Layout(props) {
         window.localStorage.removeItem('accessToken')
         setIsPartner(false)
         setIsAdmin(false)
+        window.location.reload()
     }
 
     const navToCheckout = () => {

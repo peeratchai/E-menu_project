@@ -1,5 +1,4 @@
 import Layout, { siteTitle } from '../../components/layout'
-import Container from 'react-bootstrap/Container'
 import { Row, Col, Card, Form, Button } from 'react-bootstrap'
 import useMediaQuery from "../../utils/utils";
 import utilStyles from '../../styles/utils.module.css'
@@ -7,6 +6,7 @@ import Head from 'next/head'
 import React from 'react'
 import contactUsService from '../../services/contactUsService'
 import { message } from 'antd'
+import 'antd/dist/antd.css';
 
 export default function Contact() {
     const isMobileResolution = useMediaQuery(768)
@@ -71,9 +71,9 @@ export default function Contact() {
 
             console.log('data', data)
 
-            await contactUsService.sendMessage(data).then((response) => {
-                console.log('response', response)
+            contactUsService.sendMessage(data).then((response) => {
                 message.success('Send message successful.')
+                console.log('response', response)
                 setContactUsForm({
                     "name": '',
                     "email": '',

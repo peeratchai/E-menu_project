@@ -111,32 +111,6 @@ export default function MobileFilter(props) {
                                             {DistanceDropDown}
                                         </Form.Control>
                                     </Form.Group>
-                                    {/* <Select
-                                        showSearch
-                                        style={{ width: '100%' }}
-                                        placeholder="Search to Select"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
-
-                                    >
-                                        <Option value="0">-</Option>
-                                        <Option value="1">1 กิโลเมตร</Option>
-                                        <Option value="2">2 กิโลเมตร</Option>
-                                        <Option value="3">5 กิโลเมตร</Option>
-                                        <Option value="4">10 กิโลเมตร</Option>
-                                        <Option value="5">20 กิโลเมตร</Option>
-                                        <Option value="6">40 กิโลเมตร</Option>
-                                        <Option value="7">60 กิโลเมตร</Option>
-                                        <Option value="8">80 กิโลเมตร</Option>
-                                        <Option value="9">100 กิโลเมตร</Option>
-                                        <Option value="10">250 กิโลเมตร</Option>
-                                        <Option value="11">500 กิโลเมตร</Option>
-                                    </Select> */}
                                 </Col>
                             </Row>
                         </Col>
