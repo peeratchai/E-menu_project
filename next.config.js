@@ -19,7 +19,7 @@ module.exports = {
         webpack5: true,
     },
     env: {
-        REACT_APP_FACEBOOK_APP_ID: '259379829306113',
+        REACT_APP_FACEBOOK_APP_ID: '935272050353357',
         URL: 'https://cee-menu-frontend-nsv2u.ondigitalocean.app',
         API_URL: 'https://cee-menu-tvh2o.ondigitalocean.app',
         // URL: 'http://localhost:3000',
