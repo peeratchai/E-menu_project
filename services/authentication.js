@@ -99,15 +99,15 @@ const authentication = {
                 'Content-Type': 'application/json'
             }
         }
-        // let data = {
-        //     email: 'guest_user@test.com',
-        //     password: '123'
-        // }
 
         let data = {
             email: 'guest@test.com',
             password: 'p@assword_guestuser'
-        }
+        }       
+        // let data = {
+        //     email: 'markpeeratchai@gmail.com',
+        //     password: '123'
+        // }
 
         console.log(data)
         let response = await axios.post('/api/auth/signin-with-email', data, config)

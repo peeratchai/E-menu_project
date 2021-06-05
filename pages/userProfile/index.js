@@ -3,13 +3,16 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Radio, Card } from 'antd';
+import { Upload, message, Popconfirm, Radio, Card } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import termAgreement from '../../utils/termAgreement.json'
 import profileService from '../../services/profile'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
+import checkUserPermission from '../../lib/checkUserPermission'
+import fetchJson from '../../lib/fetchJson'
+
 const axios = require('axios')
 
 function getBase64(img, callback) {
@@ -40,6 +43,7 @@ const UserProfile = ({ user }) => {
         age: '',
         phoneNumber: ''
     })
+    const { mutateUser } = checkUserPermission()
 
 
     const handleChangeProfileImage = (info) => {
@@ -144,6 +148,44 @@ const UserProfile = ({ user }) => {
         if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Phone number is required !'
         else if (!patternNumber.test(phoneNumber)) newErrors.phoneNumber = 'Please enter valid phone number!'
         return newErrors
+    }
+
+    const onDeleteUser = () => {
+        console.log('profileForm', profileForm)
+        const { first_name, last_name, gender, age, phoneNumber, profileImage, username } = profileForm
+        let profileImageData
+        if (profileImage) {
+            profileImageData = profileImage
+        } else {
+            profileImageData = null
+        }
+        let data = {
+            username: username,
+            first_name: first_name,
+            last_name: last_name,
+            gender: gender,
+            age: age,
+            phone_number: phoneNumber,
+            avatar: profileImageData,
+            is_active: false
+        }
+
+        console.log('data', data)
+        profileService.editUserProfile(data).then(async () => {
+            mutateUser(
+                await fetchJson('/api/logout', { method: 'POST' }),
+                false
+            )
+            window.localStorage.removeItem('accessToken')
+            message.success('Delete user successful.')
+
+            window.location.reload()
+        }).catch(error => {
+            console.log('error', error)
+            message.error('Cannot delete user.')
+        })
+
+
     }
 
     return (
@@ -257,9 +299,16 @@ const UserProfile = ({ user }) => {
                                         </Row> */}
 
                                         <div style={{ textAlign: "right" }}>
-                                            <Button variant="danger" style={{ marginRight: "15px" }}>
-                                                Delete User
-                                            </Button>
+                                            <Popconfirm
+                                                title="Are you sure to delete user?"
+                                                onConfirm={() => onDeleteUser()}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button variant="danger" style={{ marginRight: "15px" }}>
+                                                    Delete User
+                                                </Button>
+                                            </Popconfirm>
                                             <Button variant="primary" onClick={() => saveProfile()} >
                                                 Save
                                             </Button>

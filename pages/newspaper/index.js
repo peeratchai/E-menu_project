@@ -47,6 +47,7 @@ export default function Newspaper() {
         setLoading(true)
         newspaperService.getNewspaperList().then((newspaperList) => {
             setNewspaperList(newspaperList)
+            console.log('newspaperList', newspaperList)
         }).catch(error => {
             console.log('getNewspaperlist error', error)
             if (error.response.status === 403) {
@@ -57,20 +58,26 @@ export default function Newspaper() {
     }
 
     const getFilterMasterData = async () => {
-        let awaitFoodTypeMasterData = masterDataService.getFoodType()
-        let awaitDistanceMasterData = masterDataService.getDistance()
-        let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
+        try {
 
-        let foodTypeMasterData = await awaitFoodTypeMasterData
-        let distanceMasterData = await awaitDistanceMasterData
-        let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+            let awaitFoodTypeMasterData = masterDataService.getFoodType()
+            let awaitDistanceMasterData = masterDataService.getDistance()
+            let awaitPeymentOptionsMasterData = masterDataService.getPaymentOptions()
 
-        let masterData = {
-            foodTypeMasterData: foodTypeMasterData,
-            distanceMasterData: distanceMasterData,
-            peymentOptionsMasterData: peymentOptionsMasterData
+            let foodTypeMasterData = await awaitFoodTypeMasterData
+            let distanceMasterData = await awaitDistanceMasterData
+            let peymentOptionsMasterData = await awaitPeymentOptionsMasterData
+
+            let masterData = {
+                foodTypeMasterData: foodTypeMasterData,
+                distanceMasterData: distanceMasterData,
+                peymentOptionsMasterData: peymentOptionsMasterData
+            }
+            setMasterDataList(masterData)
+        } catch (error) {
+            console.log('error', error)
         }
-        setMasterDataList(masterData)
+
 
     }
 
