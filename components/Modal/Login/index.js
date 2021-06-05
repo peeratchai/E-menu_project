@@ -7,7 +7,8 @@ import profileService from '../../../services/profile'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import FacebookLogin from 'react-facebook-login'
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
 
@@ -466,14 +467,23 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin
-                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                        {/* <FacebookLogin
+                                            appId="259379829306113"
                                             fields="name,email,picture.height(400).width(300)"
                                             callback={responseFacebook}
-                                            render={renderProps => (
-                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                            )}
-                                        />
+                                            scope="public_profile,user_friends"
+                                        // render={renderProps => (
+                                        //     <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        // )}
+                                        /> */}
+
+                                        <FacebookLogin
+                                            appId="259379829306113"
+                                            autoLoad={true}
+                                            fields="name,email,picture"
+                                            scope="public_profile,user_friends"
+                                            callback={responseFacebook}
+                                            icon="fa-facebook" />
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
@@ -554,14 +564,15 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin
+                                        {/* <FacebookLogin
                                             appId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                             fields="name,email,picture.height(400).width(300)"
                                             callback={responseFacebook}
-                                            render={renderProps => (
-                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                            )}
-                                        />
+                                            scope="public_profile,user_friends"
+                                        // render={renderProps => (
+                                        //     <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        // )}
+                                        /> */}
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
