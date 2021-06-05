@@ -77,7 +77,7 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
-                    props.check_permission()
+                    window.location.reload()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
@@ -99,11 +99,9 @@ export default function LoginModal(props) {
 
                 props.onHide()
                 props.setlogin(true)
+                props.check_permission()
                 message.success('Sign-in successful.')
             }
-
-            localStorage.setItem('islogin', true)
-
         } else {
             liff.login();
         }
@@ -169,7 +167,7 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
-                    props.check_permission()
+                    window.location.reload()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
@@ -188,10 +186,9 @@ export default function LoginModal(props) {
                 localStorage.setItem('accessToken', accessToken)
                 props.onHide()
                 props.setlogin(true)
+                props.check_permission()
                 message.success('Sign-in successful.')
             }
-
-            localStorage.setItem('islogin', true)
         } else {
             console.log('error');
         }
@@ -352,6 +349,7 @@ export default function LoginModal(props) {
                         localStorage.setItem('isRememberMe', true)
                     }
                     props.check_permission()
+                    message.success('Sign-in successful.')
                 }).catch((error) => {
                     if (error.data === 401) {
                         const newErrors = {}

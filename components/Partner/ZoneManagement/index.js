@@ -20,7 +20,6 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
     const [tableSelected, setTableSelected] = React.useState({ name: '', id: '', size: 'small', type: 'square' });
     const [viewTableQRCodeModalShow, setViewTableQRCodeModalShow] = React.useState(false);
     const [restaurantName, setRestaurantName] = React.useState();
-
     useEffect(() => {
         if (restaurant_id && current_tab === 'zone') {
             getZone()
@@ -115,8 +114,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
             "position_y": table.position_y,
             "is_active": table.is_active
         }
-        console.log(data)
-        console.log('zoneSelected', zoneSelected)
+
         let response = await partnerSerivce.editTable(data, table.id)
         console.log(response)
         if (response) {

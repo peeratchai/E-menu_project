@@ -11,6 +11,7 @@ export default function RestaurantManagement(props) {
     const isMobileResolution = useMediaQuery(768)
     const [zone, setZone] = React.useState([])
     const [loading, setLoading] = React.useState(false)
+    const [zoneNumberSelected, setZoneNumberSelected] = React.useState(0)
 
     useEffect(() => {
         console.log('restaurant_id', restaurant_id)
@@ -19,7 +20,10 @@ export default function RestaurantManagement(props) {
         }
     }, [props])
 
-    const getZone = async () => {
+    const getZone = async (zoneNumberSelected = null) => {
+        if (zoneNumberSelected !== null) {
+            setZoneNumberSelected(zoneNumberSelected)
+        }
         setLoading(true)
         partnerSerivce.getZoneByRestaurantId(restaurant_id).then((zone) => {
             setZone(zone)
@@ -47,6 +51,7 @@ export default function RestaurantManagement(props) {
                 get_zone={getZone}
                 restaurant_id={restaurant_id}
                 restaurant_name={restaurant_name}
+                zone_number_selected={zoneNumberSelected}
             />
         )
     }

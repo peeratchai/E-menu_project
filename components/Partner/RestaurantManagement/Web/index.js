@@ -11,7 +11,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import Link from 'next/link'
 
 export default function WebComponent(props) {
-    const { zone, restaurant_id, restaurant_name } = props
+    const { zone, restaurant_id, restaurant_name, zone_number_selected } = props
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -21,8 +21,8 @@ export default function WebComponent(props) {
     const [tableSelected, setTableSelected] = React.useState();
     const [viewOrderModalShow, setViewOrderModalShow] = React.useState(false);
     const [dragging, setDragging] = React.useState(false);
-    const [zoneSelected, setZoneSelected] = React.useState();
-
+    const [zoneNumberSelected, setZoneNumberSelected] = React.useState(zone_number_selected);
+    const [zoneSelected, setZoneSelected] = React.useState()
     useEffect(() => {
         let containerWidth = refTableManagement.current.offsetWidth
         // 50 is padding left and right
@@ -32,8 +32,8 @@ export default function WebComponent(props) {
         setContainerHeight(containerHeight - 50)
         if (Array.isArray(zone)) {
             if (zone.length > 0) {
-                setZoneSelected(zone[0])
-                ratioTableImages(zone[0]);
+                setZoneSelected(zone[zone_number_selected])
+                ratioTableImages(zone[zone_number_selected]);
                 message.success('Loading zone successful.')
             } else {
                 setTable([])
@@ -125,7 +125,7 @@ export default function WebComponent(props) {
         }
         let response = await partnerSerivce.addTable(data)
         if (response) {
-            get_zone()
+            get_zone(zoneNumberSelected)
             message.success('Add new table successful.')
         } else {
             message.error('Cannot new table.')
@@ -197,7 +197,7 @@ export default function WebComponent(props) {
                 await partnerSerivce.editTable(data, table.id)
             }))
 
-            get_zone()
+            get_zone(zoneNumberSelected)
             message.success('Save table position successful.')
         }
     }
@@ -205,6 +205,8 @@ export default function WebComponent(props) {
     const onChangeZone = (e) => {
         let zoneId = e.target.value
         let zoneDetails = zone.find(zone => zone.id === zoneId)
+        let zoneIndex = zone.findIndex(zone => zone.id === zoneId)
+        setZoneNumberSelected(zoneIndex)
         setZoneSelected(zoneDetails)
         ratioTableImages(zoneDetails)
     }
