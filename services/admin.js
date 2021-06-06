@@ -58,6 +58,9 @@ const adminService = {
         console.log('api', '/api/edit_business_district/' + businessDistrictId)
         return await sendRequest.patch('/api/edit_business_district/' + businessDistrictId, formData)
     },
+    deleteBusinessDistrict: async function (businessDistrictId) {
+        return await sendRequest.delete('/api/delete_business_district/' + businessDistrictId, data)
+    },
     getAllProfile: async function () {
         return await sendRequest.get('/api/get/all_profile')
     },

@@ -200,6 +200,10 @@ module.exports = {
             destination: API_URL + '/location/:businessDistrictId'
         },
         {
+            source: '/api/delete_business_district/:businessDistrictId',
+            destination: API_URL + '/location/:businessDistrictId'
+        },
+        {
             source: '/api/get/all_profile',
             destination: API_URL + '/profile/users'
         },

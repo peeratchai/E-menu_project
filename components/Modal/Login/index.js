@@ -7,8 +7,7 @@ import profileService from '../../../services/profile'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
-// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import FacebookLogin from 'react-facebook-login'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
 
@@ -387,6 +386,12 @@ export default function LoginModal(props) {
         setRememberMeValue()
     }
 
+    const changeTabToRegister = () => {
+        changeTab('register')
+        setEmail(null)
+        setPassword(null)
+    }
+
     return (
         <Modal
             {...props}
@@ -467,23 +472,14 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        {/* <FacebookLogin
-                                            appId="259379829306113"
+                                        <FacebookLogin
+                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                             fields="name,email,picture.height(400).width(300)"
                                             callback={responseFacebook}
-                                            scope="public_profile,user_friends"
-                                        // render={renderProps => (
-                                        //     <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                        // )}
-                                        /> */}
-
-                                        <FacebookLogin
-                                            appId="259379829306113"
-                                            autoLoad={true}
-                                            fields="name,email,picture"
-                                            scope="public_profile,user_friends"
-                                            callback={responseFacebook}
-                                            icon="fa-facebook" />
+                                            render={renderProps => (
+                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                            )}
+                                        />
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
@@ -491,7 +487,7 @@ export default function LoginModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "center" }}>
-                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => (changeTab('register'), setEmail(null), setPassword(null))}>Sign Up</span>
+                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => changeTabToRegister()}>Sign Up</span>
                                     </div>
                                 </Col>
                             </Row>
@@ -564,23 +560,22 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        {/* <FacebookLogin
+                                        <FacebookLogin
                                             appId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                             fields="name,email,picture.height(400).width(300)"
                                             callback={responseFacebook}
-                                            scope="public_profile,user_friends"
-                                        // render={renderProps => (
-                                        //     <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                        // )}
-                                        /> */}
+                                            render={renderProps => (
+                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                            )}
+                                        />
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <div style={{ textAlign: "center" }}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab()}>Login</span>
+                                    <div style={{ textAlign: "center" }} onClick={() => onChangeToLoginTab()}>
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }}>Login</span>
                                     </div>
                                 </Col>
                             </Row>

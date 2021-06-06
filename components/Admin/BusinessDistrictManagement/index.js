@@ -33,6 +33,36 @@ export default function BusinessDistrictManagement(props) {
         setBusinessDistrictData(locationArray)
     }
 
+    const onChangeBusinessDistrictStatus = (checked, businessDistrict) => {
+        const { name, title, description, location, image_url_formData, is_active } = businessDistrict
+        let data = {
+            name: name,
+            title: title,
+            description: description,
+            location: location,
+            image_url: image_url_formData,
+            is_active: checked
+        }
+        adminService.editBusinessDistrict(data, businessDistrict.id).then(() => {
+            getAllLocation()
+            message.sucess('Update status successful.')
+        }).catch(error => {
+            console.log('onChangeBusinessDistrictStatus error', error)
+            message.error('Cannot update status.')
+        })
+    }
+
+    const onDeleteBusinessDistrict = (businessDistrictId) => {
+        adminService.deleteBusinessDistrict(businessDistrictId).then(() => {
+            getAllLocation()
+            message.sucess('Update status successful.')
+        }).catch(error => {
+            console.log('onChangeBusinessDistrictStatus error', error)
+            message.error('Cannot update status.')
+        })
+    }
+
+
     const columnsAccount = [
         {
             title: 'No',
@@ -64,10 +94,13 @@ export default function BusinessDistrictManagement(props) {
             key: 'action',
             render: (businessDistrict, record) => (
                 <Space size="middle">
-                    <Switch checked={businessDistrict.is_active} onChange={(checked) => on_change_businessDistrict_status(checked, businessDistrict)} />
+                    <Switch checked={businessDistrict.is_active} onChange={(checked) => onChangeBusinessDistrictStatus(checked, businessDistrict)} />
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => (setBusinessDistrictSelected(businessDistrict), setEditBusienssDistrictModalShow(true))}>
                         Edit
                     </Tag>
+                    <Popconfirm title="Sure to delete?" onConfirm={() => onDeleteBusinessDistrict(businessDistrict.id)}>
+                        <a style={{ color: "#1890ff" }}>Delete</a>
+                    </Popconfirm>
                 </Space>
             ),
         }

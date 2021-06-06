@@ -355,3 +355,7 @@ div.ant-row.ant-form-item {
   z-index: 1040 !important;
   width: auto !important;
 }
+
+.fb_dialog {
+  z-index: 1000 !important;
+}

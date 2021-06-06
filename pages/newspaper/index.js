@@ -14,7 +14,6 @@ import newspaperService from '../../services/newspaper'
 import changeFormatFilter from '../../services/changeFormatFilter'
 import { message, Spin } from 'antd';
 import masterDataService from '../../services/masterData'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
@@ -127,15 +126,6 @@ export default function Newspaper() {
         //Layout for web
         component = (
             <Layout>
-                <FacebookLogin
-                    appId="259379829306113"
-                    autoLoad
-                    callback={responseFacebook}
-                    render={renderProps => (
-                        <button onClick={renderProps.onClick}>This is my custom FB button</button>
-                    )}
-                />
-
                 <WebFilter
                     onSearch={(form) => onSearch(form)}
                     filter_master_data_list={masterDataList}
