@@ -101,7 +101,7 @@ export default function Contact() {
             {
                 !isMobileResolution ? (
                     //PC version
-                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
+                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", minHeight: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
                         <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
                             <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
                                 Contact Informations

@@ -72,7 +72,8 @@ const UserProfile = ({ user }) => {
                 gender: profile.gender,
                 age: profile.age,
                 phoneNumber: profile.phone_number,
-                username: profile.username
+                username: profile.username,
+                is_active: profile.is_active
             })
         }
     }, [user])
@@ -96,40 +97,41 @@ const UserProfile = ({ user }) => {
     }
 
     const saveProfile = async () => {
-        const newErrors = findProfileFormErrors()
+        // const newErrors = findProfileFormErrors()
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors)
+        // if (Object.keys(newErrors).length > 0) {
+        //     setErrors(newErrors)
+        // } else {
+        const { first_name, last_name, gender, age, phoneNumber, profileImage, username, is_active } = profileForm
+        let profileImageData
+        if (profileImage) {
+            profileImageData = profileImage
         } else {
-            const { first_name, last_name, gender, age, phoneNumber, profileImage, username } = profileForm
-            let profileImageData
-            if (profileImage) {
-                profileImageData = profileImage
-            } else {
-                profileImageData = null
-            }
-
-            let data = {
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                gender: gender,
-                age: age,
-                phone_number: phoneNumber,
-                avatar: profileImageData
-            }
-
-            console.log('data', data)
-
-            let responseProfile = await profileService.editUserProfile(data)
-            if (responseProfile) {
-                let profile = await profileService.getProfile()
-                window.localStorage.setItem('profile', JSON.stringify(profile))
-                message.success('Edit profile successful.')
-            } else {
-                message.error('Cannot edit profile !')
-            }
+            profileImageData = null
         }
+
+        let data = {
+            username: username,
+            first_name: first_name,
+            last_name: last_name,
+            gender: gender,
+            age: age,
+            phone_number: phoneNumber,
+            avatar: profileImageData,
+            is_active: is_active
+        }
+
+        console.log('data', data)
+
+        let responseProfile = await profileService.editUserProfile(data)
+        if (responseProfile) {
+            let profile = await profileService.getProfile()
+            window.localStorage.setItem('profile', JSON.stringify(profile))
+            message.success('Edit profile successful.')
+        } else {
+            message.error('Cannot edit profile !')
+        }
+        // }
     }
 
 
@@ -216,7 +218,7 @@ const UserProfile = ({ user }) => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col sm={6}>
+                                <Col sm={6} style={{ marginTop: "15px" }}>
                                     <Form>
                                         <Row>
                                             <Col>
@@ -252,7 +254,7 @@ const UserProfile = ({ user }) => {
                                         </Row>
 
                                         <Form.Group controlId="Gender">
-                                            <Form.Label>Gander</Form.Label>
+                                            <Form.Label>Gender</Form.Label>
                                             <div>
                                                 <Radio.Group value={profileForm.gender} onChange={(e) => onChangeGender(e)}>
                                                     <Radio value="male">ชาย</Radio>

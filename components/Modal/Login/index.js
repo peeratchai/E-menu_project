@@ -353,7 +353,7 @@ export default function LoginModal(props) {
                 }).catch((error) => {
                     if (error.data === 401) {
                         const newErrors = {}
-                        newErrors.password = 'Password incorrect.'
+                        newErrors.password = 'Email or Password incorrect.'
                         setSigninErrors(newErrors)
                     }
                 })
@@ -369,15 +369,19 @@ export default function LoginModal(props) {
         if (Object.keys(newErrors).length > 0) {
             setForgotErrors(newErrors)
         } else {
-            try {
-                const { email } = forgotForm
-                let response = await authentication.requestResetPassword(email)
-                message.success("Please check your email to reset password.")
-                props.onHide()
-                console.log(response)
-            } catch (error) {
-                console.log(error)
-            }
+            const { email } = forgotForm
+            authentication.requestResetPassword(email).then((response) => {
+                console.log('response', response)
+                if (response.data.is_success) {
+                    message.success("Please check your email to reset password.")
+                    props.onHide()
+                } else {
+                    let newForgotErrors = { ...forgotErrors }
+                    newForgotErrors.email = `Email haven't registered.`
+                    setForgotErrors(newForgotErrors)
+                    message.warning("Email haven't registered.")
+                }
+            })
         }
     }
 
