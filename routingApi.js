@@ -136,6 +136,10 @@ module.exports = {
             destination: API_URL + '/table',
         },
         {
+            source: '/api/get_table_by_tableId/:tableId',
+            destination: API_URL + '/table/:tableId',
+        },
+        {
             source: '/api/edit_table/:tableId',
             destination: API_URL + '/table/:tableId',
         },

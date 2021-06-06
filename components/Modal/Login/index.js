@@ -30,6 +30,7 @@ export default function LoginModal(props) {
     const notDisplay = null
 
     const signInwithLine = async () => {
+        
         const liff = window.liff;
 
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
@@ -82,7 +83,7 @@ export default function LoginModal(props) {
                 } else {
                     message.error('Cannot sign-up with social.')
                 }
-
+                
             } else {
                 //// Have already a account 
 
@@ -101,9 +102,12 @@ export default function LoginModal(props) {
                 props.setlogin(true)
                 props.check_permission()
                 message.success('Sign-in successful.')
+                
+                window.location.reload()
             }
         } else {
             liff.login();
+            
         }
     };
 
@@ -119,12 +123,14 @@ export default function LoginModal(props) {
     }, [])
 
     const signinWithSocial = async (email, userId) => {
+        
         let data = {
             "email": email,
             "social_id": userId
         }
 
         return await authentication.signinWithSocial(data)
+        
     }
 
     const signupWithSocial = async (signupForm) => {
@@ -133,6 +139,7 @@ export default function LoginModal(props) {
 
     const responseFacebook = async (response) => {
         console.log(response);
+        
         if (response.id) {
             console.log('login success');
             const { email, userID, picture, accessToken } = response
@@ -172,7 +179,7 @@ export default function LoginModal(props) {
                 } else {
                     message.error('Cannot sign-up with social.')
                 }
-
+                
             } else {
 
                 let accessToken = responseSignin.accessToken
@@ -188,10 +195,14 @@ export default function LoginModal(props) {
                 props.setlogin(true)
                 props.check_permission()
                 message.success('Sign-in successful.')
+                
+                window.location.reload()
             }
         } else {
             console.log('error');
         }
+
+
     }
 
     const changeTab = (tabName) => {
@@ -292,6 +303,7 @@ export default function LoginModal(props) {
     const signupWithEmail = async (event) => {
         event.preventDefault();
         const newErrors = findSignupFormErrors()
+        
         if (Object.keys(newErrors).length > 0) {
             setSignupErrors(newErrors)
         } else {
@@ -310,11 +322,13 @@ export default function LoginModal(props) {
                 localStorage.setItem('accessToken', accessToken)
                 props.onHide()
                 props.setlogin(true)
+                
                 window.location.reload()
             } catch (error) {
                 const newErrors = {}
                 newErrors.email = 'Email already registered!'
                 setSignupErrors(newErrors)
+                
             }
         }
     }
@@ -349,6 +363,7 @@ export default function LoginModal(props) {
                         localStorage.setItem('isRememberMe', true)
                     }
                     props.check_permission()
+                    window.location.reload()
                     message.success('Sign-in successful.')
                 }).catch((error) => {
                     if (error.data === 401) {
@@ -457,7 +472,7 @@ export default function LoginModal(props) {
                                                 </Col>
                                             </Row>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" type="submit"  style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
                                         </Button>
                                     </Col>

@@ -344,10 +344,10 @@ export default function ViewOrderModal(props) {
     let newOrderList = renderNewOrderList()
     let NewOrderListComponent = (
         <>
-            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {newOrderTableListComponent}
             </Col>
-            <Col xs={8}>
+            <Col xs={8} style={{ overflowY: "scroll" }}>
                 {newOrderList}
             </Col>
         </>
@@ -469,10 +469,10 @@ export default function ViewOrderModal(props) {
 
     let InOrderListComponent = (
         <>
-            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {inOrderTableList}
             </Col>
-            <Col xs={8}>
+            <Col xs={8} style={{ overflowY: "scroll" }}>
                 {inOrderList}
             </Col>
         </>
@@ -578,10 +578,10 @@ export default function ViewOrderModal(props) {
 
     let CompletedOrderListComponent = (
         <>
-            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE" }}>
+            <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {completedOrderTableList}
             </Col>
-            <Col xs={8}>
+            <Col xs={8} style={{ overflowY: "scroll" }}>
                 {completedOrderList}
             </Col>
         </>

@@ -454,7 +454,6 @@ export default function RestaurantDetailWeb(props) {
                 onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
-                table_id={props.table_id}
             />
         </Layout >
     )

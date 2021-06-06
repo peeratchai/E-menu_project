@@ -29,10 +29,9 @@ export default function OrderMenuModal(props) {
     }, [props])
 
     const saveMenu = () => {
-        if (props.table_id && props.restaurant_id) {
+        if (props.restaurant_id) {
             let basket = window.localStorage.getItem('basket');
             let restaurantId = props.restaurant_id
-            let tableId = props.table_id
             let order = {
                 ...menuDetail,
                 specialInstruction: specialInstruction,
@@ -40,7 +39,7 @@ export default function OrderMenuModal(props) {
                 total: total
             }
             if (!basket) {
-                let menu = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [order], 'total': total }
+                let menu = { 'restaurantId': restaurantId, 'order': [order], 'total': total }
                 window.localStorage.setItem('basket', JSON.stringify(menu));
             } else {
                 basket = JSON.parse(basket)
@@ -58,9 +57,9 @@ export default function OrderMenuModal(props) {
                             order = existingMenu
                         }
                     })
-                    basket = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [...existingOrder], 'total': totalAllOrder }
+                    basket = { 'restaurantId': restaurantId, 'order': [...existingOrder], 'total': totalAllOrder }
                 } else {
-                    basket = { 'restaurantId': restaurantId, 'tableId': tableId, 'order': [...existingOrder, order], 'total': totalAllOrder }
+                    basket = { 'restaurantId': restaurantId, 'order': [...existingOrder, order], 'total': totalAllOrder }
                 }
                 window.localStorage.setItem('basket', JSON.stringify(basket));
             }

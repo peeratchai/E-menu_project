@@ -32,10 +32,13 @@ export default function WebComponent(props) {
         setContainerHeight(containerHeight - 50)
         if (Array.isArray(zone)) {
             if (zone.length > 0) {
+                console.log('zone', zone[zone_number_selected])
                 setZoneSelected(zone[zone_number_selected])
                 ratioTableImages(zone[zone_number_selected]);
                 message.success('Loading zone successful.')
             } else {
+                console.log('zone not found')
+                setZoneSelected(undefined)
                 setTable([])
             }
         }
@@ -114,23 +117,26 @@ export default function WebComponent(props) {
     }
 
     const addTable = async (tableData) => {
-        let data = {
-            "zone": zoneSelected.id,
-            "name": tableData.name,
-            "type": tableData.type,
-            "size": tableData.size,
-            "position_x": tableData.position_x,
-            "position_y": tableData.position_y,
-            "is_active": true
-        }
-        let response = await partnerSerivce.addTable(data)
-        if (response) {
-            get_zone(zoneNumberSelected)
-            message.success('Add new table successful.')
+        if (zoneSelected !== undefined) {
+            let data = {
+                "zone": zoneSelected.id,
+                "name": tableData.name,
+                "type": tableData.type,
+                "size": tableData.size,
+                "position_x": tableData.position_x,
+                "position_y": tableData.position_y,
+                "is_active": true
+            }
+            let response = await partnerSerivce.addTable(data)
+            if (response) {
+                get_zone(zoneNumberSelected)
+                message.success('Add new table successful.')
+            } else {
+                message.error('Cannot new table.')
+            }
         } else {
-            message.error('Cannot new table.')
+            message.error('Please select zone before adding new table.')
         }
-
     }
 
     const contentTablePopover = (tableData) => {

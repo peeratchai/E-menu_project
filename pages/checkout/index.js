@@ -12,11 +12,11 @@ import partnerSerivce from '../../services/partner'
 import EmptyComponent from '../../components/Empty'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
+import fetchJson from '../../lib/fetchJson'
+
 const axios = require('axios')
 
-
-
-const CheckoutPage = ({ user }) => {
+const CheckoutPage = ({ user, tableId = null }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const [basketData, setBasketData] = React.useState({ 'order': [] })
@@ -24,9 +24,16 @@ const CheckoutPage = ({ user }) => {
     const [countMenuItems, setCountMenuItems] = React.useState(0);
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [userProfile, setUserProfile] = React.useState(0);
+    const [haveCheckOutPermission, setHaveCheckOutPermission] = React.useState(false)
+    const [haveMenuInBasket, setHaveMenuInBasket] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
 
     useEffect(() => {
         console.log('user', user)
+        console.log('tableId', tableId)
+        if (tableId && tableId !== null && tableId !== false) {
+            setHaveCheckOutPermission(true)
+        }
         if (user) {
             if (user.profile) {
                 setUserProfile(user.profile)
@@ -36,12 +43,19 @@ const CheckoutPage = ({ user }) => {
             let basket = window.localStorage.getItem('basket');
             basket = JSON.parse(basket)
             if (basket) {
-                setBasketData(basket)
-                let order = basket.order
-                setCountMenuItems(order.length)
-                let total_price = 0
-                order.map((menu) => total_price += menu.total)
-                setTotalPrice(total_price)
+                try {
+                    setBasketData(basket)
+                    let order = basket.order
+                    setCountMenuItems(order.length)
+                    if (order.length > 0) {
+                        setHaveMenuInBasket(true)
+                    }
+                    let total_price = 0
+                    order.map((menu) => total_price += menu.total)
+                    setTotalPrice(total_price)
+                } catch (error) {
+                    message.warning('Please select order before check out order.')
+                }
             }
         }
     }, [user])
@@ -102,47 +116,59 @@ const CheckoutPage = ({ user }) => {
 
     const onCheckOutOrder = async () => {
 
-        if (userProfile) {
-            let userId = userProfile.id
-            console.log(userId)
-            let restaurantId = basketData.restaurantId
-            if (basketData.tableId) {
-                let tableId = basketData.tableId
-                let order_items = []
-                let orders = basketData.order
-                orders.map((order) => {
-                    order_items.push({
-                        "menu": order.id,
-                        "quantity": order.count,
-                        "price": order.price,
-                        "total": order.total,
-                        "special_instruction": order.specialInstruction
+        if (haveCheckOutPermission) {
+            if (userProfile) {
+                if (haveMenuInBasket) {
+                    setLoading(true)
+                    let userId = userProfile.id
+                    console.log(userId)
+                    let restaurantId = basketData.restaurantId
+
+                    let order_items = []
+                    let orders = basketData.order
+                    orders.map((order) => {
+                        order_items.push({
+                            "menu": order.id,
+                            "quantity": order.count,
+                            "price": order.price,
+                            "total": order.total,
+                            "special_instruction": order.specialInstruction
+                        })
                     })
-                })
 
-                let data = {
-                    "restaurant": restaurantId,
-                    "restaurant_table": tableId,
-                    "user": userId,
-                    "order_items": order_items
+                    let data = {
+                        "restaurant": restaurantId,
+                        "restaurant_table": tableId,
+                        "user": userId,
+                        "order_items": order_items
+                    }
+
+                    let response = await partnerSerivce.addOrder(data)
+                    console.log('response', response)
+                    message.success('Check out order successful.')
+                    localStorage.removeItem("basket")
+                    setConfirmModalVisible(false)
+                    await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
+                        console.log('response', response)
+                        setLoading(false)
+                        // router.push({
+                        //     pathname: "/orderHistory"
+                        // })
+                    }).catch(error => {
+                        setLoading(false)
+                        console.log('api/checkoutOrder', error)
+                    })
+
+                } else {
+                    message.warning('Please select order before check out order.')
                 }
-
-                let response = await partnerSerivce.addOrder(data)
-                console.log('response', response)
-                message.success('Check out order successful.')
-                localStorage.removeItem("basket")
-                setConfirmModalVisible(false)
-
-                router.push({
-                    pathname: "/orderHistory"
-                })
             } else {
-                message.error('Please scan qr code for check out menu.')
+                message.warning('User not found. Please login and try again.')
             }
-
         } else {
-            message.warning('User not found. Please login and try again.')
+            message.warning('Please scan qr code for check out menu.')
         }
+
     }
 
     let MenuListComponentMobile = basketData.order && basketData.order.map((menu, index) => {
@@ -318,9 +344,9 @@ const CheckoutPage = ({ user }) => {
                                         <br />
                                         <Row>
                                             <Col>
-                                                <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
+                                                <Button className={styles.checkout_button} disabled={loading} onClick={() => setConfirmModalVisible(true)}>
                                                     สั่ง {countMenuItems} รายการ
-                                        </Button>
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </div>
@@ -382,14 +408,14 @@ function ConfirmOrderModal(props) {
                 <br />
                 <Row>
                     <Col>
-                        <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.fontContent}>
+                        <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
                             ยืนยันการสั่งอาหาร
                         </div>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <div style={{ textAlign: "center", color: "#ced2dc" }} className={utilStyles.font_size_sm}>
+                        <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
                             คุณต้องการยืนยันการสั่งอาหารหรือไม่
                         </div>
                     </Col>
@@ -404,7 +430,7 @@ function ConfirmOrderModal(props) {
                     </Col>
                     <Col>
                         <div style={{ textAlign: "center" }}>
-                            <Button style={{ width: "90%", backgroundColor: "#19c7d7", border: "#19c7d9" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
+                            <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
                         </div>
                     </Col>
                 </Row>
@@ -424,6 +450,7 @@ CheckoutPage.propTypes = {
 
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
+    let tableId = req.session.get('tableId')
     if (user) {
 
         let config = {
@@ -437,7 +464,7 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         if (profile) {
             user.profile = profile
             return {
-                props: { user },
+                props: { user, tableId },
             }
         }
 
@@ -449,6 +476,4 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
             },
         }
     }
-
-
 })

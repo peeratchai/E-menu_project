@@ -102,7 +102,9 @@ const partnerSerivce = {
     getTableByRestaurantId: async (restaurantId) => {
         return await sendRequest.get('/api/get_table_by_restaurantId/' + restaurantId)
     },
-
+    getTableByTableId: async (tableId) => {
+        return await sendRequest.get('/api/get_table_by_tableId/' + tableId)
+    },
     addTable: async (data) => {
         return await sendRequest.post('/api/add_table', data)
     },

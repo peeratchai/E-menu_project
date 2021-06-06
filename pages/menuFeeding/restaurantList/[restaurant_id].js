@@ -8,6 +8,9 @@ import RestaurantDetailMobile from '../../../components/MenuFeeding/Mobile/Resta
 import RestaurantDetailWeb from '../../../components/MenuFeeding/Web/RestaurantDetail'
 import restaurantService from '../../../services/restaurant'
 import Geocode from "react-geocode";
+import checkUserPermission from '../../../lib/checkUserPermission'
+import fetchJson from '../../../lib/fetchJson'
+import partnerSerivce from '../../../services/partner'
 
 export default function Restaurant() {
     const isMobileResolution = useMediaQuery(768)
@@ -16,6 +19,8 @@ export default function Restaurant() {
     ////Set State
     const [restaurantDetail, setRestaurantDetail] = React.useState()
     const [loading, setLoading] = React.useState(false)
+    const { mutateUser } = checkUserPermission()
+
     useEffect(() => {
         if (router.isReady) {
             if (restaurantId === undefined) {
@@ -24,14 +29,68 @@ export default function Restaurant() {
                 })
             } else {
                 setLoading(true)
-                getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
-                    await getAddressOnGoogleMaps(restaurantDetail)
-                }).catch((error) => {
-                    console.log('error', error)
-                })
+                setInitialData()
             }
         }
     }, [router.isReady])
+
+    const setInitialData = async () => {
+        getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
+            await getAddressOnGoogleMaps(restaurantDetail)
+        }).catch((error) => {
+            console.log('error', error)
+        })
+
+        if (typeof window !== 'undefined') {
+            if (tableId !== undefined) {
+                partnerSerivce.getTableByTableId(tableId).then(async (response) => {
+                    console.log('getTableByTableId response is :', response)
+                    if (response) {
+                        saveTableOnScanQrCode().then((response) => {
+                            console.log('response', response)
+                            let basket = window.localStorage.getItem('basket');
+                            try {
+                                basket = JSON.parse(basket)
+                                console.log('basket', basket)
+                                if (basket) {
+                                    try {
+                                        let order = basket.order
+                                        console.log('order', order)
+                                        if (order.length > 0) {
+                                            router.push({
+                                                pathname: "/checkout"
+                                            })
+                                        }
+                                    } catch (error) {
+                                        console.log('error', error)
+                                    }
+                                }
+                            } catch (error) {
+                                console.log('error', error)
+                            }
+                            console.log('saveTableOnScanQrCode')
+                        }).catch(error => {
+                            console.log('error', error)
+                        })
+
+                    }
+                })
+            }
+        }
+
+
+
+    }
+
+    const saveTableOnScanQrCode = async () => {
+        await mutateUser(
+            fetchJson('/api/saveTable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tableId: tableId }),
+            })
+        )
+    }
 
     const getRestaurantDetail = async (restaurantId) => {
         let response = await restaurantService.getRestaurantById(restaurantId)
