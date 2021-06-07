@@ -19,38 +19,38 @@ export default function Profile(props) {
         business_hour: [
             {
                 'day': 'Monday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Tuesday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Wednesday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Thursday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Friday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Saturday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             },
             {
                 'day': 'Sunday',
-                'opening_time': '',
-                'closing_time': '',
+                'opening_time': '8.00',
+                'closing_time': '16.00'
             }
         ],
         facebook: '',
@@ -136,80 +136,84 @@ export default function Profile(props) {
 
     const updateRestaurantDetails = async (restaurantForm) => {
         // console.log(restaurantForm)
-        const { restaurantLogo, bannerImage, business_hour } = restaurantForm
-        let dataForm = { ...restaurantForm }
-        if (restaurantLogo === undefined) {
-            dataForm.image = null
-        } else {
-            dataForm.image = restaurantLogo
-        }
-        let bannerImageFileList = []
-        let restaurant_pictures = []
-        let imageUrlArray = []
-        if (bannerImage !== undefined) {
-            if (bannerImage.length > 0) {
-                bannerImage.map((bannerImageData) => {
-                    console.log('bannerImageData', bannerImageData)
-                    if (bannerImageData.name !== null) {
-                        bannerImageFileList.push(bannerImageData)
-                    } else {
+        if (restaurant_id) {
+            const { restaurantLogo, bannerImage, business_hour } = restaurantForm
+            let dataForm = { ...restaurantForm }
+            if (restaurantLogo === undefined) {
+                dataForm.image = null
+            } else {
+                dataForm.image = restaurantLogo
+            }
+            let bannerImageFileList = []
+            let restaurant_pictures = []
+            let imageUrlArray = []
+            if (bannerImage !== undefined) {
+                if (bannerImage.length > 0) {
+                    bannerImage.map((bannerImageData) => {
+                        console.log('bannerImageData', bannerImageData)
+                        if (bannerImageData.name !== null) {
+                            bannerImageFileList.push(bannerImageData)
+                        } else {
+                            restaurant_pictures.push({
+                                "restaurant": restaurant_id,
+                                "title": bannerImageData.name,
+                                "is_active": true,
+                                "image_url": bannerImageData.url
+                            })
+                        }
+                    })
+                } else {
+                    dataForm.banner = null
+                    dataForm.restaurant_pictures = []
+                }
+
+                if (bannerImageFileList.length === 0) {
+                    dataForm.banner = null
+                } else {
+                    let imageResponse
+                    await Promise.all(bannerImageFileList.map(async (bannerImageData) => {
+                        imageResponse = await uploadService.uploadImage(bannerImageData.originFileObj)
+                        console.log('imageResponse', imageResponse)
+                        imageUrlArray.push(imageResponse)
+                    }))
+                    console.log('imageUrlArray', imageUrlArray)
+
+                    imageUrlArray.forEach((imageUrl) => {
                         restaurant_pictures.push({
                             "restaurant": restaurant_id,
-                            "title": bannerImageData.name,
+                            "title": null,
                             "is_active": true,
-                            "image_url": bannerImageData.url
+                            "image_url": imageUrl
                         })
-                    }
-                })
+                    })
+                }
             } else {
                 dataForm.banner = null
-                dataForm.restaurant_pictures = []
             }
 
-            if (bannerImageFileList.length === 0) {
-                dataForm.banner = null
-            } else {
-                let imageResponse
-                await Promise.all(bannerImageFileList.map(async (bannerImageData) => {
-                    imageResponse = await uploadService.uploadImage(bannerImageData.originFileObj)
-                    console.log('imageResponse', imageResponse)
-                    imageUrlArray.push(imageResponse)
-                }))
-                console.log('imageUrlArray', imageUrlArray)
-
-                imageUrlArray.forEach((imageUrl) => {
-                    restaurant_pictures.push({
-                        "restaurant": restaurant_id,
-                        "title": null,
-                        "is_active": true,
-                        "image_url": imageUrl
-                    })
+            dataForm.restaurant_pictures = restaurant_pictures
+            let businessHour = []
+            business_hour.map((business_hour) => {
+                businessHour.push({
+                    "restaurant": restaurant_id,
+                    "day": business_hour.day,
+                    "opening_time": parseFloat(business_hour.opening_time.split(":").join(".")),
+                    "closing_time": parseFloat(business_hour.closing_time.split(":").join("."))
                 })
+            })
+            dataForm.business_hour = businessHour
+            let response = await restaurantService.updateRestaurantDetails(dataForm)
+            try {
+                if (response.is_success === true) {
+                    message.success('Update data successful.')
+                } else {
+                    message.error('Cannot update data.')
+                }
+            } catch (error) {
+                message.error('Error has occurred.')
             }
         } else {
-            dataForm.banner = null
-        }
-
-        dataForm.restaurant_pictures = restaurant_pictures
-        let businessHour = []
-        business_hour.map((business_hour) => {
-            businessHour.push({
-                "restaurant": restaurant_id,
-                "day": business_hour.day,
-                "opening_time": parseFloat(business_hour.opening_time.split(":").join(".")),
-                "closing_time": parseFloat(business_hour.closing_time.split(":").join("."))
-            })
-        })
-        dataForm.business_hour = businessHour
-        let response = await restaurantService.updateRestaurantDetails(dataForm)
-        try {
-            if (response.is_success === true) {
-                message.success('Update data successful.')
-            } else {
-                message.error('Cannot update data.')
-            }
-        } catch (error) {
-            message.error('Error has occurred.')
+            message.warning('Please select restaurant.')
         }
 
     }

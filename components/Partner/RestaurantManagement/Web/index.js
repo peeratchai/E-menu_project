@@ -117,25 +117,29 @@ export default function WebComponent(props) {
     }
 
     const addTable = async (tableData) => {
-        if (zoneSelected !== undefined) {
-            let data = {
-                "zone": zoneSelected.id,
-                "name": tableData.name,
-                "type": tableData.type,
-                "size": tableData.size,
-                "position_x": tableData.position_x,
-                "position_y": tableData.position_y,
-                "is_active": true
-            }
-            let response = await partnerSerivce.addTable(data)
-            if (response) {
-                get_zone(zoneNumberSelected)
-                message.success('Add new table successful.')
+        if (restaurant_id) {
+            if (zoneSelected !== undefined) {
+                let data = {
+                    "zone": zoneSelected.id,
+                    "name": tableData.name,
+                    "type": tableData.type,
+                    "size": tableData.size,
+                    "position_x": tableData.position_x,
+                    "position_y": tableData.position_y,
+                    "is_active": true
+                }
+                let response = await partnerSerivce.addTable(data)
+                if (response) {
+                    get_zone(zoneNumberSelected)
+                    message.success('Add new table successful.')
+                } else {
+                    message.error('Cannot new table.')
+                }
             } else {
-                message.error('Cannot new table.')
+                message.error('Please select zone before adding new table.')
             }
         } else {
-            message.error('Please select zone before adding new table.')
+            message.warning('Please select restaurant.')
         }
     }
 
@@ -179,33 +183,38 @@ export default function WebComponent(props) {
 
     const updatePositionTable = async () => {
 
-        let tables = table
-        let tablesOnChangeData = []
-        let data
-        tables.map((table) => {
-            if (calulateRealPositionX(table.position_x) !== table.real_position_x || calulateRealPositionY(table.position_y) !== table.real_position_y) {
-                tablesOnChangeData.push(table)
-            }
-        })
-
-        if (tablesOnChangeData.length > 0) {
-            await Promise.all(tablesOnChangeData.map(async (table) => {
-                data = {
-                    "zone": table.zoneId,
-                    "name": table.name,
-                    "type": table.type,
-                    "size": table.size,
-                    "position_x": (table.position_x).toString(),
-                    "position_y": (table.position_y).toString(),
-                    "is_active": true
+        if (restaurant_id) {
+            let tables = table
+            let tablesOnChangeData = []
+            let data
+            tables.map((table) => {
+                if (calulateRealPositionX(table.position_x) !== table.real_position_x || calulateRealPositionY(table.position_y) !== table.real_position_y) {
+                    tablesOnChangeData.push(table)
                 }
-                console.log(data)
-                await partnerSerivce.editTable(data, table.id)
-            }))
+            })
 
-            get_zone(zoneNumberSelected)
-            message.success('Save table position successful.')
+            if (tablesOnChangeData.length > 0) {
+                await Promise.all(tablesOnChangeData.map(async (table) => {
+                    data = {
+                        "zone": table.zoneId,
+                        "name": table.name,
+                        "type": table.type,
+                        "size": table.size,
+                        "position_x": (table.position_x).toString(),
+                        "position_y": (table.position_y).toString(),
+                        "is_active": true
+                    }
+                    console.log(data)
+                    await partnerSerivce.editTable(data, table.id)
+                }))
+
+                get_zone(zoneNumberSelected)
+                message.success('Save table position successful.')
+            }
+        } else {
+            message.warning('Please select restaurant.')
         }
+
     }
 
     const onChangeZone = (e) => {

@@ -69,6 +69,7 @@ export default function RestaurantList() {
     const getRestaurant = (locationId) => {
         setLoading(true)
         restaurantService.getRestaurantSearchByLocation(locationId).then(async (restaurantList) => {
+            setRestaurantList(restaurantList)
             setLoading(false)
             await getAddressOnGoogleMaps(restaurantList)
         }).catch(error => {
@@ -96,21 +97,26 @@ export default function RestaurantList() {
     const getAddressOnGoogleMaps = async (restaurantList) => {
         let point, substringPotion, splitPotion, latLong, lat, lng
         Promise.all(restaurantList.map(async (restaurantDetails) => {
-            point = restaurantDetails.location;
-            substringPotion = point.substring(5)
-            splitPotion = substringPotion.split('(').join('').split(')');
-            latLong = splitPotion[0].split(' ')
-            lat = latLong[0]
-            lng = latLong[1]
-            let address = await Geocode.fromLatLng(lat, lng).then(
-                (response) => {
-                    const address = response.results[0].formatted_address;
-                    return address
-                }
-            );
-            restaurantDetails.googleMapsAddress = address
-            setRestaurantList(restaurantList)
-            return address
+            try {
+                point = restaurantDetails.location;
+                substringPotion = point.substring(5)
+                splitPotion = substringPotion.split('(').join('').split(')');
+                latLong = splitPotion[0].split(' ')
+                lat = latLong[0]
+                lng = latLong[1]
+                console.log(lat, lng)
+                let address = await Geocode.fromLatLng(lat, lng).then(
+                    (response) => {
+                        const address = response.results[0].formatted_address;
+                        return address
+                    }
+                );
+                restaurantDetails.googleMapsAddress = address
+                setRestaurantList(restaurantList)
+                return address
+            } catch (error) {
+                console.log('error', error)
+            }
         }))
     }
 

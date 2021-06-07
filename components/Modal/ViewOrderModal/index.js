@@ -43,8 +43,8 @@ export default function ViewOrderModal(props) {
             "zone": zoneIdArray
         }
         console.log(data)
-        let orders = await partnerService.getOrderByfilter(data)
-        if (orders) {
+        try {
+            let orders = await partnerService.getOrderByfilter(data)
             console.log('order', orders)
             setInitailNewOrder(orders)
             setInitailInOrder(orders)
@@ -52,7 +52,9 @@ export default function ViewOrderModal(props) {
 
             setOrders(orders)
             setLoading(false)
-        } else {
+        } catch (error) {
+            console.log('error',error)
+            setLoading(false)
             message.error('An error has occurred.Please try again.')
         }
     }

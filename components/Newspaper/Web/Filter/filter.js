@@ -34,7 +34,7 @@ export default function WebFilter(props) {
         if (user_location) {
             setHaveUserLocation(true)
         }
-    }, [filter_master_data_list])
+    }, [props])
 
     const setFilterOptionsFromMasterData = () => {
         let filterOptions = [{

@@ -31,7 +31,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
     useEffect(() => {
         console.log('user', user)
         console.log('tableId', tableId)
-        if (tableId && tableId !== null && tableId !== false) {
+        if (tableId && tableId !== null && tableId !== 'null') {
             setHaveCheckOutPermission(true)
         }
         if (user) {
@@ -167,6 +167,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
             }
         } else {
             message.warning('Please scan qr code for check out menu.')
+            setConfirmModalVisible(false)
         }
 
     }
@@ -450,7 +451,12 @@ CheckoutPage.propTypes = {
 
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
-    let tableId = req.session.get('tableId')
+    let tableId = null
+    try {
+        tableId = req.session.get('tableId')
+    } catch (error) {
+        console.log('error,', error)
+    }
     if (user) {
 
         let config = {
