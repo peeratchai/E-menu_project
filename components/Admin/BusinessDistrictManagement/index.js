@@ -1,6 +1,6 @@
 
 import 'antd/dist/antd.css';
-import { Table, Space, Switch, Tag, message, Spin } from 'antd';
+import { Table, Space, Switch, Tag, message, Spin ,Popconfirm} from 'antd';
 import { Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import adminService from '../../../services/admin'
