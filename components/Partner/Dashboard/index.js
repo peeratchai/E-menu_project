@@ -152,7 +152,17 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={8}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date).format('hh:mm:ss - DD/MMM/YYYY')}
+                                        {moment(order.created_date).add(7, 'hours').format('DD/MMM/YYYY')}
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={6} style={{ fontSize: "14px" }}>
+                                    <b>Order Num : {order.order_number}</b>
+                                </Col>
+                                <Col xs={6}>
+                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                        {moment(order.created_date).add(7, 'hours').format('hh:mm:ss')}
                                     </div>
                                 </Col>
                             </Row>

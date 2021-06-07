@@ -2,7 +2,7 @@
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { Spin } from 'antd'
+import { message, Spin } from 'antd'
 import useMediaQuery from "../../../utils/utils";
 import RestaurantDetailMobile from '../../../components/MenuFeeding/Mobile/RestaurantDetail'
 import RestaurantDetailWeb from '../../../components/MenuFeeding/Web/RestaurantDetail'
@@ -36,50 +36,47 @@ export default function Restaurant() {
 
     const setInitialData = async () => {
         getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
+            if (typeof window !== 'undefined') {
+                if (tableId !== undefined) {
+                    partnerSerivce.getTableByTableId(tableId).then(async (table) => {
+                        console.log('getTableByTableId response is :', table)
+                        if (table) {
+                            saveTableOnScanQrCode().then((response) => {
+                                console.log('response', response)
+                                message.success(`You've checked in ${table.name} at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                                // let basket = window.localStorage.getItem('basket');
+                                // try {
+                                //     basket = JSON.parse(basket)
+                                //     console.log('basket', basket)
+                                //     if (basket) {
+                                //         try {
+                                //             let order = basket.order
+                                //             console.log('order', order)
+                                //             if (order.length > 0) {
+                                //                 router.push({
+                                //                     pathname: "/checkout"
+                                //                 })
+                                //             }
+                                //         } catch (error) {
+                                //             console.log('error', error)
+                                //         }
+                                //     }
+                                // } catch (error) {
+                                //     console.log('error', error)
+                                // }
+                                // console.log('saveTableOnScanQrCode')
+                            }).catch(error => {
+                                console.log('error', error)
+                            })
+
+                        }
+                    })
+                }
+            }
             await getAddressOnGoogleMaps(restaurantDetail)
         }).catch((error) => {
             console.log('error', error)
         })
-
-        if (typeof window !== 'undefined') {
-            if (tableId !== undefined) {
-                partnerSerivce.getTableByTableId(tableId).then(async (response) => {
-                    console.log('getTableByTableId response is :', response)
-                    if (response) {
-                        saveTableOnScanQrCode().then((response) => {
-                            console.log('response', response)
-                            let basket = window.localStorage.getItem('basket');
-                            try {
-                                basket = JSON.parse(basket)
-                                console.log('basket', basket)
-                                if (basket) {
-                                    try {
-                                        let order = basket.order
-                                        console.log('order', order)
-                                        if (order.length > 0) {
-                                            router.push({
-                                                pathname: "/checkout"
-                                            })
-                                        }
-                                    } catch (error) {
-                                        console.log('error', error)
-                                    }
-                                }
-                            } catch (error) {
-                                console.log('error', error)
-                            }
-                            console.log('saveTableOnScanQrCode')
-                        }).catch(error => {
-                            console.log('error', error)
-                        })
-
-                    }
-                })
-            }
-        }
-
-
-
     }
 
     const saveTableOnScanQrCode = async () => {

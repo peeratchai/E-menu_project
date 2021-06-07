@@ -313,7 +313,7 @@ export default function ViewOrderModal(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div>
                                         <div>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>{order_items.special_instruction}</b>
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
@@ -437,7 +437,7 @@ export default function ViewOrderModal(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div>
                                         <div>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>{order_items.special_instruction}</b>
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
@@ -546,7 +546,7 @@ export default function ViewOrderModal(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div>
                                         <div>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>{order_items.special_instruction}</b>
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB

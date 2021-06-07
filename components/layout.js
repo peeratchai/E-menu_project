@@ -235,8 +235,8 @@ export default function Layout(props) {
             </div>
 
             <MessengerCustomerChat
-                pageId="112842050546604"
-                appId="259379829306113"
+                pageId={process.env.FACEBOOK_PAGE_ID}
+                appId={process.env.REACT_APP_FACEBOOK_APP_ID}
             />
             <LoginModal
                 show={modalShow}

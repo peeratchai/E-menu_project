@@ -204,7 +204,6 @@ export default function Menu(props) {
             <MobileComponent
                 category={category}
                 columns_table={categoryColumnsTable}
-                // expanded_row_render={expandedRowRender}
                 show_add_Category_Modal={() => setAddCategoryModal(true)}
                 spin_loading={spinLoading}
                 on_change_menu_status={onChangeMenuStatus}
@@ -217,7 +216,6 @@ export default function Menu(props) {
             <WebComponent
                 category={category}
                 columns_table={categoryColumnsTable}
-                // expanded_row_render={expandedRowRender}
                 show_add_Category_Modal={() => setAddCategoryModal(true)}
                 spin_loading={spinLoading}
                 on_change_menu_status={onChangeMenuStatus}

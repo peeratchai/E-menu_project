@@ -29,11 +29,11 @@ const Partner = ({ user }) => {
 
     const isMobileResolution = useMediaQuery(768)
     const notDisplay = null
-    const [tableNumber, setTableNumber] = React.useState('1');
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [restaurantId, setRestaurantId] = React.useState();
     const [restaurantName, setRestaurantName] = React.useState();
     const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
+    const [roles, setRoles] = React.useState([]);
 
     useEffect(() => {
         console.log('user', user)
@@ -41,6 +41,8 @@ const Partner = ({ user }) => {
             let profile = user.profile
             let restaurantId = profile.restaurant_employee.restaurant.id
             let restaurantName = profile.restaurant_employee.restaurant.name
+            let roles = profile.roles
+            setRoles(roles)
             setRestaurantId(restaurantId)
             setRestaurantName(restaurantName)
         }
@@ -76,27 +78,34 @@ const Partner = ({ user }) => {
                                         <Nav.Item>
                                             <Nav.Link eventKey="restaurantManagement">Restaurant Management</Nav.Link>
                                         </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="promote">Promote</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="promoteList">Promote List</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="menu">Menu</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="zone">Zone Management</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="profile">Profile</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="setting">Setting</Nav.Link>
-                                        </Nav.Item>
+                                        {
+                                            roles.find((role) => role === 'partner') ? (
+                                                <>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="promote">Promote</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="promoteList">Promote List</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="menu">Menu</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="zone">Zone Management</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="profile">Profile</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="setting">Setting</Nav.Link>
+                                                    </Nav.Item>
+                                                </>
+                                            ) : notDisplay
+                                        }
+
                                     </Nav>
                                 </Col>
                                 <Col sm={10}>

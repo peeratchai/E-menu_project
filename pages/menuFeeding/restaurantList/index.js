@@ -70,7 +70,7 @@ export default function RestaurantList() {
 
     const getAddressOnGoogleMaps = async (restaurantList) => {
         let point, substringPotion, splitPotion, latLong, lat, lng
-        Promise.all(restaurantList.map(async (restaurantDetails, index) => {
+        Promise.all(restaurantList.map(async (restaurantDetails) => {
             point = restaurantDetails.location;
             substringPotion = point.substring(5)
             splitPotion = substringPotion.split('(').join('').split(')');
@@ -84,15 +84,10 @@ export default function RestaurantList() {
                 }
             );
             restaurantDetails.googleMapsAddress = address
-            setRestaurantList([
-                ...restaurantList, 
-                [index].googleMapsAddress = address
-            ])
+            setRestaurantList(restaurantList)
             return address
         }))
     }
-
-
 
     return (
         <>
