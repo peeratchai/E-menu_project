@@ -359,3 +359,8 @@ div.ant-row.ant-form-item {
 .fb_dialog {
   z-index: 1000 !important;
 }
+
+.facebook-login {
+  background-color: white !important;
+  border: none !important;
+}

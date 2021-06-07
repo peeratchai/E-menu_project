@@ -31,7 +31,7 @@
     "react-data-export": "^0.6.0",
     "react-dom": "17.0.1",
     "react-draggable": "^4.4.3",
-    "react-facebook-login": "^4.1.1",
+    "react-facebook-login-component": "^0.9.2",
     "react-geocode": "^0.2.3",
     "react-google-autocomplete": "^2.1.2",
     "react-google-maps": "^9.4.5",

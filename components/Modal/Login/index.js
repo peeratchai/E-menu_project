@@ -3,11 +3,10 @@ import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import React, { useEffect } from 'react'
 import { message } from 'antd';
 import authentication from '../../../services/authentication'
-import profileService from '../../../services/profile'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { FacebookLogin } from 'react-facebook-login-component';
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
 
@@ -28,9 +27,10 @@ export default function LoginModal(props) {
     const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
+    const [facebookLoginOn, setFacebookLoginOn] = React.useState(false)
 
     const signInwithLine = async () => {
-        
+
         const liff = window.liff;
 
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
@@ -78,12 +78,12 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
-                    window.location.reload()
+                    // window.location.reload()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
                 }
-                
+
             } else {
                 //// Have already a account 
 
@@ -102,12 +102,12 @@ export default function LoginModal(props) {
                 props.setlogin(true)
                 props.check_permission()
                 message.success('Sign-in successful.')
-                
+
                 window.location.reload()
             }
         } else {
             liff.login();
-            
+
         }
     };
 
@@ -123,14 +123,14 @@ export default function LoginModal(props) {
     }, [])
 
     const signinWithSocial = async (email, userId) => {
-        
+
         let data = {
             "email": email,
             "social_id": userId
         }
 
         return await authentication.signinWithSocial(data)
-        
+
     }
 
     const signupWithSocial = async (signupForm) => {
@@ -139,7 +139,7 @@ export default function LoginModal(props) {
 
     const responseFacebook = async (response) => {
         console.log(response);
-        
+
         if (response.id) {
             console.log('login success');
             const { email, userID, picture, accessToken } = response
@@ -174,12 +174,12 @@ export default function LoginModal(props) {
 
                     props.onHide()
                     props.setlogin(true)
-                    window.location.reload()
+                    // window.location.reload()
                     message.success('Sign-in successful.')
                 } else {
                     message.error('Cannot sign-up with social.')
                 }
-                
+
             } else {
 
                 let accessToken = responseSignin.accessToken
@@ -195,8 +195,8 @@ export default function LoginModal(props) {
                 props.setlogin(true)
                 props.check_permission()
                 message.success('Sign-in successful.')
-                
-                window.location.reload()
+
+                // window.location.reload()
             }
         } else {
             console.log('error');
@@ -215,11 +215,13 @@ export default function LoginModal(props) {
     const setRememberMeValue = () => {
         let emailEncode = window.localStorage.getItem('email');
         let passwordEncode = window.localStorage.getItem('password');
-        let email = Buffer.from(emailEncode, 'base64').toString()
-        let password = Buffer.from(passwordEncode, 'base64').toString()
-        setEmail(email)
-        setPassword(password)
-        setSigninForm({ 'email': email, 'password': password })
+        if (emailEncode && passwordEncode) {
+            let email = Buffer.from(emailEncode, 'base64').toString()
+            let password = Buffer.from(passwordEncode, 'base64').toString()
+            setEmail(email)
+            setPassword(password)
+            setSigninForm({ 'email': email, 'password': password })
+        }
     }
 
     const setSigninField = (field, value) => {
@@ -303,7 +305,7 @@ export default function LoginModal(props) {
     const signupWithEmail = async (event) => {
         event.preventDefault();
         const newErrors = findSignupFormErrors()
-        
+
         if (Object.keys(newErrors).length > 0) {
             setSignupErrors(newErrors)
         } else {
@@ -322,13 +324,13 @@ export default function LoginModal(props) {
                 localStorage.setItem('accessToken', accessToken)
                 props.onHide()
                 props.setlogin(true)
-                
+
                 window.location.reload()
             } catch (error) {
                 const newErrors = {}
                 newErrors.email = 'Email already registered!'
                 setSignupErrors(newErrors)
-                
+
             }
         }
     }
@@ -411,6 +413,15 @@ export default function LoginModal(props) {
         setPassword(null)
     }
 
+    const setFacebookLoginOn2 = (response) => {
+        console.log('response', response)
+        setFacebookLoginOn(true)
+    }
+
+    const buttonText = (
+        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+    )
+
     return (
         <Modal
             {...props}
@@ -472,7 +483,7 @@ export default function LoginModal(props) {
                                                 </Col>
                                             </Row>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit"  style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                             LOG IN
                                         </Button>
                                     </Col>
@@ -491,14 +502,15 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin
-                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                        <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                            language="en_US"
+                                            scope="public_profile,email"
+                                            responseHandler={responseFacebook}
+                                            xfbml={true}
                                             fields="name,email,picture.height(400).width(300)"
-                                            callback={responseFacebook}
-                                            render={renderProps => (
-                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                            )}
-                                        />
+                                            version="v2.5"
+                                            className="facebook-login"
+                                            buttonText={buttonText} />
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
@@ -579,22 +591,23 @@ export default function LoginModal(props) {
                             <Row style={{ marginBottom: "15px" }}>
                                 <Col>
                                     <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin
-                                            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                        <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                            language="en_US"
+                                            scope="public_profile,email"
+                                            responseHandler={responseFacebook}
+                                            xfbml={true}
                                             fields="name,email,picture.height(400).width(300)"
-                                            callback={responseFacebook}
-                                            render={renderProps => (
-                                                <Image onClick={() => renderProps.onClick()} src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                            )}
-                                        />
+                                            version="v2.5"
+                                            className="facebook-login"
+                                            buttonText={buttonText} />
                                         <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
                                     </div>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <div style={{ textAlign: "center" }} onClick={() => onChangeToLoginTab()}>
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }}>Login</span>
+                                    <div style={{ textAlign: "center" }} >
+                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab()}>Login</span>
                                     </div>
                                 </Col>
                             </Row>
