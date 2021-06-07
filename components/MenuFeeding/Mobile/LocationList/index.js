@@ -17,7 +17,8 @@ import masterDataService from '../../../../services/masterData'
 
 const { Option } = Select;
 
-export default function LocationListMobile() {
+export default function LocationListMobile(props) {
+    const { user_location } = props
     const [locationList, setLocationList] = React.useState([]);
     const [modalShow, setModalShow] = React.useState(false);
     const [totalResult, setTotalResult] = React.useState(0);
@@ -28,7 +29,7 @@ export default function LocationListMobile() {
         distanceMasterData: [],
         peymentOptionsMasterData: []
     })
-    
+
     useEffect(async () => {
         getInitialData()
 
@@ -76,11 +77,21 @@ export default function LocationListMobile() {
 
 
     const onSearch = async (filterForm) => {
+        setLoading(true)
         let filter = changeFormatFilter(filterForm)
+        if (filter.distance !== null) {
+            let splitDistanceArray = filter.distance.split(" ")
+            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.current_location = user_location
+        } else {
+            filter.current_location = null
+        }
+        console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
         setFilter(filterForm)
         console.log(locationListByFilter)
+        setLoading(false)
     }
 
     const searchFunc = () => {
@@ -167,6 +178,7 @@ export default function LocationListMobile() {
                 onHide={() => setModalShow(false)}
                 on_search={(filterForm) => onSearch(filterForm)}
                 filter_master_data_list={masterDataList}
+                user_location={user_location}
             />
         </Layout >
     )

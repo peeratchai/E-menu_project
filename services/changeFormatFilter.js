@@ -41,28 +41,28 @@ export default function changeFormatFilter(filterForm) {
                 }
                 break;
             case 'distance':
-                if (filterForm.distance === 0) {
+                if (filterForm.distance === 0 || filterForm.distance === 'null') {
                     filterResponse.distance = null
                 } else {
                     filterResponse.distance = filterForm.distance
                 }
                 break;
             case 'what':
-                if (filterForm.what === '') {
+                if (filterForm.what === '' || filterForm.what === null) {
                     filterResponse.what = null
                 } else {
                     filterResponse.what = filterForm.what
                 }
                 break;
             case 'where':
-                if (filterForm.where === '') {
+                if (filterForm.where === '' || filterForm.where === null) {
                     filterResponse.where = null
                 } else {
                     filterResponse.where = filterForm.where
                 }
                 break;
             case 'food_type':
-                if (filterForm.food_type === '') {
+                if (filterForm.food_type === 'null') {
                     filterResponse.food_type = null
                 } else {
                     filterResponse.food_type = filterForm.food_type
@@ -85,7 +85,7 @@ export default function changeFormatFilter(filterForm) {
                 }
                 break;
             case 'payment_option':
-                if (filterForm.payment_option === '') {
+                if (filterForm.payment_option === 'null') {
                     filterResponse.payment_option = null
                 } else {
                     filterResponse.payment_option = filterForm.payment_option

@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import { Row, Col } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import Link from 'next/link'
+import EmptyComponent from '../../../Empty'
 
 export default function MobilePromotionlist(props) {
     const [promotionsCardColumn1, setPromotionsCardColumn1] = React.useState()
@@ -86,13 +87,21 @@ export default function MobilePromotionlist(props) {
     }
 
     return (
-        <Row xs={2}>
-            <Col style={{ padding: "0 7.5px" }}>
-                {promotionsCardColumn1}
-            </Col>
-            <Col style={{ padding: "0 7.5px" }}>
-                {promotionsCardColumn2}
-            </Col>
-        </Row>
+        <>
+            {
+                props.newspaper_list.length > 0 ? (
+                    <Row xs={2}>
+                        <Col style={{ padding: "0 7.5px" }}>
+                            {promotionsCardColumn1}
+                        </Col>
+                        <Col style={{ padding: "0 7.5px" }}>
+                            {promotionsCardColumn2}
+                        </Col>
+                    </Row>
+                ) : (
+                    <EmptyComponent />
+                )
+            }
+        </>
     )
 }

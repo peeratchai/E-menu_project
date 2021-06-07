@@ -8,11 +8,11 @@ import RestaurantListMobile from '../../../components/MenuFeeding/Mobile/Restaur
 import Geocode from "react-geocode";
 import masterDataService from '../../../services/masterData'
 
-Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
-Geocode.setLanguage("th");
-// Geocode.setRegion("es");
-Geocode.setLocationType("ROOFTOP");
-Geocode.enableDebug();
+var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+};
 
 export default function RestaurantList() {
     const isMobileResolution = useMediaQuery(768)
@@ -25,6 +25,25 @@ export default function RestaurantList() {
         distanceMasterData: [],
         peymentOptionsMasterData: []
     })
+    const [userLocation, setUserLocation] = React.useState()
+
+
+    function success(pos) {
+        var crd = pos.coords;
+
+        console.log("Your current position is:");
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+        console.log(`More or less ${crd.accuracy} meters.`);
+
+        let userLocation = `POINT(${crd.latitude + " " + crd.longitude})`
+        console.log('userLocation', userLocation)
+        setUserLocation(userLocation)
+    }
+
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
 
     useEffect(async () => {
         if (!router.isReady) {
@@ -37,8 +56,14 @@ export default function RestaurantList() {
             } else {
                 getRestaurant(locationId);
                 getFilterMasterData()
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(success, error, options)
+                } else {
+                    alert('Sorry Not available!');
+                }
             }
         }
+
     }, [router.isReady])
 
     const getRestaurant = (locationId) => {
@@ -100,6 +125,7 @@ export default function RestaurantList() {
                         location_id={locationId}
                         loading={loading}
                         master_data_list={masterDataList}
+                        user_location={userLocation}
                     />
                 ) : (
                     //Mobile Version
@@ -109,6 +135,7 @@ export default function RestaurantList() {
                         location_id={locationId}
                         loading={loading}
                         master_data_list={masterDataList}
+                        user_location={userLocation}
                     />
                 )
             }

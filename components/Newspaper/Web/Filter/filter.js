@@ -12,12 +12,13 @@ const { Option } = Select;
 
 export default function WebFilter(props) {
 
-    const { filter_master_data_list } = props
+    const { filter_master_data_list, user_location } = props
     const [filterOptions, setFilterOptions] = React.useState([]);
     const [filterValue, setFilterValue] = React.useState();
+    const [haveUserLocation, setHaveUserLocation] = React.useState(false)
     const [form, setForm] = React.useState({
-        food_type: '',
-        payment_option: '',
+        food_type: null,
+        payment_option: null,
         distance: 0,
         price_to: null,
         price_from: null,
@@ -29,6 +30,9 @@ export default function WebFilter(props) {
     useEffect(() => {
         if (filter_master_data_list) {
             setFilterOptionsFromMasterData()
+        }
+        if (user_location) {
+            setHaveUserLocation(true)
         }
     }, [filter_master_data_list])
 
@@ -107,7 +111,7 @@ export default function WebFilter(props) {
                                         onChange={(value) => setform('food_type', value)}
                                         className={'myfilter'}
                                     >
-                                        <Option value={null}>-</Option>
+                                        <Option value="null">-</Option>
                                         {FootTypeDropDown}
                                     </Select>
 
@@ -135,8 +139,9 @@ export default function WebFilter(props) {
                                         }
                                         onChange={(value) => setform('distance', value)}
                                         className={'myfilter'}
+                                        disabled={!haveUserLocation}
                                     >
-                                        <Option value={null}>-</Option>
+                                        <Option value="null">-</Option>
                                         {DistanceDropDown}
                                     </Select>
                                 </Col>

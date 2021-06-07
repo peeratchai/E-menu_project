@@ -1,7 +1,7 @@
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Button, Modal, Form } from 'react-bootstrap'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Slider, Select, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './index.module.css'
@@ -12,14 +12,15 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater';
 //Modal filter for mobile resolution
 export default function MobileFilterRestaurantList(props) {
 
-    const { filter_master_data_list } = props
+    const { filter_master_data_list, user_location } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
+    const [haveUserLocation, setHaveUserLocation] = React.useState(false)
     const [form, setForm] = React.useState({
-        what: '',
-        where: '',
-        food_type: '',
-        payment_option: '',
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
         distance: 0,
         price_to_price_from: '0 0',
         is_open_now: false,
@@ -27,6 +28,11 @@ export default function MobileFilterRestaurantList(props) {
         sort_by: null
     })
 
+    useEffect(() => {
+        if (user_location) {
+            setHaveUserLocation(true)
+        }
+    }, [props])
 
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])
@@ -103,8 +109,8 @@ export default function MobileFilterRestaurantList(props) {
                                 </div>
                                 <div>
                                     <Form.Group >
-                                        <Form.Control as="select" onChange={(e) => setform('food_type', e.target.value)}>
-                                            <option value={null} key="null">-</option>
+                                        <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
+                                            <option value="null" key="null">-</option>
                                             {FootTypeDropDown}
                                         </Form.Control>
                                     </Form.Group>
@@ -139,7 +145,7 @@ export default function MobileFilterRestaurantList(props) {
                                     <Col>
                                         <Form.Group >
                                             <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                                <option value={null}>-</option>
+                                                <option value="null">-</option>
                                                 {PeymentOptionsDropDown}
                                             </Form.Control>
                                         </Form.Group>
@@ -159,11 +165,16 @@ export default function MobileFilterRestaurantList(props) {
                                 <Row>
                                     <Col>
                                         <Form.Group >
-                                            <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                                <option value={null}>-</option>
+                                            <Form.Control as="select" disabled={!haveUserLocation} value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
+                                                <option value="null">-</option>
                                                 {DistanceDropDown}
                                             </Form.Control>
                                         </Form.Group>
+                                        {
+                                            !haveUserLocation && (
+                                                'Please allow to access your location it need to use in the filter.'
+                                            )
+                                        }
                                     </Col>
                                 </Row>
                             </Col>

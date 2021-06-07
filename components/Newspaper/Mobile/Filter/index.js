@@ -68,7 +68,7 @@ export default function MobileFilter(props) {
                             <div>
                                 <Form.Group >
                                     <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
-                                        <option value={null} key="null">-</option>
+                                        <option value="null" key="null">-</option>
                                         {FootTypeDropDown}
                                     </Form.Control>
                                 </Form.Group>
@@ -86,7 +86,7 @@ export default function MobileFilter(props) {
                                 <Col>
                                     <Form.Group >
                                         <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
-                                            <option value={null}>-</option>
+                                            <option value="null">-</option>
                                             {PeymentOptionsDropDown}
                                         </Form.Control>
                                     </Form.Group>
@@ -107,7 +107,7 @@ export default function MobileFilter(props) {
                                 <Col>
                                     <Form.Group >
                                         <Form.Control as="select" value={form.distance} onChange={(e) => setform('distance', e.target.value)}>
-                                            <option value={null}>-</option>
+                                            <option value="null">-</option>
                                             {DistanceDropDown}
                                         </Form.Control>
                                     </Form.Group>

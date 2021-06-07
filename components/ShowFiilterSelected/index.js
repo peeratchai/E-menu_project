@@ -32,7 +32,7 @@ export default function ShowFiilterSelected(props) {
                 } else {
                     return (filterData.price_from + " - " + value + " baht")
                 };
-            case 'distance': return value + " km"
+            case 'distance': return value
             case 'is_open_now':
                 if (value === true) {
                     return 'Open now'
@@ -53,7 +53,6 @@ export default function ShowFiilterSelected(props) {
 
         if (props.filter !== undefined) {
             if (Object.keys(props.filter).length > 0) {
-                console.log(props.filter)
                 setFilterData(props.filter)
             }
         }
@@ -61,9 +60,7 @@ export default function ShowFiilterSelected(props) {
 
     const filterArray = Object.keys(filterData)
     const filterList = filterArray.map((filterObject, index) => {
-        if (filterData[filterObject] !== null && filterData[filterObject] !== "" && filterData[filterObject] !== 0 && filterData[filterObject] !== false && filterData[filterObject] !== "0 0" && filterObject !== 'business_location') {
-            console.log(filterData[filterObject])
-
+        if (filterData[filterObject] !== null && filterData[filterObject] !== 'null' && filterData[filterObject] !== "" && filterData[filterObject] !== 0 && filterData[filterObject] !== false && filterData[filterObject] !== "0 0" && filterObject !== 'business_location') {
             let filter = setFormatFilter(filterObject, filterData[filterObject])
             return (
                 <div className={styles.FilterButton + " " + utilStyles.fontMobileSM + " " + utilStyles.backgroundColorTheme} key={filterObject + index}>

@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import { Row, Col, Image } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import Link from 'next/link'
+import EmptyComponent from '../../../Empty'
 
 export default function WebPromotionlist(props) {
 
@@ -120,16 +121,28 @@ export default function WebPromotionlist(props) {
     }
 
     return (
-        <Row xs={12} md={3} >
-            <Col style={{ padding: "0 1.2rem" }}>
-                {promotionsCardColumn1}
-            </Col>
-            <Col style={{ padding: "0 1.2rem" }}>
-                {promotionsCardColumn2}
-            </Col>
-            <Col style={{ padding: "0 1.2rem" }}>
-                {promotionsCardColumn3}
-            </Col>
-        </Row >
+        <>
+            {
+                props.newspaper_list.length > 0 ? (
+                    <Row xs={12} md={3} >
+                        <Col style={{ padding: "0 1.2rem" }}>
+                            {promotionsCardColumn1}
+                        </Col>
+                        <Col style={{ padding: "0 1.2rem" }}>
+                            {promotionsCardColumn2}
+                        </Col>
+                        <Col style={{ padding: "0 1.2rem" }}>
+                            {promotionsCardColumn3}
+                        </Col>
+                    </Row >
+
+                ) : (
+                    <div style={{ minHeight: "30vh" }}>
+                        <EmptyComponent />
+                    </div>
+                )
+            }
+        </>
+
     )
 }

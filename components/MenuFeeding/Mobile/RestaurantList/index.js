@@ -16,15 +16,8 @@ import restaurantService from '../../../../services/restaurant'
 import masterDataService from '../../../../services/masterData'
 import EmptyComponent from '../../../Empty'
 
-
-// Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
-// Geocode.setLanguage("th");
-// // Geocode.setRegion("es");
-// Geocode.setLocationType("ROOFTOP");
-// Geocode.enableDebug();
-
 export default function RestaurantListMobile(props) {
-    const { loading, restaurant_list, location_name, location_id , master_data_list } = props
+    const { loading, restaurant_list, location_name, location_id, master_data_list, user_location } = props
     const [modalShow, setModalShow] = React.useState(false);
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [totalResult, setTotalResult] = React.useState(0);
@@ -32,13 +25,11 @@ export default function RestaurantListMobile(props) {
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
     const [filter, setFilter] = React.useState({});
- 
+
 
     const searchFunc = () => {
         setModalShow(true)
     }
-
-
 
     useEffect(() => {
         if (restaurant_list.length !== 0) {
@@ -58,14 +49,23 @@ export default function RestaurantListMobile(props) {
     }, [restaurant_list])
 
     const onSearch = async (filterForm) => {
+        setSpinLoading(true)
         filterForm.business_location = locationId
         let filter = changeFormatFilter(filterForm)
+        if (filter.distance !== null) {
+            let splitDistanceArray = filter.distance.split(" ")
+            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.current_location = user_location
+        } else {
+            filter.current_location = null
+        }
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         setFilter(filterForm)
         console.log(locationListByFilter)
         setRestaurantList(locationListByFilter)
         setTotalResult(locationListByFilter.length)
+        setSpinLoading(false)
     }
 
     const renderRestaurantCard = (restaurantList) => {
@@ -170,6 +170,7 @@ export default function RestaurantListMobile(props) {
                 onHide={() => setModalShow(false)}
                 on_search={(filterForm) => onSearch(filterForm)}
                 filter_master_data_list={master_data_list}
+                user_location={user_location}
             />
         </Layout >
     )

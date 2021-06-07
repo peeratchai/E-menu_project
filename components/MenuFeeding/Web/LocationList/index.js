@@ -15,8 +15,8 @@ import masterDataService from '../../../../services/masterData'
 
 const { Option } = Select;
 
-export default function LocationListWeb() {
-
+export default function LocationListWeb(props) {
+    const { user_location } = props
     const [locationList, setLocationList] = React.useState([]);
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
@@ -84,12 +84,22 @@ export default function LocationListWeb() {
     }
 
     const onSearch = async (filterForm) => {
+        setLoading(true)
         console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
+        if (filter.distance !== null) {
+            let splitDistanceArray = filter.distance.split(" ")
+            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.current_location = user_location
+        } else {
+            filter.current_location = null
+        }
+
         console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
         setLocationList(locationListByFilter)
+        setLoading(false)
     }
 
 
@@ -125,6 +135,7 @@ export default function LocationListWeb() {
                             onSearch={(filterForm) => onSearch(filterForm)}
                             location_restaurant_in_maps={locationInMaps}
                             filter_master_data_list={masterDataList}
+                            user_location={user_location}
                         />
                     </Col>
 

@@ -10,22 +10,23 @@ import PointInMaps from '../../../PointInMaps'
 
 export default function Filter(props) {
 
-    const { location_restaurant_in_maps, filter_master_data_list } = props
+    const { location_restaurant_in_maps, filter_master_data_list, user_location } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState();
     const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
+    const defaultCenterMaps = { lat: 13.7641482, lng: 100.5388393 }
     const [form, setForm] = React.useState({
-        what: '',
-        where: '',
-        food_type: '',
-        payment_option: '',
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
         distance: 0,
         price_to_price_from: '0 0',
         is_open_now: false,
         have_parking: false,
-        sort_by: null
+        sort_by: null,
     })
-    const defaultCenterMaps = { lat: 13.7641482, lng: 100.5388393 }
+    
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
@@ -35,9 +36,15 @@ export default function Filter(props) {
         setform('price_to_price_from', price_from + " " + price_to)
     }
 
+    const [haveUserLocation, setHaveUserLocation] = React.useState(false)
+
     useEffect(() => {
         if (location_restaurant_in_maps) {
             setLocationInMaps(location_restaurant_in_maps)
+
+            if (user_location) {
+                setHaveUserLocation(true)
+            }
         }
     }, [props])
 
@@ -67,7 +74,6 @@ export default function Filter(props) {
     let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions) => (
         <option value={peymentOptions.name}>{peymentOptions.name}</option>
     ))
-
 
     return (
         <div>
@@ -136,7 +142,7 @@ export default function Filter(props) {
                 <div style={{ marginTop: "10px" }}>
                     <Form.Group >
                         <Form.Control as="select" onChange={(e) => setform('food_type', e.target.value)}>
-                            <option value={null} key="null">-</option>
+                            <option value="null" key="null">-</option>
                             {FootTypeDropDown}
                         </Form.Control>
                     </Form.Group>
@@ -160,7 +166,7 @@ export default function Filter(props) {
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
                             <Form.Control as="select" onChange={(e) => setform('payment_option', e.target.value)}>
-                                <option value={null}>-</option>
+                                <option value="null">-</option>
                                 {PeymentOptionsDropDown}
                             </Form.Control>
                         </Form.Group>
@@ -173,11 +179,16 @@ export default function Filter(props) {
                                             </div>
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
-                            <Form.Control as="select" onChange={(e) => setform('distance', e.target.value)}>
-                                <option value={null}>-</option>
+                            <Form.Control as="select" disabled={!haveUserLocation} onChange={(e) => setform('distance', e.target.value)} >
+                                <option value="null">-</option>
                                 {DistanceDropDown}
                             </Form.Control>
                         </Form.Group>
+                        {
+                            !haveUserLocation && (
+                                'Please allow to access your location it need to use in the filter.'
+                            )
+                        }
                     </div>
                 </div>
 
@@ -191,6 +202,6 @@ export default function Filter(props) {
                 </Button>
 
             </div>
-        </div>
+        </div >
     )
 }

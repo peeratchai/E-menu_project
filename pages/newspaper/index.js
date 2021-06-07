@@ -15,12 +15,19 @@ import changeFormatFilter from '../../services/changeFormatFilter'
 import { message, Spin } from 'antd';
 import masterDataService from '../../services/masterData'
 
+var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+};
+
 export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
-    const [newspaperList, setNewspaperList] = React.useState();
+    const [newspaperList, setNewspaperList] = React.useState([]);
     const [filter, setFilter] = React.useState({});
     const [loading, setLoading] = React.useState(false)
+    const [userLocation, setUserLocation] = React.useState()
     const [masterDataList, setMasterDataList] = React.useState({
         foodTypeMasterData: [],
         distanceMasterData: [],
@@ -32,8 +39,30 @@ export default function Newspaper() {
         console.log("test")
     }
 
+    function success(pos) {
+        var crd = pos.coords;
+
+        console.log("Your current position is:");
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+        console.log(`More or less ${crd.accuracy} meters.`);
+
+        let userLocation = `POINT(${crd.latitude + " " + crd.longitude})`
+        console.log('userLocation', userLocation)
+        setUserLocation(userLocation)
+    }
+
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
     useEffect(async () => {
         getInitialData()
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error, options)
+        } else {
+            alert('Sorry Not available!');
+        }
     }, [])
 
     const getInitialData = async () => {
@@ -84,6 +113,13 @@ export default function Newspaper() {
     const onSearch = async (filterForm) => {
         console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
+        if (filter.distance !== null) {
+            let splitDistanceArray = filter.distance.split(" ")
+            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.current_location = userLocation
+        } else {
+            filter.current_location = null
+        }
         console.log('filter', filter)
         setLoading(true)
         newspaperService.getNewspaperListBySearch(filter).then((promotions) => {
@@ -95,9 +131,7 @@ export default function Newspaper() {
             console.log('onSearch', error)
         })
     }
-    const responseFacebook = (response) => {
-        console.log(response);
-    }
+
     let component
     if (isMobileResolution) {
         //Layout for mobile
@@ -118,6 +152,7 @@ export default function Newspaper() {
                     onHide={() => setModalShow(false)}
                     onSearch={(form) => onSearch(form)}
                     filter_master_data_list={masterDataList}
+                    user_location={userLocation}
                 />
             </Layout>
         )
@@ -129,6 +164,7 @@ export default function Newspaper() {
                 <WebFilter
                     onSearch={(form) => onSearch(form)}
                     filter_master_data_list={masterDataList}
+                    user_location={userLocation}
                 />
                 <Spin spinning={loading} tip="Loading...">
                     <div style={{ backgroundColor: "white" }}>

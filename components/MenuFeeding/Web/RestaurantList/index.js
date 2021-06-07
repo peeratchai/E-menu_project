@@ -23,13 +23,14 @@ const { Option } = Select;
 
 export default function RestaurantListWeb(props) {
 
-    const { restaurant_list, location_name, location_id, loading, master_data_list } = props
+    const { restaurant_list, location_name, location_id, loading, master_data_list, user_location } = props
     const [restaurantList, setRestaurantList] = React.useState(null);
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
+    const [spinLoading, setSpinLoading] = React.useState(loading)
 
     useEffect(() => {
         if (restaurant_list.length !== 0) {
@@ -118,12 +119,22 @@ export default function RestaurantListWeb(props) {
     }
 
     const onSearch = async (filterForm) => {
+        setSpinLoading(true)
         filterForm.business_location = locationId
         let filter = changeFormatFilter(filterForm)
+        if (filter.distance !== null) {
+            let splitDistanceArray = filter.distance.split(" ")
+            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.current_location = user_location
+        } else {
+            filter.current_location = null
+        }
+        console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         console.log('filter', locationListByFilter)
         await getAddressOnGoogleMaps(locationListByFilter)
+        setSpinLoading(false)
     }
 
     const getAddressOnGoogleMaps = async (restaurantList) => {
@@ -169,6 +180,7 @@ export default function RestaurantListWeb(props) {
                         onSearch={(form) => onSearch(form)}
                         location_restaurant_in_maps={locationInMaps}
                         filter_master_data_list={master_data_list}
+                        user_location={user_location}
                     />
                 </Col>
                 {/* List Restaurant */}
@@ -196,7 +208,7 @@ export default function RestaurantListWeb(props) {
                         </Col>
                     </Row>
                     <div style={{ width: "100%" }}>
-                        <Spin spinning={loading} tip="Loading...">
+                        <Spin spinning={spinLoading} tip="Loading...">
                             <Row>
                                 {
                                     restaurantList !== null && restaurantList.length > 0 ? (
