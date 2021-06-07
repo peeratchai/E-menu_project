@@ -59,6 +59,7 @@ export default function RestaurantListMobile(props) {
         } else {
             filter.current_location = null
         }
+        filter.business_district = location_id
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         setFilter(filterForm)

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form, Button, Modal, Container } from 'react-bootstrap'
 import { Select, message } from 'antd'
-import adminService from '../../../services/admin'
 
 const { Option } = Select;
 
@@ -19,10 +18,18 @@ export default function BanUserModal(props) {
         }
         onHide()
     }
+    console.log('profile_all_user', profile_all_user)
+
+    const findUserId = (email) => {
+        let userId = profile_all_user.find((userDetail) => userDetail.email = email)
+        console.log(userId)
+        setUserId(userId)
+    }
 
     let dropdownUser = profile_all_user && profile_all_user.map((user) => (
-        <Option value={user.id}>{user.email}</Option>
+        <Option value={user.email} key={user.id}>{user.email}</Option>
     ))
+
 
     return (
 
@@ -48,9 +55,14 @@ export default function BanUserModal(props) {
                                 showSearch
                                 style={{ width: '100%' }}
                                 optionFilterProp="children"
-                                onChange={(value) => setUserId(value)}
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                onChange={(email) => findUserId(email)}
+                                filterOption={(input, option) => {
+                                    console.log('option', option)
+                                    console.log('input', input)
+                                    return (
+                                        option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    )
+                                }
                                 }
                             >
                                 {dropdownUser}

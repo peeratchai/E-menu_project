@@ -48,6 +48,7 @@ export default function RestaurantListWeb(props) {
                 renderRestaurantCard(restaurantList)
             }
         }
+        setSpinLoading(loading)
     }, [props])
 
     const setMaps = (restaurant_list) => {
@@ -129,6 +130,7 @@ export default function RestaurantListWeb(props) {
         } else {
             filter.current_location = null
         }
+        filter.business_district = location_id
         console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
