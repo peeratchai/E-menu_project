@@ -7,6 +7,7 @@ import React from 'react'
 import contactUsService from '../../services/contactUsService'
 import { message } from 'antd'
 import 'antd/dist/antd.css';
+import Link from 'next/link';
 
 export default function Contact() {
     const isMobileResolution = useMediaQuery(768)
@@ -101,7 +102,7 @@ export default function Contact() {
             {
                 !isMobileResolution ? (
                     //PC version
-                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", minHeight: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
+                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
                         <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
                             <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
                                 Contact Informations
@@ -110,15 +111,15 @@ export default function Contact() {
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                     </div>
                             <div style={{ marginTop: "50px" }}>
-                                <Button style={{ border: "none" }}>
-                                    Contact Us
-                                </Button>
+                                <Link href={process.env.FACEBOOK_PAGE_URL} passHref={true}>
+                                    <Button style={{ border: "none" }}>Contact Us</Button>
+                                </Link>
                             </div>
                         </div>
                     </div>
                 ) : (
                     //Mobile version
-                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", height: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
+                    <div style={{ backgroundImage: " url('/images/backgroundContactUs.jpg')", width: "100%", minHeight: "50vh", position: "relative", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover", opacity: "0.85" }}>
                         <div style={{ textAlign: "center", width: "100%", margin: "auto", padding: "10px", position: "relative" }}>
                             <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
                                 Contact Informations
@@ -127,9 +128,9 @@ export default function Contact() {
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                     </div>
                             <div style={{ marginTop: "50px" }}>
-                                <Button style={{ border: "none" }}>
-                                    Contact Us
-                        </Button>
+                                <Link href={process.env.FACEBOOK_PAGE_URL} passHref={true}>
+                                    <Button style={{ border: "none" }}>Contact Us</Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

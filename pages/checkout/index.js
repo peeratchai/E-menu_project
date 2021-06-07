@@ -151,9 +151,9 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
                         console.log('response', response)
                         setLoading(false)
-                        // router.push({
-                        //     pathname: "/orderHistory"
-                        // })
+                        router.push({
+                            pathname: "/orderHistory"
+                        })
                     }).catch(error => {
                         setLoading(false)
                         console.log('api/checkoutOrder', error)

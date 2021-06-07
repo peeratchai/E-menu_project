@@ -24,6 +24,7 @@ module.exports = {
         API_URL: 'https://cee-menu-tvh2o.ondigitalocean.app',
         // URL: 'http://localhost:3000',
         // API_URL: 'http://localhost:8080',
-        SECRET_COOKIE_PASSWORD: '2gyZ3GDw3LDCSCDhPmPDL3sjREVRXPr8'
+        SECRET_COOKIE_PASSWORD: '2gyZ3GDw3LDCSCDhPmPDL3sjREVRXPr8',
+        FACEBOOK_PAGE_URL: 'https://www.facebook.com/ceeMenu-104347888513882'
     },
 }
