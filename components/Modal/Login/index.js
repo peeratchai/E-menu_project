@@ -12,7 +12,7 @@ import fetchJson from '../../../lib/fetchJson'
 
 export default function LoginModal(props) {
 
-    const { mutateUser } = checkUserPermission()
+    const { user, mutateUser } = checkUserPermission()
     const { liffClientId } = props
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
@@ -118,10 +118,13 @@ export default function LoginModal(props) {
                 setRememberMeValue()
             }
         }
-        console.log('liffClientId', liffClientId)
-        if (liffClientId && liffClientId !== null) {
-            signInwithLine()
+        if (user) {
+            if (liffClientId && liffClientId !== null && !user.isLoggedIn) {
+                //// Automate signin with line when receive liffClientId from line and user not yet login
+                signInwithLine()
+            }
         }
+
     }, [props])
 
     const signinWithSocial = async (email, userId) => {
