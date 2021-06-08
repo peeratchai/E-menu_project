@@ -41,7 +41,13 @@ export default function LocationListWeb(props) {
         restaurantService.getLocationList().then((LocationList) => {
             setLocationList(LocationList)
             setMaps(LocationList)
-            setTotalResult(LocationList.length)
+            let totalResult = 0
+            LocationList.forEach((locationDetails) => {
+                if (locationDetails.total > 0) {
+                    totalResult++
+                }
+            })
+            setTotalResult(totalResult)
             setLoading(false)
         }).catch(error => {
             console.log(error)
@@ -98,33 +104,44 @@ export default function LocationListWeb(props) {
         console.log('filter', filter)
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
+        let totalResult = 0
+        locationListByFilter.forEach((locationDetails) => {
+            if (locationDetails.total > 0) {
+                totalResult++
+            }
+        })
+        setTotalResult(totalResult)
         setLocationList(locationListByFilter)
         setLoading(false)
     }
 
 
-    const locationCard = locationList && locationList.map((locationDetails) => (
-        <Col md={6} className={styles.colCard}>
-            <Link
-                href={{
-                    pathname: '/menuFeeding/restaurantList',
-                    query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location },
-                }}
-            >
-                <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
-                    <div className={utilStyles.img_hover_zoom} style={{ height: "70%" }}>
-                        <Card.Img variant="top" src={locationDetails.image_url} style={{ height: "100%" }} />
-                    </div>
-                    <Card.Body className={utilStyles.cardBody}>
-                        <Card.Text>
-                            <div className={utilStyles.cardTitle}>{locationDetails.title}</div>
-                            <div className={utilStyles.cardText}>{locationDetails.total} Listing</div>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </Link>
-        </Col>
-    ))
+    const locationCard = locationList && locationList.map((locationDetails) => {
+        if (locationDetails.total > 0) {
+            return (
+                <Col md={6} className={styles.colCard}>
+                    <Link
+                        href={{
+                            pathname: '/menuFeeding/restaurantList',
+                            query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location },
+                        }}
+                    >
+                        <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>
+                            <div className={utilStyles.img_hover_zoom} style={{ height: "70%" }}>
+                                <Card.Img variant="top" src={locationDetails.image_url} style={{ height: "100%" }} />
+                            </div>
+                            <Card.Body className={utilStyles.cardBody}>
+                                <Card.Text>
+                                    <div className={utilStyles.cardTitle}>{locationDetails.title}</div>
+                                    <div className={utilStyles.cardText}>{locationDetails.total} Listing</div>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Link>
+                </Col>
+            )
+        }
+    })
 
     return (
         <Layout containerType="center">
