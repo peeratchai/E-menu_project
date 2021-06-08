@@ -6,7 +6,7 @@ export default withSession(async (req, res) => {
   let user = req.session.get('user')
 
   try {
-    user = { ...user, accessToken: accessToken }
+    user = { isLoggedIn: true, accessToken: accessToken }
     req.session.set('user', user)
     await req.session.save()
     res.json(user)
