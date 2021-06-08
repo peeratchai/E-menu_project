@@ -13,7 +13,7 @@ import fetchJson from '../../../lib/fetchJson'
 export default function LoginModal(props) {
 
     const { mutateUser } = checkUserPermission()
-
+    const { liffClientId } = props
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
     const [forgotForm, setForgotForm] = React.useState({})
@@ -27,7 +27,6 @@ export default function LoginModal(props) {
     const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
-    const [facebookLoginOn, setFacebookLoginOn] = React.useState(false)
 
     const signInwithLine = async () => {
 
@@ -107,7 +106,6 @@ export default function LoginModal(props) {
             }
         } else {
             liff.login();
-
         }
     };
 
@@ -120,7 +118,11 @@ export default function LoginModal(props) {
                 setRememberMeValue()
             }
         }
-    }, [])
+        console.log('liffClientId', liffClientId)
+        if (liffClientId && liffClientId !== null) {
+            signInwithLine()
+        }
+    }, [props])
 
     const signinWithSocial = async (email, userId) => {
 

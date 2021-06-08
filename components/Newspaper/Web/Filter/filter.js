@@ -53,8 +53,6 @@ export default function WebFilter(props) {
             })
         })
 
-        console.log('filterOptions', filterOptions)
-
         setFilterOptions(filterOptions)
     }
 
