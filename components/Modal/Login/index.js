@@ -1,7 +1,7 @@
 
 import { Button, Modal, Row, Col, Image, Form } from 'react-bootstrap';
 import React, { useEffect } from 'react'
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import authentication from '../../../services/authentication'
 import styles from './index.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,11 +25,14 @@ export default function LoginModal(props) {
     const [signupErrors, setSignupErrors] = React.useState({});
     const [forgotErrors, setForgotErrors] = React.useState({});
     const [isRememberMe, setIsRememberMe] = React.useState(false);
+    const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
+    const [loading, setLoading] = React.useState(false)
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
 
     const signInwithLine = async () => {
-
+        setLoading(true)
+        setInProcessLineSignIn(true)
         const liff = window.liff;
 
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
@@ -104,8 +107,12 @@ export default function LoginModal(props) {
 
                 window.location.reload()
             }
+            setLoading(false)
+            setInProcessLineSignIn(false)
         } else {
             liff.login();
+            setLoading(false)
+            setInProcessLineSignIn(false)
         }
     };
 
@@ -119,7 +126,7 @@ export default function LoginModal(props) {
             }
         }
         if (user) {
-            if (liffClientId && liffClientId !== null && !user.isLoggedIn) {
+            if (liffClientId && liffClientId !== null && !user.isLoggedIn && !inProcessLineSignIn) {
                 //// Automate signin with line when receive liffClientId from line and user not yet login
                 signInwithLine()
             }
@@ -143,6 +150,7 @@ export default function LoginModal(props) {
     }
 
     const responseFacebook = async (response) => {
+        setLoading(true)
         console.log(response);
 
         if (response.id) {
@@ -203,11 +211,12 @@ export default function LoginModal(props) {
 
                 // window.location.reload()
             }
+
+            setLoading(false)
         } else {
+            setLoading(false)
             console.log('error');
         }
-
-
     }
 
     const changeTab = (tabName) => {
@@ -348,7 +357,7 @@ export default function LoginModal(props) {
 
         } else {
             const { email, password } = signinForm
-
+            setLoading(true)
             try {
                 await mutateUser(
                     fetchJson('/api/login', {
@@ -371,6 +380,7 @@ export default function LoginModal(props) {
                     }
                     props.check_permission()
                     window.location.reload()
+                    setLoading(false)
                     message.success('Sign-in successful.')
                 }).catch((error) => {
                     if (error.data === 401) {
@@ -435,232 +445,233 @@ export default function LoginModal(props) {
             dialogClassName='custom-dialog-login'
         >
             <Modal.Body style={{ padding: "65px 30px 45px" }}>
-                <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
-                    <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
-                        <Col style={{ cursor: "pointer" }} onClick={() => { changeTab('login') }}>
-                            <h4 style={{ fontWeight: "1000", margin: "0" }}> {title[tab]} </h4>
-                        </Col>
-                    </div>
-                </Row>
-                {
-                    tab === 'login' ? (
-                        <>
-                            <Row style={{ marginBottom: "1rem" }}>
-                                <Col>
-                                    Log In Your Account
-                                </Col>
-                            </Row>
-                            <Form style={{ marginBottom: "20px" }} onSubmit={signinWithEmail}>
-                                <Row>
+                <Spin spinning={loading} tip="Loading...">
+                    <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
+                        <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
+                            <Col style={{ cursor: "pointer" }} onClick={() => { changeTab('login') }}>
+                                <h4 style={{ fontWeight: "1000", margin: "0" }}> {title[tab]} </h4>
+                            </Col>
+                        </div>
+                    </Row>
+                    {
+                        tab === 'login' ? (
+                            <>
+                                <Row style={{ marginBottom: "1rem" }}>
                                     <Col>
-                                        <Form.Group >
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Email"
-                                                defaultValue={email}
-                                                onChange={(e) => setSigninField('email', e.target.value)}
-                                                isInvalid={!!signinErrors.email}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {signinErrors.email}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
+                                        Log In Your Account
+                                </Col>
+                                </Row>
+                                <Form style={{ marginBottom: "20px" }} onSubmit={signinWithEmail}>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group >
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Email"
+                                                    defaultValue={email}
+                                                    onChange={(e) => setSigninField('email', e.target.value)}
+                                                    isInvalid={!!signinErrors.email}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {signinErrors.email}
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
 
-                                        <Form.Group>
-                                            <Form.Control
-                                                type="password"
-                                                placeholder="Password"
-                                                defaultValue={password}
-                                                onChange={(e) => setSigninField('password', e.target.value)}
-                                                isInvalid={!!signinErrors.password}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {signinErrors.password}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                        <Form.Group>
-                                            <Row xs={2}>
-                                                <Col>
-                                                    <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(!isRememberMe) }} label="Remember me" />
-                                                </Col>
-                                                <Col style={{ textAlign: "right" }}>
-                                                    <a href="#" onClick={() => { changeTab('forgotPassword') }}>Forgot password?</a>
-                                                </Col>
-                                            </Row>
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
-                                            LOG IN
+                                            <Form.Group>
+                                                <Form.Control
+                                                    type="password"
+                                                    placeholder="Password"
+                                                    defaultValue={password}
+                                                    onChange={(e) => setSigninField('password', e.target.value)}
+                                                    isInvalid={!!signinErrors.password}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {signinErrors.password}
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Form.Group>
+                                                <Row xs={2}>
+                                                    <Col>
+                                                        <Form.Check type="checkbox" checked={isRememberMe} onChange={() => { setIsRememberMe(!isRememberMe) }} label="Remember me" />
+                                                    </Col>
+                                                    <Col style={{ textAlign: "right" }}>
+                                                        <a href="#" onClick={() => { changeTab('forgotPassword') }}>Forgot password?</a>
+                                                    </Col>
+                                                </Row>
+                                            </Form.Group>
+                                            <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
+                                                LOG IN
                                         </Button>
+                                        </Col>
+                                    </Row>
+
+                                </Form>
+                                <Row style={{ height: "50px", }}>
+                                    <Col style={{ width: "100%", height: "100%" }}>
+                                        <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
+                                            <span>
+                                                Or Log In With
+                                        </span>
+                                        </div>
                                     </Col>
                                 </Row>
-
-                            </Form>
-                            <Row style={{ height: "50px", }}>
-                                <Col style={{ width: "100%", height: "100%" }}>
-                                    <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
-                                        <span>
-                                            Or Log In With
-                                        </span>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginBottom: "15px" }}>
-                                <Col>
-                                    <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                                            language="en_US"
-                                            scope="public_profile,email"
-                                            responseHandler={responseFacebook}
-                                            xfbml={true}
-                                            fields="name,email,picture.height(400).width(300)"
-                                            version="v2.5"
-                                            className="facebook-login"
-                                            buttonText={buttonText} />
-                                        <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <div style={{ textAlign: "center" }}>
-                                        Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => changeTabToRegister()}>Sign Up</span>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </>
-                    ) : notDisplay
-                }
-
-                {
-                    tab === 'register' ? (
-                        <>
-                            <Row style={{ marginBottom: "1rem" }}>
-                                <Col>
-                                    Create Your Account
-                                </Col>
-                            </Row>
-                            <Form style={{ marginBottom: "20px" }} onSubmit={signupWithEmail}>
-                                <Row>
+                                <Row style={{ marginBottom: "15px" }}>
                                     <Col>
-                                        <Form.Group controlId="validationEmail" >
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Email Address"
-                                                onChange={(e) => setSignupField('email', e.target.value)}
-                                                isInvalid={!!signupErrors.email}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {signupErrors.email}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                        <Form.Group controlId="validationPassword">
-                                            <Form.Control
-                                                type="password"
-                                                placeholder="Password"
-                                                onChange={(e) => setSignupField('password', e.target.value)}
-                                                isInvalid={!!signupErrors.password}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {signupErrors.password}
-                                            </Form.Control.Feedback>
-
-                                        </Form.Group>
-                                        <Form.Group controlId="validationRetypePassword">
-                                            <Form.Control
-                                                type="password"
-                                                placeholder="Retype Password"
-                                                value={retypePassword}
-                                                onChange={(e) => setSignupField('retypePassword', e.target.value)}
-                                                isInvalid={!!signupErrors.retypePassword}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {signupErrors.retypePassword}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className={styles.button} >
-                                            CREATE AN ACCOUNT
-                                        </Button>
+                                        <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                            <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                                language="en_US"
+                                                scope="public_profile,email"
+                                                responseHandler={responseFacebook}
+                                                xfbml={true}
+                                                fields="name,email,picture.height(400).width(300)"
+                                                version="v2.5"
+                                                className="facebook-login"
+                                                buttonText={buttonText} />
+                                            <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        </div>
                                     </Col>
                                 </Row>
-                            </Form>
-
-                            <Row style={{ height: "50px" }}>
-                                <Col style={{ width: "100%", height: "100%" }}>
-                                    <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
-                                        <span>
-                                            Or Sign Up With
-                                        </span>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginBottom: "15px" }}>
-                                <Col>
-                                    <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                        <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                                            language="en_US"
-                                            scope="public_profile,email"
-                                            responseHandler={responseFacebook}
-                                            xfbml={true}
-                                            fields="name,email,picture.height(400).width(300)"
-                                            version="v2.5"
-                                            className="facebook-login"
-                                            buttonText={buttonText} />
-                                        <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <div style={{ textAlign: "center" }} >
-                                        Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab()}>Login</span>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </>
-                    ) : notDisplay
-                }
-                {
-                    tab === 'forgotPassword' ? (
-                        <>
-                            <Row style={{ marginBottom: "1rem", textAlign: "center" }}>
-                                <Col>
-                                    Don't worry! Just fill in your email and we'll send
-                                    you a link to reset your password
-                                </Col>
-                            </Row>
-                            <Form style={{ marginBottom: "20px" }} onSubmit={resetPassword}>
                                 <Row>
                                     <Col>
-                                        <Form.Group>
-                                            <Form.Label><b>EMAIL ADDRESS</b></Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Email"
-                                                onChange={(e) => setForgotField('email', e.target.value)}
-                                                isInvalid={!!forgotErrors.email}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {forgotErrors.email}
-                                            </Form.Control.Feedback>
-
-                                        </Form.Group>
                                         <div style={{ textAlign: "center" }}>
-                                            <Button variant="primary" type="submit" className={styles.button}>
-                                                Change password
-                                            </Button>
-                                        </div>
-                                        <br />
-                                        <div style={{ textAlign: "right", cursor: "pointer", color: "#1890FF" }} className={utilStyles.fontsize_sm} onClick={() => changeTab('login')}>
-                                            {"< Back"}
+                                            Don't have an account ? <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => changeTabToRegister()}>Sign Up</span>
                                         </div>
                                     </Col>
                                 </Row>
+                            </>
+                        ) : notDisplay
+                    }
 
-                            </Form>
-                        </>
-                    ) : notDisplay
-                }
+                    {
+                        tab === 'register' ? (
+                            <>
+                                <Row style={{ marginBottom: "1rem" }}>
+                                    <Col>
+                                        Create Your Account
+                                </Col>
+                                </Row>
+                                <Form style={{ marginBottom: "20px" }} onSubmit={signupWithEmail}>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="validationEmail" >
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Email Address"
+                                                    onChange={(e) => setSignupField('email', e.target.value)}
+                                                    isInvalid={!!signupErrors.email}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {signupErrors.email}
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Form.Group controlId="validationPassword">
+                                                <Form.Control
+                                                    type="password"
+                                                    placeholder="Password"
+                                                    onChange={(e) => setSignupField('password', e.target.value)}
+                                                    isInvalid={!!signupErrors.password}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {signupErrors.password}
+                                                </Form.Control.Feedback>
 
+                                            </Form.Group>
+                                            <Form.Group controlId="validationRetypePassword">
+                                                <Form.Control
+                                                    type="password"
+                                                    placeholder="Retype Password"
+                                                    value={retypePassword}
+                                                    onChange={(e) => setSignupField('retypePassword', e.target.value)}
+                                                    isInvalid={!!signupErrors.retypePassword}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {signupErrors.retypePassword}
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Button variant="primary" type="submit" className={styles.button} >
+                                                CREATE AN ACCOUNT
+                                        </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+
+                                <Row style={{ height: "50px" }}>
+                                    <Col style={{ width: "100%", height: "100%" }}>
+                                        <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
+                                            <span>
+                                                Or Sign Up With
+                                        </span>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row style={{ marginBottom: "15px" }}>
+                                    <Col>
+                                        <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                            <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                                language="en_US"
+                                                scope="public_profile,email"
+                                                responseHandler={responseFacebook}
+                                                xfbml={true}
+                                                fields="name,email,picture.height(400).width(300)"
+                                                version="v2.5"
+                                                className="facebook-login"
+                                                buttonText={buttonText} />
+                                            <Image onClick={() => signInwithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <div style={{ textAlign: "center" }} >
+                                            Get <span style={{ color: '#1890ff', cursor: "pointer" }} onClick={() => onChangeToLoginTab()}>Login</span>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </>
+                        ) : notDisplay
+                    }
+                    {
+                        tab === 'forgotPassword' ? (
+                            <>
+                                <Row style={{ marginBottom: "1rem", textAlign: "center" }}>
+                                    <Col>
+                                        Don't worry! Just fill in your email and we'll send
+                                        you a link to reset your password
+                                </Col>
+                                </Row>
+                                <Form style={{ marginBottom: "20px" }} onSubmit={resetPassword}>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group>
+                                                <Form.Label><b>EMAIL ADDRESS</b></Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Email"
+                                                    onChange={(e) => setForgotField('email', e.target.value)}
+                                                    isInvalid={!!forgotErrors.email}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {forgotErrors.email}
+                                                </Form.Control.Feedback>
+
+                                            </Form.Group>
+                                            <div style={{ textAlign: "center" }}>
+                                                <Button variant="primary" type="submit" className={styles.button}>
+                                                    Change password
+                                            </Button>
+                                            </div>
+                                            <br />
+                                            <div style={{ textAlign: "right", cursor: "pointer", color: "#1890FF" }} className={utilStyles.fontsize_sm} onClick={() => changeTab('login')}>
+                                                {"< Back"}
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </Form>
+                            </>
+                        ) : notDisplay
+                    }
+                </Spin>
             </Modal.Body>
         </Modal >
     );

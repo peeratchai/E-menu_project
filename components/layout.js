@@ -74,7 +74,6 @@ export default function Layout(props) {
         }
 
         profileService.getProfile(accessToken).then((userProfile) => {
-            console.log('userProfile', userProfile)
             let isPartner = false
             let isAdmin = false
             userProfile.roles.forEach((userRole) => {

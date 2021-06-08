@@ -7,7 +7,6 @@ export default async function checkLogin() {
         return accessTokenlocalStorage
     } else {
         //// non login
-        console.log('non login')
         let accessToken = await authentication.loginWithGuestUser()
         return accessToken
     }

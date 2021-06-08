@@ -41,12 +41,6 @@ export default function Newspaper() {
 
     function success(pos) {
         var crd = pos.coords;
-
-        console.log("Your current position is:");
-        console.log(`Latitude : ${crd.latitude}`);
-        console.log(`Longitude: ${crd.longitude}`);
-        console.log(`More or less ${crd.accuracy} meters.`);
-
         let userLocation = `POINT(${crd.latitude + " " + crd.longitude})`
         console.log('userLocation', userLocation)
         setUserLocation(userLocation)
@@ -66,18 +60,18 @@ export default function Newspaper() {
     }, [])
 
     const getInitialData = async () => {
-        setLoading(true)
         await getNewspaperlist()
         await getFilterMasterData()
-        setLoading(false)
     }
 
     const getNewspaperlist = async () => {
         setLoading(true)
         newspaperService.getNewspaperList().then((newspaperList) => {
             setNewspaperList(newspaperList)
+            setLoading(false)
             console.log('newspaperList', newspaperList)
         }).catch(error => {
+            setLoading(false)
             console.log('getNewspaperlist error', error)
             if (error.response.status === 403) {
                 message.error('403 Forbidden Error')

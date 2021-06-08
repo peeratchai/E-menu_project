@@ -35,7 +35,6 @@ export default function LocationListWeb(props) {
         setLoading(true)
         await getLocationList()
         await getFilterMasterData()
-        setLoading(false)
     }
 
     const getLocationList = async () => {
@@ -43,6 +42,7 @@ export default function LocationListWeb(props) {
             setLocationList(LocationList)
             setMaps(LocationList)
             setTotalResult(LocationList.length)
+            setLoading(false)
         }).catch(error => {
             console.log(error)
             message.error('Cannot connect server.')
