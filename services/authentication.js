@@ -19,7 +19,7 @@ const authentication = {
             })
             .catch(function (error) {
                 console.log(error)
-                return error
+                return error.response.status
             });
 
         return response
@@ -103,7 +103,7 @@ const authentication = {
         let data = {
             email: 'guest@test.com',
             password: 'p@assword_guestuser'
-        }       
+        }
         // let data = {
         //     email: 'markpeeratchai@gmail.com',
         //     password: '123'
@@ -130,7 +130,13 @@ const authentication = {
     },
     signupWithSocial: async function (data) {
         return await sendRequest.postNonToken('/api/auth/signup-with-social', data)
-    }
+    },
+
+    verifyEmail: async function (data) {
+        return await sendRequest.postNonToken('/api/auth/verify-email', data)
+    },
+
+
 }
 
 export default authentication

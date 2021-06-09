@@ -237,7 +237,6 @@ export default function ApprovePromotions(props) {
                     </TabPane>
                 </Tabs>
             </Spin>
-
             <ViewPromoteModal
                 show={viewPromoteShowModal}
                 onHide={() => setViewPromoteShowModal(false)}
@@ -245,6 +244,5 @@ export default function ApprovePromotions(props) {
                 title="Promote Details"
             />
         </>
-
     )
 }

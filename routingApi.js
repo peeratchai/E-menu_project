@@ -354,6 +354,10 @@ module.exports = {
         {
             source: '/api/get/master_data/payment-option',
             destination: API_URL + '/payment-option'
-        }
+        },
+        {
+            source: '/api/auth/verify-email',
+            destination: API_URL + '/profile/verfiy'
+        },
     ]
 }

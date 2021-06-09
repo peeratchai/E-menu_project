@@ -52,6 +52,7 @@ export default function BanUserManagement(props) {
 
     const getProfileAllUser = () => {
         adminService.getProfileAllUser().then((allUser) => {
+            console.log('allUser',allUser)
             setProfileAllUser(allUser)
         }).catch(error => {
             console.log('getAllUser error', error)

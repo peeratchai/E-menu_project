@@ -18,16 +18,17 @@ export default function BanUserModal(props) {
         }
         onHide()
     }
-    console.log('profile_all_user', profile_all_user)
 
-    const findUserId = (email) => {
-        let userId = profile_all_user.find((userDetail) => userDetail.email = email)
-        console.log(userId)
+    const findUserId = (userId) => {
+        console.log('userId', userId)
+        console.log('profile_all_user', profile_all_user)
+        let user = profile_all_user.find((userDetail) => userDetail.id == userId)
+        console.log(user)
         setUserId(userId)
     }
 
     let dropdownUser = profile_all_user && profile_all_user.map((user) => (
-        <Option value={user.email} key={user.id}>{user.email}</Option>
+        <Option value={user.id} key={user.id}>{user.email}</Option>
     ))
 
 
@@ -57,8 +58,6 @@ export default function BanUserModal(props) {
                                 optionFilterProp="children"
                                 onChange={(email) => findUserId(email)}
                                 filterOption={(input, option) => {
-                                    console.log('option', option)
-                                    console.log('input', input)
                                     return (
                                         option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                     )

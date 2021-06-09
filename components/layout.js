@@ -22,7 +22,7 @@ export default function Layout(props) {
     const { user, mutateUser } = checkUserPermission()
 
     const router = useRouter()
-    const { liffClientId } = router.query;
+    const { liffClientId, verifyEmail } = router.query;
 
     //// Set state
     const [modalShow, setModalShow] = React.useState(false);
@@ -47,6 +47,10 @@ export default function Layout(props) {
 
     useEffect(() => {
         console.log('user', user)
+
+        if (verifyEmail === '10asdokzclskf0efsf-sef0xkczlv0efie0-s0esfklkvadfadffas-adfvshbostohtrodh') {
+            message.success('Verify email successful.Please sign in again.')
+        }
         if (user) {
             setIsLogin(user.isLoggedIn)
             checkPermission(user)

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import EditPromoteModal from '../../Modal/EditPromoteModal'
+import EditApprovedPromoteModal from '../../Modal/EditApprovedPromoteModal'
 import ViewPromoteModal from '../../Modal/ViewPromoteModal'
 import { Table, Tabs, Space, Tag, Spin, Popconfirm, message } from 'antd';
 import partner from '../../../services/partner'
@@ -12,6 +13,7 @@ export default function PromoteList(props) {
     const { current_tab, restaurant_id } = props
     const [viewPromoteShowModal, setViewPromoteShowModal] = React.useState(false);
     const [editPromoteShowModal, setEditPromoteShowModal] = React.useState(false);
+    const [editApprovedPromoteShowModal, setEditApprovedPromoteShowModal] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [pendingPromotions, setpendingPromotions] = React.useState([])
     const [approvedPromotions, setApprovedPromotions] = React.useState([])
@@ -23,7 +25,6 @@ export default function PromoteList(props) {
     })
 
     useEffect(() => {
-        console.log('current_tab', current_tab)
         if (current_tab === 'promoteList') {
             getPromotions()
         }
@@ -198,6 +199,9 @@ export default function PromoteList(props) {
             key: 'action',
             render: (promotion, record) => (
                 <Space size="middle">
+                    <Tag color="blue" key={record.length + 1} style={{ cursor: "pointer" }} onClick={() => (setPromotionSelected(promotion), setEditApprovedPromoteShowModal(true))}>
+                        Edit
+                    </Tag>
                     <Tag color="blue" key={record.length + 1} style={{ cursor: "pointer" }} onClick={() => (setPromotionSelected(promotion), setViewPromoteShowModal(true))}>
                         View Content
                     </Tag>
@@ -230,6 +234,14 @@ export default function PromoteList(props) {
             <EditPromoteModal
                 show={editPromoteShowModal}
                 onHide={() => setEditPromoteShowModal(false)}
+                promotion_selected={promotionSelected}
+                title="Promote Details"
+                restaurant_id={restaurant_id}
+                get_promotions={getPromotions}
+            />
+            <EditApprovedPromoteModal
+                show={editApprovedPromoteShowModal}
+                onHide={() => setEditApprovedPromoteShowModal(false)}
                 promotion_selected={promotionSelected}
                 title="Promote Details"
                 restaurant_id={restaurant_id}

@@ -323,28 +323,28 @@ export default function LoginModal(props) {
         if (Object.keys(newErrors).length > 0) {
             setSignupErrors(newErrors)
         } else {
-            try {
-                const { email, password } = signupForm
-                console.log(email, password)
-                let response = await authentication.signupWithEmail(email, password)
-                let accessToken = response.data.accessToken
-                await mutateUser(
-                    fetchJson('/api/saveToken', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ accessToken: accessToken }),
-                    })
-                )
-                localStorage.setItem('accessToken', accessToken)
-                props.onHide()
-                props.setlogin(true)
-
-                window.location.reload()
-            } catch (error) {
+            const { email, password } = signupForm
+            console.log(email, password)
+            let response = await authentication.signupWithEmail(email, password)
+            if (response === 409) {
                 const newErrors = {}
                 newErrors.email = 'Email already registered!'
                 setSignupErrors(newErrors)
-
+            } else {
+                // let accessToken = response.data.accessToken
+                // await mutateUser(
+                //     fetchJson('/api/saveToken', {
+                //         method: 'POST',
+                //         headers: { 'Content-Type': 'application/json' },
+                //         body: JSON.stringify({ accessToken: accessToken }),
+                //     })
+                // )
+                // localStorage.setItem('accessToken', accessToken)
+                // props.onHide()
+                // props.setlogin(true)
+                // window.location.reload()
+                message.success('Please check your email to verify your account.', 5)
+                props.onHide()
             }
         }
     }
@@ -384,6 +384,7 @@ export default function LoginModal(props) {
                     message.success('Sign-in successful.')
                 }).catch((error) => {
                     if (error.data === 401) {
+                        setLoading(false)
                         const newErrors = {}
                         newErrors.password = 'Email or Password incorrect.'
                         setSigninErrors(newErrors)

@@ -359,17 +359,6 @@ export default function AdminEditProfileModal(props) {
                                     autoComplete="off"
                                 />
                             </Form.Group>
-                            <Row style={{ marginBottom: ".5rem" }}>
-                                <Col>
-                                    Sync with Facebook or Line
-                                            </Col>
-                            </Row>
-                            <Row style={{ marginBottom: "16px" }}>
-                                <Col>
-                                    <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                    <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                </Col>
-                            </Row>
 
                             <div style={{ textAlign: "right" }}>
                                 <Button variant="primary" style={{ marginRight: "15px" }} onClick={() => saveProfile()} >
