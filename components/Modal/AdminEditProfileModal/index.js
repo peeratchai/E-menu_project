@@ -290,7 +290,7 @@ export default function AdminEditProfileModal(props) {
                             <Row>
                                 <Col>
                                     <Form.Group controlId="First Name">
-                                        <Form.Label>Fist name</Form.Label>
+                                        <Form.Label>First name</Form.Label>
                                         <Form.Control
                                             type="text"
                                             onChange={(e) => setProfileform('first_name', e.target.value)}
@@ -330,7 +330,7 @@ export default function AdminEditProfileModal(props) {
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="Gender">
-                                        <Form.Label>Gander</Form.Label>
+                                        <Form.Label>Gender</Form.Label>
                                         <div>
                                             <Radio.Group value={profileForm.gender} onChange={(e) => onChangeGender(e)}>
                                                 <Radio value="male">ชาย</Radio>

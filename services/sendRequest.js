@@ -37,7 +37,7 @@ const sendRequest = {
             .catch(async function (error) {
                 let status = error.response.status
                 if (status === 401) {
-                    console.log('Token is expire.')
+                    //console.log('Token is expire.')
                     let newAccessToken = await reLogin()
                     let config = {
                         headers: {
@@ -87,7 +87,7 @@ const sendRequest = {
             .catch(async function (error) {
                 let status = error.response.status
                 if (status === 401) {
-                    console.log('Token is expire.')
+                    //console.log('Token is expire.')
                     let newAccessToken = await reLogin()
                     let config = {
                         headers: {
@@ -123,7 +123,7 @@ const sendRequest = {
             .catch(async function (error) {
                 let status = error.response.status
                 if (status === 401) {
-                    console.log('Token is expire.')
+                    //console.log('Token is expire.')
                     let newAccessToken = await reLogin()
                     let config = {
                         headers: {
@@ -160,7 +160,7 @@ const sendRequest = {
             .catch(async function (error) {
                 let status = error.response.status
                 if (status === 401) {
-                    console.log('Token is expire.')
+                    //console.log('Token is expire.')
                     let newAccessToken = await reLogin()
                     let config = {
                         headers: {

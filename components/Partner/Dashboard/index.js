@@ -158,7 +158,7 @@ export default function Dashboard(props) {
                             </Row>
                             <Row>
                                 <Col xs={6} style={{ fontSize: "14px" }}>
-                                    <b>Order Num : {order.order_number}</b>
+                                    <b>Order No : {order.order_number}</b>
                                 </Col>
                                 <Col xs={6}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>

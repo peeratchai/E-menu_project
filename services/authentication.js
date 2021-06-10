@@ -100,10 +100,17 @@ const authentication = {
             }
         }
 
+        // let data = {
+        //     email: 'guest@test.com',
+        //     password: 'p@assword_guestuser'
+        // }
+
         let data = {
-            email: 'guest@test.com',
-            password: 'p@assword_guestuser'
+            "email": "guest_user@test.com",
+            "password": "123"
         }
+
+
         // let data = {
         //     email: 'markpeeratchai@gmail.com',
         //     password: '123'
