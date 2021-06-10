@@ -364,3 +364,31 @@ div.ant-row.ant-form-item {
   background-color: white !important;
   border: none !important;
 }
+
+.menu-item {
+  display: inline-flex;
+  height: 40px;
+  padding: 15px;
+  align-items: center;
+  border-radius: 25px;
+  margin-left: 10px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  display: inline-flex;
+  height: 40px;
+  padding: 15px;
+  align-items: center;
+  border-radius: 25px;
+  margin-left: 10px;
+  color: white;
+  background-color: #ff4a4f;
+  cursor: pointer;
+}
+
+.scroll-menu-arrow {
+  padding: 20px;
+  cursor: pointer;
+}

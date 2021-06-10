@@ -20,15 +20,70 @@ import OrderMenuModal from '../../../Modal/OrderMenuModal'
 import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
 import moment from 'moment'
+import ScrollMenu from 'react-horizontal-scrolling-menu';
 
 const { Meta } = Cardantd;
+// const list = [
+//     { name: 'item1' },
+//     { name: 'item2' },
+//     { name: 'item3' },
+//     { name: 'item4' },
+//     { name: 'item5' },
+//     { name: 'item6' },
+//     { name: 'item7' },
+//     { name: 'item8' },
+//     { name: 'item9' }
+// ];
+const MenuItem = ({ text, selected }) => {
+    return <div
+        className={`menu-item ${selected ? 'active' : ''}`}
+    >{text}</div>;
+};
+export const Menu = (categoryList, selected) =>
+    categoryList.map((el, index) => {
+        const { categoryName } = el;
 
+        return <MenuItem text={categoryName} key={categoryName} selected={selected} />;
+    });
+
+
+const Arrow = ({ text, className }) => {
+    return (
+        <div
+            className={className}
+        >{text}</div>
+    );
+};
+
+
+const ArrowLeft = <LeftOutlined className='arrow-prev' />
+const ArrowRight = <RightOutlined className='arrow-next' />
+
+const getDimensions = ele => {
+    const { height } = ele.getBoundingClientRect();
+    const offsetTop = ele.offsetTop;
+    const offsetBottom = offsetTop + height;
+
+    return {
+        height,
+        offsetTop,
+        offsetBottom,
+    };
+};
+
+const scrollTo = ele => {
+    ele.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+};
 
 export default function RestaurantDetailWeb(props) {
 
     const { loading } = props
     const router = useRouter()
     ////Set State
+    const [selected, setSelected] = React.useState('item5')
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
     const [restaurantDetail, setRestaurantDetail] = React.useState({
         name: "",
@@ -50,7 +105,7 @@ export default function RestaurantDetailWeb(props) {
     const [menuEachCategory, setMenuEachCategory] = React.useState("");
     const [widthCategoryNav, setWidthCategoryNav] = React.useState();
     const [widthCategoryList, setWidthCategoryList] = React.useState();
-    const [categoryList, setCategoryList] = React.useState([{ categoryName: 'เมนูยำ', isActive: true }, { categoryName: 'เมนูข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน7', isActive: false }, { categoryName: 'เมนูแซลม่อน8', isActive: false }, { categoryName: 'เมนูแซลม่อน9', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }]);
+    const [categoryList, setCategoryList] = React.useState([]);
     const [restaurantBannerPicture, setRestaurantBannerPicture] = React.useState()
     const [locationName, setLocationName] = React.useState()
     const [locationId, setLocationId] = React.useState()
@@ -58,11 +113,14 @@ export default function RestaurantDetailWeb(props) {
     const [lat, setLat] = React.useState(13.8537968);
     const [lng, setLng] = React.useState(100.3764991);
     const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
+    const [visibleSection, setVisibleSection] = React.useState();
+
     ////Set Ref
     const refCategoryNav = React.useRef();
     const refCategoryList = React.useRef();
     const refEachCategory = React.useRef({});
-    const refsCategory = useRef([]);
+    const refsCategory = React.useRef([]);
+    const headerRef = React.useRef(null);
     ////
 
     useEffect(() => {
@@ -70,7 +128,6 @@ export default function RestaurantDetailWeb(props) {
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
             restaurant_detail.menu_categories.sort((a, b) => a.sequence_number - b.sequence_number).map((category, index) => {
-                console.log('category', category)
                 //// set initial isActive for button category 
                 if (index === 0) {
                     categoryList.push({ categoryName: category.name, isActive: true })
@@ -81,9 +138,10 @@ export default function RestaurantDetailWeb(props) {
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
+            console.log("categoryList", categoryList)
             setCategoryList(categoryList)
             renderMenuList(restaurant_detail)
-            activeCategory()
+            // activeCategory()
             setRestaurantDetail(restaurant_detail)
             setRestaurantBanner(restaurant_detail)
 
@@ -96,7 +154,38 @@ export default function RestaurantDetailWeb(props) {
 
         }
 
-    }, [props, widthCategoryList, widthCategoryNav])
+        const handleScroll = () => {
+            const { height: headerHeight } = getDimensions(headerRef.current);
+            const scrollPosition = window.scrollY - headerHeight - 120;
+            console.log('scrollPosition', scrollPosition)
+            let indexOfCategory = null
+            const selected = refsCategory.current.find((ref, index) => {
+                const ele = ref;
+                if (ele) {
+                    const { offsetBottom, offsetTop } = getDimensions(ele);
+                    if (scrollPosition > offsetTop && scrollPosition < offsetBottom) {
+                        indexOfCategory = index
+                        console.log('offsetTop', offsetTop)
+                    }
+                    return scrollPosition > offsetTop && scrollPosition < offsetBottom;
+                }
+            });
+
+            if (selected && categoryList[indexOfCategory].categoryName !== visibleSection) {
+                setVisibleSection(categoryList[indexOfCategory].categoryName);
+                setSelected(categoryList[indexOfCategory].categoryName)
+            } else if (!selected && visibleSection) {
+                setVisibleSection(undefined);
+            }
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+
+    }, [props, widthCategoryList, widthCategoryNav, visibleSection])
 
     const setRestaurantBanner = (restaurant_detail) => {
         let restaurantBanner = restaurant_detail.restaurant_pictures.map((picture) => (
@@ -157,7 +246,7 @@ export default function RestaurantDetailWeb(props) {
         let tempCategoryNav = categoryList.map((category, index) =>
         (
             <div ref={(elementRef) => refEachCategory.current[index] = elementRef} className={setClassNameCategoryNav(category, index) + " " + utilStyles.font_size_md + " " + styles.category_nav} key={category.categoryName + index} onClick={() => onClickCategory(index)}>
-                { category.categoryName}
+                {category.categoryName}
             </div >
         ))
 
@@ -181,8 +270,18 @@ export default function RestaurantDetailWeb(props) {
     }
 
     const scrollToCategorySection = (index) => {
+
         if (refsCategory.current[index] !== undefined) {
-            refsCategory.current[index].scrollIntoView({ behavior: 'smooth' })
+            const element = document.getElementById(categoryList[index].categoryName);
+            const yOffset = -90;
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            // refsCategory.current[index].scrollIntoView({
+            //     behavior: 'smooth',
+            //     block: "start"
+            // })
+            // window.scrollTop(-80)
         }
     }
 
@@ -254,10 +353,7 @@ export default function RestaurantDetailWeb(props) {
             )
 
             return (
-                <div>
-                    <div ref={(categoryRef) => (refsCategory.current[categoryIndex] = categoryRef)} style={{ position: "relative", top: '-65px' }} key={category.categoryName + categoryIndex}>
-
-                    </div>
+                <div id={category.name} ref={(categoryRef) => (refsCategory.current[categoryIndex] = categoryRef)} style={{ position: "relative" }} key={category.categoryName + categoryIndex}>
                     <Row className={styles.category_section} >
                         <Col xs={12}>
                             <div className={utilStyles.font_size_xl + " " + styles.categoryHeader}>
@@ -292,6 +388,14 @@ export default function RestaurantDetailWeb(props) {
             </Row>
         </div>
     ))
+
+    const onSelect = (key) => {
+        console.log('key', key)
+        setSelected(key);
+        let index = categoryList.findIndex((category) => category.categoryName === key)
+        console.log('index', index)
+        scrollToCategorySection(index);
+    }
 
     return (
         <Layout>
@@ -357,9 +461,12 @@ export default function RestaurantDetailWeb(props) {
                                         </Col>
                                     </Row>
                                 </div>
+
+
+
                                 <Row style={{ marginTop: "15px" }}>
                                     <Col md={8}>
-                                        <div className={styles.nav_category_layout} >
+                                        {/* <div className={styles.nav_category_layout} >
                                             <div className={styles.nav_category} ref={refCategoryNav}>
                                                 <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
                                                     {categoryNav}
@@ -371,14 +478,30 @@ export default function RestaurantDetailWeb(props) {
                                                     <RightOutlined className={styles.nav_scroller_icon} />
                                                 </Button>
                                             </div>
+                                        </div> */}
+
+
+
+                                        <div className={styles.nav_category_layout} ref={headerRef}>
+                                            <ScrollMenu
+                                                data={Menu(categoryList, selected)}
+                                                arrowLeft={ArrowLeft}
+                                                arrowRight={ArrowRight}
+                                                selected={selected}
+                                                scrollToSelected={true}
+                                                onSelect={onSelect}
+                                                wheel={false}
+                                                hideSingleArrow={true}
+                                                hideArrows={true}
+                                                alignCenter={true}
+                                            />
                                         </div>
 
-                                        {/* Menu list */}
                                         <div className={styles.menu_list}>
                                             {menuEachCategory}
                                         </div>
-
                                     </Col>
+
 
                                     <Col md={4} className={utilStyles.font_size_md} style={{ marginTop: "20px" }}>
                                         <div style={{ backgroundColor: "#f0f2f3", marginBottom: "30px" }}>
