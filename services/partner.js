@@ -43,7 +43,8 @@ const partnerSerivce = {
     },
 
     editCategory: async (categoryId, data) => {
-        return await sendRequest.patch('/api/update_category/' + categoryId, data)
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/update_category/' + categoryId, data, ContentType)
     },
 
     deleteCategory: async (categoryId) => {

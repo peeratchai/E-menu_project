@@ -60,8 +60,7 @@ export default function EditPromoteModal(props) {
                 status: status
             }
 
-            console.log('image', image)
-            console.log('promotion_image', promotion_image)
+            console.log('data', data)
             partnerSerivce.editPromotion(promotionId, data).then(() => {
                 get_promotions()
                 onHide()

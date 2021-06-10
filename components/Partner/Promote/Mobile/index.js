@@ -7,11 +7,16 @@ import React, { useEffect } from 'react'
 import styles from './index.module.css'
 
 export default function MobileComponent(props) {
+    const { restaurant_id, promote_image_url } = props
     const [promoteImageUrl, setPromoteImageUrl] = React.useState('')
+    const [disable, setDisable] = React.useState(true)
     useEffect(() => {
-        if (props && props.promote_image_url !== undefined) {
+        if (promote_image_url) {
             const { promote_image_url } = props
             setPromoteImageUrl(promote_image_url)
+        }
+        if (restaurant_id) {
+            setDisable(false)
         }
     }, [props])
 
@@ -33,7 +38,7 @@ export default function MobileComponent(props) {
                                 onChange={(e) => props.handle_upload(e)}
                                 style={{ width: "100%" }}
                             >
-                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
+                                <Button disabled={disable} icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Promote Image</Button>
                             </Upload>
                         </Col>
                     </Row>
@@ -48,6 +53,7 @@ export default function MobileComponent(props) {
                                 rows={4}
                                 isInvalid={!!props.errors.promotedContents}
                                 value={props.promote_form.promotedContents}
+                                disabled={disable}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {props.errors.promotedContents}
@@ -61,13 +67,14 @@ export default function MobileComponent(props) {
                                 rows={2}
                                 isInvalid={!!props.errors.bannerText}
                                 value={props.promote_form.bannerText}
+                                disabled={disable}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {props.errors.bannerText}
                             </Form.Control.Feedback>
                         </Form.Group>
                         <div style={{ textAlign: "right" }}>
-                            <Button variant="primary" type="submit">
+                            <Button disabled={disable} variant="primary" type="submit">
                                 Post
                             </Button>
                         </div>

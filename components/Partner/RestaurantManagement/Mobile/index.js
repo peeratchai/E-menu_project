@@ -668,15 +668,18 @@ export default function MobileComponent(props) {
 
                             </Col>
                             <Col xs={4}>
-                                <Link
-                                    href={{
-                                        pathname: '/menuFeeding/restaurantList/' + restaurant_name,
-                                        query: { restaurantId: restaurant_id, tableId: tableIdSelected },
-                                    }}
-                                >
-                                    <a className={utilStyles.font_size_sm} style={{ lineHeight: 2 }}>Take new order</a>
-                                </Link>
-                                {/* <Button>Take order</Button> */}
+                                {
+                                    restaurant_id && (
+                                        <Link
+                                            href={{
+                                                pathname: '/menuFeeding/restaurantList/' + restaurant_name,
+                                                query: { restaurantId: restaurant_id, tableId: tableIdSelected },
+                                            }}
+                                        >
+                                            <a className={utilStyles.font_size_sm} style={{ lineHeight: 2 }}>Take order</a>
+                                        </Link>
+                                    )
+                                }
                             </Col>
                         </Row>
                     </Form>

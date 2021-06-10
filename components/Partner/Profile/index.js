@@ -229,6 +229,7 @@ export default function Profile(props) {
                 spin_loading={loading}
                 update_restaurant_details={updateRestaurantDetails}
                 business_district={businessDistrict}
+                restaurant_id={restaurant_id}
             />
     } else {
         profileComponent =
@@ -240,6 +241,7 @@ export default function Profile(props) {
                 spin_loading={loading}
                 update_restaurant_details={updateRestaurantDetails}
                 business_district={businessDistrict}
+                restaurant_id={restaurant_id}
             />
     }
     return profileComponent

@@ -112,11 +112,15 @@ export default function Menu(props) {
             key: 'name',
         },
         {
+            title: 'Sequence number',
+            dataIndex: 'sequence_number',
+            key: 'sequence_number',
+        },
+        {
             title: 'Action',
             key: 'webAction',
             responsive: ['sm'],
             render: (category) => {
-                // console.log('category', category)
                 return (
                     <Space size="middle">
                         <Switch checked={category.is_active} onChange={(checked) => onChangeStatusCategory(checked, category)} />
@@ -165,25 +169,32 @@ export default function Menu(props) {
         };
     });
 
-    const handleEditCategory = async (category) => {
-
-        let categoryId = category.id
+    const handleEditCategory = async (categoryForm) => {
+        const { categoryName, sequenceNumber } = categoryForm
+        console.log('categoryForm', categoryForm)
+        console.log('sequenceNumber', sequenceNumber)
+        let categoryId = selectedCategory.id
         let data = {
             "restaurant": restaurant_id,
-            "name": category.name,
-            "is_active": category.is_active
+            "name": categoryName,
+            "sequence_number": parseInt(sequenceNumber),
+            "is_active": selectedCategory.is_active
         }
+        console.log('data', data)
         setSpinLoading(true)
         partnerService.editCategory(categoryId, data).then(() => {
             getAllMenu()
         })
     }
 
-    const handleAddCategory = async (categoryName) => {
+    const handleAddCategory = async (categoryForm) => {
+        const { categoryName, sequenceNumber } = categoryForm
         if (restaurant_id) {
             let data = {
                 "restaurant": restaurant_id,
-                "name": categoryName
+                "name": categoryName,
+                "sequence_number": parseInt(sequenceNumber),
+                "is_active": true
             }
             partnerService.addCategory(data).then(() => {
                 message.success('Add category successful.')
@@ -210,6 +221,7 @@ export default function Menu(props) {
                 set_selected_menu={(menu) => setSelectedMenu(menu)}
                 show_edit_menu_modal={() => setEditMenuModalShow(true)}
                 delete_menu={(menu) => deleteMenu(menu)}
+                restaurant_id={restaurant_id}
             />)
     } else {
         menuComponent = (
@@ -222,6 +234,7 @@ export default function Menu(props) {
                 set_selected_menu={(menu) => setSelectedMenu(menu)}
                 show_edit_menu_modal={() => setEditMenuModalShow(true)}
                 delete_menu={(menu) => deleteMenu(menu)}
+                restaurant_id={restaurant_id}
             />)
     }
 

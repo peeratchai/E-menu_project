@@ -69,7 +69,8 @@ export default function RestaurantDetailWeb(props) {
         if (props && props.restaurant_detail !== undefined) {
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
-            restaurant_detail.menu_categories.map((category, index) => {
+            restaurant_detail.menu_categories.sort((a, b) => a.sequence_number - b.sequence_number).map((category, index) => {
+                console.log('category', category)
                 //// set initial isActive for button category 
                 if (index === 0) {
                     categoryList.push({ categoryName: category.name, isActive: true })

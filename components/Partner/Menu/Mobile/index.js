@@ -8,14 +8,20 @@ import React, { useEffect } from 'react'
 
 export default function MobileComponent(props) {
 
-    let { columns_table, category, spin_loading } = props
+    let { columns_table, category, spin_loading, restaurant_id } = props
     let { show_add_Category_Modal, on_change_menu_status, show_edit_menu_modal, set_selected_menu, delete_menu } = props
-
+    const [disable, setDisable] = React.useState(true)
     const categoryData = category === undefined ? [] : category
     // add key to each category 
     categoryData.map((category, index) => {
         category.key = index
     })
+
+    useEffect(() => {
+        if (restaurant_id) {
+            setDisable(false)
+        }
+    }, [props])
 
     const showEditmenuModal = (menu) => {
         set_selected_menu(menu)
@@ -68,7 +74,7 @@ export default function MobileComponent(props) {
         <>
             <div className={styles.tab}>
                 <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                    <Button className={utilStyles.fontContent} onClick={() => show_add_Category_Modal(true)}>Add Category</Button>
+                    <Button disabled={disable} className={utilStyles.fontContent} onClick={() => show_add_Category_Modal(true)}>Add Category</Button>
                 </div>
                 <Spin spinning={spin_loading} tip="Loading...">
                     <Table columns={columns_table} dataSource={categoryData} expandable={{ expandedRowRender }} scroll={{ x: 'max-content' }} />

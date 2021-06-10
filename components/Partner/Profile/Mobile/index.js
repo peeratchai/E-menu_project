@@ -13,7 +13,7 @@ import LocationModal from '../../../Modal/Location'
 const { Option } = Select;
 
 export default function MobileProfileComponent(props) {
-    let { restaurant_form, spin_loading, business_district } = props
+    let { restaurant_form, spin_loading, business_district, restaurant_id } = props
     let { check_before_upload, update_restaurant_details } = props
     const defaultImage = "data:image/png;base64,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"
     const [previewVisible, setPreviewVisible] = React.useState(false);
@@ -24,6 +24,7 @@ export default function MobileProfileComponent(props) {
     const [formErrors, setFormErrors] = React.useState({});
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
     const [showLocationModal, setShowLocationModal] = React.useState(false)
+    const [disable, setDisable] = React.useState(true)
 
     const handleCancel = () => {
         setPreviewVisible(false)
@@ -35,6 +36,9 @@ export default function MobileProfileComponent(props) {
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
             setRestaurantLogoUrl(restaurant_form.image_url)
+        }
+        if (restaurant_id) {
+            setDisable(false)
         }
     }, [props])
 
@@ -90,7 +94,7 @@ export default function MobileProfileComponent(props) {
                     </Row>
                     <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
                         <Col>
-                            <TimePicker value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
+                            <TimePicker disabled={disable} value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
                         </Col>
                     </Row>
                 </>
@@ -130,6 +134,7 @@ export default function MobileProfileComponent(props) {
         });
     }
     const filterProps = {
+        disabled: disable,
         showArrow: true,
         mode: 'multiple',
         style: {
@@ -233,7 +238,7 @@ export default function MobileProfileComponent(props) {
                                                 style={{ width: "100%" }}
                                             // onPreview={(e) => onPreview(e)}
                                             >
-                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
+                                                <Button disabled={disable} icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
                                             </Upload>
                                         </Col>
                                     </Row>
@@ -257,6 +262,7 @@ export default function MobileProfileComponent(props) {
                                         onPreview={(e) => onPreviewImage(e)}
                                         onChange={(e) => uploadRestuarantBannerImage(e)}
                                         className="upload-restaurant-list"
+                                        disabled={disable}
                                     >
                                         {restaurantBannerFileList.length >= 3 ? null : uploadButton}
                                     </Upload>
@@ -294,6 +300,7 @@ export default function MobileProfileComponent(props) {
                                         onChange={(e) => setRestaurantDetail('name', e.target.value)}
                                         isInvalid={!!formErrors.name}
                                         value={restaurantForm.name}
+                                        disabled={disable}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {formErrors.name}
@@ -305,14 +312,16 @@ export default function MobileProfileComponent(props) {
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('description', e.target.value)}
                                         value={restaurantForm.description}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="location">
-                                    <Form.Label>Location <Button onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
+                                    <Form.Label>Location <Button disabled={disable} onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
                                     <Form.Control
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('location', e.target.value)}
                                         value={restaurantForm.location}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="businessDistrict">
@@ -328,6 +337,7 @@ export default function MobileProfileComponent(props) {
                                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                             }
                                             value={restaurantForm.business_district}
+                                            disabled={disable}
                                         >
                                             {businessDistrictDropdown}
                                         </Select>
@@ -339,6 +349,7 @@ export default function MobileProfileComponent(props) {
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('phone', e.target.value)}
                                         value={restaurantForm.phone}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="webSiteUrl">
@@ -347,6 +358,7 @@ export default function MobileProfileComponent(props) {
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('website', e.target.value)}
                                         value={restaurantForm.website}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="facebookURL">
@@ -355,6 +367,7 @@ export default function MobileProfileComponent(props) {
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('facebook', e.target.value)}
                                         value={restaurantForm.facebook}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="twitter">
@@ -363,6 +376,7 @@ export default function MobileProfileComponent(props) {
                                         type="text"
                                         onChange={(e) => setRestaurantDetail('instragram', e.target.value)}
                                         value={restaurantForm.instragram}
+                                        disabled={disable}
                                     />
                                 </Form.Group>
                                 <Form.Group>
@@ -378,7 +392,7 @@ export default function MobileProfileComponent(props) {
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Parking</Form.Label>
-                                    <Form.Check type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
+                                    <Form.Check disabled={disable} type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
                                 </Form.Group>
                                 <Form.Group controlId="priceRange">
                                     <Form.Label>Price Range (Generated by system)</Form.Label>
@@ -389,7 +403,7 @@ export default function MobileProfileComponent(props) {
                                 </Form.Group>
 
                                 <div style={{ textAlign: "right" }}>
-                                    <Button variant="primary" onClick={() => saveProfile()}>
+                                    <Button variant="primary" disabled={disable} onClick={() => saveProfile()}>
                                         Save
                                     </Button>
                                 </div>

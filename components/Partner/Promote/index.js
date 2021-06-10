@@ -125,6 +125,7 @@ export default function Promote(props) {
                 handle_upload={handleUpload}
                 set_form={(fieldName, value) => setform(fieldName, value)}
                 add_promotion={addPromotion}
+                restaurant_id={restaurant_id}
             />
         )
     } else {
@@ -137,6 +138,7 @@ export default function Promote(props) {
                 handle_upload={handleUpload}
                 set_form={(fieldName, value) => setform(fieldName, value)}
                 add_promotion={addPromotion}
+                restaurant_id={restaurant_id}
             />
         )
     }

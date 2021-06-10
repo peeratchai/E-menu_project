@@ -359,5 +359,9 @@ module.exports = {
             source: '/api/auth/verify-email',
             destination: API_URL + '/profile/verfiy'
         },
+        {
+            source: '/api/get/promotion/admin',
+            destination: API_URL + '/promotion/admin'
+        },
     ]
 }

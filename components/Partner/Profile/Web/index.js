@@ -13,7 +13,7 @@ import LocationModal from '../../../Modal/Location'
 const { Option } = Select;
 
 export default function WebProfileComponent(props) {
-    let { restaurant_form, spin_loading, business_district } = props
+    let { restaurant_form, spin_loading, business_district, restaurant_id } = props
     let { check_before_upload, update_restaurant_details } = props
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
@@ -24,6 +24,7 @@ export default function WebProfileComponent(props) {
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
     const [showLocationModal, setShowLocationModal] = React.useState(false)
     const dayArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    const [disable, setDisable] = React.useState(true)
 
     const handleCancel = () => {
         setPreviewVisible(false)
@@ -34,6 +35,9 @@ export default function WebProfileComponent(props) {
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
             setRestaurantLogoUrl(restaurant_form.image_url)
+        }
+        if (restaurant_id) {
+            setDisable(false)
         }
     }, [props])
 
@@ -86,7 +90,7 @@ export default function WebProfileComponent(props) {
                     {BusinessHourDay.day}
                 </Col>
                 <Col xs={9}>
-                    <TimePicker value={moment(BusinessHourDay.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker value={moment(BusinessHourDay.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
+                    <TimePicker disabled={disable} value={moment(BusinessHourDay.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(BusinessHourDay.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
                 </Col>
             </Row>
         )
@@ -124,6 +128,7 @@ export default function WebProfileComponent(props) {
         });
     }
     const paymentProps = {
+        disabled: disable,
         showArrow: true,
         mode: 'multiple',
         style: {
@@ -224,7 +229,7 @@ export default function WebProfileComponent(props) {
                                                 style={{ width: "100%" }}
                                             // onPreview={(e) => onPreview(e)}
                                             >
-                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
+                                                <Button disabled={disable} icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
                                             </Upload>
                                         </Col>
                                     </Row>
@@ -248,6 +253,7 @@ export default function WebProfileComponent(props) {
                                         onPreview={(e) => onPreviewImage(e)}
                                         onChange={(e) => uploadRestuarantBannerImage(e)}
                                         className="upload-restaurant-list"
+                                        disabled={disable}
                                     >
                                         {restaurantBannerFileList.length >= 3 ? null : uploadButton}
                                     </Upload>
@@ -287,6 +293,7 @@ export default function WebProfileComponent(props) {
                                     onChange={(e) => setRestaurantDetail('name', e.target.value)}
                                     isInvalid={!!formErrors.name}
                                     value={restaurantForm.name}
+                                    disabled={disable}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {formErrors.name}
@@ -298,14 +305,16 @@ export default function WebProfileComponent(props) {
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('description', e.target.value)}
                                     value={restaurantForm.description}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group controlId="location">
-                                <Form.Label>Location <Button onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
+                                <Form.Label>Location <Button disabled={disable} onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
                                 <Form.Control
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('location', e.target.value)}
                                     value={restaurantForm.location}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group controlId="businessDistrict">
@@ -321,6 +330,7 @@ export default function WebProfileComponent(props) {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                         value={restaurantForm.business_district}
+                                        disabled={disable}
                                     >
                                         {businessDistrictDropdown}
                                     </Select>
@@ -332,6 +342,7 @@ export default function WebProfileComponent(props) {
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('phone', e.target.value)}
                                     value={restaurantForm.phone}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group controlId="webSiteUrl">
@@ -340,6 +351,7 @@ export default function WebProfileComponent(props) {
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('website', e.target.value)}
                                     value={restaurantForm.website}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group controlId="facebookURL">
@@ -348,6 +360,7 @@ export default function WebProfileComponent(props) {
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('facebook', e.target.value)}
                                     value={restaurantForm.facebook}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group controlId="twitter">
@@ -356,6 +369,7 @@ export default function WebProfileComponent(props) {
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('instragram', e.target.value)}
                                     value={restaurantForm.instragram}
+                                    disabled={disable}
                                 />
                             </Form.Group>
                             <Form.Group>
@@ -371,7 +385,7 @@ export default function WebProfileComponent(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Parking</Form.Label>
-                                <Form.Check type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
+                                <Form.Check disabled={disable} type="checkbox" checked={restaurantForm.have_parking} onChange={(e) => setRestaurantDetail('have_parking', e.target.checked)} label="Have Parking" />
                             </Form.Group>
                             <Form.Group controlId="priceRange">
                                 <Form.Label>Price Range (Generated by system)</Form.Label>
@@ -382,9 +396,9 @@ export default function WebProfileComponent(props) {
                             </Form.Group>
 
                             <div style={{ textAlign: "right" }}>
-                                <Button variant="primary" onClick={() => saveProfile()}>
+                                <Button variant="primary" disabled={disable} onClick={() => saveProfile()}>
                                     Save
-                            </Button>
+                                </Button>
                             </div>
                         </Form>
                     </Col>

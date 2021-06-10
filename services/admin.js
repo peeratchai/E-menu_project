@@ -26,8 +26,8 @@ const adminService = {
         return response
     },
 
-    getAllPromotions: async () => {
-        return await sendRequest.get('/api/get/all_promotion')
+    getAllPromotionsAdmin: async () => {
+        return await sendRequest.get('/api/get/promotion/admin')
     },
 
     updatePromotionStatus: async (promotionId, data) => {

@@ -23,6 +23,7 @@ export default function WebComponent(props) {
     const [dragging, setDragging] = React.useState(false);
     const [zoneNumberSelected, setZoneNumberSelected] = React.useState(zone_number_selected);
     const [zoneSelected, setZoneSelected] = React.useState()
+    const [disable, setDisable] = React.useState(true)
     useEffect(() => {
         let containerWidth = refTableManagement.current.offsetWidth
         // 50 is padding left and right
@@ -41,6 +42,9 @@ export default function WebComponent(props) {
                 setZoneSelected(undefined)
                 setTable([])
             }
+        }
+        if (restaurant_id) {
+            setDisable(false)
         }
     }, [zone])
 
@@ -244,10 +248,10 @@ export default function WebComponent(props) {
                 </Col>
                 <Col xs={4}>
                     <div style={{ textAlign: "right" }}>
-                        <Button onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
+                        <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
                             New table
                         </Button>
-                        <Button onClick={() => updatePositionTable()}>
+                        <Button disabled={disable} onClick={() => updatePositionTable()}>
                             Save
                         </Button>
                     </div>
