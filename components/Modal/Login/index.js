@@ -155,18 +155,18 @@ export default function LoginModal(props) {
 
         if (response.id) {
             console.log('login success');
-            const { email, userID, picture, accessToken } = response
-            let responseSignin = await signinWithSocial(email, userID)
+            const { email, id, picture, accessToken } = response
+            let responseSignin = await signinWithSocial(email, id)
             console.log('responseSignin', responseSignin);
 
             if (responseSignin === 401) {
-                let api_url = `https://graph.facebook.com/${userID}?fields=first_name,last_name&access_token=${accessToken}`
+                let api_url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${accessToken}`
                 const { first_name, last_name } = await authentication.getUserProfileFacebook(api_url)
 
                 let signupForm = {
                     "email": email,
                     "username": email,
-                    "social_id": userID,
+                    "social_id": id,
                     "first_name": first_name,
                     "last_name": last_name,
                     "avatar": picture.data.url,

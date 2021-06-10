@@ -25,27 +25,31 @@ export default function LocationModal(props) {
     }, [props])
 
     const changeFormatLocation = () => {
-        let splitLocation = restaurant_location.split(' ');
-        let lat = splitLocation[0].split('(')
-        lat = lat[1]
-        let lng = splitLocation[1].split(')')
-        lng = lng[0]
+        try {
+            let splitLocation = restaurant_location.split(' ');
+            let lat = splitLocation[0].split('(')
+            lat = lat[1]
+            let lng = splitLocation[1].split(')')
+            lng = lng[0]
 
-        if (isNaN(parseFloat(lat))) {
-            lat = 0
-        } else {
-            lat = parseFloat(lat)
+            if (isNaN(parseFloat(lat))) {
+                lat = 0
+            } else {
+                lat = parseFloat(lat)
+            }
+            if (isNaN(parseFloat(lng))) {
+                lng = 0
+            } else {
+                lng = parseFloat(lng)
+            }
+            setRestaurantLocation({
+                lat: lat,
+                lng: lng
+            })
+        } catch (error) {
+            console.log('error', error)
         }
-        if (isNaN(parseFloat(lng))) {
-            lng = 0
-        } else {
-            lng = parseFloat(lng)
 
-        }
-        setRestaurantLocation({
-            lat: lat,
-            lng: lng
-        })
     }
 
     return (

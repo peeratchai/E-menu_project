@@ -27,7 +27,8 @@ export default function EditBusinessDistrictModal(props) {
                 title: businessDistrictSelected.title,
                 description: businessDistrictSelected.description,
                 location: businessDistrictSelected.location,
-                image_url: businessDistrictSelected.image_url
+                image_url: businessDistrictSelected.image_url,
+                is_active: businessDistrictSelected.is_active
             })
             setBusinessDistrictImage(businessDistrictSelected.image_url)
         }

@@ -50,6 +50,7 @@ const adminService = {
         formData.append("location", data.location);
         formData.append("district", null);
         formData.append("image_url", data.image_url);
+        formData.append("is_active", data.is_active);
 
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
@@ -59,7 +60,7 @@ const adminService = {
         return await sendRequest.patch('/api/edit_business_district/' + businessDistrictId, formData)
     },
     deleteBusinessDistrict: async function (businessDistrictId) {
-        return await sendRequest.delete('/api/delete_business_district/' + businessDistrictId, data)
+        return await sendRequest.delete('/api/delete_business_district/' + businessDistrictId)
     },
     getAllProfile: async function () {
         return await sendRequest.get('/api/get/all_profile')

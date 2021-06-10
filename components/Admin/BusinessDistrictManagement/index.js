@@ -1,6 +1,6 @@
 
 import 'antd/dist/antd.css';
-import { Table, Space, Switch, Tag, message, Spin ,Popconfirm} from 'antd';
+import { Table, Space, Switch, Tag, message, Spin, Popconfirm } from 'antd';
 import { Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import adminService from '../../../services/admin'
@@ -43,9 +43,11 @@ export default function BusinessDistrictManagement(props) {
             image_url: image_url_formData,
             is_active: checked
         }
+        console.log('data', data)
+        console.log('businessDistrict', businessDistrict)
         adminService.editBusinessDistrict(data, businessDistrict.id).then(() => {
             getAllLocation()
-            message.sucess('Update status successful.')
+            message.success('Update status successful.')
         }).catch(error => {
             console.log('onChangeBusinessDistrictStatus error', error)
             message.error('Cannot update status.')
@@ -55,7 +57,7 @@ export default function BusinessDistrictManagement(props) {
     const onDeleteBusinessDistrict = (businessDistrictId) => {
         adminService.deleteBusinessDistrict(businessDistrictId).then(() => {
             getAllLocation()
-            message.sucess('Update status successful.')
+            message.success('Update status successful.')
         }).catch(error => {
             console.log('onChangeBusinessDistrictStatus error', error)
             message.error('Cannot update status.')
@@ -129,7 +131,7 @@ export default function BusinessDistrictManagement(props) {
     }
 
     const editBusinessDistrict = async (formData) => {
-        const { name, title, description, location, image_url } = formData
+        const { name, title, description, location, image_url ,is_active} = formData
         console.log('formData', formData)
         let image_url_formData
         if (formData.image_base64) {
@@ -143,7 +145,8 @@ export default function BusinessDistrictManagement(props) {
             title: title,
             description: description,
             location: location,
-            image_url: image_url_formData
+            image_url: image_url_formData,
+            is_active: is_active
         }
         let response = await adminService.editBusinessDistrict(data, businessDistrictSelected.id)
         console.log('response', response)
