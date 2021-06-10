@@ -15,7 +15,7 @@ import partnerSerivce from '../../../services/partner'
 export default function Restaurant() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName, restaurantId, tableId } = router.query;
+    const { locationId, locationName, restaurantId, tableId, tableName } = router.query;
     ////Set State
     const [restaurantDetail, setRestaurantDetail] = React.useState()
     const [loading, setLoading] = React.useState(false)
@@ -38,38 +38,36 @@ export default function Restaurant() {
         getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
             if (typeof window !== 'undefined') {
                 if (tableId !== undefined) {
-                    partnerSerivce.getTableByTableId(tableId).then(async (table) => {
-                        console.log('getTableByTableId response is :', table)
-                        if (table) {
-                            saveTableOnScanQrCode().then((response) => {
-                                console.log('response', response)
-                                message.success(`You've checked in ${table.name} at ${restaurantDetail.name}. Let's start ordering!`, 4)
-                                // let basket = window.localStorage.getItem('basket');
-                                // try {
-                                //     basket = JSON.parse(basket)
-                                //     console.log('basket', basket)
-                                //     if (basket) {
-                                //         try {
-                                //             let order = basket.order
-                                //             console.log('order', order)
-                                //             if (order.length > 0) {
-                                //                 router.push({
-                                //                     pathname: "/checkout"
-                                //                 })
-                                //             }
-                                //         } catch (error) {
-                                //             console.log('error', error)
-                                //         }
-                                //     }
-                                // } catch (error) {
-                                //     console.log('error', error)
-                                // }
-                                // console.log('saveTableOnScanQrCode')
-                            }).catch(error => {
-                                console.log('error', error)
-                            })
-
+                    saveTableOnScanQrCode().then((response) => {
+                        console.log('response', response)
+                        if (tableName) {
+                            message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                        } else {
+                            message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
                         }
+                        // let basket = window.localStorage.getItem('basket');
+                        // try {
+                        //     basket = JSON.parse(basket)
+                        //     console.log('basket', basket)
+                        //     if (basket) {
+                        //         try {
+                        //             let order = basket.order
+                        //             console.log('order', order)
+                        //             if (order.length > 0) {
+                        //                 router.push({
+                        //                     pathname: "/checkout"
+                        //                 })
+                        //             }
+                        //         } catch (error) {
+                        //             console.log('error', error)
+                        //         }
+                        //     }
+                        // } catch (error) {
+                        //     console.log('error', error)
+                        // }
+                        // console.log('saveTableOnScanQrCode')
+                    }).catch(error => {
+                        console.log('error', error)
                     })
                 }
             }

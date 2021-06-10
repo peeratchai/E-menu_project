@@ -81,8 +81,8 @@ export default function Dashboard(props) {
             order.order_items.forEach((orderItem, index) => {
 
                 if (order.order_items.length === 1) {
-                    date = moment(order.created_date).format('DD-MM-YYYY')
-                    period = moment(order.created_date).format('hh:mm:ss') + ' - ' + moment(order.complete_date).format('hh:mm:ss')
+                    date = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('DD-MM-YYYY')
+                    period = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss') + ' - ' + moment(order.complete_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss')
                     tableNo = order.restaurant_table.name
                     userId = order.user.id
                     menuName = orderItem.menu.name
@@ -91,8 +91,8 @@ export default function Dashboard(props) {
                     csvData.push([date, period, tableNo, userId, menuName, price, total])
                 } else {
                     if (index === 0) {
-                        date = moment(order.created_date).format('DD-MM-YYYY')
-                        period = moment(order.created_date).format('hh:mm:ss') + ' - ' + moment(order.complete_date).format('hh:mm:ss')
+                        date = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('DD-MM-YYYY')
+                        period = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss') + ' - ' + moment(order.complete_date).format('HH:mm:ss')
                         tableNo = order.restaurant_table.name
                         userId = order.user.id
                         menuName = orderItem.menu.name
@@ -152,7 +152,8 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={8}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date).add(7, 'hours').format('DD/MMM/YYYY')}
+                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('DD/MMM/YYYY')}
+
                                     </div>
                                 </Col>
                             </Row>
@@ -162,7 +163,7 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={6}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date).add(7, 'hours').format('hh:mm:ss')}
+                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss')}
                                     </div>
                                 </Col>
                             </Row>

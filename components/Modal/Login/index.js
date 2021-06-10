@@ -383,11 +383,18 @@ export default function LoginModal(props) {
                     setLoading(false)
                     message.success('Sign-in successful.')
                 }).catch((error) => {
-                    if (error.data === 401) {
-                        setLoading(false)
-                        const newErrors = {}
-                        newErrors.password = 'Email or Password incorrect.'
-                        setSigninErrors(newErrors)
+                    if (error.data.response.status === 401) {
+                        if (error.data.response.message === 'Ban User') {
+                            setLoading(false)
+                            const newErrors = {}
+                            newErrors.password = 'This account has been banned. Please contact admin to activate account.'
+                            setSigninErrors(newErrors)
+                        } else {
+                            setLoading(false)
+                            const newErrors = {}
+                            newErrors.password = 'Email or Password incorrect.'
+                            setSigninErrors(newErrors)
+                        }
                     }
                 })
             } catch (error) {

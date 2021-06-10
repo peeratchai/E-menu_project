@@ -205,6 +205,16 @@ export default function PromoteList(props) {
                     <Tag color="blue" key={record.length + 1} style={{ cursor: "pointer" }} onClick={() => (setPromotionSelected(promotion), setViewPromoteShowModal(true))}>
                         View Content
                     </Tag>
+                    <Popconfirm
+                        title="Are you sure to delete this promotion?"
+                        onConfirm={() => confirmDeletePromotion(promotion.promotionId)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} >
+                            Delete
+                        </Tag>
+                    </Popconfirm>
                 </Space>
             ),
         }

@@ -39,7 +39,7 @@ export default function ViewTableQRCode(props) {
                     <div style={{ textAlign: "center" }}>
                         <QRCode
                             id="qrCodeEl"
-                            value={process.env.URL + "/menuFeeding/restaurantList/" + restaurant_name + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id}
+                            value={process.env.URL + "/menuFeeding/restaurantList/" + restaurant_name + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id + "&tableName=" + table_selected.name}
                             size={290}
                             level={"H"}
                             includeMargin={true}

@@ -53,7 +53,7 @@ export default function ViewOrderModal(props) {
             setOrders(orders)
             setLoading(false)
         } catch (error) {
-            console.log('error',error)
+            console.log('error', error)
             setLoading(false)
             message.error('An error has occurred.Please try again.')
         }
@@ -235,6 +235,7 @@ export default function ViewOrderModal(props) {
     let newOrderTableListComponent = orders && orders.map((order) => {
         let tableList = order.new_orders.map((newOrder) => {
             if (newOrder.order_items.length > 0) {
+                console.log('newOrder.order_date', newOrder.order_date)
                 return (
                     <>
                         <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
@@ -254,7 +255,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                                {moment(newOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -378,7 +379,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(inOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                                {moment(inOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -483,11 +484,6 @@ export default function ViewOrderModal(props) {
     let completedOrderTableList = orders && orders.map((order) => {
         let tableList = order.completed_orders.map((completedOrder) => {
             if (completedOrder.order_items.length > 0) {
-                // if (tableCompletedOrderSelectedNumber === undefined) {
-                //     setTableCompletedOrderSelectedNumber(completedOrder.id)
-                //     setCompletedOrderSelected(completedOrder)
-                //     setHaveOrderCompleted(true)
-                // }
                 return (
                     <>
                         {/* Table list */}
@@ -508,7 +504,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(completedOrder.order_date).add(7, 'hours').format('hh:mm:ss - DD/MMM/YYYY')}
+                                                {moment(completedOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>

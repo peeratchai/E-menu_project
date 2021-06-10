@@ -4,6 +4,7 @@ import { Table, Space, Tag, Tabs, Spin, Popconfirm, message } from 'antd';
 import adminService from '../../../services/admin'
 import EditPromoteModal from '../../Modal/EditPromoteModal'
 import EditApprovedPromoteModal from '../../Modal/EditApprovedPromoteModal'
+import partnerSerivce from '../../../services/partner';
 
 const { TabPane } = Tabs;
 
@@ -138,9 +139,21 @@ export default function ApprovePromotions(props) {
             message.success('Reject promotion successful.')
             getAllPromotions()
         } else {
-            message.error('Cannot change promotion status!. Please try again.')
+            message.error('Cannot rejest promotion. Please try again.')
         }
     }
+
+    const confirmDeletePromotion = async (promotionsId) => {
+        console.log('promotionsId', promotionsId)
+        partnerSerivce.deletePromotion(promotionsId).then(() => {
+            message.success('Delete promotion successful.')
+            getAllPromotions()
+        }).catch(error => {
+            console.log('confirmDeletePromotion', error)
+            message.error('Cannot delete promotion. Please try again.')
+        })
+    }
+
 
     const columnspendingPromotion = [
         {
@@ -194,6 +207,16 @@ export default function ApprovePromotions(props) {
                             Reject
                         </Tag>
                     </Popconfirm>
+                    <Popconfirm
+                        title="Are you sure to delete this promotion?"
+                        onConfirm={() => confirmDeletePromotion(promotion.promotionId)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} >
+                            Delete
+                        </Tag>
+                    </Popconfirm>
 
                 </Space>
             ),
@@ -232,6 +255,16 @@ export default function ApprovePromotions(props) {
                     <Tag color="blue" key={record.length + 1} style={{ cursor: "pointer" }} onClick={() => (setPromotionSelected(promotion), setEditApprovedPromoteShowModal(true))}>
                         Edit
                     </Tag>
+                    <Popconfirm
+                        title="Are you sure to delete this promotion?"
+                        onConfirm={() => confirmDeletePromotion(promotion.promotionId)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} >
+                            Delete
+                        </Tag>
+                    </Popconfirm>
                 </Space>
             ),
         }
