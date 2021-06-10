@@ -174,7 +174,7 @@ export default function LoginModal(props) {
                 }
 
                 let responseSignup = await signupWithSocial(signupForm)
-                if (responseSignup) {
+                if (responseSignup !== 401) {
                     let accessToken = responseSignup.accessToken
                     await mutateUser(
                         fetchJson('/api/saveToken', {
