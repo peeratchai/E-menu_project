@@ -65,12 +65,12 @@ export default function WebFilter(props) {
     }
 
 
-    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
-        <Option value={foodType.name}>{foodType.name}</Option>
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType, index) => (
+        <Option value={foodType.name} key={foodType.name + index}>{foodType.name}</Option>
     ))
 
-    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
-        <Option value={distance.name}>{distance.name}</Option>
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance, index) => (
+        <Option value={distance.name} key={distance.name + index}>{distance.name}</Option>
     ))
 
     return (
@@ -80,7 +80,7 @@ export default function WebFilter(props) {
                     <div>
                         <h1 style={{ fontWeight: "600" }}>
                             Discover
-                        <p style={{ fontWeight: "300" }}>your amazing city</p>
+                            <p style={{ fontWeight: "300" }}>your amazing city</p>
                         </h1>
                         <h5>
                             <p style={{ color: "#666666", fontSize: "" }}>Find great places to stay, eat, shop, or visit from local experts.</p>
@@ -206,7 +206,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 Poppular
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.boxHighlight}>
@@ -216,7 +216,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 near you
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.boxHighlight}>
@@ -226,7 +226,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 Open now
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.boxHighlight}>
@@ -236,7 +236,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 Hot price
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.boxHighlight}>
@@ -246,7 +246,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 near you
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.boxHighlight}>
@@ -256,7 +256,7 @@ export default function WebFilter(props) {
                             </div>
                             <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                 near you
-                        </div>
+                            </div>
                         </div>
                     </div>
                 </Row>

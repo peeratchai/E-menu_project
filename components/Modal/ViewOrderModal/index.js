@@ -244,7 +244,7 @@ export default function ViewOrderModal(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -255,7 +255,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
+                                                {moment(newOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -320,7 +320,7 @@ export default function ViewOrderModal(props) {
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -368,7 +368,7 @@ export default function ViewOrderModal(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -379,7 +379,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(inOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
+                                                {moment(inOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -444,7 +444,7 @@ export default function ViewOrderModal(props) {
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -493,7 +493,7 @@ export default function ViewOrderModal(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -504,7 +504,7 @@ export default function ViewOrderModal(props) {
                                     <Row>
                                         <Col>
                                             <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(completedOrder.order_date,'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
+                                                {moment(completedOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
                                             </div>
                                         </Col>
                                     </Row>
@@ -548,7 +548,7 @@ export default function ViewOrderModal(props) {
                                         </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>

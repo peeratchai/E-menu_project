@@ -23,10 +23,11 @@ export default withSession(async (req, res) => {
       await req.session.save()
       res.json(user)
     }).catch(error => {
-      console.log('error', error)
-      res.status(error.response.status).json(error)
+      console.log('error login1', error.response.data)
+      res.status(error.response.status).json(error.response.data)
     })
   } catch (error) {
+    console.log('error login2', error.response.data)
     const { response: fetchResponse } = error
     res.status(fetchResponse?.status || 500).json(error.data)
   }

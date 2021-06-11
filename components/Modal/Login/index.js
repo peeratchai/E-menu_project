@@ -13,7 +13,7 @@ import fetchJson from '../../../lib/fetchJson'
 export default function LoginModal(props) {
 
     const { user, mutateUser } = checkUserPermission()
-    const { liffClientId } = props
+    const { liff_client_id } = props
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
     const [forgotForm, setForgotForm] = React.useState({})
@@ -29,6 +29,24 @@ export default function LoginModal(props) {
     const [loading, setLoading] = React.useState(false)
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && tab !== 'register' && email === "") {
+            console.log(email)
+            let isRememberMe = window.localStorage.getItem('isRememberMe');
+            if (isRememberMe) {
+                setIsRememberMe(isRememberMe)
+                setRememberMeValue()
+            }
+        }
+        if (user) {
+            if (liff_client_id && liff_client_id !== null && !user.isLoggedIn && !inProcessLineSignIn) {
+                //// Automate signin with line when receive liff_client_id from line and user not yet login
+                signInwithLine()
+            }
+        }
+
+    }, [props])
 
     const signInwithLine = async () => {
         setLoading(true)
@@ -115,24 +133,6 @@ export default function LoginModal(props) {
             setInProcessLineSignIn(false)
         }
     };
-
-    useEffect(() => {
-        if (typeof window !== 'undefined' && tab !== 'register' && email === "") {
-            console.log(email)
-            let isRememberMe = window.localStorage.getItem('isRememberMe');
-            if (isRememberMe) {
-                setIsRememberMe(isRememberMe)
-                setRememberMeValue()
-            }
-        }
-        if (user) {
-            if (liffClientId && liffClientId !== null && !user.isLoggedIn && !inProcessLineSignIn) {
-                //// Automate signin with line when receive liffClientId from line and user not yet login
-                signInwithLine()
-            }
-        }
-
-    }, [props])
 
     const signinWithSocial = async (email, userId) => {
 
@@ -358,48 +358,47 @@ export default function LoginModal(props) {
         } else {
             const { email, password } = signinForm
             setLoading(true)
-            try {
-                await mutateUser(
-                    fetchJson('/api/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(signinForm),
-                    })
-                ).then(async (response) => {
-                    console.log('response', response)
-                    let accessToken = response.accessToken
-                    localStorage.setItem('accessToken', accessToken)
-                    props.onHide()
-                    props.setlogin(true)
-                    if (isRememberMe) {
-                        const b64EncodedEmail = Buffer.from(email).toString('base64')
-                        const b64EncodedPassword = Buffer.from(password).toString('base64')
-                        localStorage.setItem('email', b64EncodedEmail)
-                        localStorage.setItem('password', b64EncodedPassword)
-                        localStorage.setItem('isRememberMe', true)
-                    }
-                    props.check_permission()
-                    window.location.reload()
-                    setLoading(false)
-                    message.success('Sign-in successful.')
-                }).catch((error) => {
-                    if (error.data.response.status === 401) {
-                        if (error.data.response.message === 'Ban User') {
-                            setLoading(false)
-                            const newErrors = {}
-                            newErrors.password = 'This account has been banned. Please contact admin to activate account.'
-                            setSigninErrors(newErrors)
+            await mutateUser(
+                fetchJson('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(signinForm),
+                })
+            ).then(async (response) => {
+                console.log('response', response)
+                let accessToken = response.accessToken
+                localStorage.setItem('accessToken', accessToken)
+                props.onHide()
+                props.setlogin(true)
+                if (isRememberMe) {
+                    const b64EncodedEmail = Buffer.from(email).toString('base64')
+                    const b64EncodedPassword = Buffer.from(password).toString('base64')
+                    localStorage.setItem('email', b64EncodedEmail)
+                    localStorage.setItem('password', b64EncodedPassword)
+                    localStorage.setItem('isRememberMe', true)
+                }
+                props.check_permission()
+                window.location.reload()
+                setLoading(false)
+                message.success('Sign-in successful.')
+            }).catch((error) => {
+                console.log('error.data', error.data)
+                if (error.data.statusCode === 401) {
+                    const newErrors = {}
+                    if (error.data.message === 'Ban User') {
+                        newErrors.password = 'This account has been banned. Please contact admin to activate account.'
+                    } else {
+                        if (error.data.message === 'Inactive User') {
+                            newErrors.password = 'This account inactive. Please contact admin to activate account..'
                         } else {
-                            setLoading(false)
-                            const newErrors = {}
                             newErrors.password = 'Email or Password incorrect.'
-                            setSigninErrors(newErrors)
                         }
                     }
-                })
-            } catch (error) {
-                console.error('An unexpected error happened:', error)
-            }
+                    setSigninErrors(newErrors)
+                }
+                setLoading(false)
+            })
+
         }
     }
 
@@ -467,7 +466,7 @@ export default function LoginModal(props) {
                                 <Row style={{ marginBottom: "1rem" }}>
                                     <Col>
                                         Log In Your Account
-                                </Col>
+                                    </Col>
                                 </Row>
                                 <Form style={{ marginBottom: "20px" }} onSubmit={signinWithEmail}>
                                     <Row>
@@ -509,7 +508,7 @@ export default function LoginModal(props) {
                                             </Form.Group>
                                             <Button variant="primary" type="submit" style={{ width: "100%", backgroundColor: "#FF4046", border: "none" }}>
                                                 LOG IN
-                                        </Button>
+                                            </Button>
                                         </Col>
                                     </Row>
 
@@ -519,7 +518,7 @@ export default function LoginModal(props) {
                                         <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
                                             <span>
                                                 Or Log In With
-                                        </span>
+                                            </span>
                                         </div>
                                     </Col>
                                 </Row>
@@ -556,7 +555,7 @@ export default function LoginModal(props) {
                                 <Row style={{ marginBottom: "1rem" }}>
                                     <Col>
                                         Create Your Account
-                                </Col>
+                                    </Col>
                                 </Row>
                                 <Form style={{ marginBottom: "20px" }} onSubmit={signupWithEmail}>
                                     <Row>
@@ -598,7 +597,7 @@ export default function LoginModal(props) {
                                             </Form.Group>
                                             <Button variant="primary" type="submit" className={styles.button} >
                                                 CREATE AN ACCOUNT
-                                        </Button>
+                                            </Button>
                                         </Col>
                                     </Row>
                                 </Form>
@@ -608,7 +607,7 @@ export default function LoginModal(props) {
                                         <div style={{ margin: "auto", textAlign: "center", width: "100%", height: "100%" }}>
                                             <span>
                                                 Or Sign Up With
-                                        </span>
+                                            </span>
                                         </div>
                                     </Col>
                                 </Row>
@@ -645,7 +644,7 @@ export default function LoginModal(props) {
                                     <Col>
                                         Don't worry! Just fill in your email and we'll send
                                         you a link to reset your password
-                                </Col>
+                                    </Col>
                                 </Row>
                                 <Form style={{ marginBottom: "20px" }} onSubmit={resetPassword}>
                                     <Row>
@@ -666,7 +665,7 @@ export default function LoginModal(props) {
                                             <div style={{ textAlign: "center" }}>
                                                 <Button variant="primary" type="submit" className={styles.button}>
                                                     Change password
-                                            </Button>
+                                                </Button>
                                             </div>
                                             <br />
                                             <div style={{ textAlign: "right", cursor: "pointer", color: "#1890FF" }} className={utilStyles.fontsize_sm} onClick={() => changeTab('login')}>

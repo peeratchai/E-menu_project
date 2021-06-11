@@ -12,6 +12,8 @@ import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 import checkUserPermission from '../../lib/checkUserPermission'
 import fetchJson from '../../lib/fetchJson'
+import { FacebookLogin } from 'react-facebook-login-component';
+import { useRouter } from 'next/router'
 
 const axios = require('axios')
 
@@ -44,7 +46,9 @@ const UserProfile = ({ user }) => {
         phoneNumber: ''
     })
     const { mutateUser } = checkUserPermission()
-
+    const router = useRouter()
+    const { liffClientId, code } = router.query;
+    const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
 
     const handleChangeProfileImage = (info) => {
         if (info.file.status === 'uploading') {
@@ -75,6 +79,11 @@ const UserProfile = ({ user }) => {
                 username: profile.username,
                 is_active: profile.is_active
             })
+        }
+        console.log(liffClientId, code)
+
+        if (liffClientId && code && !inProcessLineSignIn) {
+            console.log(liffClientId, code)
         }
     }, [user])
 
@@ -190,6 +199,66 @@ const UserProfile = ({ user }) => {
 
     }
 
+    const syncWithLine = async () => {
+        setInProcessLineSignIn(true)
+        const liff = window.liff;
+
+        await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
+            throw err;
+        });
+        if (liff.isLoggedIn()) {
+            let token = await liff.getIDToken();
+            console.log(token)
+
+            let profile = await liff.getProfile();
+            const { userId } = profile
+
+            const email = await liff.getDecodedIDToken().email;
+            console.log(email)
+
+            let data = {
+                "signup_type": "line",
+                "social_id": userId,
+                "email": email
+            }
+            syncWithSocial(data).then(response => {
+                console.log('response', response)
+                message.success('Sync with line successful.')
+            }).catch(error => {
+                console.log('error', error)
+                message.success('Cannot sync with line!. Please try again.')
+            })
+
+        } else {
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile/" });
+        }
+    };
+
+    const responseFacebook = async (response) => {
+        console.log(response);
+        if (response.id) {
+            console.log('login success');
+            const { email, id } = response
+            let data = {
+                "signup_type": "facebook",
+                "social_id": id,
+                "email": email
+            }
+            syncWithSocial(data).then(response => {
+                console.log('response', response)
+                message.success('Sync with facebook successful.')
+            }).catch(error => {
+                console.log('error', error)
+                message.success('Cannot sync with facebook!. Please try again.')
+            })
+        } else {
+            console.log('error');
+        }
+    }
+
+    const buttonText = (
+        <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+    )
     return (
         <Layout containerType="center">
             <Container className={styles.container}>
@@ -288,17 +357,28 @@ const UserProfile = ({ user }) => {
                                                 {errors.phoneNumber}
                                             </Form.Control.Feedback>
                                         </Form.Group>
-                                        {/* <Row style={{ marginBottom: ".5rem" }}>
+                                        <Row style={{ marginBottom: ".5rem" }}>
                                             <Col>
                                                 Sync with Facebook or Line
                                             </Col>
                                         </Row>
                                         <Row style={{ marginBottom: "16px" }}>
                                             <Col>
-                                                <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                                <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                                {/* <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                                <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} /> */}
+                                                <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                                    language="en_US"
+                                                    scope="public_profile,email"
+                                                    responseHandler={responseFacebook}
+                                                    xfbml={true}
+                                                    fields="name,email,picture.height(400).width(300)"
+                                                    version="v2.5"
+                                                    className="facebook-login"
+                                                    buttonText={buttonText} />
+                                                <Image onClick={() => syncWithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+
                                             </Col>
-                                        </Row> */}
+                                        </Row>
 
                                         <div style={{ textAlign: "right" }}>
                                             <Popconfirm

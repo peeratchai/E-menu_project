@@ -1,5 +1,6 @@
 const axios = require('axios')
 import checkLogin from './checkLogin'
+import sendRequest from './sendRequest'
 
 
 const profileService = {
@@ -24,7 +25,7 @@ const profileService = {
             })
             .catch(function (error) {
                 console.log(error)
-                return error
+                throw error
             });
 
     },
@@ -113,6 +114,10 @@ const profileService = {
 
         return response.data
     },
+
+    syncWithSocial: async (data) => {
+        return await sendRequest.post('/api/sync_with_social', data)
+    }
 }
 
 export default profileService

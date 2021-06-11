@@ -98,7 +98,7 @@ export default function Layout(props) {
 
         }).catch(error => {
             console.log('Layout,checkPermission,error', error)
-            message.error('Cannot get user profile.')
+            // message.error('Cannot get user profile.')
         })
     }
 
@@ -248,7 +248,7 @@ export default function Layout(props) {
                 onHide={() => setModalShow(false)}
                 setlogin={setIsLogin}
                 check_permission={checkPermission}
-                liffClientId={liffClientId}
+                liff_client_id={liffClientId}
             />
         </div >
     )

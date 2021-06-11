@@ -91,8 +91,8 @@ export default function Dashboard(props) {
                     csvData.push([date, period, tableNo, userId, menuName, price, total])
                 } else {
                     if (index === 0) {
-                        date = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('DD-MM-YYYY')
-                        period = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss') + ' - ' + moment(order.complete_date).format('HH:mm:ss')
+                        date = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('DD-MM-YYYY')
+                        period = moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss') + ' - ' + moment(order.complete_date).format('HH:mm:ss')
                         tableNo = order.restaurant_table.name
                         userId = order.user.id
                         menuName = orderItem.menu.name
@@ -138,7 +138,7 @@ export default function Dashboard(props) {
                             <Row >
                                 <Col>
                                     <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.restaurant_table.name}
+                                    &nbsp;&nbsp; {order.restaurant_table.name}
                                 </Col>
                                 <Col>
                                     <div style={{ textAlign: "right" }}>
@@ -163,7 +163,7 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={6}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss')}
+                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss')}
                                     </div>
                                 </Col>
                             </Row>
