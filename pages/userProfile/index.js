@@ -221,7 +221,7 @@ const UserProfile = ({ user }) => {
                 "social_id": userId,
                 "email": email
             }
-            syncWithSocial(data).then(response => {
+            profileService.syncWithSocial(data).then(response => {
                 console.log('response', response)
                 message.success('Sync with line successful.')
             }).catch(error => {
@@ -244,7 +244,7 @@ const UserProfile = ({ user }) => {
                 "social_id": id,
                 "email": email
             }
-            syncWithSocial(data).then(response => {
+            profileService.syncWithSocial(data).then(response => {
                 console.log('response', response)
                 message.success('Sync with facebook successful.')
             }).catch(error => {
