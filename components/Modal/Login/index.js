@@ -525,7 +525,8 @@ export default function LoginModal(props) {
                                 <Row style={{ marginBottom: "15px" }}>
                                     <Col>
                                         <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
-                                            <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                            <FacebookLogin
+                                                socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                                 language="en_US"
                                                 scope="public_profile,email"
                                                 responseHandler={responseFacebook}

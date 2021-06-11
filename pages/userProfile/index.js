@@ -3,7 +3,7 @@ import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Popconfirm, Radio, Card } from 'antd';
+import { Upload, message, Popconfirm, Radio, Card, Spin } from 'antd';
 import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import termAgreement from '../../utils/termAgreement.json'
@@ -49,6 +49,7 @@ const UserProfile = ({ user }) => {
     const router = useRouter()
     const { liffClientId, code } = router.query;
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
+    const [loading, setLoading] = React.useState(false)
 
     const handleChangeProfileImage = (info) => {
         if (info.file.status === 'uploading') {
@@ -235,7 +236,8 @@ const UserProfile = ({ user }) => {
     };
 
     const responseFacebook = async (response) => {
-        console.log(response);
+        setLoading(true)
+        console.log('response facebook', respose);
         if (response.id) {
             console.log('login success');
             const { email, id } = response
@@ -251,8 +253,10 @@ const UserProfile = ({ user }) => {
                 console.log('error', error)
                 message.success('Cannot sync with facebook!. Please try again.')
             })
+            setLoading(false)
         } else {
             console.log('error');
+            setLoading(false)
         }
     }
 
@@ -264,31 +268,31 @@ const UserProfile = ({ user }) => {
             <Container className={styles.container}>
                 <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                     <Tab eventKey="profile" title="Profile">
-                        <div className={styles.tab}>
-                            <Row>
-                                <Col sm={6}>
-                                    <Row>
-                                        <Col>
-                                            <img src={profileImage} alt="avatar" style={{ width: '100%', height: '25rem', border: "1px solid #555", borderRadius: "5px" }} />
-                                        </Col>
-                                    </Row>
-                                    <br />
-                                    <Row>
-                                        <Col>
-                                            <Upload
-                                                showUploadList={false}
-                                                beforeUpload={beforeUpload}
-                                                onChange={(e) => handleChangeProfileImage(e)}
-                                                style={{ width: "100%" }}
-                                            // onPreview={(e) => onPreview(e)}
-                                            >
-                                                <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Profile Image</Button>
-                                            </Upload>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                <Col sm={6} style={{ marginTop: "15px" }}>
-                                    <Form>
+                        <Spin spinning={loading} tip="Loading...">
+                            <div className={styles.tab}>
+                                <Row>
+                                    <Col sm={6}>
+                                        <Row>
+                                            <Col>
+                                                <img src={profileImage} alt="avatar" style={{ width: '100%', height: '25rem', border: "1px solid #555", borderRadius: "5px" }} />
+                                            </Col>
+                                        </Row>
+                                        <br />
+                                        <Row>
+                                            <Col>
+                                                <Upload
+                                                    showUploadList={false}
+                                                    beforeUpload={beforeUpload}
+                                                    onChange={(e) => handleChangeProfileImage(e)}
+                                                    style={{ width: "100%" }}
+                                                // onPreview={(e) => onPreview(e)}
+                                                >
+                                                    <Button icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Profile Image</Button>
+                                                </Upload>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col sm={6} style={{ marginTop: "15px" }}>
                                         <Row>
                                             <Col>
                                                 <Form.Group controlId="Name">
@@ -364,19 +368,19 @@ const UserProfile = ({ user }) => {
                                         </Row>
                                         <Row style={{ marginBottom: "16px" }}>
                                             <Col>
-                                                {/* <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
-                                                <Image src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} /> */}
-                                                <FacebookLogin socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                                                    language="en_US"
-                                                    scope="public_profile,email"
-                                                    responseHandler={responseFacebook}
-                                                    xfbml={true}
-                                                    fields="name,email,picture.height(400).width(300)"
-                                                    version="v2.5"
-                                                    className="facebook-login"
-                                                    buttonText={buttonText} />
-                                                <Image onClick={() => syncWithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
-
+                                                <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                                    <FacebookLogin
+                                                        socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                                                        language="en_US"
+                                                        scope="public_profile,email"
+                                                        responseHandler={responseFacebook}
+                                                        xfbml={true}
+                                                        fields="name,email,picture.height(400).width(300)"
+                                                        version="v2.5"
+                                                        className="facebook-login"
+                                                        buttonText={buttonText} />
+                                                    <Image onClick={() => syncWithLine()} src="/images/line-icon.png " style={{ width: "50px", cursor: "pointer", height: "50px", objectFit: "contain", display: 'inline' }} />
+                                                </div>
                                             </Col>
                                         </Row>
 
@@ -395,10 +399,10 @@ const UserProfile = ({ user }) => {
                                                 Save
                                             </Button>
                                         </div>
-                                    </Form>
-                                </Col>
-                            </Row>
-                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Spin>
                     </Tab>
                     <Tab eventKey="setting" title="Setting">
                         <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
