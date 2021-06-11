@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }) {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            let newVersion = '05.06.2021 10.58'
+            let newVersion = '11.06.2021 2.19'
             let currentVersion = window.localStorage.getItem('version')
             if (currentVersion) {
                 if (currentVersion !== newVersion) {

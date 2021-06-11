@@ -102,7 +102,7 @@ const sendRequest = {
                             return error
                         })
                 } else {
-                    return error
+                    throw error
                 }
             });
     },
