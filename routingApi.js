@@ -363,5 +363,9 @@ module.exports = {
             source: '/api/get/promotion/admin',
             destination: API_URL + '/promotion/admin'
         },
+        {
+            source: '/api/sync_with_social',
+            destination: API_URL + '/profile/sync-with-social'
+        },
     ]
 }
