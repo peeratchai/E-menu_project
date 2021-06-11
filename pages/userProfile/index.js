@@ -237,7 +237,7 @@ const UserProfile = ({ user }) => {
 
     const responseFacebook = async (response) => {
         setLoading(true)
-        console.log('response facebook', respose);
+        console.log('response facebook', response);
         if (response.id) {
             console.log('login success');
             const { email, id } = response
@@ -368,7 +368,7 @@ const UserProfile = ({ user }) => {
                                         </Row>
                                         <Row style={{ marginBottom: "16px" }}>
                                             <Col>
-                                                <div style={{ margin: "auto", textAlign: 'center', width: "100%", height: "100%" }}>
+                                                <div style={{ width: "100%", height: "100%" }}>
                                                     <FacebookLogin
                                                         socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                                         language="en_US"
