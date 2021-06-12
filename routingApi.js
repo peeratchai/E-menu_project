@@ -1,6 +1,10 @@
 
 // dev env.
+// Current backend server
 const API_URL = 'https://cee-menu-back-rg3yt.ondigitalocean.app'
+
+// Old backend server
+// const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
 
 // localhost env.
 // const API_URL = 'http://localhost:8080'
@@ -366,6 +370,22 @@ module.exports = {
         {
             source: '/api/sync_with_social',
             destination: API_URL + '/profile/sync-with-social'
+        },
+        {
+            source: '/api/get-shopping-cart',
+            destination: API_URL + '/shopping-cart'
+        },
+        {
+            source: '/api/update-shopping-cart',
+            destination: API_URL + '/shopping-cart'
+        },
+        {
+            source: '/api/delete-shopping-cart',
+            destination: API_URL + '/shopping-cart'
+        },
+        {
+            source: '/api/delete-shopping-cart-item/:cartItemId',
+            destination: API_URL + '/shopping-cart-item/:cartItemId'
         },
     ]
 }

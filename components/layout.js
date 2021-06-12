@@ -46,7 +46,6 @@ export default function Layout(props) {
     }
 
     useEffect(() => {
-        console.log('user', user)
 
         if (verifyEmail === '10asdokzclskf0efsf-sef0xkczlv0efie0-s0esfklkvadfadffas-adfvshbostohtrodh') {
             message.success('Verify email successful.Please sign in again.')

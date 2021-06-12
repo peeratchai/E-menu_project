@@ -54,7 +54,7 @@ export default function RestaurantListMobile(props) {
         let filter = changeFormatFilter(filterForm)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
-            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.distance = parseFloat(splitDistanceArray[0]) * 1000
             filter.current_location = user_location
         } else {
             filter.current_location = null

@@ -36,7 +36,6 @@ const Partner = ({ user }) => {
     const [roles, setRoles] = React.useState([]);
 
     useEffect(() => {
-        console.log('user', user)
         if (user) {
             let profile = user.profile
             let restaurantId = profile.restaurant_employee.restaurant.id

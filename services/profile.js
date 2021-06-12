@@ -20,7 +20,7 @@ const profileService = {
 
         return axios.get('/api/profile/get', config)
             .then(function (response) {
-                console.log(response)
+                // console.log(response)
                 return response.data
             })
             .catch(function (error) {

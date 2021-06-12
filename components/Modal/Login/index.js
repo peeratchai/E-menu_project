@@ -32,7 +32,6 @@ export default function LoginModal(props) {
 
     useEffect(() => {
         if (typeof window !== 'undefined' && tab !== 'register' && email === "") {
-            console.log(email)
             let isRememberMe = window.localStorage.getItem('isRememberMe');
             if (isRememberMe) {
                 setIsRememberMe(isRememberMe)

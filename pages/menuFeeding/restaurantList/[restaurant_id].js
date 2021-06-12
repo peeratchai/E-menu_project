@@ -10,7 +10,7 @@ import restaurantService from '../../../services/restaurant'
 import Geocode from "react-geocode";
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
-import partnerSerivce from '../../../services/partner'
+import shoppingCartService from '../../../services/shoppingCart'
 
 export default function Restaurant() {
     const isMobileResolution = useMediaQuery(768)
@@ -20,6 +20,8 @@ export default function Restaurant() {
     const [restaurantDetail, setRestaurantDetail] = React.useState()
     const [loading, setLoading] = React.useState(false)
     const { mutateUser } = checkUserPermission()
+    const [shoppingCart, setShoppingCart] = React.useState({})
+    const [isInitialCart, setIsInitialCart] = React.useState(false)
 
     useEffect(() => {
         if (router.isReady) {
@@ -36,43 +38,38 @@ export default function Restaurant() {
 
     const setInitialData = async () => {
         getRestaurantDetail(restaurantId).then(async (restaurantDetail) => {
-            if (typeof window !== 'undefined') {
-                if (tableId !== undefined) {
-                    saveTableOnScanQrCode().then((response) => {
-                        console.log('response', response)
-                        if (tableName) {
-                            message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
-                        } else {
-                            message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
-                        }
-                        // let basket = window.localStorage.getItem('basket');
-                        // try {
-                        //     basket = JSON.parse(basket)
-                        //     console.log('basket', basket)
-                        //     if (basket) {
-                        //         try {
-                        //             let order = basket.order
-                        //             console.log('order', order)
-                        //             if (order.length > 0) {
-                        //                 router.push({
-                        //                     pathname: "/checkout"
-                        //                 })
-                        //             }
-                        //         } catch (error) {
-                        //             console.log('error', error)
-                        //         }
-                        //     }
-                        // } catch (error) {
-                        //     console.log('error', error)
-                        // }
-                        // console.log('saveTableOnScanQrCode')
-                    }).catch(error => {
-                        console.log('error', error)
-                    })
+            console.log('restaurantDetail', restaurantDetail)
+            shoppingCartService.getShoppingCart().then((response) => {
+                console.log('shoppingCart response', response)
+                if (response === 'Not Login') {
+                    message.warning('Please login and scan qr code again.')
+                } else {
+                    let shoppingCart = response
+                    setShoppingCart(shoppingCart)
+                    setIsInitialCart(true)
+                    console.log('shoppingCart', shoppingCart)
+                    if (tableId !== undefined) {
+
+                        saveTableOnScanQrCode().then((response) => {
+                            console.log('response', response)
+                            if (tableName) {
+                                message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                            } else {
+                                message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                            }
+                        }).catch(error => {
+                            console.log('error', error)
+                        })
+                    }
                 }
-            }
+            }).catch(error => {
+                console.log('error', error)
+                message.warning('Please login before take order.')
+            })
             await getAddressOnGoogleMaps(restaurantDetail)
+
         }).catch((error) => {
+            setLoading(false)
             console.log('error', error)
         })
     }
@@ -127,6 +124,8 @@ export default function Restaurant() {
                         restaurant_id={restaurantId}
                         table_id={tableId}
                         loading={loading}
+                        shopping_cart={shoppingCart}
+                        is_initial_cart={isInitialCart}
                     />
                 ) : (
                     // Mobile Version
@@ -137,6 +136,8 @@ export default function Restaurant() {
                         restaurant_id={restaurantId}
                         table_id={tableId}
                         loading={loading}
+                        shopping_cart={shoppingCart}
+                        is_initial_cart={isInitialCart}
                     />
                 )
             }

@@ -25,7 +25,7 @@ const { Meta } = Cardantd;
 
 
 export default function RestaurantDetailMobile(props) {
-    const { loading } = props
+    const { loading, shopping_cart, is_initial_cart } = props
     const router = useRouter()
     const { restaurant } = router.query;
     //// Set State
@@ -254,15 +254,15 @@ export default function RestaurantDetailMobile(props) {
                                     <Row>
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
                                             Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
-                                                    </Col>
+                                        </Col>
                                         <Col style={{ color: "#74b100" }}>
                                             Open now!
-                                            </Col>
+                                        </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>
                                         <Col style={{ paddingBottom: "15px" }}>
                                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                            </Col>
+                                        </Col>
                                     </Row>
                                 </div>
 
@@ -353,6 +353,8 @@ export default function RestaurantDetailMobile(props) {
                 onHide={() => checkMenuFromBasket()}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
+                shopping_cart={shopping_cart}
+                is_initial_cart={is_initial_cart}
             />
             <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
@@ -366,7 +368,7 @@ export default function RestaurantDetailMobile(props) {
                             <Col>
                                 <div style={{ textAlign: "right", paddingRight: "10px" }}>
                                     {basket.total} Baht
-                            </div>
+                                </div>
                             </Col>
                         </Row>
                     </Button>

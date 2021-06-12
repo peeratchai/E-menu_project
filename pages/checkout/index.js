@@ -13,13 +13,14 @@ import EmptyComponent from '../../components/Empty'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 import fetchJson from '../../lib/fetchJson'
+import shoppingCartService from '../../services/shoppingCart'
 
 const axios = require('axios')
 
 const CheckoutPage = ({ user, tableId = null }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const [basketData, setBasketData] = React.useState({ 'order': [] })
+    const [shoppingCartData, setShoppingCartData] = React.useState({ 'order': [] })
     const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     const [countMenuItems, setCountMenuItems] = React.useState(0);
     const [totalPrice, setTotalPrice] = React.useState(0);
@@ -37,81 +38,128 @@ const CheckoutPage = ({ user, tableId = null }) => {
         if (user) {
             if (user.profile) {
                 setUserProfile(user.profile)
+                setInitialCart()
             }
         }
-        if (typeof window !== 'undefined') {
-            let basket = window.localStorage.getItem('basket');
-            basket = JSON.parse(basket)
-            if (basket) {
-                try {
-                    setBasketData(basket)
-                    let order = basket.order
-                    setCountMenuItems(order.length)
-                    if (order.length > 0) {
+
+
+        // if (typeof window !== 'undefined') {
+        //     let basket = window.localStorage.getItem('basket');
+        //     basket = JSON.parse(basket)
+        //     if (basket) {
+        //         try {
+        //             setShoppingCartData(basket)
+        //             let order = basket.order
+        //             setCountMenuItems(order.length)
+        //             if (order.length > 0) {
+        //                 setHaveMenuInBasket(true)
+        //             }
+        //             let total_price = 0
+        //             order.map((menu) => total_price += menu.total)
+        //             setTotalPrice(total_price)
+        //         } catch (error) {
+        //             message.warning('Please select order before check out order.')
+        //         }
+        //     }
+        // }
+    }, [user])
+
+    const setInitialCart = () => {
+        shoppingCartService.getShoppingCart().then((response) => {
+            if (response === 'Not Login') {
+                message.warning('Please login and scan qr code again.')
+            } else {
+                let shoppingCart = response
+                if (shoppingCart === "") {
+                    message.warning('Please select order before check out order.')
+                } else {
+                    let shoppingCartItems = shoppingCart.shopping_cart_items
+                    setShoppingCartData(shoppingCart)
+                    let countCartItems = 0
+                    shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
+                    setCountMenuItems(countCartItems)
+                    if (countCartItems > 0) {
                         setHaveMenuInBasket(true)
                     }
                     let total_price = 0
-                    order.map((menu) => total_price += menu.total)
+                    shoppingCartItems.map((menu) => total_price += menu.total)
                     setTotalPrice(total_price)
-                } catch (error) {
-                    message.warning('Please select order before check out order.')
                 }
             }
-        }
-    }, [user])
+        })
+    }
 
     const reduceOrderMenu = (menuIndex) => {
-        let existingOrder = basketData.order
-        let newTotal = basketData.total
-        let newOrder = [...existingOrder]
-        let newBasket = { ...basketData }
+        let existingCartItem = shoppingCartData.shopping_cart_items
+        let newTotal = shoppingCartData.total
+        let newCartItem = [...existingCartItem]
+        let newCart = { ...shoppingCartData }
         let newTotalPrice = totalPrice
 
-        newTotal = newTotal - newOrder[menuIndex].price
-
-        if (newOrder[menuIndex].count === 1) {
-            newTotalPrice = newTotalPrice - newOrder[menuIndex].price
+        if (newCartItem[menuIndex].quantity === 1) {
+            newTotalPrice = newTotalPrice - newCartItem[menuIndex].price
             setTotalPrice(newTotalPrice)
-            newOrder.splice(menuIndex, 1)
-            let newCountMenuItems = countMenuItems
-            newCountMenuItems = newCountMenuItems - 1
-            setCountMenuItems(newCountMenuItems)
+            newCartItem.splice(menuIndex, 1)
+
         } else {
-            newOrder[menuIndex].count = newOrder[menuIndex].count - 1
-            newOrder[menuIndex].total = newOrder[menuIndex].total - newOrder[menuIndex].price
-            newTotalPrice = newTotalPrice - newOrder[menuIndex].price
+            newCartItem[menuIndex].quantity = newCartItem[menuIndex].quantity - 1
+            newCartItem[menuIndex].total = newCartItem[menuIndex].total - newCartItem[menuIndex].price
+            newTotalPrice = newTotalPrice - newCartItem[menuIndex].price
             setTotalPrice(newTotalPrice)
         }
+        let newCountMenuItems = countMenuItems
+        setCountMenuItems(newCountMenuItems - 1)
 
-        newBasket.order = newOrder
-        newBasket.total = newTotal
-        console.log('newBasket', newBasket)
-        setBasketData({ ...newBasket })
-
-        if (newOrder.length === 0) {
-            window.localStorage.removeItem('basket')
-        } else {
-            window.localStorage.setItem('basket', JSON.stringify(newBasket))
-        }
-
+        newCart.shopping_cart_items = newCartItem
+        newCart.total = newTotalPrice
+        console.log('newCart', newCart)
+        setShoppingCartData({ ...newCart })
+        updateShoppingCart(newCart)
     }
 
     const AddOrderMenu = (menuIndex) => {
-        let existingOrder = basketData.order
-        let newTotal = basketData.total
-        let newOrder = [...existingOrder]
-        let newBasket = { ...basketData }
-        newOrder[menuIndex].count = newOrder[menuIndex].count + 1
-        newOrder[menuIndex].total = newOrder[menuIndex].total + newOrder[menuIndex].price
-        newTotal = newTotal + newOrder[menuIndex].price
+        let existingCartItem = shoppingCartData.shopping_cart_items
+        let newTotal = shoppingCartData.total
+        let newCartItem = [...existingCartItem]
+        let newCart = { ...shoppingCartData }
+        newCartItem[menuIndex].quantity = newCartItem[menuIndex].quantity + 1
+        newCartItem[menuIndex].total = newCartItem[menuIndex].total + newCartItem[menuIndex].price
+        newTotal = newTotal + newCartItem[menuIndex].price
         let newTotalPrice = totalPrice
-        newTotalPrice = newTotalPrice + newOrder[menuIndex].price
+        newTotalPrice = newTotalPrice + newCartItem[menuIndex].price
+        newCart.shopping_cart_items = newCartItem
+        newCart.total = newTotalPrice
+        let newCountMenuItems = countMenuItems
+        setCountMenuItems(newCountMenuItems + 1)
+        setShoppingCartData({ ...newCart })
         setTotalPrice(newTotalPrice)
-        newBasket.order = newOrder
-        newBasket.total = newTotal
-        setBasketData({ ...newBasket })
-        window.localStorage.setItem('basket', JSON.stringify(newBasket))
+        updateShoppingCart(newCart)
+    }
 
+    const updateShoppingCart = (newCart) => {
+        console.log('newCart', newCart)
+        let shopping_cart_items = []
+        newCart.shopping_cart_items.forEach((cartItem) => {
+            shopping_cart_items.push({
+                "menu": cartItem.menu.id,
+                "quantity": cartItem.quantity,
+                "price": cartItem.price,
+                "total": cartItem.total,
+                "special_instruction": cartItem.special_instruction
+            })
+        })
+        console.log('shoppingCartData', shoppingCartData)
+        let cartDataForm = {
+            "restaurant": shoppingCartData.id,
+            "shopping_cart_items": shopping_cart_items
+        }
+
+        console.log('cartDataForm', cartDataForm)
+        // shoppingCartService.updateShoppingCart(cartDataForm).then((response) => {
+        //     console.log('response', response)
+        // }).catch(error => {
+        //     console.log('updateShoppingCart error', error)
+        // })
     }
 
     const onCheckOutOrder = async () => {
@@ -122,17 +170,17 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     setLoading(true)
                     let userId = userProfile.id
                     console.log(userId)
-                    let restaurantId = basketData.restaurantId
+                    let restaurantId = shoppingCartData.restaurantId
 
                     let order_items = []
-                    let orders = basketData.order
+                    let orders = shoppingCartData.order
                     orders.map((order) => {
                         order_items.push({
                             "menu": order.id,
                             "quantity": order.count,
                             "price": order.price,
                             "total": order.total,
-                            "special_instruction": order.specialInstruction
+                            "special_instruction": order.special_instruction
                         })
                     })
 
@@ -172,26 +220,26 @@ const CheckoutPage = ({ user, tableId = null }) => {
 
     }
 
-    let MenuListComponentMobile = basketData.order && basketData.order.map((menu, index) => {
+    let MenuListComponentMobile = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
         return (
-            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={menu.id}>
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.id}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
-                    <Image src={menu.image_url} rounded style={{ height: "100%" }} />
+                    <Image src={cartItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
                     <Row>
                         <Col>
-                            <b>{menu.name}</b>
+                            <b>{cartItem.menu.name}</b>
                         </Col>
                     </Row>
                     <Row>
                         <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
-                            * {menu.specialInstruction}
+                            * {cartItem.special_instruction}
                         </Col>
                     </Row>
                     <Row >
                         <Col xs={4} style={{ margin: "auto" }}>
-                            <b>{menu.price}</b>
+                            <b>{cartItem.price}</b>
                         </Col>
                         <Col xs={8} style={{ textAlign: "right" }}>
                             <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
@@ -200,7 +248,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                         <MinusOutlined onClick={() => reduceOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                     </Col>
                                     <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
-                                        {menu.count}
+                                        {cartItem.quantity}
                                     </Col>
                                     <Col>
                                         <PlusOutlined onClick={() => AddOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
@@ -214,26 +262,26 @@ const CheckoutPage = ({ user, tableId = null }) => {
         )
     })
 
-    let MenuListComponentWeb = basketData.order && basketData.order.map((menu, index) => {
+    let MenuListComponentWeb = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
         return (
-            <Row style={{ height: "12rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={menu.id}>
+            <Row style={{ height: "12rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.id}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
-                    <Image src={menu.image_url} rounded style={{ height: "100%" }} />
+                    <Image src={cartItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
                     <Row>
                         <Col>
-                            <b>{menu.name}</b>
+                            <b>{cartItem.menu.name}</b>
                         </Col>
                     </Row>
                     <Row>
                         <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
-                            * {menu.specialInstruction}
+                            * {cartItem.special_instruction}
                         </Col>
                     </Row>
                     <Row >
                         <Col xs={4} style={{ margin: "auto" }}>
-                            <b>{menu.price}</b>
+                            <b>{cartItem.price}</b>
                         </Col>
                         <Col xs={8} style={{ textAlign: "right" }}>
                             <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
@@ -242,7 +290,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                         <MinusOutlined onClick={() => reduceOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                     </Col>
                                     <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
-                                        {menu.count}
+                                        {cartItem.quantity}
                                     </Col>
                                     <Col>
                                         <PlusOutlined onClick={() => AddOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
@@ -276,7 +324,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                         <Row>
                                             <Col>
                                                 {countMenuItems} รายการ
-                                                </Col>
+                                            </Col>
                                             <Col style={{ textAlign: "right" }}>
                                                 <b> {totalPrice} ฿</b>
                                             </Col>
@@ -286,7 +334,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             <Col>
                                                 <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
                                                     สั่ง {countMenuItems} รายการ
-                                        </Button>
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </div>
@@ -307,7 +355,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             <Col>
                                                 <Button className={styles.checkout_button} >
                                                     ไม่มีรายการอาหาร
-                                        </Button>
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </div>
@@ -337,7 +385,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                         <Row>
                                             <Col>
                                                 {countMenuItems} รายการ
-                                                </Col>
+                                            </Col>
                                             <Col style={{ textAlign: "right" }}>
                                                 <b> {totalPrice} ฿</b>
                                             </Col>
@@ -368,7 +416,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             <Col>
                                                 <Button className={styles.checkout_button} >
                                                     ไม่มีรายการอาหาร
-                                        </Button>
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </div>

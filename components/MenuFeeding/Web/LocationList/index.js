@@ -21,6 +21,7 @@ export default function LocationListWeb(props) {
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
+    const [currentFilterForm, setCurrentFilterForm] = React.useState()
     const [masterDataList, setMasterDataList] = React.useState({
         foodTypeMasterData: [],
         distanceMasterData: [],
@@ -92,10 +93,11 @@ export default function LocationListWeb(props) {
     const onSearch = async (filterForm) => {
         setLoading(true)
         console.log('filterForm', filterForm)
+        setCurrentFilterForm(filterForm)
         let filter = changeFormatFilter(filterForm)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
-            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.distance = parseFloat(splitDistanceArray[0]) * 1000
             filter.current_location = user_location
         } else {
             filter.current_location = null
@@ -123,7 +125,7 @@ export default function LocationListWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location },
+                            query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location, currentFilterForm: JSON.stringify(currentFilterForm) },
                         }}
                     >
                         <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>

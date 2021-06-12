@@ -65,7 +65,6 @@ const UserProfile = ({ user }) => {
 
     useEffect(() => {
 
-        console.log('user', user)
         if (user) {
             let profile = user.profile
             if (profile.avatar_url !== null || profile.avatar_url !== '') {

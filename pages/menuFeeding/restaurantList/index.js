@@ -17,7 +17,7 @@ var options = {
 export default function RestaurantList() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
-    const { locationId, locationName } = router.query;
+    const { locationId, locationName, currentFilterForm } = router.query;
     const [restaurantList, setRestaurantList] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
     const [masterDataList, setMasterDataList] = React.useState({
@@ -30,12 +30,6 @@ export default function RestaurantList() {
 
     function success(pos) {
         var crd = pos.coords;
-
-        console.log("Your current position is:");
-        console.log(`Latitude : ${crd.latitude}`);
-        console.log(`Longitude: ${crd.longitude}`);
-        console.log(`More or less ${crd.accuracy} meters.`);
-
         let userLocation = `POINT(${crd.latitude + " " + crd.longitude})`
         console.log('userLocation', userLocation)
         setUserLocation(userLocation)
@@ -71,7 +65,7 @@ export default function RestaurantList() {
         restaurantService.getRestaurantSearchByLocation(locationId).then(async (restaurantList) => {
             setRestaurantList(restaurantList)
             setLoading(false)
-            await getAddressOnGoogleMaps(restaurantList)
+            // await getAddressOnGoogleMaps(restaurantList)
         }).catch(error => {
             console.log('getRestaurant error', error)
         })
@@ -126,12 +120,13 @@ export default function RestaurantList() {
                 !isMobileResolution ? (
                     //PC Version
                     <RestaurantListWeb
-                        restaurant_list={restaurantList}
+                        // restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
                         loading={loading}
                         master_data_list={masterDataList}
                         user_location={userLocation}
+                        current_filter_form={currentFilterForm}
                     />
                 ) : (
                     //Mobile Version
@@ -142,6 +137,7 @@ export default function RestaurantList() {
                         loading={loading}
                         master_data_list={masterDataList}
                         user_location={userLocation}
+                        current_filter_form={currentFilterForm}
                     />
                 )
             }

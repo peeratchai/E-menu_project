@@ -107,9 +107,10 @@ export default function Newspaper() {
     const onSearch = async (filterForm) => {
         console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
+        console.log('filter', filter)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
-            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.distance = parseFloat(splitDistanceArray[0]) * 1000
             filter.current_location = userLocation
         } else {
             filter.current_location = null

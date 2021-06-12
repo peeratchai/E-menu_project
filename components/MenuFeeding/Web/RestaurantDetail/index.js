@@ -23,17 +23,6 @@ import moment from 'moment'
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 
 const { Meta } = Cardantd;
-// const list = [
-//     { name: 'item1' },
-//     { name: 'item2' },
-//     { name: 'item3' },
-//     { name: 'item4' },
-//     { name: 'item5' },
-//     { name: 'item6' },
-//     { name: 'item7' },
-//     { name: 'item8' },
-//     { name: 'item9' }
-// ];
 const MenuItem = ({ text, selected }) => {
     return <div
         className={`menu-item ${selected ? 'active' : ''}`}
@@ -71,19 +60,11 @@ const getDimensions = ele => {
     };
 };
 
-const scrollTo = ele => {
-    ele.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-    });
-};
-
 export default function RestaurantDetailWeb(props) {
 
-    const { loading } = props
-    const router = useRouter()
+    const { loading, shopping_cart, is_initial_cart } = props
     ////Set State
-    const [selected, setSelected] = React.useState('item5')
+    const [selected, setSelected] = React.useState('')
     const [slidingPxCategoryNav, setslidingPxCategoryNav] = React.useState(0);
     const [restaurantDetail, setRestaurantDetail] = React.useState({
         name: "",
@@ -99,9 +80,6 @@ export default function RestaurantDetailWeb(props) {
 
     })
     const [modalShow, setModalShow] = React.useState(false);
-    const [categoryNav, setCategoryNav] = React.useState();
-    const [styleButtonRight, setStyleButtonRight] = React.useState(styles.nav_scroller_button_right);
-    const [styleButtonLeft, setStyleButtonLeft] = React.useState(styles.nav_scroller_button_left + " " + styles.hide);
     const [menuEachCategory, setMenuEachCategory] = React.useState("");
     const [widthCategoryNav, setWidthCategoryNav] = React.useState();
     const [widthCategoryList, setWidthCategoryList] = React.useState();
@@ -138,8 +116,8 @@ export default function RestaurantDetailWeb(props) {
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
-            console.log("categoryList", categoryList)
             setCategoryList(categoryList)
+            setSelected(categoryList[0].categoryName)
             renderMenuList(restaurant_detail)
             // activeCategory()
             setRestaurantDetail(restaurant_detail)
@@ -157,7 +135,6 @@ export default function RestaurantDetailWeb(props) {
         const handleScroll = () => {
             const { height: headerHeight } = getDimensions(headerRef.current);
             const scrollPosition = window.scrollY - headerHeight - 120;
-            console.log('scrollPosition', scrollPosition)
             let indexOfCategory = null
             const selected = refsCategory.current.find((ref, index) => {
                 const ele = ref;
@@ -165,7 +142,6 @@ export default function RestaurantDetailWeb(props) {
                     const { offsetBottom, offsetTop } = getDimensions(ele);
                     if (scrollPosition > offsetTop && scrollPosition < offsetBottom) {
                         indexOfCategory = index
-                        console.log('offsetTop', offsetTop)
                     }
                     return scrollPosition > offsetTop && scrollPosition < offsetBottom;
                 }
@@ -205,7 +181,6 @@ export default function RestaurantDetailWeb(props) {
         let currentCategoryList = categoryList
         currentCategoryList.filter((category) => category.isActive == true).forEach(category => category.isActive = false)
         currentCategoryList[index].isActive = !currentCategoryList[index].isActive
-        console.log(currentCategoryList)
         setCategoryList(currentCategoryList)
         activeCategory()
     }
@@ -390,10 +365,8 @@ export default function RestaurantDetailWeb(props) {
     ))
 
     const onSelect = (key) => {
-        console.log('key', key)
         setSelected(key);
         let index = categoryList.findIndex((category) => category.categoryName === key)
-        console.log('index', index)
         scrollToCategorySection(index);
     }
 
@@ -443,7 +416,7 @@ export default function RestaurantDetailWeb(props) {
                                     <Row>
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetail.price_from}-{restaurantDetail.price_to}</b></span> baht
-                                    </Col>
+                                        </Col>
                                         <Col style={{ color: "#74b100" }}>
                                             {
                                                 moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
@@ -578,6 +551,8 @@ export default function RestaurantDetailWeb(props) {
                 onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}
                 restaurant_id={props.restaurant_id}
+                shopping_cart={shopping_cart}
+                is_initial_cart={is_initial_cart}
             />
         </Layout >
     )

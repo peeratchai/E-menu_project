@@ -23,7 +23,7 @@ const { Option } = Select;
 
 export default function RestaurantListWeb(props) {
 
-    const { restaurant_list, location_name, location_id, loading, master_data_list, user_location } = props
+    const { restaurant_list, location_name, location_id, loading, master_data_list, user_location, current_filter_form } = props
     const [restaurantList, setRestaurantList] = React.useState(null);
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
@@ -33,29 +33,22 @@ export default function RestaurantListWeb(props) {
     const [spinLoading, setSpinLoading] = React.useState(loading)
 
     useEffect(() => {
-        if (restaurant_list.length !== 0) {
-            if (restaurantList === null) {
-                console.log('restaurant_list', restaurant_list)
-                setLocationName(location_name)
-                setLocationId(location_id)
-                setTotalResult(restaurant_list.length)
-                setRestaurantList(restaurant_list)
-                renderRestaurantCard(restaurant_list)
-                setMaps(restaurant_list)
-            } else {
-                setTotalResult(restaurantList.length)
-                setRestaurantList(restaurantList)
-                renderRestaurantCard(restaurantList)
+
+        if (location_name) {
+            setLocationName(location_name)
+            setLocationId(location_id)
+            if (JSON.parse(current_filter_form)) {
+                onSearch(JSON.parse(current_filter_form))
             }
         }
         setSpinLoading(loading)
-    }, [props])
+    }, [location_name])
 
     const setMaps = (restaurant_list) => {
         let LocationInMaps = []
         let point, substringPotion, splitPotion, latLong, lat, lng
 
-        restaurant_list.map((restaurantDetails, index) => {
+        restaurant_list.map((restaurantDetails) => {
             try {
                 point = restaurantDetails.location;
                 substringPotion = point.substring(5)
@@ -72,8 +65,6 @@ export default function RestaurantListWeb(props) {
 
         setLocationInMaps(LocationInMaps)
     }
-
-
 
     const renderRestaurantCard = (restaurantList) => {
         let restaurantCard = restaurantList && restaurantList.map((restaurantDetails) => {
@@ -93,10 +84,10 @@ export default function RestaurantListWeb(props) {
                                     <Row >
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetails.price_from}-{restaurantDetails.price_to}</b></span> baht
-                                    </Col>
+                                        </Col>
                                         <Col style={{ color: "#74b100" }}>
                                             Open now!
-                                    </Col>
+                                        </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>
                                         <Col style={{ paddingBottom: "15px", borderBottom: "1px solid #dee2e6" }}>
@@ -121,11 +112,13 @@ export default function RestaurantListWeb(props) {
 
     const onSearch = async (filterForm) => {
         setSpinLoading(true)
-        filterForm.business_location = locationId
-        let filter = changeFormatFilter(filterForm)
+        let filter = { ...filterForm }
+        filter.business_location = locationId
+        filter = changeFormatFilter(filter)
+        console.log('filter', filter)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
-            filter.distance = parseFloat(splitDistanceArray[0])
+            filter.distance = parseFloat(splitDistanceArray[0]) * 1000
             filter.current_location = user_location
         } else {
             filter.current_location = null
@@ -135,8 +128,12 @@ export default function RestaurantListWeb(props) {
         let accessToken = await checkLogin()
         let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         console.log('filter', locationListByFilter)
-        await getAddressOnGoogleMaps(locationListByFilter)
+        setRestaurantList(locationListByFilter)
+        setTotalResult(locationListByFilter.length)
+        renderRestaurantCard(locationListByFilter)
+        // await getAddressOnGoogleMaps(locationListByFilter)
         setSpinLoading(false)
+        setMaps(locationListByFilter)
     }
 
     const getAddressOnGoogleMaps = async (restaurantList) => {
