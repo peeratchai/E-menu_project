@@ -31,14 +31,18 @@ export default function RestaurantListWeb(props) {
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [spinLoading, setSpinLoading] = React.useState(loading)
+    const [currentFilterForm, setCurrentFilterForm] = React.useState({})
 
     useEffect(() => {
 
         if (location_name) {
+            console.log(location_name)
+            console.log(location_id)
             setLocationName(location_name)
             setLocationId(location_id)
             if (JSON.parse(current_filter_form)) {
                 onSearch(JSON.parse(current_filter_form))
+                setCurrentFilterForm(JSON.parse(current_filter_form))
             }
         }
         setSpinLoading(loading)
@@ -177,6 +181,7 @@ export default function RestaurantListWeb(props) {
                     {/* Filter */}
                     <Filter
                         onSearch={(form) => onSearch(form)}
+                        initial_filter_form={currentFilterForm}
                         location_restaurant_in_maps={locationInMaps}
                         filter_master_data_list={master_data_list}
                         user_location={user_location}

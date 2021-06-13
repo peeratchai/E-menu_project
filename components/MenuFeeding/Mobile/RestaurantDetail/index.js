@@ -253,15 +253,22 @@ export default function RestaurantDetailMobile(props) {
                                 <div className={styles.restaurant_details}>
                                     <Row>
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
-                                            Price <span style={{ color: "#74b100" }}><b>30-400</b></span> baht
+                                            Price <span style={{ color: "#74b100" }}><b>{restaurantDetail.price_from}-{restaurantDetail.price_to}</b></span> baht
                                         </Col>
                                         <Col style={{ color: "#74b100" }}>
-                                            Open now!
+                                            {
+                                                moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
+                                                    moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm') ? (
+                                                    'Open now!'
+                                                ) : (
+                                                    'Close now!'
+                                                )
+                                            }
                                         </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>
                                         <Col style={{ paddingBottom: "15px" }}>
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                                            {restaurantDetail.description}
                                         </Col>
                                     </Row>
                                 </div>

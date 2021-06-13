@@ -29,10 +29,19 @@ export default function LocationListMobile(props) {
         distanceMasterData: [],
         peymentOptionsMasterData: []
     })
-
+    const [currentFilterForm, setCurrentFilterForm] = React.useState({
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
+        distance: 0,
+        price_to_price_from: '0 0',
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null,
+    })
     useEffect(async () => {
         getInitialData()
-
     }, [])
 
 
@@ -84,6 +93,7 @@ export default function LocationListMobile(props) {
 
     const onSearch = async (filterForm) => {
         setLoading(true)
+        setCurrentFilterForm(filterForm)
         let filter = changeFormatFilter(filterForm)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
@@ -101,6 +111,7 @@ export default function LocationListMobile(props) {
                 totalResult++
             }
         })
+        setLocationList(locationListByFilter)
         setFilter(filterForm)
         setTotalResult(totalResult)
         console.log(locationListByFilter)
@@ -118,7 +129,9 @@ export default function LocationListMobile(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location },
+                            query: {
+                                locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location, currentFilterForm: JSON.stringify(currentFilterForm)
+                            },
                         }}
                     >
                         <Card style={{ height: "100%", border: "none" }}>
@@ -131,7 +144,7 @@ export default function LocationListMobile(props) {
                             </Card.Body>
                         </Card>
                     </Link>
-                </Col>
+                </Col >
             )
         }
     })
@@ -146,7 +159,7 @@ export default function LocationListMobile(props) {
                     <Col xs={12}>
                         <span className={utilStyles.fontTitleMobile}>
                             Area Selection
-                    </span>
+                        </span>
                     </Col>
                 </Row>
 
@@ -160,7 +173,7 @@ export default function LocationListMobile(props) {
                     <Col xs={7}>
                         <div style={{ textAlign: "right" }}>
                             <b>sort by</b> &nbsp;
-                                        <Select
+                            <Select
                                 showSearch
                                 style={{ width: "25vw", textAlign: "left" }}
                                 placeholder="Search to Select"
@@ -196,6 +209,7 @@ export default function LocationListMobile(props) {
                 on_search={(filterForm) => onSearch(filterForm)}
                 filter_master_data_list={masterDataList}
                 user_location={user_location}
+                initial_filter_form={currentFilterForm}
             />
         </Layout >
     )

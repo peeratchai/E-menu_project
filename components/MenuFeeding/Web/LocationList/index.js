@@ -21,7 +21,18 @@ export default function LocationListWeb(props) {
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
-    const [currentFilterForm, setCurrentFilterForm] = React.useState()
+    const [currentFilterForm, setCurrentFilterForm] = React.useState({
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
+        distance: 0,
+        price_to_price_from: '0 0',
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null,
+    })
+
     const [masterDataList, setMasterDataList] = React.useState({
         foodTypeMasterData: [],
         distanceMasterData: [],
@@ -155,6 +166,7 @@ export default function LocationListWeb(props) {
                             location_restaurant_in_maps={locationInMaps}
                             filter_master_data_list={masterDataList}
                             user_location={user_location}
+                            initial_filter_form={currentFilterForm}
                         />
                     </Col>
 

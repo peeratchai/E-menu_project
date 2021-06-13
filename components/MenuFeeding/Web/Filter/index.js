@@ -10,23 +10,24 @@ import PointInMaps from '../../../PointInMaps'
 
 export default function Filter(props) {
 
-    const { location_restaurant_in_maps, filter_master_data_list, user_location } = props
+    const { location_restaurant_in_maps, filter_master_data_list, user_location, initial_filter_form = {} } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState();
     const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const defaultCenterMaps = { lat: 13.7641482, lng: 100.5388393 }
-    const [form, setForm] = React.useState({
-        what: null,
-        where: null,
-        food_type: null,
-        payment_option: null,
-        distance: 0,
-        price_to_price_from: '0 0',
-        is_open_now: false,
-        have_parking: false,
-        sort_by: null,
-    })
-    
+    // const [form, setForm] = React.useState({
+    //     what: null,
+    //     where: null,
+    //     food_type: null,
+    //     payment_option: null,
+    //     distance: 0,
+    //     price_to_price_from: '0 0',
+    //     is_open_now: false,
+    //     have_parking: false,
+    //     sort_by: null,
+    // })
+    const [form, setForm] = React.useState({})
+
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
@@ -46,7 +47,24 @@ export default function Filter(props) {
                 setHaveUserLocation(true)
             }
         }
-    }, [props])
+        console.log('initial_filter_form', initial_filter_form)
+        console.log('form', form)
+
+        if (Object.keys(initial_filter_form).length !== 0 && Object.keys(form).length === 0) {
+            console.log('initial_filter_form', initial_filter_form)
+            setForm({ ...initial_filter_form })
+            try {
+                let priceReange = initial_filter_form.price_to_price_from
+                priceReange = priceReange.split(" ")
+                let priceMin = priceReange[0]
+                let priceMax = priceReange[1]
+                setPriceMinSearch(priceMin)
+                setPriceMaxSearch(priceMax)
+            } catch (error) {
+                console.log('error', error)
+            }
+        }
+    }, [location_restaurant_in_maps, initial_filter_form])
 
     const setform = (fieldName, value) => {
         setForm({
@@ -105,7 +123,7 @@ export default function Filter(props) {
                             </Col>
                             <Col xs={9} style={{ paddingLeft: "0" }}>
                                 <Form.Group controlId="whatSearch" style={{ marginBottom: "0" }}>
-                                    <Form.Control type="text" placeholder="Any keywords.." className={styles.search_Box} onChange={(e) => setform('what', e.target.value)} />
+                                    <Form.Control type="text" value={form.what} placeholder="Any keywords.." className={styles.search_Box} onChange={(e) => setform('what', e.target.value)} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -116,7 +134,7 @@ export default function Filter(props) {
                             </Col>
                             <Col xs={9} style={{ paddingLeft: "0" }}>
                                 <Form.Group controlId="whatSearch" style={{ marginBottom: "0" }}>
-                                    <Form.Control type="text" placeholder="City, postcode.." className={styles.search_Box} onChange={(e) => setform('where', e.target.value)} />
+                                    <Form.Control type="text" value={form.where} placeholder="City, postcode.." className={styles.search_Box} onChange={(e) => setform('where', e.target.value)} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -141,7 +159,7 @@ export default function Filter(props) {
                 </div>
                 <div style={{ marginTop: "10px" }}>
                     <Form.Group >
-                        <Form.Control as="select" onChange={(e) => setform('food_type', e.target.value)}>
+                        <Form.Control as="select" value={form.food_type} onChange={(e) => setform('food_type', e.target.value)}>
                             <option value="null" key="null">-</option>
                             {FootTypeDropDown}
                         </Form.Control>
@@ -162,10 +180,10 @@ export default function Filter(props) {
                 <div style={{ marginTop: "10px" }}>
                     <div>
                         Payment option
-                                            </div>
+                    </div>
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
-                            <Form.Control as="select" onChange={(e) => setform('payment_option', e.target.value)}>
+                            <Form.Control as="select" value={form.payment_option} onChange={(e) => setform('payment_option', e.target.value)}>
                                 <option value="null">-</option>
                                 {PeymentOptionsDropDown}
                             </Form.Control>
@@ -176,10 +194,10 @@ export default function Filter(props) {
                 <div style={{ marginTop: "10px" }}>
                     <div>
                         Distance
-                                            </div>
+                    </div>
                     <div style={{ marginTop: "10px" }}>
                         <Form.Group >
-                            <Form.Control as="select" disabled={!haveUserLocation} onChange={(e) => setform('distance', e.target.value)} >
+                            <Form.Control as="select" value={form.distance} disabled={!haveUserLocation} onChange={(e) => setform('distance', e.target.value)} >
                                 <option value="null">-</option>
                                 {DistanceDropDown}
                             </Form.Control>
@@ -193,8 +211,8 @@ export default function Filter(props) {
                 </div>
 
                 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                    <Checkbox onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
-                    <Checkbox onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
+                    <Checkbox value={form.is_open_now} onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
+                    <Checkbox value={form.have_parking} onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
                 </div>
 
                 <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>

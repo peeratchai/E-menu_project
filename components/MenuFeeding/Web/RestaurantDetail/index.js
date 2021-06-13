@@ -439,22 +439,6 @@ export default function RestaurantDetailWeb(props) {
 
                                 <Row style={{ marginTop: "15px" }}>
                                     <Col md={8}>
-                                        {/* <div className={styles.nav_category_layout} >
-                                            <div className={styles.nav_category} ref={refCategoryNav}>
-                                                <div className={styles.categoryList} ref={refCategoryList} style={{ transform: `translateX(${slidingPxCategoryNav}px)` }}>
-                                                    {categoryNav}
-                                                </div>
-                                                <Button className={styleButtonLeft} onClick={() => scrollCategoryNav('left')}>
-                                                    <LeftOutlined className={styles.nav_scroller_icon} />
-                                                </Button>
-                                                <Button className={styleButtonRight} onClick={() => scrollCategoryNav('right')}>
-                                                    <RightOutlined className={styles.nav_scroller_icon} />
-                                                </Button>
-                                            </div>
-                                        </div> */}
-
-
-
                                         <div className={styles.nav_category_layout} ref={headerRef}>
                                             <ScrollMenu
                                                 data={Menu(categoryList, selected)}

@@ -119,12 +119,10 @@ const CheckoutPage = ({ user, tableId = null }) => {
 
     const AddOrderMenu = (menuIndex) => {
         let existingCartItem = shoppingCartData.shopping_cart_items
-        let newTotal = shoppingCartData.total
         let newCartItem = [...existingCartItem]
         let newCart = { ...shoppingCartData }
         newCartItem[menuIndex].quantity = newCartItem[menuIndex].quantity + 1
         newCartItem[menuIndex].total = newCartItem[menuIndex].total + newCartItem[menuIndex].price
-        newTotal = newTotal + newCartItem[menuIndex].price
         let newTotalPrice = totalPrice
         newTotalPrice = newTotalPrice + newCartItem[menuIndex].price
         newCart.shopping_cart_items = newCartItem
@@ -150,16 +148,16 @@ const CheckoutPage = ({ user, tableId = null }) => {
         })
         console.log('shoppingCartData', shoppingCartData)
         let cartDataForm = {
-            "restaurant": shoppingCartData.id,
+            "restaurant": shoppingCartData.restaurant.id,
             "shopping_cart_items": shopping_cart_items
         }
 
         console.log('cartDataForm', cartDataForm)
-        // shoppingCartService.updateShoppingCart(cartDataForm).then((response) => {
-        //     console.log('response', response)
-        // }).catch(error => {
-        //     console.log('updateShoppingCart error', error)
-        // })
+        shoppingCartService.updateShoppingCart(cartDataForm).then((response) => {
+            console.log('response', response)
+        }).catch(error => {
+            console.log('updateShoppingCart error', error)
+        })
     }
 
     const onCheckOutOrder = async () => {
@@ -170,14 +168,14 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     setLoading(true)
                     let userId = userProfile.id
                     console.log(userId)
-                    let restaurantId = shoppingCartData.restaurantId
+                    let restaurantId = shoppingCartData.restaurant.id
 
                     let order_items = []
-                    let orders = shoppingCartData.order
+                    let orders = shoppingCartData.shopping_cart_items
                     orders.map((order) => {
                         order_items.push({
-                            "menu": order.id,
-                            "quantity": order.count,
+                            "menu": order.menu.id,
+                            "quantity": order.quantity,
                             "price": order.price,
                             "total": order.total,
                             "special_instruction": order.special_instruction
@@ -191,6 +189,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                         "order_items": order_items
                     }
 
+                    console.log('order data', data)
                     let response = await partnerSerivce.addOrder(data)
                     console.log('response', response)
                     message.success('Check out order successful.')

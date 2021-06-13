@@ -94,41 +94,6 @@ export default function OrderMenuModal(props) {
             })
 
 
-            let basket = window.localStorage.getItem('basket');
-            let restaurantId = restaurant_id
-
-
-            let order = {
-                ...menuDetail,
-                specialInstruction: specialInstruction,
-                count: count,
-                total: total
-            }
-            if (!basket) {
-                let menu = { 'restaurantId': restaurantId, 'order': [order], 'total': total }
-                window.localStorage.setItem('basket', JSON.stringify(menu));
-            } else {
-                basket = JSON.parse(basket)
-                let existingOrder = basket.order
-                let totalAllOrder = basket.total + total
-                let existingMenu = existingOrder.filter((order) => order.id === menuDetail.id)
-                if (existingMenu.length > 0) {
-                    existingMenu = existingMenu[0]
-                    existingMenu.count = existingMenu.count + count
-                    existingMenu.total = existingMenu.total + total
-                    existingMenu.specialInstruction = specialInstruction
-
-                    existingOrder.map((order) => {
-                        if (order.id === existingMenu.id) {
-                            order = existingMenu
-                        }
-                    })
-                    basket = { 'restaurantId': restaurantId, 'order': [...existingOrder], 'total': totalAllOrder }
-                } else {
-                    basket = { 'restaurantId': restaurantId, 'order': [...existingOrder, order], 'total': totalAllOrder }
-                }
-                window.localStorage.setItem('basket', JSON.stringify(basket));
-            }
             console.log('specialInstruction ->', specialInstruction)
             console.log('count ->', count)
             setCount(1)

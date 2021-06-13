@@ -17,7 +17,7 @@ import masterDataService from '../../../../services/masterData'
 import EmptyComponent from '../../../Empty'
 
 export default function RestaurantListMobile(props) {
-    const { loading, restaurant_list, location_name, location_id, master_data_list, user_location } = props
+    const { loading, location_name, location_id, master_data_list, user_location, current_filter_form } = props
     const [modalShow, setModalShow] = React.useState(false);
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [totalResult, setTotalResult] = React.useState(0);
@@ -25,28 +25,23 @@ export default function RestaurantListMobile(props) {
     const [locationName, setLocationName] = React.useState("");
     const [locationId, setLocationId] = React.useState("");
     const [filter, setFilter] = React.useState({});
-
-
+    const [currentFilterForm, setCurrentFilterForm] = React.useState({})
+    const [spinLoading, setSpinLoading] = React.useState(loading)
     const searchFunc = () => {
         setModalShow(true)
     }
 
     useEffect(() => {
-        if (restaurant_list.length !== 0) {
-            // setRestaurantList(props.restaurant_list)
-            if (restaurantList.length === 0) {
-                setLocationName(location_name)
-                setLocationId(location_id)
-                setTotalResult(restaurant_list.length)
-                setRestaurantList(restaurant_list)
-                renderRestaurantCard(restaurant_list)
-            } else {
-                setTotalResult(restaurantList.length)
-                setRestaurantList(restaurantList)
-                renderRestaurantCard(restaurantList)
+        if (location_name) {
+            setLocationName(location_name)
+            setLocationId(location_id)
+            if (JSON.parse(current_filter_form)) {
+                onSearch(JSON.parse(current_filter_form))
+                setCurrentFilterForm(JSON.parse(current_filter_form))
             }
         }
-    }, [restaurant_list])
+
+    }, [location_name])
 
     const onSearch = async (filterForm) => {
         setSpinLoading(true)
@@ -66,6 +61,7 @@ export default function RestaurantListMobile(props) {
         console.log(locationListByFilter)
         setRestaurantList(locationListByFilter)
         setTotalResult(locationListByFilter.length)
+        renderRestaurantCard(locationListByFilter)
         setSpinLoading(false)
     }
 
@@ -87,10 +83,10 @@ export default function RestaurantListMobile(props) {
                                     <Row >
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetails.price_from}-{restaurantDetails.price_to}</b></span> baht
-                                    </Col>
+                                        </Col>
                                         <Col style={{ color: "#74b100" }}>
                                             Open now!
-                                    </Col>
+                                        </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>
                                         <Col style={{ paddingBottom: "15px", borderBottom: "1px solid #dee2e6" }}>
@@ -136,7 +132,7 @@ export default function RestaurantListMobile(props) {
                     <Col xs={7}>
                         <div style={{ textAlign: "right" }}>
                             <b>sort by</b> &nbsp;
-                                        <Select
+                            <Select
                                 showSearch
                                 style={{ width: "25vw", textAlign: "left" }}
                                 placeholder="Search to Select"
@@ -153,7 +149,7 @@ export default function RestaurantListMobile(props) {
 
                 {/* List of Restaurant */}
                 <div style={{ width: "100%" }}>
-                    <Spin spinning={loading} tip="Loading...">
+                    <Spin spinning={spinLoading} tip="Loading...">
                         <Row>
                             {
                                 restaurantList.length > 0 ? (
@@ -172,6 +168,7 @@ export default function RestaurantListMobile(props) {
                 on_search={(filterForm) => onSearch(filterForm)}
                 filter_master_data_list={master_data_list}
                 user_location={user_location}
+                initial_filter_form={currentFilterForm}
             />
         </Layout >
     )

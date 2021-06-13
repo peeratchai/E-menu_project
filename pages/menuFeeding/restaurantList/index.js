@@ -18,7 +18,6 @@ export default function RestaurantList() {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const { locationId, locationName, currentFilterForm } = router.query;
-    const [restaurantList, setRestaurantList] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
     const [masterDataList, setMasterDataList] = React.useState({
         foodTypeMasterData: [],
@@ -48,8 +47,9 @@ export default function RestaurantList() {
                     pathname: "/menuFeeding"
                 })
             } else {
-                getRestaurant(locationId);
+                setLoading(true)
                 getFilterMasterData()
+
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(success, error, options)
                 } else {
@@ -60,16 +60,6 @@ export default function RestaurantList() {
 
     }, [router.isReady])
 
-    const getRestaurant = (locationId) => {
-        setLoading(true)
-        restaurantService.getRestaurantSearchByLocation(locationId).then(async (restaurantList) => {
-            setRestaurantList(restaurantList)
-            setLoading(false)
-            // await getAddressOnGoogleMaps(restaurantList)
-        }).catch(error => {
-            console.log('getRestaurant error', error)
-        })
-    }
 
     const getFilterMasterData = async () => {
         let awaitFoodTypeMasterData = masterDataService.getFoodType()
@@ -86,6 +76,7 @@ export default function RestaurantList() {
             peymentOptionsMasterData: peymentOptionsMasterData
         }
         setMasterDataList(masterData)
+        setLoading(false)
     }
 
     const getAddressOnGoogleMaps = async (restaurantList) => {
@@ -120,7 +111,6 @@ export default function RestaurantList() {
                 !isMobileResolution ? (
                     //PC Version
                     <RestaurantListWeb
-                        // restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
                         loading={loading}
@@ -131,7 +121,6 @@ export default function RestaurantList() {
                 ) : (
                     //Mobile Version
                     <RestaurantListMobile
-                        restaurant_list={restaurantList}
                         location_name={locationName}
                         location_id={locationId}
                         loading={loading}

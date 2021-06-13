@@ -12,28 +12,45 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater';
 //Modal filter for mobile resolution
 export default function MobileFilterRestaurantList(props) {
 
-    const { filter_master_data_list, user_location } = props
+    const { filter_master_data_list, user_location, initial_filter_form = {} } = props
     const [priceMinSearch, setPriceMinSearch] = React.useState(0);
     const [priceMaxSearch, setPriceMaxSearch] = React.useState(2000);
     const [haveUserLocation, setHaveUserLocation] = React.useState(false)
-    const [form, setForm] = React.useState({
-        what: null,
-        where: null,
-        food_type: null,
-        payment_option: null,
-        distance: 0,
-        price_to_price_from: '0 0',
-        is_open_now: false,
-        have_parking: false,
-        sort_by: null
-    })
+    const [form, setForm] = React.useState({})
+    // const [form, setForm] = React.useState({
+    //     what: null,
+    //     where: null,
+    //     food_type: null,
+    //     payment_option: null,
+    //     distance: 0,
+    //     price_to_price_from: '0 0',
+    //     is_open_now: false,
+    //     have_parking: false,
+    //     sort_by: null
+    // })
 
     useEffect(() => {
         if (user_location) {
             setHaveUserLocation(true)
         }
-    }, [props])
+        console.log('initial_filter_form', initial_filter_form)
+        console.log('form', form)
 
+        if (Object.keys(initial_filter_form).length !== 0 && Object.keys(form).length === 0) {
+            console.log('initial_filter_form', initial_filter_form)
+            setForm({ ...initial_filter_form })
+            try {
+                let priceReange = initial_filter_form.price_to_price_from
+                priceReange = priceReange.split(" ")
+                let priceMin = priceReange[0]
+                let priceMax = priceReange[1]
+                setPriceMinSearch(priceMin)
+                setPriceMaxSearch(priceMax)
+            } catch (error) {
+                console.log('error', error)
+            }
+        }
+    }, [user_location, initial_filter_form])
     const onChangePriceFilter = (value) => {
         setPriceMinSearch(value[0])
         setPriceMaxSearch(value[1])
@@ -123,7 +140,7 @@ export default function MobileFilterRestaurantList(props) {
                                     <Col>
                                         <div className={utilStyles.fontTitleMobileSM}>
                                             Price Range
-                                    </div>
+                                        </div>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -217,7 +234,7 @@ export default function MobileFilterRestaurantList(props) {
                                     </div>
                                     <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                         near you
-                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Col>
@@ -230,7 +247,7 @@ export default function MobileFilterRestaurantList(props) {
                                     </div>
                                     <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                         Open now
-                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Col>
@@ -243,7 +260,7 @@ export default function MobileFilterRestaurantList(props) {
                                     </div>
                                     <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                         Hot price
-                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Col>
@@ -256,7 +273,7 @@ export default function MobileFilterRestaurantList(props) {
                                     </div>
                                     <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                         near you
-                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Col>
@@ -269,7 +286,7 @@ export default function MobileFilterRestaurantList(props) {
                                     </div>
                                     <div style={{ marginTop: "0.625rem", fontSize: "0.7rem" }}>
                                         near you
-                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </Col>

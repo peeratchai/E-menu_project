@@ -45,7 +45,27 @@ export default function Restaurant() {
                     message.warning('Please login and scan qr code again.')
                 } else {
                     let shoppingCart = response
-                    setShoppingCart(shoppingCart)
+                    if (response === "") {
+                        setShoppingCart(shoppingCart)
+                    } else {
+                        let cartItems = []
+                        shoppingCart.shopping_cart_items.forEach((cartItem) => {
+                            cartItems.push({
+                                "menu": cartItem.menu.id,
+                                "quantity": cartItem.quantity,
+                                "price": cartItem.price,
+                                "total": cartItem.total,
+                                "special_instruction": cartItem.special_instruction
+                            })
+                        })
+                        let newShoppingCart = {
+                            "restaurant": shoppingCart.restaurant.id,
+                            "shopping_cart_items": cartItems
+                        }
+
+                        setShoppingCart(newShoppingCart)
+
+                    }
                     setIsInitialCart(true)
                     console.log('shoppingCart', shoppingCart)
                     if (tableId !== undefined) {
