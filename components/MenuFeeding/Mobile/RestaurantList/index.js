@@ -22,8 +22,6 @@ export default function RestaurantListMobile(props) {
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantList, setRestaurantList] = React.useState([]);
-    const [locationName, setLocationName] = React.useState("");
-    const [locationId, setLocationId] = React.useState("");
     const [filter, setFilter] = React.useState({});
     const [currentFilterForm, setCurrentFilterForm] = React.useState({})
     const [spinLoading, setSpinLoading] = React.useState(loading)
@@ -33,8 +31,7 @@ export default function RestaurantListMobile(props) {
 
     useEffect(() => {
         if (location_name) {
-            setLocationName(location_name)
-            setLocationId(location_id)
+            console.log('location_name', location_name)
             if (JSON.parse(current_filter_form)) {
                 onSearch(JSON.parse(current_filter_form))
                 setCurrentFilterForm(JSON.parse(current_filter_form))
@@ -45,7 +42,7 @@ export default function RestaurantListMobile(props) {
 
     const onSearch = async (filterForm) => {
         setSpinLoading(true)
-        filterForm.business_location = locationId
+        filterForm.business_location = location_id
         let filter = changeFormatFilter(filterForm)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
@@ -72,7 +69,7 @@ export default function RestaurantListMobile(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList/' + restaurantDetails.name,
-                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id },
+                            query: { locationId: location_id, locationName: location_name, restaurantId: restaurantDetails.id },
                         }}
                     >
                         <Card>
@@ -117,7 +114,7 @@ export default function RestaurantListMobile(props) {
 
                 <Breadcrumb>
                     <Link href="/menuFeeding" passHref>
-                        <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{location_name}</Breadcrumb.Item>
                     </Link>
                     <Breadcrumb.Item active>Restaurant List</Breadcrumb.Item>
                 </Breadcrumb>

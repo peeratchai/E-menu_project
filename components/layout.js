@@ -15,6 +15,7 @@ import MessengerCustomerChat from 'react-messenger-customer-chat';
 import checkUserPermission from '../lib/checkUserPermission'
 import fetchJson from '../lib/fetchJson'
 import profileService from '../services/profile'
+import shoppingCartService from '../services/shoppingCart'
 
 export default function Layout(props) {
 
@@ -53,19 +54,32 @@ export default function Layout(props) {
         if (user) {
             setIsLogin(user.isLoggedIn)
             checkPermission(user)
-        }
-        if (typeof window !== 'undefined') {
-            let basket = window.localStorage.getItem('basket');
-            if (basket !== null) {
-                basket = JSON.parse(basket)
-                let order = basket.order
-                setTotal_menu_in_basket(order.length)
-            }
+            setInitialCart()
+            console.log('Layout shoppingCart')
         }
         setStyleOfContainer(containerType)
         generateButtonNavbar()
 
     }, [containerType, page, islogin, menuInBasket, user])
+
+    const setInitialCart = () => {
+        shoppingCartService.getShoppingCart().then((response) => {
+            if (response !== 'Not Login') {
+                let shoppingCart = response
+                if (shoppingCart !== "") {
+                    console.log('Layout shoppingCart', shoppingCart)
+                    let shoppingCartItems = shoppingCart.shopping_cart_items
+                    let countCartItems = 0
+                    shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
+                    if (countCartItems > 0) {
+                        console.log('countCartItems', countCartItems)
+                        setTotal_menu_in_basket(countCartItems)
+                        generateButtonNavbar(countCartItems)
+                    }
+                }
+            }
+        })
+    }
 
     const checkPermission = (user = null) => {
         let roles = ['employee', 'partner', 'admin']
@@ -118,14 +132,14 @@ export default function Layout(props) {
         })
     }
 
-    const generateButtonNavbar = () => {
+    const generateButtonNavbar = (countCartItems = total_menu_in_basket) => {
         let buttonNavbar
         if (page === 'restaurantDetails') {
             buttonNavbar = (
                 <ActiveLink activeClassName="active" href="/newspaper">
                     <>
                         <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
-                        <Badge count={total_menu_in_basket} size="small">
+                        <Badge count={countCartItems} size="small">
                             <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
                         </Badge>
                     </>

@@ -21,13 +21,9 @@ import changeFormatLatLong from '../../../../services/chaneformatLatLong'
 import PointInMaps from '../../../PointInMaps'
 import moment from 'moment'
 
-const { Meta } = Cardantd;
-
-
 export default function RestaurantDetailMobile(props) {
-    const { loading, shopping_cart, is_initial_cart } = props
+    const { loading, shopping_cart, is_initial_cart, restaurant_detail } = props
     const router = useRouter()
-    const { restaurant } = router.query;
     //// Set State
     const showBasketButton = ""
     const [modalShow, setModalShow] = React.useState(false);
@@ -40,9 +36,11 @@ export default function RestaurantDetailMobile(props) {
     const [locationId, setLocationId] = React.useState()
     const [restaurantBannerPicture, setRestaurantBannerPicture] = React.useState()
     const [menuSelected, setMenuSelected] = React.useState()
-    const [have_menu_in_basket, setHave_menu_in_basket] = React.useState(false)
+    const [haveShoppingCart, setHaveShoppingCart] = React.useState(false)
     const [basket, setBasket] = React.useState({ 'order': [], 'total': 0 })
     const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
+    const [numberOfCartItem, setNumberOfCartItem] = React.useState(0)
+    const [totalOfCartItem, setTotalOfCartItem] = React.useState(0)
     const [restaurantDetail, setRestaurantDetail] = React.useState({
         name: "",
         description: "",
@@ -71,7 +69,7 @@ export default function RestaurantDetailMobile(props) {
 
 
     useEffect(() => {
-        if (props && props.restaurant_detail !== undefined) {
+        if (restaurant_detail) {
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
             restaurant_detail.menu_categories.map((category, index) => {
@@ -97,17 +95,35 @@ export default function RestaurantDetailMobile(props) {
                 setLocationName(location_name)
                 setLocationId(location_id)
             }
-            checkMenuFromBasket()
-        }
 
-    }, [props])
+            console.log('shopping_cart', shopping_cart)
+            if (Object.keys(shopping_cart).length > 0) {
+                setInitialShoppingCart(shopping_cart)
+            }
+        }
+    }, [restaurant_detail, shopping_cart])
+
+    const setInitialShoppingCart = (shoppingCart) => {
+        console.log('shoppingCart', shoppingCart)
+        let cartItems = shoppingCart.shopping_cart_items
+        let numberOfCartItem = 0
+        let total = 0
+        cartItems.forEach((cartItem) => {
+            numberOfCartItem += cartItem.quantity
+            total += cartItem.total
+        })
+
+        setNumberOfCartItem(numberOfCartItem)
+        setHaveShoppingCart(true)
+        setTotalOfCartItem(total)
+    }
 
     const checkMenuFromBasket = () => {
         let existingBasket = window.localStorage.getItem('basket');
         if (existingBasket) {
             existingBasket = JSON.parse(existingBasket)
             setBasket(existingBasket)
-            setHave_menu_in_basket(true)
+            setHaveShoppingCart(true)
         }
 
         setModalShow(false)
@@ -362,19 +378,20 @@ export default function RestaurantDetailMobile(props) {
                 restaurant_id={props.restaurant_id}
                 shopping_cart={shopping_cart}
                 is_initial_cart={is_initial_cart}
+                set_initial_shopping_cart={setInitialShoppingCart}
             />
-            <div className={have_menu_in_basket ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
+            <div className={haveShoppingCart ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
                     <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#ff4a4f", borderRadius: "5px", color: "white" }}>
                         <Row>
                             <Col>
                                 <div stlye={{ textAlign: "left", paddingLeft: "10px" }}>
-                                    Basket : {basket.order.length} Item
+                                    Basket : {numberOfCartItem} Item
                                 </div>
                             </Col>
                             <Col>
                                 <div style={{ textAlign: "right", paddingRight: "10px" }}>
-                                    {basket.total} Baht
+                                    {totalOfCartItem} Baht
                                 </div>
                             </Col>
                         </Row>

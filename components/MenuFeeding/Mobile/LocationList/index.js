@@ -123,6 +123,7 @@ export default function LocationListMobile(props) {
     }
 
     const locationCard = locationList && locationList.map((locationDetails) => {
+        console.log('locationDetails', locationDetails)
         if (locationDetails.total > 0) {
             return (
                 <Col xs={12} className={styles.colCardMobile}>

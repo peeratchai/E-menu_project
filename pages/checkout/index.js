@@ -28,7 +28,6 @@ const CheckoutPage = ({ user, tableId = null }) => {
     const [haveCheckOutPermission, setHaveCheckOutPermission] = React.useState(false)
     const [haveMenuInBasket, setHaveMenuInBasket] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
-
     useEffect(() => {
         console.log('user', user)
         console.log('tableId', tableId)
@@ -41,7 +40,6 @@ const CheckoutPage = ({ user, tableId = null }) => {
                 setInitialCart()
             }
         }
-
 
         // if (typeof window !== 'undefined') {
         //     let basket = window.localStorage.getItem('basket');
@@ -304,13 +302,14 @@ const CheckoutPage = ({ user, tableId = null }) => {
     })
 
 
+
     return (
         <>
             {
                 isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
-                            <Container className={utilStyles.container_sm}>
+                            <Container className={utilStyles.container_sm} style={{ maxHeight: "calc(100vh - 200px)", overflowX: "scroll" }}>
                                 {
                                     countMenuItems > 0 ? MenuListComponentMobile : <EmptyComponent />
                                 }
@@ -318,7 +317,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                         </Layout >
                         {
                             countMenuItems > 0 ? (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
