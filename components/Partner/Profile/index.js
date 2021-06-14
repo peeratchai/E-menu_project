@@ -76,10 +76,10 @@ export default function Profile(props) {
         website: ''
     })
     const [loading, setLoading] = React.useState(false)
-    useEffect(() => {
+    useEffect(async () => {
         if (restaurant_id && current_tab === 'profile') {
+            await getAllBusinessDistrict()
             getRestaurantDetails()
-            getAllBusinessDistrict()
         }
     }, [props])
 
@@ -112,6 +112,7 @@ export default function Profile(props) {
                 image_url: restaurantDetail.image_url,
                 instragram: restaurantDetail.instragram,
                 location: restaurantDetail.location,
+                address: restaurantDetail.address,
                 name: restaurantDetail.name,
                 Line: restaurantDetail.line,
                 name_eng: restaurantDetail.name_eng,

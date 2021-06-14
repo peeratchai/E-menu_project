@@ -102,6 +102,8 @@ const restaurantService = {
         formData.append("image_url", restaurantForm.image_url);
         formData.append("instragram", restaurantForm.instragram);
         formData.append("location", restaurantForm.location);
+        console.log('restaurantForm.address', restaurantForm.address)
+        formData.append("address", restaurantForm.address);
         formData.append("name", restaurantForm.name);
         formData.append("name_eng", restaurantForm.name_eng);
         formData.append("payment_option", restaurantForm.payment_option);

@@ -170,7 +170,8 @@ class Map extends Component {
                 })
                 let markerPosition = {
                     lat: newLat,
-                    lng: newLng
+                    lng: newLng,
+                    address: address
                 }
                 this.props.on_select_location(markerPosition)
             },
@@ -214,7 +215,8 @@ class Map extends Component {
         })
         let markerPosition = {
             lat: latValue,
-            lng: lngValue
+            lng: lngValue,
+            address: place.formatted_address
         }
         this.props.on_select_location(markerPosition)
     };

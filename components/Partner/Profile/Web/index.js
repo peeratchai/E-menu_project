@@ -186,7 +186,12 @@ export default function WebProfileComponent(props) {
 
     const onSelectLocation = (markerPosition) => {
         let location = "POINT(" + markerPosition.lat + " " + markerPosition.lng + ")"
-        setRestaurantDetail('location', location)
+        let address = markerPosition.address
+        setRestaurantForm({
+            ...restaurantForm,
+            location: location,
+            address: address
+        })
         setShowLocationModal(false)
     }
 
@@ -309,11 +314,20 @@ export default function WebProfileComponent(props) {
                                 />
                             </Form.Group>
                             <Form.Group controlId="location">
-                                <Form.Label>Location <Button disabled={disable} onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
+                                <Form.Label>Location Point(Lat - Lng) <Button disabled={disable} onClick={() => setShowLocationModal(true)}>Change location</Button></Form.Label>
                                 <Form.Control
                                     type="text"
                                     onChange={(e) => setRestaurantDetail('location', e.target.value)}
                                     value={restaurantForm.location}
+                                    disabled={disable}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="address">
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    onChange={(e) => setRestaurantDetail('address', e.target.value)}
+                                    value={restaurantForm.address}
                                     disabled={disable}
                                 />
                             </Form.Group>

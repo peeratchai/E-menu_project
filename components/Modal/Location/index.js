@@ -1,8 +1,5 @@
-import utilStyles from '../../../styles/utils.module.css'
-import { Row, Col, Form, Button, Modal, Container } from 'react-bootstrap'
+import { Button, Modal, Container } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, Select, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import Maps from '../../Maps'
 

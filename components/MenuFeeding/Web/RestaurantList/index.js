@@ -100,7 +100,7 @@ export default function RestaurantListWeb(props) {
                                     </Row>
                                     <Row style={{ marginTop: "15px" }}>
                                         <Col>
-                                            <LocationOnIcon /> {restaurantDetails.googleMapsAddress}
+                                            <LocationOnIcon /> {restaurantDetails.address}
                                         </Col>
                                     </Row>
                                 </Card.Text>
