@@ -83,8 +83,14 @@ export default function MobileProfileComponent(props) {
     let BusinessHourComponent, businessHour
     if (restaurantForm.business_hour.length > 0) {
         BusinessHourComponent = sortBusinessHourArray.map((day, index) => {
-            businessHour = restaurantForm.business_hour.filter((businessHour) => businessHour.day === day)
-            businessHour = businessHour[0]
+            businessHour = restaurantForm.business_hour.find((businessHour) => businessHour.day === day)
+            if (businessHour === undefined) {
+                businessHour = {
+                    'day': day,
+                    'opening_time': '8.00',
+                    'closing_time': '16.00'
+                }
+            }
             return (
                 <>
                     <Row style={{ marginBottom: "5px" }}>
@@ -102,8 +108,7 @@ export default function MobileProfileComponent(props) {
         })
     }
 
-
-    const [optionsOfPayment, setOptionsOfPayment] = React.useState([
+    const optionsOfPayment = [
         {
             label: `Cash`,
             value: 'Cash',
@@ -112,7 +117,8 @@ export default function MobileProfileComponent(props) {
             label: `Credit Card`,
             value: 'Credit Card',
         }
-    ]);
+    ]
+
 
     const uploadButton = (
         <div >

@@ -1,6 +1,6 @@
 
 import 'antd/dist/antd.css';
-import { Table, Space, Switch, Tag, Input, Button, message, Spin } from 'antd';
+import { Table, Space, Popconfirm, Tag, Input, Button, message, Spin } from 'antd';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
 import AdminEditProfileModal from '../../Modal/AdminEditProfileModal'
@@ -13,7 +13,6 @@ export default function AccountManagement(props) {
     const [edifProfileModalShow, setEdifProfileModalShow] = React.useState();
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
-    const [userProfiles, setUserProfiles] = React.useState();
     const [userProfilesData, setUserProfilesData] = React.useState();
     const [profileSelected, setProfileSelected] = React.useState();
     const [loading, setLoading] = React.useState(false);
@@ -38,7 +37,6 @@ export default function AccountManagement(props) {
     const getAllUserProfile = async () => {
         setLoading(true)
         let allProfile = await adminService.getProfileUser()
-        setUserProfiles(allProfile)
         let userProfilesData = []
         let restaurant_employee = null
         let restaurant_name = null
@@ -105,10 +103,10 @@ export default function AccountManagement(props) {
                         style={{ width: 90 }}
                     >
                         Search
-              </Button>
+                    </Button>
                     <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
                         Reset
-              </Button>
+                    </Button>
 
                 </Space>
             </div>
@@ -199,17 +197,25 @@ export default function AccountManagement(props) {
             key: 'action',
             render: (profile, record) => (
                 <Space size="middle">
-                    <Switch checked={profile.is_active} onChange={(checked) => on_change_profile_status(checked, profile)} />
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => onEditProfile(profile)}>
                         Edit
                     </Tag>
-
+                    <Popconfirm
+                        title="Are you sure to delete this account?"
+                        onConfirm={() => onDeleteAccount(profile)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} >
+                            Delete
+                        </Tag>
+                    </Popconfirm>
                 </Space>
             ),
         }
     ]
 
-    const on_change_profile_status = async (checked, profile) => {
+    const onDeleteAccount = async (profile) => {
         let data = {
             username: profile.username,
             first_name: profile.first_name,
@@ -220,7 +226,7 @@ export default function AccountManagement(props) {
             avatar: profile.avatar_url,
             roles: profile.roles,
             restaurant_employee: profile.restaurant_employee,
-            is_active: checked
+            is_active: false
         }
 
 
