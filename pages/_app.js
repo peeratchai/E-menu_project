@@ -36,29 +36,29 @@ const handExitComplete = () => {
 export default function App({ Component, pageProps }) {
     const router = useRouter()
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            let newVersion = '11.06.2021 2.19'
-            let currentVersion = window.localStorage.getItem('version')
-            if (currentVersion) {
-                if (currentVersion !== newVersion) {
-                    localStorage.clear();
-                    window.localStorage.setItem('version', newVersion)
-                    window.location.reload();
-                    router.push({
-                        pathname: "/"
-                    })
-                }
-            } else {
-                localStorage.clear();
-                window.localStorage.setItem('version', newVersion)
-                window.location.reload();
-                router.push({
-                    pathname: "/"
-                })
-            }
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (typeof window !== 'undefined') {
+    //         let newVersion = '11.06.2021 2.19'
+    //         let currentVersion = window.localStorage.getItem('version')
+    //         if (currentVersion) {
+    //             if (currentVersion !== newVersion) {
+    //                 localStorage.clear();
+    //                 window.localStorage.setItem('version', newVersion)
+    //                 window.location.reload();
+    //                 router.push({
+    //                     pathname: "/"
+    //                 })
+    //             }
+    //         } else {
+    //             localStorage.clear();
+    //             window.localStorage.setItem('version', newVersion)
+    //             window.location.reload();
+    //             router.push({
+    //                 pathname: "/"
+    //             })
+    //         }
+    //     }
+    // }, [])
 
     return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
         <Head>
