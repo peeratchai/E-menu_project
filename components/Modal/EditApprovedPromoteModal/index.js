@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import partnerSerivce from '../../../services/partner'
 import utilStyles from '../../../styles/utils.module.css'
 
-export default function EditPromoteModal(props) {
+export default function EditApprovePromoteModal(props) {
 
     const { promotion_selected, restaurant_id } = props
     const { onHide, get_promotions } = props
@@ -37,6 +37,7 @@ export default function EditPromoteModal(props) {
     }
 
     const editPromotion = async () => {
+        setConfirmModalVisible(false)
         const newErrors = findAddPromotionFormErrors()
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors)
@@ -134,6 +135,7 @@ export default function EditPromoteModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <Container>
+
                     <Row>
                         <Col sm={6}>
                             <Row>

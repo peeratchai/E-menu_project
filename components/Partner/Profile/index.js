@@ -140,6 +140,9 @@ export default function Profile(props) {
         if (restaurant_id) {
             const { restaurantLogo, bannerImage, business_hour } = restaurantForm
             let dataForm = { ...restaurantForm }
+            if (dataForm.business_district === null) {
+                dataForm.business_district = " "
+            }
             if (restaurantLogo === undefined) {
                 dataForm.image = null
             } else {
