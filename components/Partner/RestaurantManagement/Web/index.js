@@ -18,7 +18,7 @@ export default function WebComponent(props) {
     const [containerHeight, setContainerHeight] = React.useState();
     const [table, setTable] = React.useState([]);
     const [addTableModalShow, setAddTableModalShow] = React.useState(false);
-    const [tableSelected, setTableSelected] = React.useState();
+    const [tableSelected, setTableSelected] = React.useState({ id: null, name: '' });
     const [viewOrderModalShow, setViewOrderModalShow] = React.useState(false);
     const [dragging, setDragging] = React.useState(false);
     const [zoneNumberSelected, setZoneNumberSelected] = React.useState(zone_number_selected);
@@ -233,7 +233,7 @@ export default function WebComponent(props) {
     return (
         <div className={styles.tab}>
             <Row>
-                <Col xs={8}>
+                <Col xs={6}>
                     <Form>
                         <Form.Group controlId="zoneName">
                             <Form.Control
@@ -246,13 +246,13 @@ export default function WebComponent(props) {
                         </Form.Group>
                     </Form>
                 </Col>
-                <Col xs={4}>
+                <Col xs={6}>
                     <div style={{ textAlign: "right" }}>
                         <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
                             New table
                         </Button>
                         <Button disabled={disable} onClick={() => updatePositionTable()}>
-                            Save
+                            Save table position
                         </Button>
                     </div>
                 </Col>

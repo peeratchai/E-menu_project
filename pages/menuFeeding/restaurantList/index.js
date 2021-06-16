@@ -2,10 +2,8 @@ import { useRouter } from 'next/router'
 import useMediaQuery from "../../../utils/utils";
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
-import restaurantService from '../../../services/restaurant'
 import RestaurantListWeb from '../../../components/MenuFeeding/Web/RestaurantList'
 import RestaurantListMobile from '../../../components/MenuFeeding/Mobile/RestaurantList'
-import Geocode from "react-geocode";
 import masterDataService from '../../../services/masterData'
 
 var options = {
@@ -14,7 +12,7 @@ var options = {
     maximumAge: 0,
 };
 
-export default function RestaurantList() {
+export default function RestaurantList({ masterData }) {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const { locationId, locationName, currentFilterForm } = router.query;
@@ -39,6 +37,7 @@ export default function RestaurantList() {
     }
 
     useEffect(async () => {
+        console.log('masterData', masterData)
         if (!router.isReady) {
             // console.log('not ready')
         } else {
@@ -79,31 +78,31 @@ export default function RestaurantList() {
         setLoading(false)
     }
 
-    const getAddressOnGoogleMaps = async (restaurantList) => {
-        let point, substringPotion, splitPotion, latLong, lat, lng
-        Promise.all(restaurantList.map(async (restaurantDetails) => {
-            try {
-                point = restaurantDetails.location;
-                substringPotion = point.substring(5)
-                splitPotion = substringPotion.split('(').join('').split(')');
-                latLong = splitPotion[0].split(' ')
-                lat = latLong[0]
-                lng = latLong[1]
-                console.log(lat, lng)
-                let address = await Geocode.fromLatLng(lat, lng).then(
-                    (response) => {
-                        const address = response.results[0].formatted_address;
-                        return address
-                    }
-                );
-                restaurantDetails.googleMapsAddress = address
-                setRestaurantList(restaurantList)
-                return address
-            } catch (error) {
-                console.log('error', error)
-            }
-        }))
-    }
+    // const getAddressOnGoogleMaps = async (restaurantList) => {
+    //     let point, substringPotion, splitPotion, latLong, lat, lng
+    //     Promise.all(restaurantList.map(async (restaurantDetails) => {
+    //         try {
+    //             point = restaurantDetails.location;
+    //             substringPotion = point.substring(5)
+    //             splitPotion = substringPotion.split('(').join('').split(')');
+    //             latLong = splitPotion[0].split(' ')
+    //             lat = latLong[0]
+    //             lng = latLong[1]
+    //             console.log(lat, lng)
+    //             let address = await Geocode.fromLatLng(lat, lng).then(
+    //                 (response) => {
+    //                     const address = response.results[0].formatted_address;
+    //                     return address
+    //                 }
+    //             );
+    //             restaurantDetails.googleMapsAddress = address
+    //             setRestaurantList(restaurantList)
+    //             return address
+    //         } catch (error) {
+    //             console.log('error', error)
+    //         }
+    //     }))
+    // }
 
     return (
         <>

@@ -55,7 +55,6 @@ export default function Layout(props) {
             setIsLogin(user.isLoggedIn)
             checkPermission(user)
             setInitialCart()
-            console.log('Layout shoppingCart')
         }
         setStyleOfContainer(containerType)
         generateButtonNavbar()
@@ -67,12 +66,10 @@ export default function Layout(props) {
             if (response !== 'Not Login') {
                 let shoppingCart = response
                 if (shoppingCart !== "") {
-                    console.log('Layout shoppingCart', shoppingCart)
                     let shoppingCartItems = shoppingCart.shopping_cart_items
                     let countCartItems = 0
                     shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
                     if (countCartItems > 0) {
-                        console.log('countCartItems', countCartItems)
                         setTotal_menu_in_basket(countCartItems)
                         generateButtonNavbar(countCartItems)
                     }

@@ -1,7 +1,7 @@
 import Layout from '../../../layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
-import { Row, Col, Card, Breadcrumb } from 'react-bootstrap'
+import { Row, Col, Card, Button, Breadcrumb } from 'react-bootstrap'
 import Link from 'next/link'
 import styles from './index.module.css'
 import { Select, Spin } from 'antd';
@@ -25,22 +25,29 @@ export default function RestaurantListMobile(props) {
     const [filter, setFilter] = React.useState({});
     const [currentFilterForm, setCurrentFilterForm] = React.useState({})
     const [spinLoading, setSpinLoading] = React.useState(loading)
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const [nextPage, setNextPage] = React.useState(1)
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [sortValue, setSortValue] = React.useState()
+    // limit is number of reataurant list each page 
+    const limit = 10
+
     const searchFunc = () => {
         setModalShow(true)
     }
 
     useEffect(() => {
         if (location_name) {
-            console.log('location_name', location_name)
             if (JSON.parse(current_filter_form)) {
                 onSearch(JSON.parse(current_filter_form))
-                setCurrentFilterForm(JSON.parse(current_filter_form))
             }
         }
 
     }, [location_name])
 
-    const onSearch = async (filterForm) => {
+    const onSearch = async (filterForm, isLoadMore = false) => {
+        setFilter(filterForm)
+        setCurrentFilterForm(filterForm)
         setSpinLoading(true)
         filterForm.business_location = location_id
         let filter = changeFormatFilter(filterForm)
@@ -52,13 +59,38 @@ export default function RestaurantListMobile(props) {
             filter.current_location = null
         }
         filter.business_district = location_id
-        let accessToken = await checkLogin()
-        let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
-        setFilter(filterForm)
-        console.log(locationListByFilter)
-        setRestaurantList(locationListByFilter)
-        setTotalResult(locationListByFilter.length)
-        renderRestaurantCard(locationListByFilter)
+        let response = await restaurantService.getRestaurantSearchWithPaging(nextPage, limit, filter)
+        console.log('response', response)
+        let next_page = response.next_page
+        let current_page = response.current_page
+        let totalPage = response.total_page
+        const results = response.results
+        let newRestaurantList = []
+
+        if (results.length > 0) {
+            if (isLoadMore) {
+                newRestaurantList = [...restaurantList, ...results]
+            } else {
+                newRestaurantList = [...results]
+            }
+            console.log(newRestaurantList)
+            if (sortValue) {
+                onSort(sortValue, newRestaurantList)
+            } else {
+                setRestaurantList(newRestaurantList)
+                renderRestaurantCard(newRestaurantList)
+            }
+            setCurrentPage(current_page)
+            setNextPage(next_page)
+            setTotalPage(totalPage)
+            setTotalResult(newRestaurantList.length)
+        } else {
+            setRestaurantList(newRestaurantList)
+            renderRestaurantCard(newRestaurantList)
+            setTotalResult(0)
+            setNextPage(1)
+        }
+
         setSpinLoading(false)
     }
 
@@ -106,6 +138,23 @@ export default function RestaurantListMobile(props) {
         setRestaurantCard(restaurantCard)
     }
 
+
+    const onSort = (sortValue, newRestaurantList = restaurantList) => {
+        setSortValue(sortValue)
+        if (sortValue === 'A-Z') {
+            const sortResult = [].concat(newRestaurantList)
+                .sort((a, b) => a.name > b.name ? 1 : -1)
+            setRestaurantList(sortResult)
+            renderRestaurantCard(sortResult)
+        }
+        if (sortValue === 'Z-A') {
+            const sortResult = [].concat(newRestaurantList)
+                .sort((a, b) => a.name < b.name ? 1 : -1)
+            setRestaurantList(sortResult)
+            renderRestaurantCard(sortResult)
+        }
+    }
+
     return (
         <Layout containerType="mobile" search searchFunc={searchFunc}>
             <Container className={utilStyles.container_sm} >
@@ -133,12 +182,12 @@ export default function RestaurantListMobile(props) {
                                 showSearch
                                 style={{ width: "25vw", textAlign: "left" }}
                                 placeholder="Search to Select"
-                                defaultValue="Lastet"
+                                defaultValue="-"
+                                onChange={(value) => onSort(value)}
                             >
                                 <Option value="-">-</Option>
-                                <Option value="Lastet">Lastet</Option>
-                                <Option value="Bangkok">Bangkok</Option>
-                                <Option value="Nonthaburi">Nonthaburi</Option>
+                                <Option value="A-Z">A-Z</Option>
+                                <Option value="Z-A">Z-A</Option>
                             </Select>
                         </div>
                     </Col>
@@ -150,7 +199,16 @@ export default function RestaurantListMobile(props) {
                         <Row>
                             {
                                 restaurantList.length > 0 ? (
-                                    restaurantCard
+                                    <>
+                                        {restaurantCard}
+                                        {
+                                            currentPage < totalPage && (
+                                                <div style={{ width: "100%", textAlign: "center" }}>
+                                                    <Button onClick={() => onSearch(currentFilterForm, true)}>Load more</Button>
+                                                </div>
+                                            )
+                                        }
+                                    </>
                                 ) : (
                                     <EmptyComponent />
                                 )

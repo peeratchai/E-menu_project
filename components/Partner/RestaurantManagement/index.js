@@ -14,7 +14,6 @@ export default function RestaurantManagement(props) {
     const [zoneNumberSelected, setZoneNumberSelected] = React.useState(0)
 
     useEffect(() => {
-        console.log('restaurant_id', restaurant_id)
         if (restaurant_id && current_tab === 'restaurantManagement') {
             getZone()
         }

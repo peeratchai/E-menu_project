@@ -32,26 +32,23 @@ export default function MobileComponent(props) {
     useEffect(() => {
         if (Array.isArray(zone)) {
             if (zone.length > 0) {
-                console.log('zone', zone)
                 setZoneSelected(zone[0])
-                getOrder(zone[0])
+                let initialTableIdSelected = zone[0].restaurant_tables[0].id
+                setTableIdSelected(initialTableIdSelected)
+                setRestaurantTable(zone[0].restaurant_tables)
+                getOrder(initialTableIdSelected)
             }
         }
     }, [props])
 
-    const getOrder = async (zone = zoneSelected) => {
+    const getOrder = async (tableId) => {
         setLoading(true)
-        let zoneIdArray = []
-        zoneIdArray.push(zone.id)
         let data = {
             "restaurant": restaurant_id,
-            "restaurant_table": null,
-            "zone": zoneIdArray
+            "restaurant_table": [tableId],
+            "zone": null
         }
         console.log(data)
-
-        setRestaurantTable(zone.restaurant_tables)
-        setTableIdSelected(zone.restaurant_tables[0].id)
 
         partnerService.getOrderByfilter(data).then((orders) => {
             console.log('order', orders)
@@ -228,7 +225,7 @@ export default function MobileComponent(props) {
 
     let newOrderTableListComponent = orders && orders.map((order) => {
         let tableList = order.new_orders.map((newOrder) => {
-            if (newOrder.order_items.length > 0) {
+            if (newOrder.order_items.length > 0 && newOrder.status === 'New Order') {
                 return (
                     <>
                         <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
@@ -237,7 +234,7 @@ export default function MobileComponent(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -313,7 +310,7 @@ export default function MobileComponent(props) {
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -362,7 +359,7 @@ export default function MobileComponent(props) {
 
     let inOrderTableList = orders && orders.map((order) => {
         let tableList = order.in_orders.map((inOrder) => {
-            if (inOrder.order_items.length > 0) {
+            if (inOrder.order_items.length > 0 && inOrder.status === 'In Order') {
                 return (
                     <>
                         {/* Table list */}
@@ -372,7 +369,7 @@ export default function MobileComponent(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -448,7 +445,7 @@ export default function MobileComponent(props) {
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -498,7 +495,7 @@ export default function MobileComponent(props) {
 
     let completedOrderTableList = orders && orders.map((order) => {
         let tableList = order.completed_orders.map((completedOrder) => {
-            if (completedOrder.order_items.length > 0) {
+            if (completedOrder.order_items.length > 0 && completedOrder.status === 'Completed') {
                 return (
                     <>
                         {/* Table list */}
@@ -508,7 +505,7 @@ export default function MobileComponent(props) {
                                     <Row >
                                         <Col>
                                             <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                                        &nbsp;&nbsp; {order.name}
+                                            &nbsp;&nbsp; {order.name}
                                         </Col>
                                         <Col>
                                             <div style={{ textAlign: "right" }}>
@@ -563,7 +560,7 @@ export default function MobileComponent(props) {
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -627,6 +624,7 @@ export default function MobileComponent(props) {
     }
 
     const onChangeTable = (tableId) => {
+        getOrder(tableId)
         setTableIdSelected(tableId)
     }
 
@@ -642,13 +640,6 @@ export default function MobileComponent(props) {
                         >
                             {zoneDropdown}
                         </Select>
-                        {/* <Form.Control
-                            as="select"
-                            custom
-                            onChange={(e) => onChangeZone(e)}
-                        >
-                            {zoneDropdown}
-                        </Form.Control> */}
                         <Row style={{ marginTop: "15px" }}>
                             <Col xs={8}>
                                 <Select
@@ -658,14 +649,6 @@ export default function MobileComponent(props) {
                                 >
                                     {tableDropdown}
                                 </Select>
-                                {/* <Form.Control
-                                    as="select"
-                                    custom
-                                    onChange={(e) => onChangeTable(e)}
-                                >
-                                    {tableDropdown}
-                                </Form.Control> */}
-
                             </Col>
                             <Col xs={4}>
                                 {

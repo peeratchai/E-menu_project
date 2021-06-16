@@ -35,12 +35,12 @@ export default function ViewOrderModal(props) {
 
     const getOrder = async () => {
         setLoading(true)
-        let zoneIdArray = []
-        zoneIdArray.push(table_selected.zoneId)
+        let tableIdArray = []
+        tableIdArray.push(table_selected.id)
         let data = {
             "restaurant": restaurant_id,
-            "restaurant_table": null,
-            "zone": zoneIdArray
+            "restaurant_table": tableIdArray,
+            "zone": null
         }
         console.log(data)
         try {
@@ -63,54 +63,66 @@ export default function ViewOrderModal(props) {
         let haveNewOrder = false
         let IndexOfFirstOrder = 0
         let firstOrder, checkOrder
-        orders.map((order, index) => {
-            if (order.new_orders.length > 0) {
-                checkOrder = order.new_orders.find((order) => order.status === 'New Order')
-                if (checkOrder) {
-                    // if checkOrder has value so it has new order
+        orders.map((order) => {
+            order.new_orders.forEach((orderItem, index) => {
+                if (orderItem.order_items.length > 0) {
                     haveNewOrder = true
                     if (IndexOfFirstOrder === 0) {
                         IndexOfFirstOrder = index
                     }
                 }
-            }
+            })
         })
 
         if (!haveNewOrder) {
             setNewOrderSelected({})
             setTableNewOrderSelectedNumber(undefined)
         } else {
-            firstOrder = orders[IndexOfFirstOrder].new_orders.find((order) => order.status === 'New Order')
-            setNewOrderSelected(firstOrder)
-            setTableNewOrderSelectedNumber(firstOrder.id)
+            try {
+                firstOrder = orders[0].new_orders[IndexOfFirstOrder]
+                console.log('firstOrder', firstOrder)
+                setNewOrderSelected(firstOrder)
+                setTableNewOrderSelectedNumber(firstOrder.id)
+            } catch (error) {
+                console.log('error', error)
+            }
         }
+        console.log('haveNewOrder', haveNewOrder)
         setHaveNewOrder(haveNewOrder)
     }
 
     const setInitailInOrder = (orders) => {
         let haveOrderInProcess = false
         let IndexOfFirstOrder = 0
-        let firstOrder, checkOrder
+        let currentOrder, firstOrder
         orders.map((order, index) => {
-            if (order.in_orders.length > 0) {
-                checkOrder = order.new_orders.find((order) => order.status === 'In Order')
-                if (checkOrder) {
-                    // if checkOrder has value so it has order in process
+            order.in_orders.forEach((orderItem) => {
+                if (orderItem.order_items.length > 0) {
                     haveOrderInProcess = true
                     if (IndexOfFirstOrder === 0) {
                         IndexOfFirstOrder = index
                     }
                 }
-            }
+            })
         })
 
         if (!haveOrderInProcess) {
             setInOrderSelected({})
             setTableInOrderSelectedNumber(undefined)
         } else {
-            firstOrder = orders[IndexOfFirstOrder].in_orders.find((order) => order.status === 'In Order')
-            setInOrderSelected(firstOrder)
-            setTableInOrderSelectedNumber(firstOrder.id)
+            if (tableInOrderSelectedNumber) {
+                currentOrder = orders[0].in_orders.find((order) => order.id === tableInOrderSelectedNumber)
+                setInOrderSelected(currentOrder)
+                setTableInOrderSelectedNumber(currentOrder.id)
+            } else {
+                // firstOrder = orders[IndexOfFirstOrder].in_orders.find((order) => order.status === 'In Order')
+                // setInOrderSelected(firstOrder)
+                // setTableInOrderSelectedNumber(firstOrder.id)
+                firstOrder = orders[0].in_orders[IndexOfFirstOrder]
+                console.log('firstOrder', firstOrder)
+                setInOrderSelected(firstOrder)
+                setTableInOrderSelectedNumber(firstOrder.id)
+            }
         }
         setHaveOrderInProcess(haveOrderInProcess)
     }
@@ -118,27 +130,37 @@ export default function ViewOrderModal(props) {
     const setInitailCompletedOrder = (orders) => {
         let haveOrderCompleted = false
         let IndexOfFirstOrder = 0
-        let firstOrder, checkOrder
+        let firstOrder, currentOrder
         orders.map((order, index) => {
-            if (order.completed_orders.length > 0) {
-                checkOrder = order.new_orders.find((order) => order.status === 'Completed')
-                if (checkOrder) {
-                    // if checkOrder has value so it has completed order
+            order.completed_orders.forEach((orderItem) => {
+                if (orderItem.order_items.length > 0) {
                     haveOrderCompleted = true
                     if (IndexOfFirstOrder === 0) {
                         IndexOfFirstOrder = index
                     }
                 }
-            }
+            })
         })
 
         if (!haveOrderCompleted) {
             setCompletedOrderSelected({})
             setTableCompletedOrderSelectedNumber(undefined)
         } else {
-            firstOrder = orders[IndexOfFirstOrder].completed_orders.find((order) => order.status === 'Completed')
-            setCompletedOrderSelected(firstOrder)
-            setTableCompletedOrderSelectedNumber(firstOrder.id)
+            if (tableCompletedOrderSelectedNumber) {
+                currentOrder = orders[0].completed_orders.find((order) => order.id === tableCompletedOrderSelectedNumber)
+                setCompletedOrderSelected(currentOrder)
+                setTableCompletedOrderSelectedNumber(currentOrder.id)
+            } else {
+                // firstOrder = orders[IndexOfFirstOrder].completed_orders.find((order) => order.status === 'Completed')
+                // setCompletedOrderSelected(firstOrder)
+                // setTableCompletedOrderSelectedNumber(firstOrder.id)
+                firstOrder = orders[0].completed_orders[IndexOfFirstOrder]
+                console.log('firstOrder', firstOrder)
+                setCompletedOrderSelected(firstOrder)
+                setTableCompletedOrderSelectedNumber(firstOrder.id)
+            }
+
+
         }
         setHaveOrderCompleted(haveOrderCompleted)
     }
@@ -235,7 +257,6 @@ export default function ViewOrderModal(props) {
     let newOrderTableListComponent = orders && orders.map((order) => {
         let tableList = order.new_orders.map((newOrder) => {
             if (newOrder.order_items.length > 0) {
-                console.log('newOrder.order_date', newOrder.order_date)
                 return (
                     <>
                         <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
@@ -594,7 +615,7 @@ export default function ViewOrderModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    All Orders in {zoneDetails.name}
+                    Table {table_selected.name}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

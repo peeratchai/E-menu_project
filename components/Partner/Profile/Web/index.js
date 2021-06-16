@@ -2,7 +2,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, Slider, TimePicker, Space, Spin, Select } from 'antd';
+import { Upload, Slider, TimePicker, Space, Spin, Select, Popconfirm } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import AntdModal from "../../../AntdModal"
@@ -212,6 +212,17 @@ export default function WebProfileComponent(props) {
     }
     )
 
+    const onDeleteRestaurant = () => {
+        restaurantService.deleteRestaurantById(restaurant_id).then((response) => {
+            console.log('response', response)
+            message.success('Delete restaurant successful.')
+            getAllRestaurant()
+        }).catch(error => {
+            console.log('confirmDeleteRestaurant error', error)
+            message.error('Cannot delete restaurant.')
+        })
+    }
+
     return (
         <Spin spinning={spin_loading} tip="Loading...">
             <div className={styles.tab}>
@@ -420,6 +431,16 @@ export default function WebProfileComponent(props) {
                             </Form.Group>
 
                             <div style={{ textAlign: "right" }}>
+                                <Popconfirm
+                                    title="Are you sure to delte this restaurant?"
+                                    onConfirm={() => onDeleteRestaurant()}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button variant="danger" disabled={disable} style={{ marginRight: "15px" }}>
+                                        Delete Restaurant
+                                    </Button>
+                                </Popconfirm>
                                 <Button variant="primary" disabled={disable} onClick={() => saveProfile()}>
                                     Save
                                 </Button>

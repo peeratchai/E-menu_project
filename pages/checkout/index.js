@@ -166,8 +166,9 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     setLoading(true)
                     let userId = userProfile.id
                     console.log(userId)
+                    console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
-
+                    let restaurantName = shoppingCartData.restaurant.name
                     let order_items = []
                     let orders = shoppingCartData.shopping_cart_items
                     orders.map((order) => {
@@ -188,21 +189,37 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     }
 
                     console.log('order data', data)
-                    let response = await partnerSerivce.addOrder(data)
-                    console.log('response', response)
-                    message.success('Check out order successful.')
-                    localStorage.removeItem("basket")
-                    setConfirmModalVisible(false)
-                    await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
-                        console.log('response', response)
-                        setLoading(false)
-                        router.push({
-                            pathname: "/orderHistory"
-                        })
-                    }).catch(error => {
-                        setLoading(false)
-                        console.log('api/checkoutOrder', error)
-                    })
+                    let addOrderResponse = await partnerSerivce.addOrder(data)
+                    console.log('addOrderResponse', addOrderResponse)
+                    if (addOrderResponse) {
+                        if (addOrderResponse.is_success) {
+                            shoppingCartService.deleteShoppingCart().then((deleteShoppingCartResponse) => {
+                                if (deleteShoppingCartResponse) {
+                                    if (deleteShoppingCartResponse.is_success) {
+                                        message.success('Check out order successful.')
+                                        router.push({
+                                            pathname: '/menuFeeding/restaurantList/' + restaurantName,
+                                            query: { restaurantId: restaurantId }
+                                        })
+                                        setConfirmModalVisible(false)
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    setLoading(false)
+
+                    // await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
+                    //     console.log('response', response)
+                    //     setLoading(false)
+                    //     router.push({
+                    //         pathname: '/menuFeeding/restaurantList/' + restaurantName,
+                    //         query: { restaurantId: restaurantId }
+                    //     })
+                    // }).catch(error => {
+                    //     setLoading(false)
+                    //     console.log('api/checkoutOrder', error)
+                    // })
 
                 } else {
                     message.warning('Please select order before check out order.')
@@ -309,7 +326,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                 isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
-                            <Container className={utilStyles.container_sm} style={{ maxHeight: "calc(100vh - 200px)", overflowX: "scroll" }}>
+                            <Container className={utilStyles.container_sm} style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}>
                                 {
                                     countMenuItems > 0 ? MenuListComponentMobile : <EmptyComponent />
                                 }
@@ -338,7 +355,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
@@ -370,7 +387,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                 ) : (
                     <>
                         <Layout>
-                            <Container className={utilStyles.container}>
+                            <Container className={utilStyles.container} style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}>
                                 {
                                     countMenuItems > 0 ? MenuListComponentWeb : <EmptyComponent />
                                 }
@@ -378,7 +395,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                         </Layout >
                         {
                             countMenuItems > 0 ? (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
@@ -399,7 +416,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", marginBottom: "10px", borderTop: "1px solid #DEDEDE" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>

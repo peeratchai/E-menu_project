@@ -71,6 +71,21 @@ const restaurantService = {
             });
         return response
     },
+    getRestaurantSearchWithPaging: async function (page, limit, filterForm) {
+        console.log(filterForm)
+        console.log('api url', '/api/restaurant / search_with_paging / ' + page + "/" + limit)
+        return await sendRequest.post('/api/restaurant/search_with_paging/' + page + "/" + limit, filterForm)
+        // let response = await axios.post('/api/restaurant/search_by_filter/' + page + "/" + limit, data, config)
+        //     .then(function (response) {
+        //         console.log(response)
+        //         return response.data
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error)
+        //         return error
+        //     });
+        // return response
+    },
     getLocationSearchByFilter: async function (accessToken, filterForm) {
         let config = {
             headers: {
@@ -148,8 +163,26 @@ const restaurantService = {
 
         return response.data
 
-    }
+    },
 
+    deleteRestaurantById: async function (restaurantId) {
+        return await sendRequest.delete('/api/delete_restaurant/' + restaurantId)
+    },
+
+    addRestaurant: async function (data) {
+        let ContentType = 'multipart/form-data'
+
+        let formData = new FormData()
+
+        formData.append("name", data.name);
+        formData.append("business_hour", JSON.stringify(data.business_hour));
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        return await sendRequest.post('/api/add_new_restaurant', formData, ContentType)
+    },
 
 }
 

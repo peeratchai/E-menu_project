@@ -23,7 +23,7 @@ export default function MobilePromotionlist(props) {
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                    query: { restaurantId: newspaperDetail.restaurant.id},
                 }}
             >
                 <div className={styles.colCardMobile} >
@@ -55,7 +55,7 @@ export default function MobilePromotionlist(props) {
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id, locationLatLong: newspaperDetail.restaurant.location },
+                    query: { restaurantId: newspaperDetail.restaurant.id},
                 }}
             >
                 <div className={styles.colCardMobile} >

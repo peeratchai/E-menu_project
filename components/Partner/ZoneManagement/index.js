@@ -98,6 +98,7 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
     }
 
     const onViewQRCode = (table) => {
+        console.log(process.env.URL + "/menuFeeding/restaurantList/" + restaurantName + "?restaurantId=" + restaurant_id + "&tableId=" + table.id)
         setTableSelected(table)
         setViewTableQRCodeModalShow(true)
     }

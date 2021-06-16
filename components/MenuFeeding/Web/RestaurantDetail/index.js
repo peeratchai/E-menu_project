@@ -35,16 +35,6 @@ export const Menu = (categoryList, selected) =>
         return <MenuItem text={categoryName} key={categoryName} selected={selected} />;
     });
 
-
-const Arrow = ({ text, className }) => {
-    return (
-        <div
-            className={className}
-        >{text}</div>
-    );
-};
-
-
 const ArrowLeft = <LeftOutlined className='arrow-prev' />
 const ArrowRight = <RightOutlined className='arrow-next' />
 
@@ -381,7 +371,6 @@ export default function RestaurantDetailWeb(props) {
                                     <Link href="/" passHref>
                                         <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
                                     </Link>
-                                    <Breadcrumb.Item>{restaurantDetail.name}</Breadcrumb.Item>
                                 </>
                             ) :
                             (

@@ -39,6 +39,7 @@ export default function Dashboard(props) {
     }
 
     const getOrderByPeriod = async (startDate, endDate) => {
+        console.log('restaurant_id', restaurant_id)
         let data = {
             "restaurant": restaurant_id,
             "status": "completed",

@@ -20,7 +20,7 @@ export default function EditPromoteModal(props) {
 
     useEffect(() => {
         if (promotion_selected) {
-            console.log('promotion_selected', promotion_selected)
+            // console.log('promotion_selected', promotion_selected)
             setPromoteForm(promotion_selected)
             setPromoteImageUrl(promotion_selected.image_url)
         }

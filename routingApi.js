@@ -44,6 +44,10 @@ module.exports = {
             destination: API_URL + '/restaurant',
         },
         {
+            source: '/api/add_new_restaurant',
+            destination: API_URL + '/restaurant',
+        },
+        {
             source: '/api/restaurant/:restaurantId',
             destination: API_URL + '/restaurant/:restaurantId',
         },
@@ -66,6 +70,10 @@ module.exports = {
         {
             source: '/api/restaurant/search_by_filter',
             destination: API_URL + '/restaurant/search_by_filter',
+        },
+        {
+            source: '/api/restaurant/search_with_paging/:page/:limit',
+            destination: API_URL + '/restaurant/search_with_paging?page=:page&limit=:limit',
         },
         {
             source: '/api/location/search_by_filter',

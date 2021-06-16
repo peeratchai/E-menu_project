@@ -7,7 +7,6 @@ export default function ViewTableQRCode(props) {
     const { table_selected, restaurant_name, restaurant_id } = props
     const { onHide } = props
 
-    console.log('props', process.env.URL + "/menuFeeding/restaurantList/" + restaurant_name + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id)
     const downloadQR = () => {
         const canvas = document.getElementById("qrCodeEl");
         const pngUrl = canvas

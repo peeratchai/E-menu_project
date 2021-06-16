@@ -131,7 +131,7 @@ export default function LocationListMobile(props) {
                         href={{
                             pathname: '/menuFeeding/restaurantList',
                             query: {
-                                locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location, currentFilterForm: JSON.stringify(currentFilterForm)
+                                locationId: locationDetails.id, locationName: locationDetails.title, currentFilterForm: JSON.stringify(currentFilterForm)
                             },
                         }}
                     >

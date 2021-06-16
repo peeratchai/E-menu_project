@@ -237,7 +237,6 @@ export default function RestaurantDetailMobile(props) {
                                     <Link href="/" passHref>
                                         <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
                                     </Link>
-                                    <Breadcrumb.Item>{restaurantDetail.name}</Breadcrumb.Item>
                                 </>
                             ) :
                             (
@@ -257,6 +256,8 @@ export default function RestaurantDetailMobile(props) {
                                 </>
                             )
                     }
+
+                    <Breadcrumb.Item active>{restaurantDetail.name}</Breadcrumb.Item>
                 </Breadcrumb>
                 <Carousel>
                     {restaurantBannerPicture}

@@ -148,6 +148,7 @@ const Partner = ({ user }) => {
                                             <Profile
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
+                                                user_profile={user}
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="setting">
@@ -220,6 +221,7 @@ const Partner = ({ user }) => {
                                     <Profile
                                         restaurant_id={restaurantId}
                                         current_tab={menuSelected}
+                                        user_profile={user}
                                     />
                                 )
                             }

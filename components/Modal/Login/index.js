@@ -63,7 +63,10 @@ export default function LoginModal(props) {
             const { displayName, pictureUrl, userId } = profile
             console.log(profile)
 
-            const email = await liff.getDecodedIDToken().email;
+            let email = await liff.getDecodedIDToken().email;
+            if (email === undefined || email === "" || email === 'null') {
+                email = null
+            }
             console.log(email)
 
             let responseSignin = await signinWithSocial(email, userId)
@@ -155,6 +158,10 @@ export default function LoginModal(props) {
         if (response.id) {
             console.log('login success');
             const { email, id, picture, accessToken } = response
+            let email_facebook = email
+            if (email === undefined || email === "" || email === 'null') {
+                email_facebook = null
+            }
             let responseSignin = await signinWithSocial(email, id)
             console.log('responseSignin', responseSignin);
 

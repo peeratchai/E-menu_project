@@ -136,7 +136,7 @@ export default function LocationListWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList',
-                            query: { locationId: locationDetails.id, locationName: locationDetails.title, locationLatLong: locationDetails.location, currentFilterForm: JSON.stringify(currentFilterForm) },
+                            query: { locationId: locationDetails.id, locationName: locationDetails.title, currentFilterForm: JSON.stringify(currentFilterForm) },
                         }}
                     >
                         <Card style={{ height: "100%", border: "none", backgroundColor: "#eaeff3" }}>

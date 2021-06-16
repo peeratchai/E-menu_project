@@ -23,29 +23,27 @@ const { Option } = Select;
 
 export default function RestaurantListWeb(props) {
 
-    const { restaurant_list, location_name, location_id, loading, master_data_list, user_location, current_filter_form } = props
-    const [restaurantList, setRestaurantList] = React.useState(null);
-    const [locationName, setLocationName] = React.useState("");
-    const [locationId, setLocationId] = React.useState("");
+    const { location_name, location_id, master_data_list, user_location, current_filter_form } = props
+    const [restaurantList, setRestaurantList] = React.useState([]);
     const [totalResult, setTotalResult] = React.useState(0);
     const [restaurantCard, setRestaurantCard] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
-    const [spinLoading, setSpinLoading] = React.useState(loading)
+    const [spinLoading, setSpinLoading] = React.useState()
     const [currentFilterForm, setCurrentFilterForm] = React.useState({})
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const [nextPage, setNextPage] = React.useState(1)
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [sortValue, setSortValue] = React.useState()
+    // limit is number of reataurant list each page 
+    const limit = 10
 
     useEffect(() => {
 
         if (location_name) {
-            console.log(location_name)
-            console.log(location_id)
-            setLocationName(location_name)
-            setLocationId(location_id)
             if (JSON.parse(current_filter_form)) {
                 onSearch(JSON.parse(current_filter_form))
-                setCurrentFilterForm(JSON.parse(current_filter_form))
             }
         }
-        setSpinLoading(loading)
     }, [location_name])
 
     const setMaps = (restaurant_list) => {
@@ -77,7 +75,7 @@ export default function RestaurantListWeb(props) {
                     <Link
                         href={{
                             pathname: '/menuFeeding/restaurantList/' + restaurantDetails.name,
-                            query: { locationId: locationId, locationName: locationName, restaurantId: restaurantDetails.id },
+                            query: { locationId: location_id, locationName: location_name, restaurantId: restaurantDetails.id },
                         }}
                     >
                         <Card>
@@ -114,10 +112,10 @@ export default function RestaurantListWeb(props) {
         setRestaurantCard(restaurantCard)
     }
 
-    const onSearch = async (filterForm) => {
+    const onSearch = async (filterForm, isLoadMore = false) => {
+        setCurrentFilterForm(filterForm)
         setSpinLoading(true)
         let filter = { ...filterForm }
-        filter.business_location = locationId
         filter = changeFormatFilter(filter)
         console.log('filter', filter)
         if (filter.distance !== null) {
@@ -129,49 +127,64 @@ export default function RestaurantListWeb(props) {
         }
         filter.business_district = location_id
         console.log('filter', filter)
-        let accessToken = await checkLogin()
-        let locationListByFilter = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
-        console.log('filter', locationListByFilter)
-        setRestaurantList(locationListByFilter)
-        setTotalResult(locationListByFilter.length)
-        renderRestaurantCard(locationListByFilter)
-        // await getAddressOnGoogleMaps(locationListByFilter)
+
+        // let NewRestaurantList = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
+        let response = await restaurantService.getRestaurantSearchWithPaging(nextPage, limit, filter)
+        console.log('response', response)
+        let next_page = response.next_page
+        let current_page = response.current_page
+        let totalPage = response.total_page
+        const results = response.results
+        let newRestaurantList = []
+        if (results.length > 0) {
+            if (isLoadMore) {
+                newRestaurantList = [...restaurantList, ...results]
+            } else {
+                newRestaurantList = [...results]
+            }
+            console.log(newRestaurantList)
+            if (sortValue) {
+                onSort(sortValue, newRestaurantList)
+            } else {
+                setRestaurantList(newRestaurantList)
+                renderRestaurantCard(newRestaurantList)
+            }
+            setCurrentPage(current_page)
+            setNextPage(next_page)
+            setTotalPage(totalPage)
+            setTotalResult(newRestaurantList.length)
+        } else {
+            setRestaurantList(newRestaurantList)
+            renderRestaurantCard(newRestaurantList)
+            setTotalResult(0)
+            setNextPage(1)
+        }
+        setMaps(newRestaurantList)
         setSpinLoading(false)
-        setMaps(locationListByFilter)
+
     }
 
-    const getAddressOnGoogleMaps = async (restaurantList) => {
-        let point, substringPotion, splitPotion, latLong, lat, lng
-        Promise.all(restaurantList.map(async (restaurantDetails) => {
-            point = restaurantDetails.location;
-            substringPotion = point.substring(5)
-            splitPotion = substringPotion.split('(').join('').split(')');
-            latLong = splitPotion[0].split(' ')
-            lat = latLong[0]
-            lng = latLong[1]
-            let address = await Geocode.fromLatLng(lat, lng).then(
-                (response) => {
-                    const address = response.results[0].formatted_address;
-                    return address
-                },
-                (error) => {
-                    console.error(error);
-                }
-            );
-            restaurantDetails.googleMapsAddress = address
-            return address
-        })).then(() => {
-            setRestaurantList(restaurantList)
-            setTotalResult(restaurantList.length)
-        })
-
+    const onSort = (sortValue, newRestaurantList = restaurantList) => {
+        setSortValue(sortValue)
+        if (sortValue === 'A-Z') {
+            const sortResult = [].concat(newRestaurantList)
+                .sort((a, b) => a.name > b.name ? 1 : -1)
+            setRestaurantList(sortResult)
+            renderRestaurantCard(sortResult)
+        }
+        if (sortValue === 'Z-A') {
+            const sortResult = [].concat(newRestaurantList)
+                .sort((a, b) => a.name < b.name ? 1 : -1)
+            setRestaurantList(sortResult)
+            renderRestaurantCard(sortResult)
+        }
     }
 
     return (
         <Layout containerType="center">
             <Breadcrumb>
                 <Link href="/menuFeeding" passHref>
-                    <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{location_name}</Breadcrumb.Item>
                 </Link>
                 <Breadcrumb.Item active>Restaurant List</Breadcrumb.Item>
             </Breadcrumb>
@@ -201,12 +214,12 @@ export default function RestaurantListWeb(props) {
                                     showSearch
                                     style={{ width: "150px" }}
                                     placeholder="Search to Select"
-                                    defaultValue="Lastet"
+                                    defaultValue="-"
+                                    onChange={(value) => onSort(value)}
                                 >
                                     <Option value="-">-</Option>
-                                    <Option value="Lastet">Lastet</Option>
-                                    <Option value="Bangkok">Bangkok</Option>
-                                    <Option value="Nonthaburi">Nonthaburi</Option>
+                                    <Option value="A-Z">A-Z</Option>
+                                    <Option value="Z-A">Z-A</Option>
                                 </Select>
                             </div>
                         </Col>
@@ -215,8 +228,17 @@ export default function RestaurantListWeb(props) {
                         <Spin spinning={spinLoading} tip="Loading...">
                             <Row>
                                 {
-                                    restaurantList !== null && restaurantList.length > 0 ? (
-                                        restaurantCard
+                                    restaurantList.length > 0 ? (
+                                        <>
+                                            {restaurantCard}
+                                            {
+                                                currentPage < totalPage && (
+                                                    <div style={{ width: "100%", textAlign: "center" }}>
+                                                        <Button onClick={() => onSearch(currentFilterForm, true)}>Load more</Button>
+                                                    </div>
+                                                )
+                                            }
+                                        </>
                                     ) : (
                                         <EmptyComponent />
                                     )

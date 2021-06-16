@@ -50,7 +50,7 @@ const UserProfile = ({ user }) => {
     const { liffClientId, code } = router.query;
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
-
+    const [userIsCustomer, setUserIsCustomer] = React.useState(false)
     const handleChangeProfileImage = (info) => {
         if (info.file.status === 'uploading') {
             return;
@@ -66,6 +66,11 @@ const UserProfile = ({ user }) => {
     useEffect(() => {
 
         if (user) {
+            let userRoles = user.profile.roles
+            let filterRoles = userRoles.filter((role) => role !== 'customer')
+            if (filterRoles.length === 0) {
+                setUserIsCustomer(true)
+            }
             let profile = user.profile
             if (profile.avatar_url !== null || profile.avatar_url !== '') {
                 setProfileImage(profile.avatar_url)
@@ -384,16 +389,21 @@ const UserProfile = ({ user }) => {
                                         </Row>
 
                                         <div style={{ textAlign: "right" }}>
-                                            <Popconfirm
-                                                title="Are you sure to delete user?"
-                                                onConfirm={() => onDeleteUser()}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <Button variant="danger" style={{ marginRight: "15px" }}>
-                                                    Delete User
-                                                </Button>
-                                            </Popconfirm>
+                                            {
+                                                // Customer cannot delete account
+                                                !userIsCustomer && (
+                                                    <Popconfirm
+                                                        title="Are you sure to delete user?"
+                                                        onConfirm={() => onDeleteUser()}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <Button variant="danger" style={{ marginRight: "15px" }}>
+                                                            Delete User
+                                                        </Button>
+                                                    </Popconfirm>
+                                                )
+                                            }
                                             <Button variant="primary" onClick={() => saveProfile()} >
                                                 Save
                                             </Button>
@@ -460,6 +470,4 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
             },
         }
     }
-
-
 })
