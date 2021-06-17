@@ -412,6 +412,7 @@ const Admin = () => {
 
     function onChangeRestaurant(restaurantId) {
         setRestaurantId(restaurantId)
+        console.log('restaurantId',restaurantId)
     }
 
     function onSearchRestaurantName(val) {

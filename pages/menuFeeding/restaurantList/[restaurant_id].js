@@ -132,6 +132,11 @@ export default function Restaurant() {
 
     }
 
+    const settingShoppintCart = (shoppingCart) => {
+        console.log('setShoppingCart', shoppingCart)
+        setShoppingCart(shoppingCart)
+    }
+
     return (
         <>
             {
@@ -145,6 +150,7 @@ export default function Restaurant() {
                         table_id={tableId}
                         loading={loading}
                         shopping_cart={shoppingCart}
+                        set_shopping_cart={settingShoppintCart}
                         is_initial_cart={isInitialCart}
                     />
                 ) : (
@@ -157,6 +163,7 @@ export default function Restaurant() {
                         table_id={tableId}
                         loading={loading}
                         shopping_cart={shoppingCart}
+                        set_shopping_cart={settingShoppintCart}
                         is_initial_cart={isInitialCart}
                     />
                 )

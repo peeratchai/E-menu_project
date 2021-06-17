@@ -12,7 +12,7 @@ import shoppingCartService from '../../../services/shoppingCart';
 export default function OrderMenuModal(props) {
 
     const { shopping_cart, restaurant_id, menu_detail, is_initial_cart } = props
-    const { set_initial_shopping_cart } = props
+    const { set_initial_shopping_cart, update_shopping_cart } = props
     const isMobileResolution = useMediaQuery(768)
     const [specialInstruction, setSpecialInstruction] = React.useState(null);
     const [count, setCount] = React.useState(1);
@@ -32,9 +32,12 @@ export default function OrderMenuModal(props) {
         }
 
         console.log('is_initial_cart', is_initial_cart)
-        if (shopping_cart && is_initial_cart) {
+        console.log('shopping_cart', shopping_cart)
+        if (shopping_cart !== "" && is_initial_cart) {
             console.log(shopping_cart)
             setShoppingCart(shopping_cart)
+        } else {
+            setShoppingCart({})
         }
     }, [menu_detail, shopping_cart, is_initial_cart])
 
@@ -89,8 +92,11 @@ export default function OrderMenuModal(props) {
                 } else {
                     console.log('success')
                     setShoppingCart(newCartItemData)
+                    if (update_shopping_cart) {
+                        update_shopping_cart(newCartItemData)
+                    }
                     if (set_initial_shopping_cart !== undefined) {
-                        set_initial_shopping_cart(newCartItemData)
+                        set_initial_shopping_cart(newCartItemData, true)
                     }
                 }
             }).catch(error => {

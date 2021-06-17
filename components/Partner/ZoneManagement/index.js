@@ -21,10 +21,12 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
     const [viewTableQRCodeModalShow, setViewTableQRCodeModalShow] = React.useState(false);
     const [restaurantName, setRestaurantName] = React.useState();
     useEffect(() => {
+        console.log('restaurant_id', restaurant_id)
+        console.log('current_tab', current_tab)
         if (restaurant_id && current_tab === 'zone') {
             getZone()
         }
-    }, [current_tab])
+    }, [restaurant_id, current_tab])
 
     const getZone = async () => {
         setLoading(true)
@@ -166,6 +168,7 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
             'name': zoneName,
             'is_active': true
         }
+        console.log('data', data)
         try {
             await partnerSerivce.addZone(data)
             message.success('Add new zone successful.')
