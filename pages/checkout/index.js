@@ -2,7 +2,8 @@ import Layout, { siteTitle } from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import React, { useEffect } from 'react'
-import { Row, Col, Form, Image, Button, Modal, Container, Tabs } from 'react-bootstrap'
+import { Row, Col, Image, Button, Modal, Container } from 'react-bootstrap'
+import { Spin } from 'antd'
 import useMediaQuery from "../../utils/utils";
 import { useRouter } from 'next/router'
 import 'antd/dist/antd.css';
@@ -12,7 +13,6 @@ import partnerSerivce from '../../services/partner'
 import EmptyComponent from '../../components/Empty'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
-import fetchJson from '../../lib/fetchJson'
 import shoppingCartService from '../../services/shoppingCart'
 
 const axios = require('axios')
@@ -202,12 +202,15 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             query: { restaurantId: restaurantId }
                                         })
                                         setConfirmModalVisible(false)
+                                        setLoading(false)
                                     }
                                 }
+                            }).catch(error => {
+                                console.log('error', error)
+                                setLoading(false)
                             })
                         }
                     }
-                    setLoading(false)
 
                     // await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
                     //     console.log('response', response)
@@ -382,6 +385,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                             show={confirmModalVisible}
                             onHide={() => setConfirmModalVisible(false)}
                             check_out_order={onCheckOutOrder}
+                            loading={loading}
                         />
                     </>
                 ) : (
@@ -443,6 +447,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                             show={confirmModalVisible}
                             onHide={() => setConfirmModalVisible(false)}
                             check_out_order={onCheckOutOrder}
+                            loading={loading}
                         />
                     </>
                 )
@@ -452,6 +457,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
 }
 
 function ConfirmOrderModal(props) {
+    console.log('loading', props.loading)
     return (
         <Modal
             {...props}
@@ -462,42 +468,44 @@ function ConfirmOrderModal(props) {
         >
 
             <Modal.Body>
-                <Row>
-                    <Col>
-                        <div>
-                            <Image src="/images/checklist.png" style={{ objectFit: "contain", paddingLeft: "20px", height: "7rem", marginTop: "30px" }} />
-                        </div>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col>
-                        <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
-                            ยืนยันการสั่งอาหาร
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
-                            คุณต้องการยืนยันการสั่งอาหารหรือไม่
-                        </div>
-                    </Col>
-                </Row>
-                <br />
-                <br />
-                <Row>
-                    <Col>
-                        <div style={{ textAlign: "center" }}>
-                            <Button style={{ width: "90%", backgroundColor: "#c0cacc", border: "1px solid #c0cacf" }} onClick={props.onHide} className={utilStyles.fontContent}>ยกเลิก</Button>
-                        </div>
-                    </Col>
-                    <Col>
-                        <div style={{ textAlign: "center" }}>
-                            <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
-                        </div>
-                    </Col>
-                </Row>
+                <Spin spinning={props.loading}>
+                    <Row>
+                        <Col>
+                            <div>
+                                <Image src="/images/checklist.png" style={{ objectFit: "contain", paddingLeft: "20px", height: "7rem", marginTop: "30px" }} />
+                            </div>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
+                                ยืนยันการสั่งอาหาร
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
+                                คุณต้องการยืนยันการสั่งอาหารหรือไม่
+                            </div>
+                        </Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#c0cacc", border: "1px solid #c0cacf" }} onClick={props.onHide} className={utilStyles.fontContent}>ยกเลิก</Button>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Spin>
             </Modal.Body>
         </Modal >
     );

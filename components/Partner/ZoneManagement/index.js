@@ -9,7 +9,7 @@ import EditZoneModal from '../../../components/Modal/EditZoneModal'
 import EditTableModal from '../../../components/Modal/EditTable'
 import ViewTableQRCode from '../../Modal/ViewTableQRCode';
 
-export default function ZoneManagement({ restaurant_id, current_tab }) {
+export default function ZoneManagement({ restaurant_id, current_tab, type }) {
 
     const [loading, setLoading] = React.useState(false);
     const [zone, setZone] = React.useState([])
@@ -211,9 +211,14 @@ export default function ZoneManagement({ restaurant_id, current_tab }) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
-                Zone Management
-            </div>
+            {
+                type === 'partner' && (
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                        Zone Management
+                    </div>
+                )
+            }
+
             <div style={{ textAlign: "right", padding: "15px" }}>
                 <Button type="primary" onClick={() => setShowAddZoneModal(true)}>
                     New Zone

@@ -168,6 +168,10 @@ module.exports = {
             destination: API_URL + '/order/search_by_filter',
         },
         {
+            source: '/api/get_order_by_filter2',
+            destination: API_URL + '/order/search_by_filter2',
+        },
+        {
             source: '/api/take_order/:orderId',
             destination: API_URL + '/order-item/take_order/:orderId',
         },

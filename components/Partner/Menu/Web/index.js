@@ -8,7 +8,7 @@ import React, { useEffect } from 'react'
 
 export default function WebComponent(props) {
 
-    let { columns_table, category, spin_loading, restaurant_id } = props
+    let { columns_table, category, spin_loading, restaurant_id, type } = props
     let { show_add_Category_Modal, on_change_menu_status, show_edit_menu_modal, set_selected_menu, delete_menu } = props
     const [disable, setDisable] = React.useState(true)
     const categoryData = category === undefined ? [] : category
@@ -72,6 +72,13 @@ export default function WebComponent(props) {
 
     return (
         <>
+            {
+                type === 'partner' && (
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                        Menu Management
+                    </div>
+                )
+            }
             <div className={styles.tab}>
                 <div style={{ textAlign: "right", marginBottom: "10px" }}>
                     <Button disabled={disable} className={utilStyles.fontContent} onClick={() => show_add_Category_Modal(true)}>Add Category</Button>

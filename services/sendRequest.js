@@ -85,6 +85,7 @@ const sendRequest = {
                 return response.data
             })
             .catch(async function (error) {
+                console.log('error', error)
                 let status = error.response.status
                 if (status === 401) {
                     //console.log('Token is expire.')

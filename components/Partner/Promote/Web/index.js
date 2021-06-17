@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import styles from './index.module.css'
 
 export default function WebComponent(props) {
-    const { restaurant_id } = props
+    const { restaurant_id, type } = props
     const [promoteImageUrl, setPromoteImageUrl] = React.useState('')
     const [disable, setDisable] = React.useState(true)
     useEffect(() => {
@@ -21,7 +21,14 @@ export default function WebComponent(props) {
     }, [props])
 
     return (
-        <div className={styles.tab}>
+        <div>
+            {
+                type === 'partner' && (
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                        Promote promotion
+                    </div>
+                )
+            }
             <Row>
                 <Col sm={6}>
                     <Row>

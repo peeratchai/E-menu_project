@@ -13,7 +13,7 @@ const { RangePicker } = DatePicker;
 
 export default function Dashboard(props) {
 
-    const { restaurant_id } = props
+    const { restaurant_id, type } = props
     const [allOrder, setAllOrder] = React.useState([])
     const [orderSelected, setOrderSelected] = React.useState({})
     const [haveOrder, setHaveOrder] = React.useState(false);
@@ -25,8 +25,6 @@ export default function Dashboard(props) {
         const endTime = "23:59:59";
         let startDate = moment(dateString[0] + ' ' + startTime).format()
         let endDate = moment(dateString[1] + ' ' + endTime).format()
-        console.log('startDate', startDate);
-        console.log('endDate', endDate);
 
         if (startDate !== 'Invalid date' || endDate !== 'Invalid date') {
             getOrderByPeriod(startDate, endDate)
@@ -264,7 +262,14 @@ export default function Dashboard(props) {
     )
 
     return (
-        <div className={styles.tab}>
+        <div>
+            {
+                type === 'partner' && (
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                        Dashboard
+                    </div>
+                )
+            }
             <Row style={{ height: "80vh" }}>
                 {OrderListComponent}
             </Row>

@@ -25,6 +25,7 @@ import FoodDataManagement from '../../components/Admin/FoodDataManagement'
 import BanUserManagement from '../../components/Admin/BanUserManagement'
 import ContactUsMessage from '../../components/Admin/ContactUsMessage'
 import RestaurantListManagemnet from '../../components/Admin/RestaurantListMangament'
+import ZoneManagement from '../../components/Partner/ZoneManagement'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 const axios = require('axios')
@@ -72,7 +73,7 @@ const Admin = () => {
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const [searchedColumn, setSearchedColumn] = React.useState('');
     const [searchText, setSearchText] = React.useState('');
-    const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile"]
+    const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile", "zone"]
 
     var searchInput = React.createRef();
 
@@ -461,6 +462,9 @@ const Admin = () => {
                                                 <Nav.Link eventKey="restaurantListManagement">Restaurant List</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
+                                                <Nav.Link eventKey="zone">Zone Management</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
                                                 <Nav.Link eventKey="email">Email</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
@@ -531,6 +535,12 @@ const Admin = () => {
                                                     current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
+                                            <Tab.Pane eventKey="zone">
+                                                <ZoneManagement
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                />
+                                            </Tab.Pane>
                                             <Tab.Pane eventKey="email">
                                                 <SendEmail />
                                             </Tab.Pane>
@@ -587,6 +597,7 @@ const Admin = () => {
                                     <Option value="menu">Menu Management</Option>
                                     <Option value="profile">Profile Management</Option>
                                     <Option value="restaurantListManagement">Restaurant List Management</Option>
+                                    <Option value="zone">Zone</Option>
                                     <Option value="email">Email</Option>
                                     <Option value="directMessage">Direct Message</Option>
                                     <Option value="approvePromotion">Approve Promotion</Option>
@@ -598,14 +609,19 @@ const Admin = () => {
                                     <Option value="setting">Setting</Option>
                                 </Select>
                             </div>
-
+                            {
+                                // check tab is restaurant feature?
+                                restaurantfeature.indexOf(currentTab) > -1 && (
+                                    <SelectRestaurant
+                                        onChangeRestaurant={onChangeRestaurant}
+                                        restauran_list={restaurantList}
+                                        restaurant_id={restaurantId}
+                                    />
+                                )
+                            }
                             {
                                 menuSelected == 'restaurantManagement' ? (
                                     <Spin spinning={loadingRestaurantList} tip="Loading...">
-                                        <SelectRestaurant
-                                            onChangeRestaurant={onChangeRestaurant}
-                                            restauran_list={restaurantList}
-                                        />
                                         <RestaurantManagement
                                             restaurant_id={restaurantId}
                                             current_tab={menuSelected}
@@ -617,10 +633,6 @@ const Admin = () => {
                             {
                                 menuSelected == 'promote' ? (
                                     <Spin spinning={loadingRestaurantList} tip="Loading...">
-                                        <SelectRestaurant
-                                            onChangeRestaurant={onChangeRestaurant}
-                                            restauran_list={restaurantList}
-                                        />
                                         <Promote
                                             restaurant_id={restaurantId}
                                         />
@@ -630,10 +642,6 @@ const Admin = () => {
                             {
                                 menuSelected == 'menu' ? (
                                     <>
-                                        <SelectRestaurant
-                                            onChangeRestaurant={onChangeRestaurant}
-                                            restauran_list={restaurantList}
-                                        />
                                         <Menu
                                             restaurant_id={restaurantId}
                                             current_tab={menuSelected}
@@ -644,10 +652,6 @@ const Admin = () => {
                             {
                                 menuSelected == 'profile' ? (
                                     <>
-                                        <SelectRestaurant
-                                            onChangeRestaurant={onChangeRestaurant}
-                                            restauran_list={restaurantList}
-                                        />
                                         <Profile
                                             restaurant_id={restaurantId}
                                             current_tab={menuSelected}
@@ -664,8 +668,14 @@ const Admin = () => {
                                     </Tab.Pane>
                                 ) : null
                             }
-
-
+                            {
+                                menuSelected == 'zone' && (
+                                    <ZoneManagement
+                                        restaurant_id={restaurantId}
+                                        current_tab={menuSelected}
+                                    />
+                                )
+                            }
                             {
                                 menuSelected == 'email' ? (
                                     <SendEmail />

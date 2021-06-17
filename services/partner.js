@@ -122,7 +122,9 @@ const partnerSerivce = {
     getOrderByfilter: async (data) => {
         return await sendRequest.post('/api/get_order_by_filter', data)
     },
-
+    getOrderByfilter2: async (data) => {
+        return await sendRequest.post('/api/get_order_by_filter2', data)
+    },
     takeOrder: async (orderId) => {
         let data = {}
         return await sendRequest.patch('/api/take_order/' + orderId, data)

@@ -14,7 +14,7 @@ const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYA
 const { Option } = Select;
 
 export default function WebProfileComponent(props) {
-    let { restaurant_form, spin_loading, business_district, restaurant_id } = props
+    let { restaurant_form, spin_loading, business_district, restaurant_id, type } = props
     let { check_before_upload, update_restaurant_details } = props
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
@@ -225,7 +225,14 @@ export default function WebProfileComponent(props) {
 
     return (
         <Spin spinning={spin_loading} tip="Loading...">
-            <div className={styles.tab}>
+            <div>
+                {
+                    type === 'partner' && (
+                        <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                            Restaurant Profile
+                        </div>
+                    )
+                }
                 <Row>
                     {/* Left section */}
                     <Col sm={6}>

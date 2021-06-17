@@ -13,9 +13,10 @@ import EmptyComponent from '../../Empty'
 export default function ViewOrderModal(props) {
 
     const { table_selected, restaurant_id, zone_details } = props
-    const [zoneDetails, setZoneDetails] = React.useState({ name: '' })
     const [loading, setLoading] = React.useState(false);
-    const [orders, setOrders] = React.useState([])
+    const [newOrders, setNewOrders] = React.useState([])
+    const [inOrders, setInOrders] = React.useState([])
+    const [completedOrders, setCompletedOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
     const [haveNewOrder, setHaveNewOrder] = React.useState(false)
     const [tableNewOrderSelectedNumber, setTableNewOrderSelectedNumber] = React.useState()
@@ -25,32 +26,42 @@ export default function ViewOrderModal(props) {
     const [completedOrderSelected, setCompletedOrderSelected] = React.useState({})
     const [haveOrderCompleted, setHaveOrderCompleted] = React.useState(false)
     const [tableCompletedOrderSelectedNumber, setTableCompletedOrderSelectedNumber] = React.useState()
+    const startTime = "00:00:00";
+    const endTime = "23:59:59";
+    const currentDate = moment().format('YYYY-MM-DD')
+    const startDate = moment(currentDate + ' ' + startTime).format()
+    const endDate = moment(currentDate + ' ' + endTime).format()
 
     useEffect(() => {
         if (restaurant_id && table_selected) {
-            getOrder()
-            setZoneDetails(zone_details)
+            getNewOrder()
         }
     }, [table_selected])
 
-    const getOrder = async () => {
+    const getNewOrder = async (countOrderItmes = null) => {
         setLoading(true)
         let tableIdArray = []
         tableIdArray.push(table_selected.id)
         let data = {
             "restaurant": restaurant_id,
             "restaurant_table": tableIdArray,
-            "zone": null
+            "zone": null,
+            "status": "New Order",
+            "start_date": startDate,
+            "end_date": endDate
         }
-        console.log(data)
+        console.log('dataForm', data)
         try {
-            let orders = await partnerService.getOrderByfilter(data)
-            console.log('order', orders)
-            setInitailNewOrder(orders)
-            setInitailInOrder(orders)
-            setInitailCompletedOrder(orders)
-
-            setOrders(orders)
+            let tableDetails = await partnerService.getOrderByfilter2(data)
+            console.log('tableDetails', tableDetails)
+            if (tableDetails.length > 0) {
+                setInitailNewOrder(tableDetails, countOrderItmes)
+                setNewOrders(tableDetails[0].orders)
+            } else {
+                setNewOrderSelected({})
+                setNewOrders([])
+                setTableNewOrderSelectedNumber(undefined)
+            }
             setLoading(false)
         } catch (error) {
             console.log('error', error)
@@ -59,110 +70,127 @@ export default function ViewOrderModal(props) {
         }
     }
 
-    const setInitailNewOrder = (orders) => {
-        let haveNewOrder = false
-        let IndexOfFirstOrder = 0
-        let firstOrder, checkOrder
-        orders.map((order) => {
-            order.new_orders.forEach((orderItem, index) => {
-                if (orderItem.order_items.length > 0) {
-                    haveNewOrder = true
-                    if (IndexOfFirstOrder === 0) {
-                        IndexOfFirstOrder = index
-                    }
-                }
+    const setInitailNewOrder = (tableDetails, countOrderItmes) => {
+        let firstOrder
+        tableDetails.map((tableDetail) => {
+            tableDetail.orders.forEach((orderItem) => {
+                orderItem.total = orderItem.order_items.reduce(sum, 0)
+                console.log(orderItem.total)
             })
         })
 
-        if (!haveNewOrder) {
-            setNewOrderSelected({})
-            setTableNewOrderSelectedNumber(undefined)
-        } else {
-            try {
-                firstOrder = orders[0].new_orders[IndexOfFirstOrder]
-                console.log('firstOrder', firstOrder)
-                setNewOrderSelected(firstOrder)
-                setTableNewOrderSelectedNumber(firstOrder.id)
-            } catch (error) {
-                console.log('error', error)
-            }
+        firstOrder = tableDetails[0].orders[0]
+        if (countOrderItmes === null) {
+            setTableNewOrderSelectedNumber(firstOrder.id)
+            setNewOrderSelected(firstOrder)
         }
-        console.log('haveNewOrder', haveNewOrder)
-        setHaveNewOrder(haveNewOrder)
+        setHaveNewOrder(true)
     }
 
-    const setInitailInOrder = (orders) => {
-        let haveOrderInProcess = false
-        let IndexOfFirstOrder = 0
-        let currentOrder, firstOrder
-        orders.map((order, index) => {
-            order.in_orders.forEach((orderItem) => {
-                if (orderItem.order_items.length > 0) {
-                    haveOrderInProcess = true
-                    if (IndexOfFirstOrder === 0) {
-                        IndexOfFirstOrder = index
-                    }
-                }
-            })
-        })
-
-        if (!haveOrderInProcess) {
-            setInOrderSelected({})
-            setTableInOrderSelectedNumber(undefined)
-        } else {
-            if (tableInOrderSelectedNumber) {
-                currentOrder = orders[0].in_orders.find((order) => order.id === tableInOrderSelectedNumber)
-                setInOrderSelected(currentOrder)
-                setTableInOrderSelectedNumber(currentOrder.id)
-            } else {
-                // firstOrder = orders[IndexOfFirstOrder].in_orders.find((order) => order.status === 'In Order')
-                // setInOrderSelected(firstOrder)
-                // setTableInOrderSelectedNumber(firstOrder.id)
-                firstOrder = orders[0].in_orders[IndexOfFirstOrder]
-                console.log('firstOrder', firstOrder)
-                setInOrderSelected(firstOrder)
-                setTableInOrderSelectedNumber(firstOrder.id)
-            }
+    const getInOrder = async (countOrderItmes = null) => {
+        setLoading(true)
+        let tableIdArray = []
+        tableIdArray.push(table_selected.id)
+        let data = {
+            "restaurant": restaurant_id,
+            "restaurant_table": tableIdArray,
+            "zone": null,
+            "status": "In Order",
+            "start_date": startDate,
+            "end_date": endDate
         }
-        setHaveOrderInProcess(haveOrderInProcess)
+        console.log('dataForm', data)
+        try {
+            let tableDetails = await partnerService.getOrderByfilter2(data)
+            console.log('tableDetails', tableDetails)
+            if (tableDetails.length > 0) {
+                setInitailInOrder(tableDetails, countOrderItmes)
+                setInOrders(tableDetails[0].orders)
+            } else {
+                setInOrders([])
+                setInOrderSelected({})
+                setTableInOrderSelectedNumber(undefined)
+            }
+
+            setLoading(false)
+        } catch (error) {
+            console.log('error', error)
+            setLoading(false)
+            message.error('An error has occurred.Please try again.')
+        }
+    }
+    function sum(accumulator, a) {
+        return accumulator + a.total;
     }
 
-    const setInitailCompletedOrder = (orders) => {
-        let haveOrderCompleted = false
+    const setInitailInOrder = (tableDetails, countOrderItmes) => {
         let IndexOfFirstOrder = 0
-        let firstOrder, currentOrder
-        orders.map((order, index) => {
-            order.completed_orders.forEach((orderItem) => {
-                if (orderItem.order_items.length > 0) {
-                    haveOrderCompleted = true
-                    if (IndexOfFirstOrder === 0) {
-                        IndexOfFirstOrder = index
-                    }
+        let firstOrder
+        tableDetails.map((tableDetail) => {
+            tableDetail.orders.map((orderItem, index) => {
+                orderItem.total = orderItem.order_items.reduce(sum, 0)
+                console.log(orderItem.total)
+                if (IndexOfFirstOrder === 0) {
+                    IndexOfFirstOrder = index
                 }
             })
         })
 
-        if (!haveOrderCompleted) {
-            setCompletedOrderSelected({})
-            setTableCompletedOrderSelectedNumber(undefined)
-        } else {
-            if (tableCompletedOrderSelectedNumber) {
-                currentOrder = orders[0].completed_orders.find((order) => order.id === tableCompletedOrderSelectedNumber)
-                setCompletedOrderSelected(currentOrder)
-                setTableCompletedOrderSelectedNumber(currentOrder.id)
-            } else {
-                // firstOrder = orders[IndexOfFirstOrder].completed_orders.find((order) => order.status === 'Completed')
-                // setCompletedOrderSelected(firstOrder)
-                // setTableCompletedOrderSelectedNumber(firstOrder.id)
-                firstOrder = orders[0].completed_orders[IndexOfFirstOrder]
-                console.log('firstOrder', firstOrder)
-                setCompletedOrderSelected(firstOrder)
-                setTableCompletedOrderSelectedNumber(firstOrder.id)
-            }
-
-
+        firstOrder = tableDetails[0].orders[0]
+        if (countOrderItmes === null) {
+            setTableInOrderSelectedNumber(firstOrder.id)
+            setInOrderSelected(firstOrder)
         }
-        setHaveOrderCompleted(haveOrderCompleted)
+        setHaveOrderInProcess(true)
+    }
+
+    const getCompletedOrder = async (countOrderItmes = null) => {
+        setLoading(true)
+        let tableIdArray = []
+        tableIdArray.push(table_selected.id)
+        let data = {
+            "restaurant": restaurant_id,
+            "restaurant_table": tableIdArray,
+            "zone": null,
+            "status": "Completed",
+            "start_date": startDate,
+            "end_date": endDate
+        }
+        console.log('dataForm', data)
+        try {
+            let tableDetails = await partnerService.getOrderByfilter2(data)
+            console.log('tableDetails', tableDetails)
+            if (tableDetails.length > 0) {
+                setInitailCompletedOrder(tableDetails, countOrderItmes)
+                setCompletedOrders(tableDetails[0].orders)
+            } else {
+                setCompletedOrders([])
+                setCompletedOrderSelected({})
+                setTableCompletedOrderSelectedNumber(undefined)
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log('error', error)
+            setLoading(false)
+            message.error('An error has occurred.Please try again.')
+        }
+    }
+
+    const setInitailCompletedOrder = (tableDetails, countOrderItmes) => {
+        let firstOrder
+        tableDetails.map((tableDetail) => {
+            tableDetail.orders.forEach((orderItem) => {
+                orderItem.total = orderItem.order_items.reduce(sum, 0)
+                console.log(orderItem.total)
+            })
+        })
+
+        firstOrder = tableDetails[0].orders[0]
+        if (countOrderItmes === null) {
+            setTableCompletedOrderSelectedNumber(firstOrder.id)
+            setCompletedOrderSelected(firstOrder)
+        }
+        setHaveOrderCompleted(true)
     }
 
     const confirmTakeOrder = async (order_items, index) => {
@@ -176,8 +204,13 @@ export default function ViewOrderModal(props) {
                 let orderItems = [...newOrderSelected.order_items]
                 orderItems.splice(index, 1)
                 newOrder.order_items = orderItems
+                if (orderItems.length === 0) {
+                    getNewOrder()
+                } else {
+                    getNewOrder(tableNewOrderSelectedNumber)
+                }
+                console.log('newOrder', newOrder)
                 setNewOrderSelected(newOrder)
-                getOrder()
                 message.success('Take order successful.')
             } else {
                 message.error('Cannot take order.Please try again.')
@@ -199,8 +232,13 @@ export default function ViewOrderModal(props) {
                 let orderItems = [...inOrder.order_items]
                 orderItems.splice(index, 1)
                 inOrder.order_items = orderItems
+                if (orderItems.length === 0) {
+                    getInOrder()
+                } else {
+                    getInOrder(tableInOrderSelectedNumber)
+                }
                 setInOrderSelected(inOrder)
-                getOrder()
+
                 message.success('Complete order successful.')
             } else {
                 message.error('Cannot complete order.Please try again.')
@@ -221,8 +259,12 @@ export default function ViewOrderModal(props) {
                 let orderItems = [...newOrderSelected.order_items]
                 orderItems.splice(index, 1)
                 newOrder.order_items = orderItems
+                if (orderItems.length === 0) {
+                    getNewOrder()
+                } else {
+                    getNewOrder(tableNewOrderSelectedNumber)
+                }
                 setNewOrderSelected(newOrder)
-                getOrder()
                 message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
@@ -243,8 +285,12 @@ export default function ViewOrderModal(props) {
                 let orderItems = [...inOrder.order_items]
                 orderItems.splice(index, 1)
                 inOrder.order_items = orderItems
+                if (orderItems.length === 0) {
+                    getInOrder()
+                } else {
+                    getInOrder(tableInOrderSelectedNumber)
+                }
                 setInOrderSelected(inOrder)
-                getOrder()
                 message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
@@ -254,40 +300,36 @@ export default function ViewOrderModal(props) {
         }
     }
 
-    let newOrderTableListComponent = orders && orders.map((order) => {
-        let tableList = order.new_orders.map((newOrder) => {
-            if (newOrder.order_items.length > 0) {
-                return (
-                    <>
-                        <Row className={tableNewOrderSelectedNumber == newOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(newOrder), setTableNewOrderSelectedNumber(newOrder.id))}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                            &nbsp;&nbsp; {order.name}
-                                        </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>{newOrder.total} THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(newOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
+    let newOrderTableListComponent = newOrders && newOrders.map((order) => {
 
-        })
+        return (
+            <>
+                <Row className={tableNewOrderSelectedNumber == order.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setNewOrderSelected(order), setTableNewOrderSelectedNumber(order.id))}>
+                    <Col>
+                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                            <Row >
+                                <Col>
+                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                    &nbsp;&nbsp; {table_selected.name}
+                                </Col>
+                                <Col>
+                                    <div style={{ textAlign: "right" }}>
+                                        <b>{order.total} THB</b>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                </Row>
+            </>
+        )
 
         return tableList
     })
@@ -377,40 +419,37 @@ export default function ViewOrderModal(props) {
         </>
     )
 
-    let inOrderTableList = orders && orders.map((order) => {
-        let tableList = order.in_orders.map((inOrder) => {
-            if (inOrder.order_items.length > 0) {
-                return (
-                    <>
-                        {/* Table list */}
-                        <Row className={tableInOrderSelectedNumber == inOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setInOrderSelected(inOrder), setTableInOrderSelectedNumber(inOrder.id))}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                            &nbsp;&nbsp; {order.name}
-                                        </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>{inOrder.total} THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(inOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-        })
+    let inOrderTableList = inOrders && inOrders.map((order) => {
+
+        return (
+            <>
+                {/* Table list */}
+                <Row className={tableInOrderSelectedNumber == order.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setInOrderSelected(order), setTableInOrderSelectedNumber(order.id))}>
+                    <Col>
+                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                            <Row >
+                                <Col>
+                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                    &nbsp;&nbsp; {table_selected.name}
+                                </Col>
+                                <Col>
+                                    <div style={{ textAlign: "right" }}>
+                                        <b>{order.total} THB</b>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                </Row>
+            </>
+        )
         return tableList
 
     })
@@ -502,40 +541,36 @@ export default function ViewOrderModal(props) {
         </>
     )
 
-    let completedOrderTableList = orders && orders.map((order) => {
-        let tableList = order.completed_orders.map((completedOrder) => {
-            if (completedOrder.order_items.length > 0) {
-                return (
-                    <>
-                        {/* Table list */}
-                        <Row className={tableCompletedOrderSelectedNumber == completedOrder.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setCompletedOrderSelected(completedOrder), setTableCompletedOrderSelectedNumber(completedOrder.id))}>
-                            <Col>
-                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                    <Row >
-                                        <Col>
-                                            <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
-                                            &nbsp;&nbsp; {order.name}
-                                        </Col>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }}>
-                                                <b>{completedOrder.total} THB</b>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                                {moment(completedOrder.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-        })
+    let completedOrderTableList = completedOrders && completedOrders.map((order) => {
+        return (
+            <>
+                {/* Table list */}
+                <Row className={tableCompletedOrderSelectedNumber == order.id ? styles.tableSelected : null} style={{ margin: "10px 0", cursor: "pointer" }} onClick={() => (setCompletedOrderSelected(order), setTableCompletedOrderSelectedNumber(order.id))}>
+                    <Col>
+                        <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                            <Row >
+                                <Col>
+                                    <Image src="/images/table-icon.png" style={{ width: "30px", height: "30px" }} />
+                                    &nbsp;&nbsp; {table_selected.name}
+                                </Col>
+                                <Col>
+                                    <div style={{ textAlign: "right" }}>
+                                        <b>{order.total} THB</b>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                </Row>
+            </>
+        )
         return tableList
     })
 
@@ -606,6 +641,20 @@ export default function ViewOrderModal(props) {
         </>
     )
 
+    const onChangeTab = (tabName) => {
+        if (tabName === 'newOrder') {
+            getNewOrder()
+        } else {
+            if (tabName === 'inOrder') {
+                getInOrder()
+            } else {
+                if (tabName === 'completed') {
+                    getCompletedOrder()
+                }
+            }
+        }
+    }
+
     return (
 
         <Modal
@@ -620,7 +669,7 @@ export default function ViewOrderModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <Spin spinning={loading} tip="Loading...">
-                    <Tabs defaultActiveKey="newOrder" id="orderStatus-tabs">
+                    <Tabs defaultActiveKey="newOrder" id="orderStatus-tabs" onSelect={onChangeTab}>
                         <Tab eventKey="newOrder" title="New order">
                             <Row style={{ height: "80vh", marginTop: "20px" }}>
                                 {

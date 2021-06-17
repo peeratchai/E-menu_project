@@ -225,7 +225,7 @@ export default function PromoteList(props) {
         <>
             <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                 Promotion List
-             </div>
+            </div>
 
             <Spin spinning={loading} tip='loading...'>
                 <Tabs defaultActiveKey="pending" >

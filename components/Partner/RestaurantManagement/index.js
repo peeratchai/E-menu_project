@@ -7,7 +7,7 @@ import { message, Spin } from "antd";
 import { FormatColorResetOutlined } from "@material-ui/icons";
 
 export default function RestaurantManagement(props) {
-    const { restaurant_id, current_tab, restaurant_name } = props
+    const { restaurant_id, current_tab, restaurant_name, type } = props
     const isMobileResolution = useMediaQuery(768)
     const [zone, setZone] = React.useState([])
     const [loading, setLoading] = React.useState(false)
@@ -51,6 +51,7 @@ export default function RestaurantManagement(props) {
                 restaurant_id={restaurant_id}
                 restaurant_name={restaurant_name}
                 zone_number_selected={zoneNumberSelected}
+                type={type}
             />
         )
     }

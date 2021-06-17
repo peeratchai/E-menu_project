@@ -114,16 +114,19 @@ const Partner = ({ user }) => {
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
                                                 restaurant_name={restaurantName}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="dashboard">
                                             <Dashboard
                                                 restaurant_id={restaurantId}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="promote">
                                             <Promote
                                                 restaurant_id={restaurantId}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="promoteList">
@@ -136,12 +139,14 @@ const Partner = ({ user }) => {
                                             <Menu
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="zone">
                                             <ZoneManagement
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="profile">
@@ -149,6 +154,7 @@ const Partner = ({ user }) => {
                                                 restaurant_id={restaurantId}
                                                 current_tab={currentTab}
                                                 user_profile={user}
+                                                type="partner"
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="setting">

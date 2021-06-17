@@ -13,7 +13,7 @@ import partnerService from '../../../services/partner'
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export default function Menu(props) {
-    const { restaurant_id, current_tab } = props
+    const { restaurant_id, current_tab, type } = props
     const isMobileResolution = useMediaQuery(768)
     const [category, setCategory] = React.useState([]);
     const [addCategoryModal, setAddCategoryModal] = React.useState(false);
@@ -235,6 +235,7 @@ export default function Menu(props) {
                 show_edit_menu_modal={() => setEditMenuModalShow(true)}
                 delete_menu={(menu) => deleteMenu(menu)}
                 restaurant_id={restaurant_id}
+                type={type}
             />)
     }
 

@@ -8,7 +8,7 @@ import uploadService from '../../../services/upload'
 import adminService from '../../../services/admin'
 import { message } from 'antd';
 export default function Profile(props) {
-    const { restaurant_id, current_tab } = props
+    const { restaurant_id, current_tab, type } = props
     const isMobileResolution = useMediaQuery(768)
     const [restaurantBannerFileList, setRestaurantBannerFileList] = React.useState([]);
     const [formErrors, setFormErrors] = React.useState({});
@@ -241,6 +241,7 @@ export default function Profile(props) {
                 update_restaurant_details={updateRestaurantDetails}
                 business_district={businessDistrict}
                 restaurant_id={restaurant_id}
+                type={type}
             />
     }
     return profileComponent

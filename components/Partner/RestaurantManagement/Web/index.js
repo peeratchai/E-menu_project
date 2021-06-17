@@ -11,7 +11,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import Link from 'next/link'
 
 export default function WebComponent(props) {
-    const { zone, restaurant_id, restaurant_name, zone_number_selected } = props
+    const { zone, restaurant_id, restaurant_name, zone_number_selected, type } = props
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -231,7 +231,14 @@ export default function WebComponent(props) {
     }
 
     return (
-        <div className={styles.tab}>
+        <div>
+            {
+                type === 'partner' && (
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                        Restaurant Management
+                    </div>
+                )
+            }
             <Row>
                 <Col xs={6}>
                     <Form>
