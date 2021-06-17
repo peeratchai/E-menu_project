@@ -337,22 +337,27 @@ export default function RestaurantDetailWeb(props) {
         setMenuEachCategory(categorySection)
     }
 
-    const business_hourHTML = restaurantDetail && restaurantDetail.business_hour.map((business_hour) => (
-        <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-            <Row>
-                <Col>
-                    <div>
-                        <b>{business_hour.day}</b>
-                    </div>
-                </Col>
-                <Col>
-                    <div style={{ textAlign: "right" }}>
-                        {business_hour.opening_time} - {business_hour.closing_time}
-                    </div>
-                </Col>
-            </Row>
-        </div>
-    ))
+    const business_hourHTML = restaurantDetail && restaurantDetail.business_hour.map((business_hour) => {
+        if (business_hour && business_hour.opening_time) {
+            return (
+                <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
+                    <Row>
+                        <Col>
+                            <div>
+                                <b>{business_hour.day}</b>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div style={{ textAlign: "right" }}>
+                                {business_hour.opening_time} - {business_hour.closing_time}
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
+            )
+        }
+
+    })
 
     const onSelect = (key) => {
         setSelected(key);
@@ -408,7 +413,7 @@ export default function RestaurantDetailWeb(props) {
                                         </Col>
                                         <Col style={{ color: "#74b100" }}>
                                             {
-                                                moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
+                                                restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
                                                     moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm') ? (
                                                     'Open now!'
                                                 ) : (
@@ -498,7 +503,7 @@ export default function RestaurantDetailWeb(props) {
                                                         <Col>
                                                             <div style={{ textAlign: "right", color: "#74b100 " }}>
                                                                 {
-                                                                    moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
+                                                                    restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') &&
                                                                         moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm') ? (
                                                                         'Open now!'
                                                                     ) : (

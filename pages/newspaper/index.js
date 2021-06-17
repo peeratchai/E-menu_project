@@ -76,27 +76,9 @@ export default function Newspaper() {
     }, [])
 
     const getInitialData = async () => {
-        // await getNewspaperlist()
         await onSearch()
         await getFilterMasterData()
     }
-
-    // const getNewspaperlist = async () => {
-    //     setLoading(true)
-    //     let data
-    //     newspaperService.getNewspaperListBySearchWithPaging().then((newspaperList) => {
-    //         setNewspaperList(newspaperList)
-    //         setLoading(false)
-    //         console.log('newspaperList', newspaperList)
-    //     }).catch(error => {
-    //         setLoading(false)
-    //         console.log('getNewspaperlist error', error)
-    //         if (error.response.status === 403) {
-    //             message.error('403 Forbidden Error')
-    //         }
-    //     })
-
-    // }
 
     const getFilterMasterData = async () => {
         try {
