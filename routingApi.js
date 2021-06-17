@@ -84,6 +84,10 @@ module.exports = {
             destination: API_URL + '/promotion/newspaper',
         },
         {
+            source: '/api/promotion/newspaper_with_paging/:page/:limit',
+            destination: API_URL + '/promotion/newspaper_with_paging?page=:page&limit=:limit',
+        },
+        {
             source: '/api/add_promotion',
             destination: API_URL + '/promotion',
         },

@@ -14,6 +14,7 @@ import newspaperService from '../../services/newspaper'
 import changeFormatFilter from '../../services/changeFormatFilter'
 import { message, Spin } from 'antd';
 import masterDataService from '../../services/masterData'
+import { Button } from 'react-bootstrap'
 
 var options = {
     enableHighAccuracy: true,
@@ -25,7 +26,22 @@ export default function Newspaper() {
     const isMobileResolution = useMediaQuery(768)
     const [modalShow, setModalShow] = React.useState(false);
     const [newspaperList, setNewspaperList] = React.useState([]);
-    const [filter, setFilter] = React.useState({});
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const [nextPage, setNextPage] = React.useState(1)
+    const [totalPage, setTotalPage] = React.useState(0)
+    // limit is number of reataurant list each page 
+    const limit = 10
+    const [filter, setFilter] = React.useState({
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
+        distance: 0,
+        price_to_price_from: '0 0',
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null
+    });
     const [loading, setLoading] = React.useState(false)
     const [userLocation, setUserLocation] = React.useState()
     const [masterDataList, setMasterDataList] = React.useState({
@@ -60,25 +76,27 @@ export default function Newspaper() {
     }, [])
 
     const getInitialData = async () => {
-        await getNewspaperlist()
+        // await getNewspaperlist()
+        await onSearch()
         await getFilterMasterData()
     }
 
-    const getNewspaperlist = async () => {
-        setLoading(true)
-        newspaperService.getNewspaperList().then((newspaperList) => {
-            setNewspaperList(newspaperList)
-            setLoading(false)
-            console.log('newspaperList', newspaperList)
-        }).catch(error => {
-            setLoading(false)
-            console.log('getNewspaperlist error', error)
-            if (error.response.status === 403) {
-                message.error('403 Forbidden Error')
-            }
-        })
+    // const getNewspaperlist = async () => {
+    //     setLoading(true)
+    //     let data
+    //     newspaperService.getNewspaperListBySearchWithPaging().then((newspaperList) => {
+    //         setNewspaperList(newspaperList)
+    //         setLoading(false)
+    //         console.log('newspaperList', newspaperList)
+    //     }).catch(error => {
+    //         setLoading(false)
+    //         console.log('getNewspaperlist error', error)
+    //         if (error.response.status === 403) {
+    //             message.error('403 Forbidden Error')
+    //         }
+    //     })
 
-    }
+    // }
 
     const getFilterMasterData = async () => {
         try {
@@ -104,10 +122,10 @@ export default function Newspaper() {
 
     }
 
-    const onSearch = async (filterForm) => {
+    const onSearch = async (filterForm = filter, isLoadMore = false) => {
+        setLoading(true)
         console.log('filterForm', filterForm)
         let filter = changeFormatFilter(filterForm)
-        console.log('filter', filter)
         if (filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
             filter.distance = parseFloat(splitDistanceArray[0]) * 1000
@@ -116,11 +134,33 @@ export default function Newspaper() {
             filter.current_location = null
         }
         console.log('filter', filter)
-        setLoading(true)
-        newspaperService.getNewspaperListBySearch(filter).then((promotions) => {
+        newspaperService.getNewspaperListBySearchWithPaging(nextPage, limit, filter).then((response) => {
+            let next_page = response.next_page
+            let current_page = response.current_page
+            let totalPage = response.total_page
+            const results = response.results
+            let newNewspaperList = []
+            if (results.length > 0) {
+                if (isLoadMore) {
+                    newNewspaperList = [...newspaperList, ...results]
+                } else {
+                    newNewspaperList = [...results]
+                }
+                console.log(newNewspaperList)
+
+                setCurrentPage(current_page)
+                if (next_page !== null) {
+                    setNextPage(next_page)
+                }
+                setTotalPage(totalPage)
+            } else {
+                setTotalResult(0)
+                setNextPage(1)
+            }
+
             setLoading(false)
             setFilter(filterForm)
-            setNewspaperList(promotions)
+            setNewspaperList(newNewspaperList)
         }).catch(error => {
             setLoading(false)
             console.log('onSearch', error)
@@ -140,6 +180,13 @@ export default function Newspaper() {
                         <MobilePromotionlist
                             newspaper_list={newspaperList}
                         />
+                        {
+                            currentPage < totalPage && (
+                                <div style={{ width: "100%", textAlign: "center", paddingBottom: "100px" }}>
+                                    <Button onClick={() => onSearch(filter, true)}>Load more</Button>
+                                </div>
+                            )
+                        }
                     </Spin>
                 </Container>
                 <MobileFilter
@@ -168,6 +215,13 @@ export default function Newspaper() {
                             <WebPromotionlist
                                 newspaper_list={newspaperList}
                             />
+                            {
+                                currentPage < totalPage && (
+                                    <div style={{ width: "100%", textAlign: "center", paddingBottom: "100px" }}>
+                                        <Button onClick={() => onSearch(filter, true)}>Load more</Button>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </Spin >

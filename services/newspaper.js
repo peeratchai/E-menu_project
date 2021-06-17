@@ -8,6 +8,10 @@ const newspaperService = {
 
     getNewspaperListBySearch: async function (data) {
         return await sendRequest.post('/api/promotion/newspaper', data)
+    },
+
+    getNewspaperListBySearchWithPaging: async function (page, limit, data) {
+        return await sendRequest.post('/api/promotion/newspaper_with_paging/' + page + "/" + limit, data)
     }
 }
 

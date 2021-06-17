@@ -127,8 +127,8 @@ export default function RestaurantListWeb(props) {
         }
         filter.business_district = location_id
         console.log('filter', filter)
+        console.log('nextPage', nextPage)
 
-        // let NewRestaurantList = await restaurantService.getRestaurantSearchByFilter(accessToken, filter)
         let response = await restaurantService.getRestaurantSearchWithPaging(nextPage, limit, filter)
         console.log('response', response)
         let next_page = response.next_page
@@ -150,7 +150,9 @@ export default function RestaurantListWeb(props) {
                 renderRestaurantCard(newRestaurantList)
             }
             setCurrentPage(current_page)
-            setNextPage(next_page)
+            if (next_page !== null) {
+                setNextPage(next_page)
+            }
             setTotalPage(totalPage)
             setTotalResult(newRestaurantList.length)
         } else {
