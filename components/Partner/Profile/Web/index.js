@@ -439,7 +439,7 @@ export default function WebProfileComponent(props) {
 
                             <div style={{ textAlign: "right" }}>
                                 <Popconfirm
-                                    title="Are you sure to delte this restaurant?"
+                                    title="Are you sure to delete this restaurant?"
                                     onConfirm={() => onDeleteRestaurant()}
                                     okText="Yes"
                                     cancelText="No"

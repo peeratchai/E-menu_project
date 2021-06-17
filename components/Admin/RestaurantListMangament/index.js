@@ -201,7 +201,7 @@ export default function RestaurantListManagement(props) {
             render: (restaurant) => (
                 <Space size="middle">
                     <Popconfirm
-                        title="Are you sure to delte this restaurant?"
+                        title="Are you sure to delete this restaurant?"
                         onConfirm={() => confirmDeleteRestaurant(restaurant.restaurantId)}
                         okText="Yes"
                         cancelText="No"
