@@ -12,7 +12,8 @@ import EmptyComponent from '../../Empty'
 
 export default function ViewOrderModal(props) {
 
-    const { table_selected, restaurant_id, zone_details } = props
+    const { table_selected, restaurant_id } = props
+    const { get_zone } = props
     const [loading, setLoading] = React.useState(false);
     const [newOrders, setNewOrders] = React.useState([])
     const [inOrders, setInOrders] = React.useState([])
@@ -34,11 +35,11 @@ export default function ViewOrderModal(props) {
 
     useEffect(() => {
         if (restaurant_id && table_selected) {
-            getNewOrder()
+            getNewOrder(null, true)
         }
     }, [table_selected])
 
-    const getNewOrder = async (countOrderItmes = null) => {
+    const getNewOrder = async (countOrderItmes = null, setinitialOrder = false) => {
         setLoading(true)
         let tableIdArray = []
         tableIdArray.push(table_selected.id)
@@ -58,6 +59,9 @@ export default function ViewOrderModal(props) {
                 setInitailNewOrder(tableDetails, countOrderItmes)
                 setNewOrders(tableDetails[0].orders)
             } else {
+                if (!setinitialOrder) {
+                    get_zone()
+                }
                 setNewOrderSelected({})
                 setNewOrders([])
                 setTableNewOrderSelectedNumber(undefined)
@@ -87,7 +91,7 @@ export default function ViewOrderModal(props) {
         setHaveNewOrder(true)
     }
 
-    const getInOrder = async (countOrderItmes = null) => {
+    const getInOrder = async (countOrderItmes = null, setinitialOrder = false) => {
         setLoading(true)
         let tableIdArray = []
         tableIdArray.push(table_selected.id)
@@ -107,6 +111,9 @@ export default function ViewOrderModal(props) {
                 setInitailInOrder(tableDetails, countOrderItmes)
                 setInOrders(tableDetails[0].orders)
             } else {
+                if (!setinitialOrder) {
+                    get_zone()
+                }
                 setInOrders([])
                 setInOrderSelected({})
                 setTableInOrderSelectedNumber(undefined)
@@ -210,6 +217,7 @@ export default function ViewOrderModal(props) {
                     getNewOrder(tableNewOrderSelectedNumber)
                 }
                 console.log('newOrder', newOrder)
+
                 setNewOrderSelected(newOrder)
                 message.success('Take order successful.')
             } else {

@@ -229,7 +229,7 @@ export default function Dashboard(props) {
     let orderList = renderOrderList()
     let OrderListComponent = (
         <>
-            <Col xs={5} style={{ borderRight: "1px solid #DEDEDE" }}>
+            <Col xs={5} style={{ borderRight: "1px solid #DEDEDE", height: "inherit", overflowY: "scroll" }}>
                 <div style={{ color: "white", marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
                     <div style={{ marginBottom: "10px" }}>
                         <Row>
@@ -251,7 +251,7 @@ export default function Dashboard(props) {
                     }
                 </Spin>
             </Col>
-            <Col xs={7}>
+            <Col xs={7} style={{ height: "inherit", overflowY: "scroll" }}>
                 <Spin spinning={loading} tip="Loading...">
                     {
                         haveOrder ? orderList : <EmptyComponent />

@@ -108,6 +108,7 @@ export default function OrderMenuModal(props) {
             console.log('count ->', count)
             setCount(1)
             setSpecialInstruction('')
+            message.success('Add menu to cart succesful.')
             props.onHide()
         } else {
             message.error('Please scan qr code again.')

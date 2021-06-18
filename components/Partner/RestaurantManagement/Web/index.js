@@ -36,7 +36,7 @@ export default function WebComponent(props) {
                 console.log('zone', zone[zone_number_selected])
                 setZoneSelected(zone[zone_number_selected])
                 ratioTableImages(zone[zone_number_selected]);
-                message.success('Loading zone successful.')
+                // message.success('Loading zone successful.')
             } else {
                 console.log('zone not found')
                 setZoneSelected(undefined)
@@ -54,7 +54,7 @@ export default function WebComponent(props) {
         let tableImage
         if (Array.isArray(tablesInZone)) {
             tablesInZone.forEach((table, index) => {
-                tableImage = mappingTableImage.find((mappingData) => mappingData.size === table.size && mappingData.type === table.type)
+                tableImage = mappingTableImage.find((mappingData) => mappingData.size === table.size && mappingData.type === table.type && mappingData.status === table.status)
                 table.image = tableImage.image
                 table.tableNumber = index + 1
                 table.position_x = parseFloat(table.position_x)
@@ -118,6 +118,14 @@ export default function WebComponent(props) {
         tables[tableIndex] = tempTable;
         setTable(tables)
 
+    }
+
+    const updateTableStatus = (tableStatus) => {
+        console.log('tableStatus', tableStatus)
+        let currentZone = zone[zone_number_selected]
+        console.log('tableSelected', tableSelected)
+        console.log('zone', zone)
+        // ratioTableImages()
     }
 
     const addTable = async (tableData) => {
@@ -230,6 +238,10 @@ export default function WebComponent(props) {
         ratioTableImages(zoneDetails)
     }
 
+    const getZone = () => {
+        get_zone(zoneNumberSelected)
+    }
+
     return (
         <div>
             {
@@ -280,8 +292,10 @@ export default function WebComponent(props) {
                 show={viewOrderModalShow}
                 onHide={() => setViewOrderModalShow(false)}
                 table_selected={tableSelected}
+                update_table_status={updateTableStatus}
                 restaurant_id={restaurant_id}
                 zone_details={zoneSelected}
+                get_zone={getZone}
             />
         </div >
     )
