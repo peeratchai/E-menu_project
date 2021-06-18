@@ -61,7 +61,7 @@ const profileService = {
             formData.append("restaurant_employee", data.restaurant_employee);
         }
         formData.append("username", data.username);
-        formData.append("avatar_url", null);
+        // formData.append("avatar_url", null);
         formData.append("is_active", data.is_active);
         formData.append("roles", data.roles);
 
