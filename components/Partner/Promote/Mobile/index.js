@@ -45,20 +45,6 @@ export default function MobileComponent(props) {
                 </Col>
                 <Col sm={6} style={{ margin: '15px 0' }}>
                     <Form onSubmit={props.add_promotion}>
-                        <Form.Group controlId="promoted.contents">
-                            <Form.Label >Promoted contents</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                onChange={(e) => props.set_form('promotedContents', e.target.value)}
-                                rows={4}
-                                isInvalid={!!props.errors.promotedContents}
-                                value={props.promote_form.promotedContents}
-                                disabled={disable}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {props.errors.promotedContents}
-                            </Form.Control.Feedback>
-                        </Form.Group>
                         <Form.Group controlId="banner.text">
                             <Form.Label >Banner Text</Form.Label>
                             <Form.Control
@@ -71,6 +57,20 @@ export default function MobileComponent(props) {
                             />
                             <Form.Control.Feedback type="invalid">
                                 {props.errors.bannerText}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="promoted.contents">
+                            <Form.Label >Promoted contents</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                onChange={(e) => props.set_form('promotedContents', e.target.value)}
+                                rows={4}
+                                isInvalid={!!props.errors.promotedContents}
+                                value={props.promote_form.promotedContents}
+                                disabled={disable}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {props.errors.promotedContents}
                             </Form.Control.Feedback>
                         </Form.Group>
                         <div style={{ textAlign: "right" }}>
