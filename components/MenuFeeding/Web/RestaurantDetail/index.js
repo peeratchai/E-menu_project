@@ -98,12 +98,14 @@ export default function RestaurantDetailWeb(props) {
         if (props && props.restaurant_detail !== undefined) {
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
-            restaurant_detail.menu_categories.sort((a, b) => a.sequence_number - b.sequence_number).map((category, index) => {
+            restaurant_detail.menu_categories.sort((a, b) => a.sequence_number - b.sequence_number).forEach((category, index) => {
                 //// set initial isActive for button category 
-                if (index === 0) {
-                    categoryList.push({ categoryName: category.name, isActive: true })
-                } else {
-                    categoryList.push({ categoryName: category.name, isActive: false })
+                if (category.is_active === true && category.menus.length > 0) {
+                    if (index === 0) {
+                        categoryList.push({ categoryName: category.name, isActive: true })
+                    } else {
+                        categoryList.push({ categoryName: category.name, isActive: false })
+                    }
                 }
             })
             let { lat, lng } = changeFormatLatLong(restaurant_detail.location)
@@ -111,10 +113,14 @@ export default function RestaurantDetailWeb(props) {
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
             setSelected(categoryList[0].categoryName)
-            renderMenuList(restaurant_detail)
+            let menuCategory = restaurant_detail.menu_categories.filter((menuCategory) => menuCategory.is_active === true && menuCategory.menus.length > 0)
+            renderMenuList(menuCategory)
             // activeCategory()
             setRestaurantDetail(restaurant_detail)
 
+            console.log(moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm'))
+            console.log(moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm'))
+            console.log(moment().format('HH.mm'))
             if (restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
                 setRestaurantOpenNow(true)
             }
@@ -283,30 +289,34 @@ export default function RestaurantDetailWeb(props) {
         set_shopping_cart(shoppingCart)
     }
 
-    const renderMenuList = (restaurantDetail) => {
-        let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
-            let menuCard = category.menus.map((menu, menuIndex) =>
-                <Col xs={6} className={styles.menu_card} key={menu + menuIndex} onClick={() => onAddMenu(menu)}>
-                    <Cardantd
-                        cover={
-                            <img
-                                alt="example"
-                                src={menu.image_url}
-                                style={{ height: '200px' }}
-                            />
-                        }
-                        actions={[
-                            <b style={{ color: "black" }}>{menu.price + " Baht"}</b>
-                        ]}
-                    >
-                        <Meta
-                            title={menu.name}
-                            description={menu.description}
-                        />
-                    </Cardantd>
-                </Col >
-            )
+    const renderMenuList = (categoryList) => {
+        let categorySection = categoryList.map((category, categoryIndex) => {
+            let menuCard = category.menus.map((menu, menuIndex) => {
+                if (menu.is_active === true) {
+                    return (
+                        <Col xs={6} className={styles.menu_card} key={menu + menuIndex} onClick={() => onAddMenu(menu)}>
+                            <Cardantd
+                                cover={
+                                    <img
+                                        alt="example"
+                                        src={menu.image_url}
+                                        style={{ height: '200px' }}
+                                    />
+                                }
+                                actions={[
+                                    <b style={{ color: "black" }}>{menu.price + " Baht"}</b>
+                                ]}
+                            >
+                                <Meta
+                                    title={menu.name}
+                                    description={menu.description}
+                                />
+                            </Cardantd>
+                        </Col>
+                    )
 
+                }
+            })
             return (
                 <div id={category.name} ref={(categoryRef) => (refsCategory.current[categoryIndex] = categoryRef)} style={{ position: "relative" }} key={category.categoryName + categoryIndex}>
                     <Row className={styles.category_section} >
@@ -465,7 +475,7 @@ export default function RestaurantDetailWeb(props) {
                                             </div>
                                             <div style={{ padding: "1.25rem" }}>
                                                 <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                    <LocationOnIcon /> &nbsp; {restaurantDetail.googleMapsAddress}
+                                                    <LocationOnIcon /> &nbsp; {restaurantDetail.address}
                                                 </div>
                                                 <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
                                                     <PhoneIcon /> &nbsp; {restaurantDetail.phone}

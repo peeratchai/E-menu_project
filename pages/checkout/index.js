@@ -26,7 +26,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [userProfile, setUserProfile] = React.useState(0);
     const [haveCheckOutPermission, setHaveCheckOutPermission] = React.useState(false)
-    const [haveMenuInBasket, setHaveMenuInBasket] = React.useState(false)
+    const [haveMenuInCart, setHaveMenuInCart] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     useEffect(() => {
         console.log('user', user)
@@ -41,25 +41,6 @@ const CheckoutPage = ({ user, tableId = null }) => {
             }
         }
 
-        // if (typeof window !== 'undefined') {
-        //     let basket = window.localStorage.getItem('basket');
-        //     basket = JSON.parse(basket)
-        //     if (basket) {
-        //         try {
-        //             setShoppingCartData(basket)
-        //             let order = basket.order
-        //             setCountMenuItems(order.length)
-        //             if (order.length > 0) {
-        //                 setHaveMenuInBasket(true)
-        //             }
-        //             let total_price = 0
-        //             order.map((menu) => total_price += menu.total)
-        //             setTotalPrice(total_price)
-        //         } catch (error) {
-        //             message.warning('Please select order before check out order.')
-        //         }
-        //     }
-        // }
     }, [user])
 
     const setInitialCart = () => {
@@ -77,7 +58,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
                     setCountMenuItems(countCartItems)
                     if (countCartItems > 0) {
-                        setHaveMenuInBasket(true)
+                        setHaveMenuInCart(true)
                     }
                     let total_price = 0
                     shoppingCartItems.map((menu) => total_price += menu.total)
@@ -162,7 +143,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
 
         if (haveCheckOutPermission) {
             if (userProfile) {
-                if (haveMenuInBasket) {
+                if (haveMenuInCart) {
                     setLoading(true)
                     let userId = userProfile.id
                     console.log(userId)
@@ -321,7 +302,16 @@ const CheckoutPage = ({ user, tableId = null }) => {
         )
     })
 
+    const additionalOrder = () => {
 
+        let restaurantName = shoppingCartData.restaurant.name
+        let restaurantId = shoppingCartData.restaurant.id
+
+        router.push({
+            pathname: '/menuFeeding/restaurantList/' + restaurantName,
+            query: { restaurantId: restaurantId }
+        })
+    }
 
     return (
         <>
@@ -331,7 +321,18 @@ const CheckoutPage = ({ user, tableId = null }) => {
                         <Layout containerType="mobile">
                             <Container className={utilStyles.container_sm} style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}>
                                 {
-                                    countMenuItems > 0 ? MenuListComponentMobile : <EmptyComponent />
+                                    haveMenuInCart && (
+                                        <div style={{ width: "100%", textAlign: "right", marginBottom: "15px" }}>
+                                            <Button onClick={() => additionalOrder()}>สั่งอาหารเพิ่ม</Button>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    countMenuItems > 0 ? (
+                                        <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                            {MenuListComponentMobile}
+                                        </div>) : <EmptyComponent />
+
                                 }
                             </Container>
                         </Layout >
@@ -391,9 +392,19 @@ const CheckoutPage = ({ user, tableId = null }) => {
                 ) : (
                     <>
                         <Layout>
-                            <Container className={utilStyles.container} style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}>
+                            <Container className={utilStyles.container}>
                                 {
-                                    countMenuItems > 0 ? MenuListComponentWeb : <EmptyComponent />
+                                    haveMenuInCart && (
+                                        <div style={{ width: "100%", textAlign: "right", marginBottom: "15px" }}>
+                                            <Button onClick={() => additionalOrder()}>สั่งอาหารเพิ่ม</Button>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    countMenuItems > 0 ? (
+                                        <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                            {MenuListComponentWeb}
+                                        </div>) : <EmptyComponent />
                                 }
                             </Container>
                         </Layout >

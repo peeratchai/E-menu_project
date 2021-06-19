@@ -82,11 +82,14 @@ export default function Restaurant() {
                         })
                     }
                 }
+
             }).catch(error => {
                 console.log('error', error)
                 message.warning('Please login before take order.')
             })
-            await getAddressOnGoogleMaps(restaurantDetail)
+            // await getAddressOnGoogleMaps(restaurantDetail)
+            setRestaurantDetail(restaurantDetail)
+            setLoading(false)
 
         }).catch((error) => {
             setLoading(false)

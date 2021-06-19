@@ -29,7 +29,7 @@ export default function RestaurantDetailMobile(props) {
     //// Set State
     const showBasketButton = ""
     const [modalShow, setModalShow] = React.useState(false);
-    const [categoryList, setCategoryList] = React.useState([{ categoryName: 'เมนูยำ', isActive: true }, { categoryName: 'เมนูข้าว', isActive: false }, { categoryName: 'เมนูลูกชิ้น', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน7', isActive: false }, { categoryName: 'เมนูแซลม่อน8', isActive: false }, { categoryName: 'เมนูแซลม่อน9', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }, { categoryName: 'เมนูแซลม่อน', isActive: false }]);
+    const [categoryList, setCategoryList] = React.useState([]);
     const [menuEachCategory, setMenuEachCategory] = React.useState("");
     const [categorySelected, setCategorySelected] = React.useState("");
     const [lat, setLat] = React.useState(13.8537968);
@@ -77,11 +77,14 @@ export default function RestaurantDetailMobile(props) {
         if (restaurant_detail) {
             let { restaurant_detail, location_id, location_name } = props
             let categoryList = []
-            restaurant_detail.menu_categories.map((category, index) => {
-                if (index === 0) {
-                    categoryList.push({ categoryName: category.name, isActive: true })
-                } else {
-                    categoryList.push({ categoryName: category.name, isActive: false })
+            restaurant_detail.menu_categories.sort((a, b) => a.sequence_number - b.sequence_number).map((category, index) => {
+                if (category.is_active === true && category.menus.length > 0) {
+                    console.log('category', category)
+                    if (index === 0) {
+                        categoryList.push({ categoryName: category.name, isActive: true })
+                    } else {
+                        categoryList.push({ categoryName: category.name, isActive: false })
+                    }
                 }
             })
 
@@ -90,7 +93,8 @@ export default function RestaurantDetailMobile(props) {
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
             setCategorySelected(categoryList[0].categoryName)
-            renderMenuList(restaurant_detail)
+            let menuCategory = restaurant_detail.menu_categories.filter((menuCategory) => menuCategory.is_active === true && menuCategory.menus.length > 0)
+            renderMenuList(menuCategory)
             setRestaurantDetail(restaurant_detail)
 
             if (restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
@@ -193,42 +197,43 @@ export default function RestaurantDetailMobile(props) {
         })
     ]
 
-    const renderMenuList = (restaurantDetail) => {
-        let categorySection = restaurantDetail.menu_categories.map((category, categoryIndex) => {
+    const renderMenuList = (categoryList) => {
+        let categorySection = categoryList.map((category, categoryIndex) => {
             let styleCard = styles.menu_card
 
             let menucard = category.menus.map((menu, menuIndex) => {
                 if (menuIndex > 0) {
                     styleCard = styleCard + " " + styles.borderTop
                 }
-                return (
-                    <Col xs={12} className={styleCard} key={menu.name + menuIndex} onClick={() => onAddMenu(menu)}>
-                        <Row style={{ height: "100%" }}>
-                            <Col xs={9}>
-                                <Row>
-                                    <Col style={{ fontSize: "14px", fontWeight: "bold" }}>
-                                        {menu.name}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col style={{ fontSize: "12px" }} xs={8}>
-                                        {menu.description}
-                                    </Col>
-                                </Row>
-                                <Row style={{ marginTop: "10px", fontWeight: "bold" }}>
-                                    <Col>
-                                        {menu.price + " Baht"}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
-                                <Image src={menu.image_url} rounded style={{ height: "100%" }} />
-                            </Col>
-                        </Row>
-                    </Col>
-                )
-            }
-            )
+                if (menu.is_active === true) {
+                    return (
+                        <Col xs={12} className={styleCard} key={menu.name + menuIndex} onClick={() => onAddMenu(menu)}>
+                            <Row style={{ height: "100%" }}>
+                                <Col xs={9}>
+                                    <Row>
+                                        <Col style={{ fontSize: "14px", fontWeight: "bold" }}>
+                                            {menu.name}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col style={{ fontSize: "12px" }} xs={8}>
+                                            {menu.description}
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginTop: "10px", fontWeight: "bold" }}>
+                                        <Col>
+                                            {menu.price + " Baht"}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
+                                    <Image src={menu.image_url} rounded style={{ height: "100%" }} />
+                                </Col>
+                            </Row>
+                        </Col>
+                    )
+                }
+            })
 
             return (
                 <div key={category.name + categoryIndex}>
@@ -368,7 +373,7 @@ export default function RestaurantDetailMobile(props) {
                                             </div>
                                             <div style={{ padding: "1.25rem" }}>
                                                 <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
-                                                    <LocationOnIcon /> &nbsp; {restaurantDetail.googleMapsAddress}
+                                                    <LocationOnIcon /> &nbsp; {restaurantDetail.address}
                                                 </div>
                                                 <div style={{ padding: "10px 0", borderBottom: "1px solid #dee2e6" }}>
                                                     <PhoneIcon /> &nbsp; {restaurantDetail.phone}

@@ -9,6 +9,7 @@ import AntdModal from "../../../AntdModal"
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import moment from 'moment';
 import LocationModal from '../../../Modal/Location'
+import restaurantService from '../../../../services/restaurant'
 
 const { Option } = Select;
 
@@ -194,6 +195,16 @@ export default function MobileProfileComponent(props) {
         if (!!formErrors[fieldName]) setFormErrors({
             ...formErrors,
             [fieldName]: null
+        })
+    }
+
+    const onDeleteRestaurant = () => {
+        restaurantService.deleteRestaurantById(restaurant_id).then((response) => {
+            console.log('response', response)
+            message.success('Delete restaurant successful.')
+        }).catch(error => {
+            console.log('confirmDeleteRestaurant error', error)
+            message.error('Cannot delete restaurant.')
         })
     }
 
@@ -422,6 +433,16 @@ export default function MobileProfileComponent(props) {
                                 </Form.Group>
 
                                 <div style={{ textAlign: "right" }}>
+                                    <Popconfirm
+                                        title="Are you sure to delete this restaurant? This account wil be permanently deleted."
+                                        onConfirm={() => onDeleteRestaurant()}
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        <Button variant="danger" disabled={disable} style={{ marginRight: "15px" }}>
+                                            Delete Restaurant
+                                        </Button>
+                                    </Popconfirm>
                                     <Button variant="primary" disabled={disable} onClick={() => saveProfile()}>
                                         Save
                                     </Button>

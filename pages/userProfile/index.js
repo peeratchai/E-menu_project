@@ -67,7 +67,7 @@ const UserProfile = ({ user }) => {
 
         if (user) {
             let userRoles = user.profile.roles
-            let filterRoles = userRoles.filter((role) => role !== 'customer')
+            let filterRoles = userRoles.filter((role) => role !== 'customer' && role !== 'partner')
             if (filterRoles.length === 0) {
                 setUserIsCustomer(true)
             }
