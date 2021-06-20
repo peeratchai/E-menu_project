@@ -612,7 +612,7 @@ const Admin = () => {
                             </div>
                             {
                                 // check tab is restaurant feature?
-                                restaurantfeature.indexOf(currentTab) > -1 && (
+                                restaurantfeature.indexOf(menuSelected) > -1 && (
                                     <SelectRestaurant
                                         onChangeRestaurant={onChangeRestaurant}
                                         restauran_list={restaurantList}

@@ -2,7 +2,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, Slider, TimePicker, Select, Space, Spin } from 'antd';
+import { Upload, Slider, TimePicker, Select, Space, Spin, Popconfirm, message } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import AntdModal from "../../../AntdModal"
@@ -71,9 +71,17 @@ export default function MobileProfileComponent(props) {
         }
     };
 
-    const onChageBusinessHour = (newTime, indexOfBusinessHour, timeType) => {
+    const onChageBusinessHour = (newTime, day, timeType) => {
         let newBusinessHour = [...restaurantForm.business_hour]
-        newBusinessHour[indexOfBusinessHour][timeType] = newTime
+        newBusinessHour.map((businessHour) => {
+            if (businessHour.day === day) {
+                if (newTime === "") {
+                    businessHour[timeType] = null
+                } else {
+                    businessHour[timeType] = newTime
+                }
+            }
+        })
         setRestaurantDetail('business_hour', newBusinessHour)
         console.log('newBusinessHour', newBusinessHour)
     }
@@ -101,7 +109,7 @@ export default function MobileProfileComponent(props) {
                     </Row>
                     <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
                         <Col>
-                            <TimePicker disabled={disable} value={moment(businessHour.opening_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, index, 'closing_time')} />
+                            <TimePicker disabled={disable} value={businessHour.opening_time !== null ? moment(businessHour.opening_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
                         </Col>
                     </Row>
                 </>
@@ -171,7 +179,21 @@ export default function MobileProfileComponent(props) {
 
     const saveProfile = () => {
         //  console.log(restaurantForm)
-        update_restaurant_details(restaurantForm)
+        let businessHourList = restaurantForm.business_hour
+        let openingTimeListError = {}
+        openingTimeListError = businessHourList.find((businessHour) => businessHour.opening_time === null)
+        let closingTimeListError = {}
+        closingTimeListError = businessHourList.find((businessHour) => businessHour.closing_time === null)
+        console.log('openingTimeListError', openingTimeListError)
+        if (openingTimeListError && Object.keys(openingTimeListError).length > 0) {
+            message.error('Please select opening time in ' + openingTimeListError.day)
+        } else {
+            if (closingTimeListError && Object.keys(closingTimeListError).length > 0) {
+                message.error('Please select closing time in ' + closingTimeListError.day)
+            } else {
+                update_restaurant_details(restaurantForm)
+            }
+        }
     }
 
     const findProfileFormErrors = () => {

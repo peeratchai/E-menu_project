@@ -90,23 +90,23 @@ export default function WebProfileComponent(props) {
     }
 
     const format = 'HH:mm'
-    let BusinessHourDay
+    let businessHour
     let BusinessHourComponent = dayArray.map((day, index) => {
-        BusinessHourDay = restaurantForm.business_hour.find((businessHour) => businessHour.day === day)
-        if (BusinessHourDay === undefined) {
-            BusinessHourDay = {
+        businessHour = restaurantForm.business_hour.find((businessHour) => businessHour.day === day)
+        if (businessHour === undefined) {
+            businessHour = {
                 'day': day,
                 'opening_time': '8.00',
                 'closing_time': '16.00'
             }
         }
         return (
-            <Row style={{ marginBottom: "10px" }} key={BusinessHourDay.day + index}>
+            <Row style={{ marginBottom: "10px" }} key={businessHour.day + index}>
                 <Col xs={3}>
-                    {BusinessHourDay.day}
+                    {businessHour.day}
                 </Col>
                 <Col xs={9}>
-                    <TimePicker disabled={disable} value={BusinessHourDay.opening_time !== null ? moment(BusinessHourDay.opening_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(BusinessHourDay.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
+                    <TimePicker disabled={disable} value={businessHour.opening_time !== null ? moment(businessHour.opening_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
                 </Col>
             </Row>
         )
