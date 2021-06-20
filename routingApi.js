@@ -381,7 +381,7 @@ module.exports = {
         },
         {
             source: '/api/auth/verify-email',
-            destination: API_URL + '/profile/verfiy'
+            destination: API_URL + '/profile/verify'
         },
         {
             source: '/api/get/promotion/admin',
