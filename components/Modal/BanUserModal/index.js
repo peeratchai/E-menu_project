@@ -19,16 +19,15 @@ export default function BanUserModal(props) {
         onHide()
     }
 
-    const findUserId = (userId) => {
-        console.log('userId', userId)
+    const findUserId = (email) => {
+        console.log('email', email)
         console.log('profile_all_user', profile_all_user)
-        let user = profile_all_user.find((userDetail) => userDetail.id == userId)
-        console.log(user)
-        setUserId(userId)
+        let user = profile_all_user.find((userDetail) => userDetail.email == email)
+        console.log(user.id)
+        setUserId(user.id)
     }
 
     let dropdownUser = profile_all_user && profile_all_user.map((user) => {
-        console.log('user', user)
         if (user.email !== null && user.email !== 'null') {
             return (
                 <Option value={user.email} key={user.id}>{user.email}</Option>
