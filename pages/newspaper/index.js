@@ -136,7 +136,6 @@ export default function Newspaper() {
                 }
                 setTotalPage(totalPage)
             } else {
-                setTotalResult(0)
                 setNextPage(1)
             }
 
