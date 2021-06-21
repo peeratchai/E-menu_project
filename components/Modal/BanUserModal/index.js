@@ -27,9 +27,15 @@ export default function BanUserModal(props) {
         setUserId(userId)
     }
 
-    let dropdownUser = profile_all_user && profile_all_user.map((user) => (
-        <Option value={user.id} key={user.id}>{user.email}</Option>
-    ))
+    let dropdownUser = profile_all_user && profile_all_user.map((user) => {
+        console.log('user', user)
+        if (user.email !== null && user.email !== 'null') {
+            return (
+                <Option value={user.email} key={user.id}>{user.email}</Option>
+            )
+        }
+    }
+    )
 
 
     return (
@@ -42,7 +48,7 @@ export default function BanUserModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title style={{ fontSize: "1.3rem" }}>
-                    New Category
+                    Ban User
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -57,11 +63,11 @@ export default function BanUserModal(props) {
                                 style={{ width: '100%' }}
                                 optionFilterProp="children"
                                 onChange={(email) => findUserId(email)}
-                                filterOption={(input, option) => {
-                                    return (
-                                        option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    )
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
+                                filterSort={(optionA, optionB) =>
+                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                 }
                             >
                                 {dropdownUser}
