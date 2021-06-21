@@ -106,7 +106,7 @@ export default function WebProfileComponent(props) {
                     {businessHour.day}
                 </Col>
                 <Col xs={9}>
-                    <TimePicker disabled={disable} value={businessHour.opening_time !== null ? moment(businessHour.opening_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={moment(businessHour.closing_time, format)} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
+                    <TimePicker disabled={disable} value={businessHour.opening_time !== null ? moment(businessHour.opening_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'opening_time')} /> - <TimePicker disabled={disable} value={businessHour.closing_time !== null ? moment(businessHour.closing_time, format) : null} format={format} onChange={(time, timeString) => onChageBusinessHour(timeString, day, 'closing_time')} />
                 </Col>
             </Row>
         )
