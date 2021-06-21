@@ -128,6 +128,11 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
         }
     }
 
+    const onChangeTableStatus = (checked, table) => {
+        console.log('checked', checked)
+        console.log('table', table)
+    }
+
     const expandedRowRender = (record) => {
         const columns = [
             { title: 'No', dataIndex: 'index', key: 'index' },
@@ -137,7 +142,7 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
                 key: 'action',
                 render: (table) => (
                     <Space size="middle">
-                        <Switch defaultChecked checked={zone.is_active} onChange={(checked) => onChangeTableStatus(checked, zone)} />
+                        <Switch defaultChecked checked={table.is_active} onChange={(checked) => onChangeTableStatus(checked, table)} />
                         <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => onEditTable(table)}>Edit</Button>
                         <Popconfirm
                             title="Are you sure to delete this table?"

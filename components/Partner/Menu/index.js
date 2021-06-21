@@ -92,8 +92,18 @@ export default function Menu(props) {
 
     const confirmDeleteCategory = (category) => {
         setSpinLoading(true)
-        partnerService.deleteCategory(category.id).then(() => {
-            getAllMenu()
+        partnerService.deleteCategory(category.id).then((response) => {
+            if (response.is_success === false) {
+                partnerService.deleteCategory(category.id).then((response) => {
+                    if (response.is_success === true) {
+                        getAllMenu()
+                    } else {
+                        message.error('Cannot delete category.')
+                    }
+                })
+            } else {
+                getAllMenu()
+            }
         })
 
     }

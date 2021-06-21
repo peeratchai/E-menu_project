@@ -48,7 +48,7 @@ const partnerSerivce = {
     },
 
     deleteCategory: async (categoryId) => {
-        return await sendRequest.delete('/api/update_category/' + categoryId)
+        return await sendRequest.delete('/api/delete_category/' + categoryId)
     },
     editMenu: async (data, menuId) => {
         let formData = new FormData()
