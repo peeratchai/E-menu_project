@@ -95,7 +95,8 @@ const partnerSerivce = {
         return await sendRequest.post('/api/add_zone', data)
     },
     editZone: async (data, zoneId) => {
-        return await sendRequest.patch('/api/edit_zone/' + zoneId, data)
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/edit_zone/' + zoneId, data, ContentType)
     },
     deleteZone: async (zoneId) => {
         return await sendRequest.delete('/api/delete_zone/' + zoneId)

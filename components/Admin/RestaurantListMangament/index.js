@@ -38,50 +38,51 @@ export default function RestaurantListManagement(props) {
     const addRestaurant = (restaurantForm) => {
         let data = {
             "name": restaurantForm.restaurantName,
-            "business_hour": [
-                {
-                    'restaurant': null,
-                    'day': 'Monday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Tuesday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Wednesday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Thursday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Friday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Saturday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                },
-                {
-                    'restaurant': null,
-                    'day': 'Sunday',
-                    'opening_time': '8.00',
-                    'closing_time': '16.00'
-                }
-            ]
+            // "business_hour": [
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Monday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Tuesday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Wednesday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Thursday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Friday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Saturday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     },
+            //     {
+            //         'restaurant': null,
+            //         'day': 'Sunday',
+            //         'opening_time': '8.00',
+            //         'closing_time': '16.00'
+            //     }
+            // ],
+            "location": "POINT(0.0000 90.0000)"
         }
         console.log(data)
         restaurantService.addRestaurant(data).then((response) => {

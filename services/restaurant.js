@@ -173,9 +173,10 @@ const restaurantService = {
         let ContentType = 'multipart/form-data'
 
         let formData = new FormData()
-
+        
         formData.append("name", data.name);
-        formData.append("business_hour", JSON.stringify(data.business_hour));
+        formData.append("location", data.location);
+        // formData.append("business_hour", JSON.stringify(data.business_hour));
 
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
