@@ -534,10 +534,9 @@ CheckoutPage.propTypes = {
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
     let tableId = null
-    try {
-        tableId = req.session.get('tableId')
-    } catch (error) {
-        console.log('error,', error)
+    let tableIdSession = req.session.get('tableId')
+    if (tableIdSession) {
+        tableId = tableIdSession
     }
     if (user) {
 
