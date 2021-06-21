@@ -111,58 +111,57 @@ const UserProfile = ({ user }) => {
     }
 
     const saveProfile = async () => {
-        // const newErrors = findProfileFormErrors()
+        const newErrors = findProfileFormErrors()
 
-        // if (Object.keys(newErrors).length > 0) {
-        //     setErrors(newErrors)
-        // } else {
-        const { first_name, last_name, gender, age, phoneNumber, profileImage, username, is_active } = profileForm
-        let profileImageData
-        if (profileImage) {
-            profileImageData = profileImage
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors)
         } else {
-            profileImageData = null
-        }
+            const { first_name, last_name, gender, age, phoneNumber, profileImage, username, is_active } = profileForm
+            let profileImageData
+            if (profileImage) {
+                profileImageData = profileImage
+            } else {
+                profileImageData = null
+            }
 
-        let data = {
-            username: username,
-            first_name: first_name,
-            last_name: last_name,
-            gender: gender,
-            age: age,
-            phone_number: phoneNumber,
-            avatar: profileImageData,
-            is_active: is_active
-        }
+            let data = {
+                username: username,
+                first_name: first_name,
+                last_name: last_name,
+                gender: gender,
+                age: age,
+                phone_number: phoneNumber,
+                avatar: profileImageData,
+                is_active: is_active
+            }
 
-        console.log('data', data)
+            console.log('data', data)
 
-        let responseProfile = await profileService.editUserProfile(data)
-        if (responseProfile) {
-            let profile = await profileService.getProfile()
-            window.localStorage.setItem('profile', JSON.stringify(profile))
-            message.success('Edit profile successful.')
-        } else {
-            message.error('Cannot edit profile !')
+            let responseProfile = await profileService.editUserProfile(data)
+            if (responseProfile) {
+                let profile = await profileService.getProfile()
+                window.localStorage.setItem('profile', JSON.stringify(profile))
+                message.success('Edit profile successful.')
+            } else {
+                message.error('Cannot edit profile !')
+            }
         }
-        // }
     }
 
 
     const findProfileFormErrors = () => {
         const { first_name, last_name, age, phoneNumber } = profileForm
         var patternNumber = new RegExp(/^\d+$/);
+        var patternLetters = new RegExp(/^[a-zA-Z]+$/);
         const newErrors = {}
         // first_name  errors
-        if (!first_name || first_name === '') newErrors.first_name = 'First name is required !'
+        if (!patternLetters.test(first_name)) newErrors.first_name = 'Please enter valid first name!'
         // last_name  errors
-        if (!last_name || last_name === '') newErrors.last_name = 'Last name is required !'
+        if (!patternLetters.test(last_name)) newErrors.last_name = 'Please enter valid last name!'
         // age errors
-        if (!age || age === '') newErrors.age = 'Age is required !'
-        else if (!patternNumber.test(age)) newErrors.age = 'Please enter valid age!'
+        if (!patternNumber.test(age)) newErrors.age = 'Please enter valid age!'
         // phoneNumber errors
-        if (!phoneNumber || phoneNumber === '') newErrors.phoneNumber = 'Phone number is required !'
-        else if (!patternNumber.test(phoneNumber)) newErrors.phoneNumber = 'Please enter valid phone number!'
+        if (!patternNumber.test(phoneNumber)) newErrors.phoneNumber = 'Please enter valid phone number!'
         return newErrors
     }
 
