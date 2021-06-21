@@ -255,7 +255,7 @@ const UserProfile = ({ user }) => {
                 message.success('Sync with facebook successful.')
             }).catch(error => {
                 console.log('error', error)
-                message.success('Cannot sync with facebook!. Please try again.')
+                message.error('Cannot sync with facebook!. Please try again.')
             })
             setLoading(false)
         } else {

@@ -97,7 +97,7 @@ export default function RestaurantDetailMobile(props) {
             renderMenuList(menuCategory)
             setRestaurantDetail(restaurant_detail)
 
-            if (restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
+            if (restaurant_detail.current_business_hour && moment(restaurant_detail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurant_detail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
                 setRestaurantOpenNow(true)
             }
 
