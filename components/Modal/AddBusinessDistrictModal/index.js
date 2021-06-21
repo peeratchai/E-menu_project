@@ -5,6 +5,7 @@ import LocationModal from '../Location'
 import { UploadOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import utilStyles from '../../../styles/utils.module.css'
+import checkBeforeUpload from '../../../services/checkBeforeUploadImage'
 
 export default function AddBusinessDistrictModal(props) {
     const { onHide, add_business_district } = props
@@ -81,18 +82,6 @@ export default function AddBusinessDistrictModal(props) {
         setShowLocationModal(false)
     }
 
-    const beforeUploadImage = (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    }
-
     const handleUploadImage = (info) => {
         if (info.file.status === 'uploading') {
             return;
@@ -138,7 +127,7 @@ export default function AddBusinessDistrictModal(props) {
                                 <Col>
                                     <Upload
                                         showUploadList={false}
-                                        beforeUpload={beforeUploadImage}
+                                        beforeUpload={checkBeforeUpload}
                                         onChange={(e) => handleUploadImage(e)}
                                         style={{ width: "100%" }}
                                     >

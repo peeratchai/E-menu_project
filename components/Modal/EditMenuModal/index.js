@@ -101,6 +101,7 @@ export default function EditMenuModal(props) {
         // price errors
         if (!price || price === '') newErrors.price = 'Price is required !'
         else if (!pattern.test(price)) newErrors.price = 'Please enter valid price !'
+        else if (parseFloat(price) > 1000000 || parseFloat(price) < 0) newErrors.price = 'Price have to more 0 and no more than 1,000,000.'
         return newErrors
     }
 
