@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from './layout.module.css'
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap';
 import { useRouter } from 'next/router'
 import { Badge, message } from 'antd';
 import ActiveLink from './ActiveLink'
@@ -135,7 +135,7 @@ export default function Layout(props) {
             buttonNavbar = (
                 <ActiveLink activeClassName="active" href="/newspaper">
                     <>
-                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
                         <Badge count={countCartItems} size="small">
                             <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
                         </Badge>
@@ -148,14 +148,14 @@ export default function Layout(props) {
                 buttonNavbar =
                     <ActiveLink activeClassName="active" href="/newspaper">
                         <>
-                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
                         </>
                     </ActiveLink>
             } else {
                 buttonNavbar =
                     <ActiveLink activeClassName="active" href="/newspaper">
                         <>
-                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><MenuBookIcon style={{ margin: "auto", color: "#FF4A4F", fontSize: "2.5rem" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
                             <SearchIcon className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
                         </>
                     </ActiveLink>
@@ -169,10 +169,6 @@ export default function Layout(props) {
 
     return (
         <div style={{ paddingBottom: '5px' }}>
-            <Head>
-                <title>E-Menu</title>
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bree Serif" />
-            </Head>
             <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "#eaeff3", boxShadow: "rgb(204 204 204) 3px 2px 8px 1px", padding: "20px 20px", fontWeight: "bold" }}>
                 <style jsx>{`
                     .nav-link {

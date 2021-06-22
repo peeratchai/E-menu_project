@@ -72,6 +72,8 @@ export default function App({ Component, pageProps }) {
                 src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
             ></script>
             <script src="https://static.line-scdn.net/liff/edge/2.1/liff.js"></script>
+            <title>CeeMenu</title>
+            <link rel="icon" href="/favicon.ico" />
         </Head>
         <style global jsx>{`
         body {
