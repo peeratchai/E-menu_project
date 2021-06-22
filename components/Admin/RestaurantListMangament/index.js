@@ -82,7 +82,7 @@ export default function RestaurantListManagement(props) {
             //         'closing_time': '16.00'
             //     }
             // ],
-            "location": "POINT(0.0000 90.0000)"
+            "location": "POINT(13.736717 100.523186)"
         }
         console.log(data)
         restaurantService.addRestaurant(data).then((response) => {
