@@ -1,7 +1,7 @@
 import Layout from '../../../layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import { Row, Col, Card, Image, Button, Breadcrumb, Modal } from 'react-bootstrap'
-import { Card as Cardantd, Spin } from 'antd';
+import { Card as Cardantd, message, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import styles from './index.module.css'
@@ -53,7 +53,7 @@ const getDimensions = ele => {
 
 export default function RestaurantDetailWeb(props) {
 
-    const { loading, shopping_cart, is_initial_cart, restaurant_id } = props
+    const { loading, shopping_cart, is_initial_cart, restaurant_id, is_user_signin } = props
     const { set_shopping_cart } = props
     ////Set State
     const [selected, setSelected] = React.useState('')
@@ -262,21 +262,26 @@ export default function RestaurantDetailWeb(props) {
     const onAddMenu = (menu) => {
         console.log('shopping_cart', shopping_cart)
         setMenuSelected(menu)
-        if (restaurantOpenNow) {
-            if (shopping_cart !== "") {
-                let restaurantIdOfCart = shopping_cart.restaurant
-                if (restaurant_id !== restaurantIdOfCart) {
-                    console.log('have order in shopping cart and not the same restaurant.')
-                    setNotificationModalVisible(true)
+        if (is_user_signin) {
+            if (restaurantOpenNow) {
+                if (shopping_cart !== "") {
+                    let restaurantIdOfCart = shopping_cart.restaurant
+                    if (restaurant_id !== restaurantIdOfCart) {
+                        console.log('have order in shopping cart and not the same restaurant.')
+                        setNotificationModalVisible(true)
+                    } else {
+                        setModalShow(true)
+                    }
                 } else {
                     setModalShow(true)
                 }
             } else {
-                setModalShow(true)
+                setNotificationRestaurantClosingModalVisible(true)
             }
         } else {
-            setNotificationRestaurantClosingModalVisible(true)
+            message.warning('Please login before take order.')
         }
+
     }
 
     const onTakeNewCart = () => {

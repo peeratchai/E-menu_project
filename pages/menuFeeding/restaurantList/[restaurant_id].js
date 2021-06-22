@@ -22,6 +22,7 @@ export default function Restaurant() {
     const { mutateUser } = checkUserPermission()
     const [shoppingCart, setShoppingCart] = React.useState({})
     const [isInitialCart, setIsInitialCart] = React.useState(false)
+    const [isUserSignin, setIsUserSignin] = React.useState(false);
 
     useEffect(() => {
         if (router.isReady) {
@@ -42,8 +43,9 @@ export default function Restaurant() {
             shoppingCartService.getShoppingCart().then((response) => {
                 console.log('shoppingCart response', response)
                 if (response === 'Not Login') {
-                    message.warning('Please login and scan qr code again.')
+                    message.warning('Please login before take order.')
                 } else {
+                    setIsUserSignin(true)
                     let shoppingCart = response
                     if (response === "") {
                         setShoppingCart(shoppingCart)
@@ -155,6 +157,7 @@ export default function Restaurant() {
                         shopping_cart={shoppingCart}
                         set_shopping_cart={settingShoppintCart}
                         is_initial_cart={isInitialCart}
+                        is_user_signin={isUserSignin}
                     />
                 ) : (
                     // Mobile Version
@@ -168,6 +171,7 @@ export default function Restaurant() {
                         shopping_cart={shoppingCart}
                         set_shopping_cart={settingShoppintCart}
                         is_initial_cart={isInitialCart}
+                        is_user_signin={isUserSignin}
                     />
                 )
             }
