@@ -97,7 +97,12 @@ export default function RestaurantDetailMobile(props) {
             renderMenuList(menuCategory)
             setRestaurantDetail(restaurant_detail)
 
+            console.log(restaurant_detail)
+            console.log(moment().format('HH.mm'))
+            console.log(moment(restaurant_detail.current_business_hour.opening_time, 'HH.mm').format('HH.mm'))
+            console.log(moment(restaurant_detail.current_business_hour.closing_time, 'HH.mm').format('HH.mm'))
             if (restaurant_detail.current_business_hour && moment(restaurant_detail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurant_detail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
+                console.log('Open')
                 setRestaurantOpenNow(true)
             }
 
@@ -117,7 +122,7 @@ export default function RestaurantDetailMobile(props) {
                 setTotalOfCartItem(0)
             }
         }
-    }, [restaurant_detail, shopping_cart])
+    }, [restaurant_detail, shopping_cart, restaurantOpenNow])
 
     const setInitialShoppingCart = (shoppingCart, update = false) => {
         console.log('shoppingCart', shoppingCart)
@@ -151,6 +156,7 @@ export default function RestaurantDetailMobile(props) {
 
     const onAddMenu = (menu) => {
         console.log('shopping_cart', shopping_cart)
+        console.log('restaurantOpenNow', restaurantOpenNow)
         setMenuSelected(menu)
         if (is_user_signin) {
             if (restaurantOpenNow) {
@@ -169,9 +175,8 @@ export default function RestaurantDetailMobile(props) {
                 setNotificationRestaurantClosingModalVisible(true)
             }
         } else {
-            message.warning('Please login before take order.')
+            message.warning('Please login before placing order.')
         }
-
     }
 
     const onTakeNewCart = () => {

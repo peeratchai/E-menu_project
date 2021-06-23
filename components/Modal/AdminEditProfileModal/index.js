@@ -183,15 +183,36 @@ export default function AdminEditProfileModal(props) {
     }
 
     const restaurantRow = {
+        showSearch: true,
         showArrow: true,
         style: {
             width: '100%',
         },
         value: restaurantName,
         options: restaurantList,
+        optionFilterProp: "children",
         onChange: (restaurant) => {
             setProfileform('restaurant_employee', restaurant)
             setRestaurantName(restaurant)
+        },
+        filterOption: (input, option) => {
+            try {
+                console.log('option', option)
+                console.log('input', input)
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            } catch (error) {
+                console.log('error option', option)
+            }
+
+        },
+        filterSort: (optionA, optionB) => {
+            try {
+                console.log('optionA', optionA)
+                console.log('optionB', optionB)
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+            } catch (error) {
+                console.log('error optionB', option)
+            }
         },
         placeholder: 'Select restaurant...',
         disabled: disableRestaurantDropdown
@@ -229,6 +250,14 @@ export default function AdminEditProfileModal(props) {
         placeholder: 'Select role...',
         maxTagCount: 'responsive',
     };
+
+    const dropdownRestaurant = restaurant_list && restaurant_list.map((restaurant) => {
+        if (restaurant && restaurant.name !== null && restaurant.name !== '') {
+            return (
+                <Option value={restaurant.id} key={restaurant.id}>{restaurant.name}</Option>
+            )
+        }
+    })
 
     return (
 
@@ -273,14 +302,25 @@ export default function AdminEditProfileModal(props) {
                                     <Form.Group controlId="Restaurant Id">
                                         <Form.Label>Restaurant</Form.Label>
                                         <div>
-                                            <Space
-                                                direction="vertical"
-                                                style={{
-                                                    width: '100%',
+                                            <Select
+                                                showSearch
+                                                style={{ width: '100%' }}
+                                                optionFilterProp="children"
+                                                onChange={(restaurant) => {
+                                                    setProfileform('restaurant_employee', restaurant)
+                                                    setRestaurantName(restaurant)
                                                 }}
+                                                filterOption={(input, option) =>
+                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                filterSort={(optionA, optionB) =>
+                                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                }
+                                                value={restaurantName}
+                                                disabled={disableRestaurantDropdown}
                                             >
-                                                <Select {...restaurantRow} />
-                                            </Space>
+                                                {dropdownRestaurant}
+                                            </Select>
                                         </div>
                                     </Form.Group>
                                 </Col>

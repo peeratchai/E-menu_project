@@ -140,13 +140,13 @@ export default function WebComponent(props) {
                     "position_y": tableData.position_y,
                     "is_active": true
                 }
-                let response = await partnerSerivce.addTable(data)
-                if (response) {
+                partnerSerivce.addTable(data).then(() => {
                     get_zone(zoneNumberSelected)
                     message.success('Add new table successful.')
-                } else {
-                    message.error('Cannot new table.')
-                }
+                }).catch(error => {
+                    console.log('error', error)
+                    message.error('Cannot add new table.')
+                })
             } else {
                 message.error('Please select zone before adding new table.')
             }

@@ -117,7 +117,6 @@ const restaurantService = {
         formData.append("image_url", restaurantForm.image_url);
         formData.append("instragram", restaurantForm.instragram);
         formData.append("location", restaurantForm.location);
-        console.log('restaurantForm.address', restaurantForm.address)
         formData.append("address", restaurantForm.address);
         formData.append("name", restaurantForm.name);
         formData.append("name_eng", restaurantForm.name_eng);
@@ -157,8 +156,8 @@ const restaurantService = {
                 return response
             })
             .catch(function (error) {
-                console.log(error.status)
-                return error
+                console.log(error)
+                throw error
             });
 
         return response.data
@@ -173,9 +172,10 @@ const restaurantService = {
         let ContentType = 'multipart/form-data'
 
         let formData = new FormData()
-        
+
         formData.append("name", data.name);
         formData.append("location", data.location);
+        formData.append("is_active", data.is_active);
         // formData.append("business_hour", JSON.stringify(data.business_hour));
 
         for (var pair of formData.entries()) {

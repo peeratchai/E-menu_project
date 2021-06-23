@@ -135,7 +135,7 @@ export default function Layout(props) {
             buttonNavbar = (
                 <ActiveLink activeClassName="active" href="/newspaper">
                     <>
-                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                        <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '60px', height: "60px" }} /></Navbar.Brand>
                         <Badge count={countCartItems} size="small">
                             <ShoppingCartOutlined className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => navToCheckout()} />
                         </Badge>
@@ -148,14 +148,14 @@ export default function Layout(props) {
                 buttonNavbar =
                     <ActiveLink activeClassName="active" href="/newspaper">
                         <>
-                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '60px', height: "60px" }} /></Navbar.Brand>
                         </>
                     </ActiveLink>
             } else {
                 buttonNavbar =
                     <ActiveLink activeClassName="active" href="/newspaper">
                         <>
-                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '40px', height: "40px" }} /><div style={{ display: "inline", marginLeft: "15px" }}>E-Menu</div></Navbar.Brand>
+                            <Navbar.Brand style={{ color: "black !important", cursor: "pointer", paddingLeft: "40px", margin: "auto", fontWeight: "bold", fontFamily: "Bree Serif" }}><Image src="/images/CeeMenuLogo.png" style={{ margin: 'auto', width: '60px', height: "60px" }} /></Navbar.Brand>
                             <SearchIcon className="d-inline-block align-top" style={{ color: "black", fontSize: "2.5rem" }} onClick={() => searchFunc()} />
                         </>
                     </ActiveLink>

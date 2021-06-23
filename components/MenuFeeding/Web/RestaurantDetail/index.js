@@ -118,10 +118,11 @@ export default function RestaurantDetailWeb(props) {
             // activeCategory()
             setRestaurantDetail(restaurant_detail)
 
-            console.log(moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm'))
-            console.log(moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm'))
             console.log(moment().format('HH.mm'))
-            if (restaurantDetail.current_business_hour && moment(restaurantDetail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
+            console.log(restaurant_detail)
+            console.log(moment(restaurant_detail.current_business_hour.opening_time, 'HH.mm').format('HH.mm'))
+            console.log(moment(restaurant_detail.current_business_hour.closing_time, 'HH.mm').format('HH.mm'))
+            if (restaurant_detail.current_business_hour && moment(restaurant_detail.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurant_detail.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
                 setRestaurantOpenNow(true)
             }
 
@@ -165,7 +166,7 @@ export default function RestaurantDetailWeb(props) {
             window.removeEventListener("scroll", handleScroll);
         };
 
-    }, [props, widthCategoryList, widthCategoryNav, visibleSection])
+    }, [props, widthCategoryList, widthCategoryNav, visibleSection,restaurantOpenNow])
 
     const setRestaurantBanner = (restaurant_detail) => {
         let restaurantBanner = restaurant_detail.restaurant_pictures.map((picture) => (
@@ -279,7 +280,7 @@ export default function RestaurantDetailWeb(props) {
                 setNotificationRestaurantClosingModalVisible(true)
             }
         } else {
-            message.warning('Please login before take order.')
+            message.warning('Please login before placing order.')
         }
 
     }

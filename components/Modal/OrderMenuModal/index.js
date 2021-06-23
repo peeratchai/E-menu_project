@@ -31,8 +31,6 @@ export default function OrderMenuModal(props) {
             setTotal(menu_detail.price)
         }
 
-        console.log('is_initial_cart', is_initial_cart)
-        console.log('shopping_cart', shopping_cart)
         if (shopping_cart !== "" && is_initial_cart) {
             console.log(shopping_cart)
             setShoppingCart(shopping_cart)

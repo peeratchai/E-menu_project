@@ -77,8 +77,10 @@ export default function Profile(props) {
     const [loading, setLoading] = React.useState(false)
     useEffect(async () => {
         if (restaurant_id && current_tab === 'profile') {
+            setLoading(true)
             await getAllBusinessDistrict()
-            getRestaurantDetails()
+            await getRestaurantDetails()
+            setLoading(false)
         }
     }, [props])
 
@@ -88,7 +90,6 @@ export default function Profile(props) {
     }
 
     const getRestaurantDetails = async () => {
-        setLoading(true)
         try {
             let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
             let restaurantDetail = responseRestaurantDetail.data
@@ -124,10 +125,8 @@ export default function Profile(props) {
                 restaurant_id: restaurant_id,
                 business_district: businessDistrictId
             }
-            setLoading(false)
             setRestaurantForm(initialRestaurantForm)
         } catch (error) {
-            setLoading(false)
             console.log('error', error)
             message.error('Cannot connect to server.')
         }
@@ -139,9 +138,6 @@ export default function Profile(props) {
         if (restaurant_id) {
             const { restaurantLogo, bannerImage, business_hour } = restaurantForm
             let dataForm = { ...restaurantForm }
-            if (dataForm.business_district === null) {
-                dataForm.business_district = " "
-            }
             if (restaurantLogo === undefined) {
                 dataForm.image = null
             } else {
@@ -205,16 +201,13 @@ export default function Profile(props) {
                 })
             })
             dataForm.business_hour = businessHour
-            let response = await restaurantService.updateRestaurantDetails(dataForm)
-            try {
-                if (response.is_success === true) {
-                    message.success('Update data successful.')
-                } else {
-                    message.error('Cannot update data.')
-                }
-            } catch (error) {
-                message.error('Error has occurred.')
-            }
+            restaurantService.updateRestaurantDetails(dataForm).then((response) => {
+                console.log('response', response)
+                message.success('Update data successful.')
+            }).catch(error => {
+                console.log('error', error)
+                message.error('Invalid restaurant ! Please contact admin.')
+            })
         } else {
             message.warning('Please select restaurant.')
         }

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import adminService from '../../../services/admin'
-import AddResraurantModal from '../../../components/Modal/AddRestaurantModal'
+import AddRestaurantModal from '../../../components/Modal/AddRestaurantModal'
 import restaurantService from '../../../services/restaurant';
 
 export default function RestaurantListManagement(props) {
@@ -82,7 +82,8 @@ export default function RestaurantListManagement(props) {
             //         'closing_time': '16.00'
             //     }
             // ],
-            "location": "POINT(13.736717 100.523186)"
+            "location": "POINT(13.736717 100.523186)",
+            "is_active": true
         }
         console.log(data)
         restaurantService.addRestaurant(data).then((response) => {
@@ -229,7 +230,7 @@ export default function RestaurantListManagement(props) {
             <Spin spinning={loading} tip="Loading...">
                 <Table columns={columnsRestaurant} dataSource={RestaurantDataTable} scroll={{ x: 'max-content' }} />
             </Spin>
-            <AddResraurantModal
+            <AddRestaurantModal
                 show={restaurantModalShow}
                 onHide={() => setRestaurantModalShow(false)}
                 add_restaurant={(restaurantForm = {}) => addRestaurant(restaurantForm)}

@@ -115,6 +115,27 @@ export default function FoodDataManagement(props) {
         })
     }
 
+    const setMasterData = (fieldName, newMasterData) => {
+        switch (fieldName) {
+            case 'FoodCategory':
+                setMasterFoodCategory(newMasterData.filter((foodCategory) => foodCategory.is_active === true));
+                break;
+            case 'National':
+                setMasterNational(newMasterData.filter((foodCategory) => foodCategory.is_active === true));
+                break;
+            case 'FoodKind':
+                setMasterFoodKind(newMasterData.filter((foodCategory) => foodCategory.is_active === true));
+                break;
+            case 'SubKind':
+                setMasterSubKind(newMasterData.filter((foodCategory) => foodCategory.is_active === true));
+                break;
+            case 'CookMethod':
+                setMasterCookMethod(newMasterData.filter((foodCategory) => foodCategory.is_active === true));
+                break;
+        }
+    }
+
+
     const getMasterData = async () => {
         let awaitMasterFoodCategory = adminService.getMasterFoodCategory()
         let awaitMasterNational = adminService.getMasterNational()
@@ -152,7 +173,7 @@ export default function FoodDataManagement(props) {
         <>
             <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
                 Food Data
-                </div>
+            </div>
             <div style={{ textAlign: "right", padding: "15px" }}>
                 <Button type="primary" onClick={() => setEditMasterDataModalShow(true)}>
                     Edit master data
@@ -165,7 +186,7 @@ export default function FoodDataManagement(props) {
                 show={editMasterDataModalShow}
                 onHide={() => setEditMasterDataModalShow(false)}
                 title='Edit master data'
-                get_master_data={getMasterData}
+                set_master_data={setMasterData}
             />
             <EditFoodDataModal
                 show={foodDataModalShow}

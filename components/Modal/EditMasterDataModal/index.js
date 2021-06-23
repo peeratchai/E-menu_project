@@ -8,9 +8,7 @@ const { Option } = Select;
 
 export default function EditMasterDataModal(props) {
 
-    const { get_master_data } = props
-
-    const [categoryName, setCategoryName] = React.useState();
+    const { set_master_data } = props
     const [masterData, setMasterData] = React.useState([]);
     const [dataSelected, setDataSelected] = React.useState("Category");
     const [loading, setLoading] = React.useState(false)
@@ -41,7 +39,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('FoodCategory', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -55,7 +53,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('National', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -69,7 +67,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('FoodKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -83,7 +81,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('SubKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -97,7 +95,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('CookMethod', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -124,7 +122,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('FoodCategory', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -138,7 +136,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('National', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -152,7 +150,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('FoodKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -166,7 +164,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('SubKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -180,7 +178,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
-                get_master_data()
+                set_master_data('CookMethod', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -227,6 +225,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('FoodCategory', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -240,6 +239,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('National', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -253,6 +253,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('FoodKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -266,6 +267,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('SubKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -279,6 +281,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('CookMethod', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -365,6 +368,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('FoodCategory', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -378,6 +382,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('National', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -391,6 +396,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('FoodKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -404,6 +410,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('SubKind', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
@@ -417,6 +424,7 @@ export default function EditMasterDataModal(props) {
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
+                set_master_data('CookMethod', masterData)
             }).catch((error) => {
                 setLoading(false)
                 console.log(error)
