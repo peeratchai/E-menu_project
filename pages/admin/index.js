@@ -529,6 +529,7 @@ const Admin = () => {
                                                 <Profile
                                                     restaurant_id={restaurantId}
                                                     current_tab={currentTab}
+                                                    get_restaurant_list={getRestaurantList}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="restaurantListManagement">
