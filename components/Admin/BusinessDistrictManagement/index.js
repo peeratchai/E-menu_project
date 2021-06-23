@@ -118,7 +118,8 @@ export default function BusinessDistrictManagement(props) {
             title: title,
             description: description,
             location: location,
-            image_url: image_url
+            image_url: image_url,
+            is_active: true
         }
         let response = await adminService.addBusinessDistrict(data)
         console.log('response', response)
@@ -131,7 +132,7 @@ export default function BusinessDistrictManagement(props) {
     }
 
     const editBusinessDistrict = async (formData) => {
-        const { name, title, description, location, image_url ,is_active} = formData
+        const { name, title, description, location, image_url, is_active } = formData
         console.log('formData', formData)
         let image_url_formData
         if (formData.image_base64) {
