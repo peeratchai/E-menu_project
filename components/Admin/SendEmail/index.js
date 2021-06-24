@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Form, Checkbox, Select, Input, Button, Card, Popconfirm, message, Spin } from 'antd';
+import { Form, Checkbox, Select, Input, Button, message } from 'antd';
 import { Row, Col, Image, Tab, Modal, Container, Nav, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import SunEditor from 'suneditor-react';
@@ -30,8 +30,8 @@ export default function SendEmail() {
     const [emailForm, setEmailForm] = React.useState({
         "is_send_all_customer": false,
         "is_send_all_restaurant": false,
-        "message": ''
     })
+    const [messageContent, setMessageContent] = React.useState('')
 
 
     useEffect(() => {
@@ -49,12 +49,11 @@ export default function SendEmail() {
     }
 
     const setEmailFormData = (fieldName, value) => {
-        // console.log
+        console.log('emailForm', emailForm)
         setEmailForm({
             ...emailForm,
             [fieldName]: value
         })
-
     }
 
     const onChangeCheckbox = (checkedValues) => {
@@ -77,8 +76,7 @@ export default function SendEmail() {
         } else {
             mail_to = []
         }
-
-        newEmailForm.mail_to = mail_to
+        console.log('newEmailForm', newEmailForm)
         setEmailForm({ ...newEmailForm })
         form.setFieldsValue({
             mail_to: mail_to,
@@ -87,7 +85,7 @@ export default function SendEmail() {
     }
 
     const onChangeMessage = (content) => {
-        setEmailFormData('message', content)
+        setMessageContent(content)
     }
 
     let emailOptions = allEmail && allEmail.map((email, index) => {
@@ -99,7 +97,7 @@ export default function SendEmail() {
         const { is_send_all_customer, is_send_all_restaurant } = emailForm
         const { mail_to, cc, subject, message } = values
         let mail_toString
-        let cc_STring = null
+        let cc_String = null
 
         if (is_send_all_customer || is_send_all_restaurant) {
             mail_toString = null
@@ -111,9 +109,11 @@ export default function SendEmail() {
             cc_String = cc.join(';')
         }
 
+        console.log('emailForm', emailForm)
+
         let dataForm = {
             "mail_to": mail_toString,
-            "cc": cc_STring,
+            "cc": cc_String,
             "subject": subject,
             "message": message,
             "is_send_all_customer": is_send_all_customer,
@@ -122,15 +122,19 @@ export default function SendEmail() {
         console.log('dataForm:', dataForm);
 
         adminService.sendEmail(dataForm).then(() => {
+            let defaultMailTo = []
+            if (is_send_all_customer || is_send_all_restaurant) {
+                defaultMailTo = mail_to
+            }
             form.setFieldsValue({
-                "mail_to": [],
+                "mail_to": defaultMailTo,
                 "cc": [],
                 "subject": undefined,
                 "message": undefined,
                 "is_send_all_customer": false,
                 "is_send_all_restaurant": false
             })
-            setEmailFormData('message', undefined)
+            setMessageContent(undefined)
             sendEmailSuccessful()
         }).catch(error => {
             console.log('send email error:', error);
@@ -256,7 +260,7 @@ export default function SendEmail() {
                         ]}
                     >
                         <SunEditor
-                            setContents={emailForm.message}
+                            setContents={messageContent}
                             onChange={(content) => onChangeMessage(content)}
                             onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
                             onImageUploadBefore={(files, info, uploadHandler) => handleImageUploadBefore(files, info, uploadHandler)}
