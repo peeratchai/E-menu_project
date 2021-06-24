@@ -29,7 +29,8 @@ export default function SendEmail() {
     const [allEmail, setAllEmail] = React.useState([])
     const [emailForm, setEmailForm] = React.useState({
         "is_send_all_customer": false,
-        "is_send_all_restaurant": false
+        "is_send_all_restaurant": false,
+        "message": ''
     })
 
 
@@ -121,6 +122,15 @@ export default function SendEmail() {
         console.log('dataForm:', dataForm);
 
         adminService.sendEmail(dataForm).then(() => {
+            form.setFieldsValue({
+                "mail_to": [],
+                "cc": [],
+                "subject": undefined,
+                "message": undefined,
+                "is_send_all_customer": false,
+                "is_send_all_restaurant": false
+            })
+            setEmailFormData('message', undefined)
             sendEmailSuccessful()
         }).catch(error => {
             console.log('send email error:', error);
@@ -137,6 +147,7 @@ export default function SendEmail() {
 
 
     const onFinishFailed = (errorInfo) => {
+        console.log('form', form)
         console.log('Failed:', errorInfo);
     };
 
@@ -240,11 +251,12 @@ export default function SendEmail() {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your subject!',
+                                message: 'Please input your message!',
                             },
                         ]}
                     >
                         <SunEditor
+                            setContents={emailForm.message}
                             onChange={(content) => onChangeMessage(content)}
                             onImageUpload={(targetImgElement, index, state, imageInfo, remainingFilesCount) => handleImageUpload(targetImgElement, index, state, imageInfo, remainingFilesCount)}
                             onImageUploadBefore={(files, info, uploadHandler) => handleImageUploadBefore(files, info, uploadHandler)}

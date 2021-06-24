@@ -77,12 +77,13 @@ export default function Profile(props) {
     const [loading, setLoading] = React.useState(false)
     useEffect(async () => {
         if (restaurant_id && current_tab === 'profile') {
+            console.log('kiki')
             setLoading(true)
             await getAllBusinessDistrict()
             await getRestaurantDetails()
             setLoading(false)
         }
-    }, [props])
+    }, [restaurant_id, current_tab])
 
     const getAllBusinessDistrict = async () => {
         let businessDistrict = await adminService.getAllLocation()
@@ -90,10 +91,10 @@ export default function Profile(props) {
     }
 
     const getRestaurantDetails = async () => {
-        try {
-            let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
-            let restaurantDetail = responseRestaurantDetail.data
-            let businessHour
+        let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
+        let restaurantDetail = responseRestaurantDetail.data
+        let businessHour
+        if (restaurantDetail) {
             if (restaurantDetail.business_hour.length > 0) {
                 businessHour = restaurantDetail.business_hour
             } else {
@@ -126,20 +127,19 @@ export default function Profile(props) {
                 business_district: businessDistrictId
             }
             setRestaurantForm(initialRestaurantForm)
-        } catch (error) {
-            console.log('error', error)
-            message.error('Cannot connect to server.')
+        } else {
+            console.log('restaurantDetail', restaurantDetail)
+            message.error('Cannot get restaurant details.')
         }
+
 
     }
 
     const updateRestaurantDetails = async (restaurantForm) => {
         // console.log(restaurantForm)
         if (restaurant_id) {
-            console.log('get_restaurant_list', get_restaurant_list)
             const { restaurantLogo, bannerImage, business_hour } = restaurantForm
             let dataForm = { ...restaurantForm }
-            console.log(dataForm.business_district)
             if (restaurantLogo === undefined) {
                 dataForm.image = null
             } else {

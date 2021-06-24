@@ -100,7 +100,7 @@ const sendRequest = {
                             return response
                         })
                         .catch(function (error) {
-                            return error
+                            throw error
                         })
                 } else {
                     throw error

@@ -33,38 +33,6 @@ export default function BusinessDistrictManagement(props) {
         setBusinessDistrictData(locationArray)
     }
 
-    const onChangeBusinessDistrictStatus = (checked, businessDistrict) => {
-        const { name, title, description, location, image_url_formData, is_active } = businessDistrict
-        let data = {
-            name: name,
-            title: title,
-            description: description,
-            location: location,
-            image_url: image_url_formData,
-            is_active: checked
-        }
-        console.log('data', data)
-        console.log('businessDistrict', businessDistrict)
-        adminService.editBusinessDistrict(data, businessDistrict.id).then(() => {
-            getAllLocation()
-            message.success('Update status successful.')
-        }).catch(error => {
-            console.log('onChangeBusinessDistrictStatus error', error)
-            message.error('Cannot update status.')
-        })
-    }
-
-    const onDeleteBusinessDistrict = (businessDistrictId) => {
-        adminService.deleteBusinessDistrict(businessDistrictId).then(() => {
-            getAllLocation()
-            message.success('Update status successful.')
-        }).catch(error => {
-            console.log('onChangeBusinessDistrictStatus error', error)
-            message.error('Cannot update status.')
-        })
-    }
-
-
     const columnsAccount = [
         {
             title: 'No',
@@ -108,7 +76,41 @@ export default function BusinessDistrictManagement(props) {
         }
     ]
 
+    const onChangeBusinessDistrictStatus = (checked, businessDistrict) => {
+        const { name, title, description, location, image_url_formData } = businessDistrict
+        let data = {
+            name: name,
+            title: title,
+            description: description,
+            location: location,
+            image_url: image_url_formData,
+            is_active: checked
+        }
+
+        adminService.editBusinessDistrict(data, businessDistrict.id).then(() => {
+            getAllLocation()
+            message.success('Update status successful.')
+        }).catch(error => {
+            console.log('onChangeBusinessDistrictStatus error', error)
+            message.error('Cannot update status.')
+        })
+    }
+
+    const onDeleteBusinessDistrict = (businessDistrictId) => {
+        setLoading(true)
+        adminService.deleteBusinessDistrict(businessDistrictId).then(() => {
+            setLoading(false)
+            getAllLocation()
+            message.success('Deelte business district successful.')
+        }).catch(error => {
+            setLoading(false)
+            console.log('onChangeBusinessDistrictStatus error', error)
+            message.error('Cannot update status.')
+        })
+    }
+
     const addBusinessDistrict = async (formData) => {
+        setLoading(true)
         console.log('formData', formData)
         let image_url = await uploadService.uploadImage(formData.image_base64)
         console.log('image_url', image_url)
@@ -121,14 +123,15 @@ export default function BusinessDistrictManagement(props) {
             image_url: image_url,
             is_active: true
         }
-        let response = await adminService.addBusinessDistrict(data)
-        console.log('response', response)
-        if (response) {
-            getAllLocation()
+        adminService.addBusinessDistrict(data).then(() => {
+            setLoading(false)
             message.success('Add new business district successful.')
-        } else {
+            getAllLocation()
+        }).catch(error => {
+            setLoading(false)
+            console.log('error', error)
             message.error('Cannot add new business district. Please try again.')
-        }
+        })
     }
 
     const editBusinessDistrict = async (formData) => {
@@ -158,6 +161,9 @@ export default function BusinessDistrictManagement(props) {
             message.error('Cannot edit business district. Please try again.')
         }
     }
+
+    
+
 
     return (
         <>

@@ -10,6 +10,7 @@ import restaurantService from '../../../services/restaurant';
 
 export default function RestaurantListManagement(props) {
     const { current_tab } = props
+    const { get_restaurant_list } = props
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
     const [RestaurantDataTable, setRestaurantDataTable] = React.useState();
@@ -91,6 +92,7 @@ export default function RestaurantListManagement(props) {
             if (response.is_success) {
                 message.success('Add new restaurant successful.')
                 getAllRestaurant()
+                get_restaurant_list()
             } else {
                 message.error('Cannot add new restaurant! Please try again.')
 
@@ -179,6 +181,7 @@ export default function RestaurantListManagement(props) {
             console.log('response', response)
             message.success('Delete restaurant successful.')
             getAllRestaurant()
+            get_restaurant_list()
         }).catch(error => {
             console.log('confirmDeleteRestaurant error', error)
             message.error('Cannot delete restaurant.')

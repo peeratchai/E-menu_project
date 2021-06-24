@@ -35,6 +35,7 @@ export default function WebProfileComponent(props) {
 
     useEffect(() => {
         if (restaurant_form !== null) {
+            console.log('WebProfileComponent')
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
             if (restaurant_form.image_url !== null || restaurant_form.image_url !== "") {
@@ -44,7 +45,7 @@ export default function WebProfileComponent(props) {
         if (restaurant_id) {
             setDisable(false)
         }
-    }, [props])
+    }, [restaurant_form, restaurant_id])
 
     const setDefaultRestaurantBannerImage = (restaurantBannerFileList) => {
         let cuurnetRestaurantBannerFileList = []
@@ -63,6 +64,7 @@ export default function WebProfileComponent(props) {
     }
 
     const uploadRestaurantLogo = (info) => {
+        console.log('info', info)
         if (info.file.status === 'uploading') {
             return;
         }
@@ -168,9 +170,30 @@ export default function WebProfileComponent(props) {
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1),)
         setPreviewVisible(true)
     };
-    const uploadRestuarantBannerImage = ({ fileList }) => {
-        setRestaurantDetail('bannerImage', fileList)
-        setRestaurantBannerFileList(fileList)
+
+
+    const uploadRestuarantBannerImage = ({ fileList, file }) => {
+        console.log('file', file)
+        console.log('fileList', fileList)
+        if (file.type || file.type === "") {
+            console.log('Not delete')
+            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isJpgOrPng) {
+                message.error('You can only upload JPG/PNG file!');
+            } else {
+                if (!isLt2M) {
+                    message.error('Image must smaller than 2MB!');
+                } else {
+                    setRestaurantDetail('bannerImage', fileList)
+                    setRestaurantBannerFileList(fileList)
+                }
+            }
+        } else {
+            console.log('Delete')
+            setRestaurantDetail('bannerImage', fileList)
+            setRestaurantBannerFileList(fileList)
+        }
     }
 
     const saveProfile = () => {
@@ -191,16 +214,6 @@ export default function WebProfileComponent(props) {
                 update_restaurant_details(restaurantForm)
             }
         }
-    }
-
-    const findProfileFormErrors = () => {
-        const { promotedContents, bannerText } = promoteForm
-        const newErrors = {}
-        // Promoted contents errors
-        if (!promotedContents || promotedContents === '') newErrors.promotedContents = 'Promoted contents is required !'
-        // Banner text errors
-        if (!bannerText || bannerText === '') newErrors.bannerText = 'Banner text is required !'
-        return newErrors
     }
 
     const setRestaurantDetail = (fieldName, value) => {
@@ -304,7 +317,6 @@ export default function WebProfileComponent(props) {
                                     <Upload
                                         listType="picture-card"
                                         fileList={restaurantBannerFileList}
-                                        beforeUpload={checkBeforeUpload}
                                         onPreview={(e) => onPreviewImage(e)}
                                         onChange={(e) => uploadRestuarantBannerImage(e)}
                                         className="upload-restaurant-list"

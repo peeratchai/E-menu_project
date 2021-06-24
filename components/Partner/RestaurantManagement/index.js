@@ -24,8 +24,8 @@ export default function RestaurantManagement(props) {
             setZoneNumberSelected(zoneNumberSelected)
         }
         setLoading(true)
-        partnerSerivce.getZoneByRestaurantId(restaurant_id).then((zone) => {
-            setZone(zone)
+        partnerSerivce.getZoneByRestaurantId(restaurant_id).then((zoneList) => {
+            setZone(zoneList.filter((zone) => zone.is_active === true))
             setLoading(false)
         }).catch(error => {
             message.error('Cannot access to database.')

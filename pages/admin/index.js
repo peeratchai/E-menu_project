@@ -1,15 +1,12 @@
-import Layout, { siteTitle } from '../../components/layout'
+import Layout from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Tab, Modal, Container, Nav, Tabs } from 'react-bootstrap'
+import { Row, Col, Tab, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Checkbox, Tag, Radio, Input, Button, Card, Popconfirm, TimePicker, Spin } from 'antd';
-import { PlusOutlined, UploadOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { message, Select, Card, Spin } from 'antd';
 import React, { useEffect } from 'react'
-import Draggable from "react-draggable";
 import useMediaQuery from "../../utils/utils";
 import DirectMessageAdmin from '../../components/DirectMessageAdmin'
-import { SearchOutlined } from '@ant-design/icons';
 import termAgreement from '../../utils/termAgreement.json'
 import AccountManagement from '../../components/Admin/AccountManagement'
 import RestaurantManagement from '../../components/Partner/RestaurantManagement'
@@ -32,50 +29,15 @@ const axios = require('axios')
 
 const { Option } = Select;
 
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
-
-function getBase64Antd(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
-
-function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
-
-
 const Admin = () => {
     const isMobileResolution = useMediaQuery(768)
     const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
     const [restaurantId, setRestaurantId] = React.useState();
     const [restaurantList, setRestaurantList] = React.useState([]);
     const [loadingRestaurantList, setLoadingRestaurantList] = React.useState(false);
-    const [category, setCategory] = React.useState([]);
-    const [table, setTable] = React.useState();
-    const [containerWidth, setContainerWidth] = React.useState();
-    const [dragging, setDragging] = React.useState(false);
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
-    const [searchedColumn, setSearchedColumn] = React.useState('');
-    const [searchText, setSearchText] = React.useState('');
     const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile", "zone"]
 
-    var searchInput = React.createRef();
 
     useEffect(() => {
         getRestaurantList()
@@ -85,325 +47,15 @@ const Admin = () => {
         setLoadingRestaurantList(true)
         let restaurantList = await restaurantService.getAllRestaurant();
         if (restaurantList) {
+            console.log('restaurantList', restaurantList)
+            let restaurantSelected = restaurantList.find((restaurant) => restaurant.id === restaurantId)
+            if(!restaurantSelected){
+                setRestaurantId(undefined)
+            }
             setLoadingRestaurantList(false)
             setRestaurantList(restaurantList)
         }
     }
-
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSearchText(selectedKeys[0])
-                            setSearchedColumn(dataIndex)
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    })
-
-    const columnsAccount = [
-        {
-            title: 'No',
-            dataIndex: 'No',
-            key: 'No',
-        },
-        {
-            title: 'Name',
-            dataIndex: 'Name',
-            key: 'Name',
-            ...getColumnSearchProps('Name'),
-        },
-        {
-            title: 'Gender',
-            dataIndex: 'Gender',
-            key: 'Gender',
-        },
-        {
-            title: 'Age',
-            dataIndex: 'Age',
-            key: 'Age',
-        },
-        {
-            title: 'Type',
-            dataIndex: 'Type',
-            key: 'Type',
-            filters: [
-                { text: 'User', value: 'User' },
-                { text: 'Restaurant', value: 'Restaurant' },
-            ],
-            onFilter: (value, record) => record.Type.includes(value),
-            ellipsis: true,
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => setEdifProfileModalShow(true)}>
-                        Edit
-                    </Tag>
-                    <Tag color="red" key={record.length + 10} style={{ cursor: "pointer" }}>
-                        Delete
-                    </Tag>
-                </Space>
-            ),
-        }
-    ]
-
-
-
-
-
-
-    const [columns, setColumns] = React.useState([
-        {
-            title: 'Category',
-            dataIndex: 'category',
-            key: 'category',
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <Switch defaultChecked onChange={onChange} />
-                    {/* <Button style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>Add Menu</Button>
-                    <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
-                    <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button> */}
-                    <Tag color="blue" key={text + 1} style={{ cursor: "pointer" }} onClick={() => (setSelectCategory(record.category), setMenuModalShow(true))}>
-                        Add Menu
-                    </Tag>
-                    <Tag color="green" key={text + 2} style={{ cursor: "pointer" }}>
-                        Edit
-                    </Tag>
-                    <Tag color="red" key={text + 3} style={{ cursor: "pointer" }}>
-                        Delete
-                    </Tag>
-                </Space>
-            ),
-        },
-    ]);
-
-
-    const handleAdd = (data) => {
-        const dataSource = category;
-        console.log(data)
-        const newData = {
-            key: (category.length + 1),
-            category: data
-        };
-
-        setCategory([...dataSource, newData])
-    };
-
-    const columnsTable = columns.map((col) => {
-        return {
-            ...col
-        };
-    });
-
-
-
-    const onChange = (checked) => {
-        console.log(`switch to ${checked}`);
-    }
-
-    const handleChange = (info, type) => {
-        if (info.file.status === 'uploading') {
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => {
-                switch (type) {
-                    case 'PromoteImage': setPromoteImageUrl(imageUrl); break;
-                    case 'RestaurantLogo': setRestaurantLogoUrl(imageUrl); break;
-                    default: break;
-                }
-            }
-            );
-        }
-    };
-
-    const expandedRowRender = () => {
-        const columns = [
-            { title: 'No', dataIndex: 'id', key: 'id' },
-            { title: 'Image', dataIndex: 'image', key: 'image', width: 300 },
-            { title: 'Menu', dataIndex: 'menu', key: 'menu' },
-            { title: 'Description', dataIndex: 'description', key: 'description' },
-            { title: 'Price', dataIndex: 'price', key: 'price' },
-            {
-                title: 'Action',
-                key: 'action',
-                render: (text, record) => (
-                    <Space size="middle">
-                        <Switch defaultChecked onChange={onChange} />
-                        {/* <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Edit</Button>
-                        <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Delete</Button> */}
-                        <Tag color="green" key={text + 2} style={{ cursor: "pointer" }}>
-                            Edit
-                        </Tag>
-                        <Tag color="red" key={text + 3} style={{ cursor: "pointer" }}>
-                            Delete
-                        </Tag>
-                    </Space>
-                ),
-            },
-        ];
-
-        let data = [];
-        for (let i = 0; i < 3; ++i) {
-            data = [
-                {
-                    id: 1,
-                    image: (<img src="/images/food4.jpg" />),
-                    menu: 'ยำรวมมิตร',
-                    description: '',
-                    price: 120
-                },
-                {
-                    id: 2,
-                    menu: 'แซลมอน',
-                    image: (<img src="/images/food9.jpg" />),
-                    description: '',
-                    price: 250
-                },
-                {
-                    id: 3,
-                    image: (<img src="/images/food8.jpg" />),
-                    menu: 'ลูกชิ้น',
-                    description: '',
-                    price: 50
-                },
-            ]
-        }
-        return <Table columns={columns} dataSource={data} pagination={false} />;
-    };
-
-    const onClick = (data) => {
-        // your code
-        setTableSelected(data.tableNumber)
-        setViewOrderModalShow(true)
-    }
-
-    const onDrop = (event) => {
-
-        // your code
-    }
-
-    const onDrag = () => {
-
-        setDragging(true)
-    }
-
-    const onStop = (data) => {
-        setDragging(false)
-        if (dragging) {
-            onDrop()
-        } else {
-            onClick(data)
-        }
-    }
-
-    function onChangePrice(value) {
-        console.log('value: ', value);
-        setPriceMinSearch(value[0])
-        setPriceMaxSearch(value[1])
-    }
-
-    let tableManagement = table && table.map((data) =>
-        <Draggable
-            bounds="parent"
-            defaultPosition={{ x: data.x, y: data.y }}
-            onDrag={() => onDrag()}
-            onStop={() => onStop(data)}
-        >
-            <div style={{ width: containerWidth / 10, height: containerWidth / 10, cursor: "pointer", backgroundImage: `url(${data.tableImage})`, backgroundSize: 'contain' }}  >
-                {/* <Image src={data.tableImage} className={styles.img} /> */}
-                <div className={styles.tableNumber} >
-                    {data.tableNumber}
-                </div>
-            </div>
-        </Draggable>
-    )
-
-    const handleCancel = () => {
-        setPreviewVisible(false)
-    }
-
-    const handlePreview = async file => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64Antd(file.originFileObj);
-        }
-        console.log(file.preview)
-        setPreviewImage(file.url || file.preview,)
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1),)
-        setPreviewVisible(true)
-    };
-    const uploadButton = (
-
-        <div >
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
-
-    const handleChangeUploadRestaurant = ({ fileList }) => {
-        setRestaurantfileList(fileList)
-    }
-
 
     const handleChangeMenu = value => {
         setMenuSelected(value)
@@ -412,23 +64,8 @@ const Admin = () => {
 
     function onChangeRestaurant(restaurantId) {
         setRestaurantId(restaurantId)
-        console.log('restaurantId',restaurantId)
+        console.log('restaurantId', restaurantId)
     }
-
-    function onSearchRestaurantName(val) {
-        console.log('search:', val);
-    }
-
-    const handleImageUploadBefore = (files, info, uploadHandler) => {
-        console.log(files, info)
-    }
-    const handleImageUpload = (targetImgElement, index, state, imageInfo, remainingFilesCount) => {
-        console.log(targetImgElement, index, state, imageInfo, remainingFilesCount)
-    }
-    const handleImageUploadError = (errorMessage, result) => {
-        console.log(errorMessage, result)
-    }
-
 
     const onChangeTab = (key) => {
         setCurrentTab(key)
@@ -535,6 +172,7 @@ const Admin = () => {
                                             <Tab.Pane eventKey="restaurantListManagement">
                                                 <RestaurantListManagemnet
                                                     current_tab={currentTab}
+                                                    get_restaurant_list={getRestaurantList}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="zone">
