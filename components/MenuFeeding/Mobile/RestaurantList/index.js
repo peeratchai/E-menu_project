@@ -81,7 +81,9 @@ export default function RestaurantListMobile(props) {
                 renderRestaurantCard(newRestaurantList)
             }
             setCurrentPage(current_page)
-            setNextPage(next_page)
+            if (next_page !== null && isLoadMore) {
+                setNextPage(next_page)
+            }
             setTotalPage(totalPage)
             setTotalResult(newRestaurantList.length)
         } else {
