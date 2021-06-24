@@ -123,7 +123,7 @@ const restaurantService = {
         formData.append("payment_option", restaurantForm.payment_option);
         formData.append("phone", restaurantForm.phone);
         formData.append("website", restaurantForm.website);
-        formData.append("food_type", null);
+        formData.append("food_type", restaurantForm.food_type);
         formData.append("image", restaurantForm.image);
         formData.append("is_active", true);
         formData.append("Line", restaurantForm.Line);

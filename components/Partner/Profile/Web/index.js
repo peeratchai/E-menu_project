@@ -16,7 +16,7 @@ const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYA
 const { Option } = Select;
 
 export default function WebProfileComponent(props) {
-    let { restaurant_form, spin_loading, business_district, restaurant_id, type } = props
+    let { restaurant_form, spin_loading, business_district, restaurant_id, type, master_Data_Food_Type } = props
     let { update_restaurant_details } = props
     const [previewVisible, setPreviewVisible] = React.useState(false);
     const [previewTitle, setPreviewTitle] = React.useState('');
@@ -250,6 +250,13 @@ export default function WebProfileComponent(props) {
     }
     )
 
+    let foodTypeDropdown = master_Data_Food_Type && master_Data_Food_Type.map((foodType) => {
+        return (
+            <Option value={foodType.name}>{foodType.name}</Option>
+        )
+    }
+    )
+
     const onDeleteRestaurant = () => {
         restaurantService.deleteRestaurantById(restaurant_id).then((response) => {
             console.log('response', response)
@@ -411,6 +418,25 @@ export default function WebProfileComponent(props) {
                                         disabled={disable}
                                     >
                                         {businessDistrictDropdown}
+                                    </Select>
+                                </div>
+                            </Form.Group>
+                            <Form.Group controlId="foodType">
+                                <Form.Label>Food Type</Form.Label>
+                                <div>
+                                    <Select
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Select a food type"
+                                        optionFilterProp="children"
+                                        onChange={(value) => setRestaurantDetail('food_type', value)}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        value={restaurantForm.food_type}
+                                        disabled={disable}
+                                    >
+                                        {foodTypeDropdown}
                                     </Select>
                                 </div>
                             </Form.Group>
