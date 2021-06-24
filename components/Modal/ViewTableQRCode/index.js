@@ -1,11 +1,22 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Modal, Container } from 'react-bootstrap'
 import QRCode from 'qrcode.react';
 
 export default function ViewTableQRCode(props) {
     const { table_selected, restaurant_name, restaurant_id } = props
     const { onHide } = props
+
+    const [restaurantName, setRestaurantName] = React.useState()
+    const [tableName, setTableName] = React.useState()
+    useEffect(() => {
+        if (restaurant_name && table_selected) {
+            let restaurantName = restaurant_name.replace(" ", "%20")
+            let tableName = table_selected.name.replace(" ", "%20")
+            setRestaurantName(restaurantName)
+            setTableName(tableName)
+        }
+    }, [restaurant_name])
 
     const downloadQR = () => {
         const canvas = document.getElementById("qrCodeEl");
@@ -38,7 +49,7 @@ export default function ViewTableQRCode(props) {
                     <div style={{ textAlign: "center" }}>
                         <QRCode
                             id="qrCodeEl"
-                            value={process.env.URL + "/menuFeeding/restaurantList/" + restaurant_name + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id + "&tableName=" + table_selected.name}
+                            value={process.env.URL + "/menuFeeding/restaurantList/" + restaurantName + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id + "&tableName=" + tableName}
                             size={290}
                             level={"H"}
                             includeMargin={true}
