@@ -139,17 +139,6 @@ export default function RestaurantDetailMobile(props) {
         }
     }
 
-    const checkMenuFromBasket = () => {
-        let existingBasket = window.localStorage.getItem('basket');
-        if (existingBasket) {
-            existingBasket = JSON.parse(existingBasket)
-            setBasket(existingBasket)
-            setHaveShoppingCart(true)
-        }
-
-        setModalShow(false)
-    }
-
     const onAddMenu = (menu) => {
         console.log('shopping_cart', shopping_cart)
         console.log('restaurantOpenNow', restaurantOpenNow)
@@ -432,7 +421,7 @@ export default function RestaurantDetailMobile(props) {
             </Container>
             <OrderMenuModal
                 show={modalShow}
-                onHide={() => checkMenuFromBasket()}
+                onHide={() => setModalShow(false)}
                 menu_detail={menuSelected}
                 restaurant_id={restaurant_id}
                 shopping_cart={shopping_cart}

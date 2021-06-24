@@ -66,26 +66,29 @@ const UserProfile = ({ user }) => {
     useEffect(() => {
 
         if (user) {
-            let userRoles = user.profile.roles
-            let filterRoles = userRoles.filter((role) => role !== 'customer' && role !== 'partner')
-            if (filterRoles.length === 0) {
-                setUserIsCustomer(true)
+            try {
+                let userRoles = user.profile.roles
+                let filterRoles = userRoles.filter((role) => role !== 'customer' && role !== 'partner')
+                if (filterRoles.length === 0) {
+                    setUserIsCustomer(true)
+                }
+                let profile = user.profile
+                if (profile.avatar_url !== null || profile.avatar_url !== '') {
+                    setProfileImage(profile.avatar_url)
+                }
+                setProfileForm({
+                    first_name: profile.first_name,
+                    last_name: profile.last_name,
+                    gender: profile.gender,
+                    age: profile.age,
+                    phoneNumber: profile.phone_number,
+                    username: profile.username,
+                    is_active: profile.is_active
+                })
+            } catch (error) {
+                console.log('error', error)
             }
-            let profile = user.profile
-            if (profile.avatar_url !== null || profile.avatar_url !== '') {
-                setProfileImage(profile.avatar_url)
-            }
-            setProfileForm({
-                first_name: profile.first_name,
-                last_name: profile.last_name,
-                gender: profile.gender,
-                age: profile.age,
-                phoneNumber: profile.phone_number,
-                username: profile.username,
-                is_active: profile.is_active
-            })
         }
-        console.log(liffClientId, code)
 
         if (liffClientId && code && !inProcessLineSignIn) {
             console.log(liffClientId, code)
@@ -139,8 +142,6 @@ const UserProfile = ({ user }) => {
 
             let responseProfile = await profileService.editUserProfile(data)
             if (responseProfile) {
-                let profile = await profileService.getProfile()
-                window.localStorage.setItem('profile', JSON.stringify(profile))
                 message.success('Edit profile successful.')
             } else {
                 message.error('Cannot edit profile !')
