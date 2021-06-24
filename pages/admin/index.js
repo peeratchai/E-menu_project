@@ -29,7 +29,7 @@ const axios = require('axios')
 
 const { Option } = Select;
 
-const Admin = () => {
+const Admin = ({ user }) => {
     const isMobileResolution = useMediaQuery(768)
     const [currentTab, setCurrentTab] = React.useState('restaurantManagement');
     const [restaurantId, setRestaurantId] = React.useState();
@@ -37,10 +37,13 @@ const Admin = () => {
     const [loadingRestaurantList, setLoadingRestaurantList] = React.useState(false);
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile", "zone"]
-
+    const [userProfile, setUserProfile] = React.useState()
 
     useEffect(() => {
         getRestaurantList()
+        if (user) {
+            setUserProfile(user.profile)
+        }
     }, [])
 
     const getRestaurantList = async () => {
@@ -49,7 +52,7 @@ const Admin = () => {
         if (restaurantList) {
             console.log('restaurantList', restaurantList)
             let restaurantSelected = restaurantList.find((restaurant) => restaurant.id === restaurantId)
-            if(!restaurantSelected){
+            if (!restaurantSelected) {
                 setRestaurantId(undefined)
             }
             setLoadingRestaurantList(false)
@@ -192,6 +195,7 @@ const Admin = () => {
                                             <Tab.Pane eventKey="accountManagement">
                                                 <AccountManagement
                                                     restaurant_list={restaurantList}
+                                                    user_profile={userProfile}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="businessDistrict">

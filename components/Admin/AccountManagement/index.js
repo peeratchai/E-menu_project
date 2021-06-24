@@ -9,7 +9,7 @@ import adminService from '../../../services/admin'
 import profileService from '../../../services/profile'
 
 export default function AccountManagement(props) {
-    const { restaurant_list } = props
+    const { restaurant_list, user_profile } = props
     const [edifProfileModalShow, setEdifProfileModalShow] = React.useState();
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
@@ -253,6 +253,7 @@ export default function AccountManagement(props) {
                 profile={profileSelected}
                 restaurant_list={restaurant_list}
                 get_all_user_profile={getAllUserProfile}
+                user_profile={user_profile}
             />
         </>
     )
