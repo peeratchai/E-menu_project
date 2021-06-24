@@ -232,8 +232,12 @@ export default function AccountManagement(props) {
 
         let responseProfile = await profileService.adminEditUserProfile(data, profile.userId)
         if (responseProfile) {
-            getAllUserProfile()
             message.success('Edit profile successful.')
+            if (profile.userId === user_profile.id) {
+                window.location.reload()
+            } else {
+                getAllUserProfile()
+            }
         } else {
             message.error('Cannot edit profile !')
         }

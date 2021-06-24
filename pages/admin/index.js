@@ -408,7 +408,6 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
     let havePermission = false
 
     if (user) {
-
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + user.accessToken,
@@ -417,27 +416,35 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
         let profile = reponse.data
 
-        profile.roles.forEach((userRole) => {
-            roles.forEach((role) => {
-                if (userRole === role) {
-                    havePermission = true
-                }
+        if (profile) {
+            profile.roles.forEach((userRole) => {
+                roles.forEach((role) => {
+                    if (userRole === role) {
+                        havePermission = true
+                    }
+                })
             })
-        })
 
-        console.log('havePermission', havePermission)
+            console.log('havePermission', havePermission)
 
-        if (!havePermission) {
+            if (!havePermission) {
+                return {
+                    redirect: {
+                        destination: '/',
+                        permanent: false,
+                    },
+                }
+            } else {
+                user.profile = profile
+            }
+        } else {
             return {
                 redirect: {
                     destination: '/',
                     permanent: false,
                 },
             }
-        } else {
-            user.profile = profile
         }
-
     } else {
         return {
             redirect: {
