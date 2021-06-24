@@ -142,80 +142,47 @@ export default function AdminEditProfileModal(props) {
         const { userId, first_name, last_name, gender, age, phoneNumber, profileImage, username, roles, is_active, restaurant_employee } = profileForm
 
         console.log('restaurant_employee', restaurant_employee)
-        let partnerRole = roles.filter((role) => role === 'partner' || role === 'employee')
-        if (partnerRole.length > 0 && (!restaurant_employee || restaurant_employee === '' || restaurant_employee === null)) {
-            message.warning("Please select restaurant.")
+        if (roles.length > 0) {
+            let partnerRole = roles.filter((role) => role === 'partner' || role === 'employee')
+            if (partnerRole.length > 0 && (!restaurant_employee || restaurant_employee === '' || restaurant_employee === null)) {
+                message.warning("Please select restaurant.")
+            } else {
+                let profileImageData
+                if (profileImage) {
+                    profileImageData = profileImage
+                } else {
+                    profileImageData = null
+                }
+
+                let data = {
+                    username: username,
+                    first_name: first_name,
+                    last_name: last_name,
+                    gender: gender,
+                    age: age,
+                    phone_number: phoneNumber,
+                    avatar: profileImageData,
+                    roles: roles,
+                    restaurant_employee: restaurant_employee,
+                    is_active: is_active
+                }
+
+                console.log('data', data)
+
+                let responseProfile = await profileService.adminEditUserProfile(data, userId)
+                console.log('responseProfile', responseProfile)
+                if (responseProfile) {
+                    let profile = await profileService.getProfile()
+                    window.localStorage.setItem('profile', JSON.stringify(profile))
+                    get_all_user_profile()
+                    message.success('Edit profile successful.')
+                } else {
+                    message.error('Cannot edit profile !')
+                }
+            }
         } else {
-            let profileImageData
-            if (profileImage) {
-                profileImageData = profileImage
-            } else {
-                profileImageData = null
-            }
-
-            let data = {
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                gender: gender,
-                age: age,
-                phone_number: phoneNumber,
-                avatar: profileImageData,
-                roles: roles,
-                restaurant_employee: restaurant_employee,
-                is_active: is_active
-            }
-
-            console.log('data', data)
-
-            let responseProfile = await profileService.adminEditUserProfile(data, userId)
-            console.log('responseProfile', responseProfile)
-            if (responseProfile) {
-                let profile = await profileService.getProfile()
-                window.localStorage.setItem('profile', JSON.stringify(profile))
-                get_all_user_profile()
-                message.success('Edit profile successful.')
-            } else {
-                message.error('Cannot edit profile !')
-            }
+            message.error('Please select one or more roles.')
         }
-
-    }
-
-    const restaurantRow = {
-        showSearch: true,
-        showArrow: true,
-        style: {
-            width: '100%',
-        },
-        value: restaurantName,
-        options: restaurantList,
-        optionFilterProp: "children",
-        onChange: (restaurant) => {
-            setProfileform('restaurant_employee', restaurant)
-            setRestaurantName(restaurant)
-        },
-        filterOption: (input, option) => {
-            try {
-                console.log('option', option)
-                console.log('input', input)
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            } catch (error) {
-                console.log('error option', option)
-            }
-
-        },
-        filterSort: (optionA, optionB) => {
-            try {
-                console.log('optionA', optionA)
-                console.log('optionB', optionB)
-                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-            } catch (error) {
-                console.log('error optionB', option)
-            }
-        },
-        placeholder: 'Select restaurant...',
-        disabled: disableRestaurantDropdown
     }
 
     const rolesProps = {
