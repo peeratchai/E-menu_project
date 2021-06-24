@@ -131,7 +131,7 @@ export default function Newspaper() {
                 console.log(newNewspaperList)
 
                 setCurrentPage(current_page)
-                if (next_page !== null) {
+                if (next_page !== null && isLoadMore) {
                     setNextPage(next_page)
                 }
                 setTotalPage(totalPage)

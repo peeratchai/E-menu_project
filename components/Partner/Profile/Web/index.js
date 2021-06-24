@@ -38,8 +38,10 @@ export default function WebProfileComponent(props) {
             console.log('WebProfileComponent')
             setDefaultRestaurantBannerImage(restaurant_form.restaurant_pictures)
             setRestaurantForm(restaurant_form)
-            if (restaurant_form.image_url !== null || restaurant_form.image_url !== "") {
+            if (restaurant_form.image_url !== null && restaurant_form.image_url !== "" && restaurant_form.image_url !== "null") {
                 setRestaurantLogoUrl(restaurant_form.image_url)
+            } else {
+                setRestaurantLogoUrl(defaultImage)
             }
         }
         if (restaurant_id) {
@@ -498,59 +500,4 @@ export default function WebProfileComponent(props) {
             />
         </Spin>
     )
-}
-
-function ConfirmOrderModal(props) {
-    console.log('loading', props.loading)
-    return (
-        <Modal
-            {...props}
-            size="sm"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            style={{ padding: "1.3rem" }}
-        >
-
-            <Modal.Body>
-                <Spin spinning={props.loading}>
-                    <Row>
-                        <Col>
-                            <div>
-                                <Image src="/images/checklist.png" style={{ objectFit: "contain", paddingLeft: "20px", height: "7rem", marginTop: "30px" }} />
-                            </div>
-                        </Col>
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col>
-                            <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
-                                ยืนยันการสั่งอาหาร
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
-                                คุณต้องการยืนยันการสั่งอาหารหรือไม่
-                            </div>
-                        </Col>
-                    </Row>
-                    <br />
-                    <br />
-                    <Row>
-                        <Col>
-                            <div style={{ textAlign: "center" }}>
-                                <Button style={{ width: "90%", backgroundColor: "#c0cacc", border: "1px solid #c0cacf" }} onClick={props.onHide} className={utilStyles.fontContent}>ยกเลิก</Button>
-                            </div>
-                        </Col>
-                        <Col>
-                            <div style={{ textAlign: "center" }}>
-                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
-                            </div>
-                        </Col>
-                    </Row>
-                </Spin>
-            </Modal.Body>
-        </Modal >
-    );
 }

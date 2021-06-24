@@ -74,6 +74,43 @@ export default function Profile(props) {
         restaurant_pictures: [],
         website: ''
     })
+    const defaultBusinessHour = [
+        {
+            'day': 'Monday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Tuesday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Wednesday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Thursday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Friday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Saturday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        },
+        {
+            'day': 'Sunday',
+            'opening_time': '8.00',
+            'closing_time': '16.00'
+        }
+    ]
     const [loading, setLoading] = React.useState(false)
     useEffect(async () => {
         if (restaurant_id && current_tab === 'profile') {
@@ -95,15 +132,24 @@ export default function Profile(props) {
         let restaurantDetail = responseRestaurantDetail.data
         let businessHour
         if (restaurantDetail) {
+
             if (restaurantDetail.business_hour.length > 0) {
                 businessHour = restaurantDetail.business_hour
             } else {
-                businessHour = restaurantForm.business_hour
+                businessHour = defaultBusinessHour
             }
+
             let businessDistrictId = null
             if (restaurantDetail.business_district !== null) {
                 businessDistrictId = restaurantDetail.business_district.id
             }
+            let paymentOption
+            if (restaurantDetail.payment_option !== null) {
+                paymentOption = restaurantDetail.payment_option
+            }
+
+            console.log('businessHour', businessHour)
+
             let initialRestaurantForm = {
                 business_hour: businessHour,
                 facebook: restaurantDetail.facebook,
@@ -117,7 +163,7 @@ export default function Profile(props) {
                 name: restaurantDetail.name,
                 Line: restaurantDetail.line,
                 name_eng: restaurantDetail.name_eng,
-                payment_option: restaurantDetail.payment_option,
+                payment_option: paymentOption,
                 phone: restaurantDetail.phone,
                 price_from: restaurantDetail.price_from,
                 price_to: restaurantDetail.price_to,
@@ -203,6 +249,7 @@ export default function Profile(props) {
                 })
             })
             dataForm.business_hour = businessHour
+            console.log('dataForm', dataForm)
             restaurantService.updateRestaurantDetails(dataForm).then((response) => {
                 console.log('response', response)
                 if (get_restaurant_list) {

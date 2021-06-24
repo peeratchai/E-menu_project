@@ -116,16 +116,24 @@ export default function LocationListWeb(props) {
 
         console.log('filter', filter)
         let accessToken = await checkLogin()
-        let locationListByFilter = await restaurantService.getLocationSearchByFilter(accessToken, filter)
-        let totalResult = 0
-        locationListByFilter.forEach((locationDetails) => {
-            if (locationDetails.total > 0) {
-                totalResult++
+        restaurantService.getLocationSearchByFilter(accessToken, filter).then((locationListByFilter) => {
+            let totalResult = 0
+            console.log('locationListByFilter', locationListByFilter)
+            if (locationListByFilter) {
+                locationListByFilter.forEach((locationDetails) => {
+                    if (locationDetails.total > 0) {
+                        totalResult++
+                    }
+                })
+                setTotalResult(totalResult)
+                setLocationList(locationListByFilter)
             }
+            setLoading(false)
+        }).catch(error => {
+            setLoading(false)
+            console.log('error', error)
         })
-        setTotalResult(totalResult)
-        setLocationList(locationListByFilter)
-        setLoading(false)
+
     }
 
 
