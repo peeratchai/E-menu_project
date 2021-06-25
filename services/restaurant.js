@@ -184,7 +184,10 @@ const restaurantService = {
 
         return await sendRequest.post('/api/add_new_restaurant', formData, ContentType)
     },
-
+    setActiveStatusRestaurant: async function (data, restaurantId) {
+        let ContentType = 'application/json'
+        return await sendRequest.patch('/api/set_active_restaurant/' + restaurantId, data, ContentType)
+    }
 }
 
 export default restaurantService

@@ -1,5 +1,5 @@
 
-import { Table, Space, Input, Button, Popconfirm, Spin, message, Tag } from 'antd';
+import { Table, Space, Input, Button, Popconfirm, Spin, message, Tag, Switch } from 'antd';
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
@@ -16,7 +16,6 @@ export default function RestaurantListManagement(props) {
     const [RestaurantDataTable, setRestaurantDataTable] = React.useState();
     const [loading, setLoading] = React.useState(false);
     const [restaurantModalShow, setRestaurantModalShow] = React.useState(false);
-
     var searchInput = React.createRef();
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -102,7 +101,7 @@ export default function RestaurantListManagement(props) {
 
     const getAllRestaurant = async () => {
         setLoading(true)
-        restaurantService.getAllRestaurant().then((restaurantList) => {
+        adminService.getAllRestaurant().then((restaurantList) => {
             let restaurantDataTable = []
             console.log('restaurantList', restaurantList)
             restaurantList.map((restaurant, index) => {
@@ -111,6 +110,7 @@ export default function RestaurantListManagement(props) {
                     key: restaurant.id + index,
                     restaurantId: restaurant.id,
                     restaurantName: restaurant.name,
+                    is_active: restaurant.is_active
                 })
             })
             setRestaurantDataTable(restaurantDataTable)
@@ -175,6 +175,26 @@ export default function RestaurantListManagement(props) {
             ),
     })
 
+    const onChangeRestaurantStatus = (checked, restaurantDataSelected) => {
+        setLoading(true)
+        let data = {
+            "is_active": checked
+        }
+        restaurantService.setActiveStatusRestaurant(data, restaurantDataSelected.restaurantId).then(() => {
+            setLoading(false)
+            if (checked) {
+                message.success('Active restaurant successful.')
+            } else {
+                message.success('Inactive restaurant successful.')
+            }
+            getAllRestaurant()
+            get_restaurant_list()
+        }).catch(error => {
+            setLoading(false)
+            console.log('onChangeRestaurantStatus error', error)
+        })
+    }
+
     const confirmDeleteRestaurant = (restaurantId) => {
         console.log('restaurantId', restaurantId)
         restaurantService.deleteRestaurantById(restaurantId).then((response) => {
@@ -203,20 +223,23 @@ export default function RestaurantListManagement(props) {
         {
             title: 'Action',
             key: 'action',
-            render: (restaurant) => (
-                <Space size="middle">
-                    <Popconfirm
-                        title="Are you sure to delete this restaurant?"
-                        onConfirm={() => confirmDeleteRestaurant(restaurant.restaurantId)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Tag color="red" key={restaurant.restaurantId} style={{ cursor: "pointer" }} >
-                            Delete
-                        </Tag>
-                    </Popconfirm>
-                </Space>
-            ),
+            render: (restaurant) => {
+                return (
+                    <Space size="middle">
+                        <Switch checked={restaurant.is_active} onChange={(checked) => onChangeRestaurantStatus(checked, restaurant)} />
+                        <Popconfirm
+                            title="Are you sure to delete this restaurant?"
+                            onConfirm={() => confirmDeleteRestaurant(restaurant.restaurantId)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Tag color="red" key={restaurant.restaurantId} style={{ cursor: "pointer" }} >
+                                Delete
+                            </Tag>
+                        </Popconfirm>
+                    </Space>
+                )
+            },
         }
     ]
 

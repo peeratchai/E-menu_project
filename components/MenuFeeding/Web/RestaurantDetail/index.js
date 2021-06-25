@@ -112,7 +112,7 @@ export default function RestaurantDetailWeb(props) {
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
-            setSelected(categoryList[0].categoryName)
+            setSelected(categoryList[0] && categoryList[0].categoryName)
             let menuCategory = restaurant_detail.menu_categories.filter((menuCategory) => menuCategory.is_active === true && menuCategory.menus.length > 0)
             renderMenuList(menuCategory)
             // activeCategory()
@@ -162,7 +162,7 @@ export default function RestaurantDetailWeb(props) {
             window.removeEventListener("scroll", handleScroll);
         };
 
-    }, [props, widthCategoryList, widthCategoryNav, visibleSection,restaurantOpenNow])
+    }, [props, widthCategoryList, widthCategoryNav, visibleSection, restaurantOpenNow])
 
     const setRestaurantBanner = (restaurant_detail) => {
         let restaurantBanner = restaurant_detail.restaurant_pictures.map((picture) => (

@@ -92,7 +92,7 @@ export default function RestaurantDetailMobile(props) {
             setLat(parseFloat(lat))
             setLng(parseFloat(lng))
             setCategoryList(categoryList)
-            setCategorySelected(categoryList[0].categoryName)
+            setCategorySelected(categoryList[0] && categoryList[0].categoryName)
             let menuCategory = restaurant_detail.menu_categories.filter((menuCategory) => menuCategory.is_active === true && menuCategory.menus.length > 0)
             renderMenuList(menuCategory)
             setRestaurantDetail(restaurant_detail)

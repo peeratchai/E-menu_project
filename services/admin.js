@@ -39,6 +39,10 @@ const adminService = {
         return await sendRequest.get('/api/location')
     },
 
+    getAllRestaurant: async function () {
+        return await sendRequest.get('/api/restaurant_list_admin/all')
+    },
+
     addBusinessDistrict: async function (data) {
         return await sendRequest.post('/api/add_business_district', data)
     },

@@ -44,12 +44,20 @@ module.exports = {
             destination: API_URL + '/restaurant',
         },
         {
+            source: '/api/restaurant_list_admin/all',
+            destination: API_URL + '/restaurant/all',
+        },
+        {
             source: '/api/delete_restaurant/:restaurantId',
             destination: API_URL + '/restaurant/:restaurantId',
         },
         {
             source: '/api/add_new_restaurant',
             destination: API_URL + '/restaurant',
+        },
+        {
+            source: '/api/set_active_restaurant/:restaurantId',
+            destination: API_URL + '/restaurant/set_active_status/:restaurantId',
         },
         {
             source: '/api/restaurant/:restaurantId',
