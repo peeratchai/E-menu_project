@@ -41,7 +41,7 @@ export default function RestaurantListWeb(props) {
 
         if (location_name) {
             if (JSON.parse(current_filter_form)) {
-                onSearch(JSON.parse(current_filter_form))
+                onSearch(JSON.parse(current_filter_form), true)
             }
         }
     }, [location_name])
@@ -128,8 +128,14 @@ export default function RestaurantListWeb(props) {
         filter.business_district = location_id
         console.log('filter', filter)
         console.log('nextPage', nextPage)
+        console.log('isLoadMore', isLoadMore)
+        let page = nextPage
+        if (isLoadMore === false) {
+            page = 1
+            setNextPage(2)
+        }
 
-        let response = await restaurantService.getRestaurantSearchWithPaging(nextPage, limit, filter)
+        let response = await restaurantService.getRestaurantSearchWithPaging(page, limit, filter)
         console.log('response', response)
         let next_page = response.next_page
         let current_page = response.current_page

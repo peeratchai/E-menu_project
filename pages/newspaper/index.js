@@ -76,7 +76,7 @@ export default function Newspaper() {
     }, [])
 
     const getInitialData = async () => {
-        await onSearch()
+        await onSearch(filter, true)
         await getFilterMasterData()
     }
 
@@ -116,7 +116,14 @@ export default function Newspaper() {
             filter.current_location = null
         }
         console.log('filter', filter)
-        newspaperService.getNewspaperListBySearchWithPaging(nextPage, limit, filter).then((response) => {
+
+        let page = nextPage
+        if (isLoadMore === false) {
+            page = 1
+            setNextPage(2)
+        }
+
+        newspaperService.getNewspaperListBySearchWithPaging(page, limit, filter).then((response) => {
             let next_page = response.next_page
             let current_page = response.current_page
             let totalPage = response.total_page

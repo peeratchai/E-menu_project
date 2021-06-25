@@ -39,7 +39,7 @@ export default function RestaurantListMobile(props) {
     useEffect(() => {
         if (location_name) {
             if (JSON.parse(current_filter_form)) {
-                onSearch(JSON.parse(current_filter_form))
+                onSearch(JSON.parse(current_filter_form), true)
             }
         }
 
@@ -59,7 +59,14 @@ export default function RestaurantListMobile(props) {
             filter.current_location = null
         }
         filter.business_district = location_id
-        let response = await restaurantService.getRestaurantSearchWithPaging(nextPage, limit, filter)
+
+        let page = nextPage
+        if (isLoadMore === false) {
+            page = 1
+            setNextPage(2)
+        }
+
+        let response = await restaurantService.getRestaurantSearchWithPaging(page, limit, filter)
         console.log('response', response)
         let next_page = response.next_page
         let current_page = response.current_page
