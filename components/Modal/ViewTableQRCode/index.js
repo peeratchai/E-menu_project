@@ -13,10 +13,11 @@ export default function ViewTableQRCode(props) {
         if (restaurant_name && table_selected) {
             let restaurantName = restaurant_name.replace(" ", "%20")
             let tableName = table_selected.name.replace(" ", "%20")
+            console.log(process.env.URL + "/menuFeeding/restaurantList/" + restaurantName + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id + "&tableName=" + tableName)
             setRestaurantName(restaurantName)
             setTableName(tableName)
         }
-    }, [restaurant_name])
+    }, [restaurant_name, table_selected])
 
     const downloadQR = () => {
         const canvas = document.getElementById("qrCodeEl");
