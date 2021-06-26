@@ -234,13 +234,23 @@ export default function AccountManagement(props) {
         if (responseProfile) {
             message.success('Edit profile successful.')
             if (profile.userId === user_profile.id) {
-                window.location.reload()
+                await signOut()
             } else {
                 getAllUserProfile()
             }
         } else {
             message.error('Cannot edit profile !')
         }
+    }
+
+    const signOut = async () => {
+        await fetchJson('/api/logout', { method: 'POST' }).then(() => {
+            window.localStorage.removeItem('accessToken')
+            window.location.reload()
+        }).catch(error => {
+            console.log('signOut error', error)
+        })
+
     }
 
     return (
