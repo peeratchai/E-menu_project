@@ -53,14 +53,6 @@ export default function Restaurant() {
                     if (shoppingCart === "") {
                         setShoppingCart(shoppingCart)
                     } else {
-
-                        if (restaurantId === shoppingCart.restaurant.id) {
-                            console.log('Same restaurant')
-                        } else {
-                            console.log('Dif restaurant')
-                            setNotificationModalVisible(true)
-                        }
-
                         let cartItems = []
                         shoppingCart.shopping_cart_items.forEach((cartItem) => {
                             cartItems.push({
@@ -77,22 +69,26 @@ export default function Restaurant() {
                         }
 
                         setShoppingCart(newShoppingCart)
-
-                    }
-                    setIsInitialCart(true)
-                    console.log('shoppingCart', shoppingCart)
-                    if (tableId !== undefined) {
-
-                        saveTableOnScanQrCode().then((response) => {
-                            console.log('response', response)
+                        setIsInitialCart(true)
+                        console.log('shoppingCart', shoppingCart)
+                        if (tableId !== undefined) {
                             if (tableName) {
                                 message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
                             } else {
                                 message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
                             }
-                        }).catch(error => {
-                            console.log('error', error)
-                        })
+                            if (restaurantId === shoppingCart.restaurant.id) {
+                                console.log('Same restaurant')
+                                saveTableOnScanQrCode().then((response) => {
+                                    console.log('response', response)
+                                }).catch(error => {
+                                    console.log('error', error)
+                                })
+                            } else {
+                                console.log('Dif restaurant')
+                                setNotificationModalVisible(true)
+                            }
+                        }
                     }
                 }
 
@@ -131,6 +127,18 @@ export default function Restaurant() {
 
     const resetShoppingCart = () => {
         setShoppingCart("")
+        saveTableOnScanQrCode().then((response) => {
+            console.log('response', response)
+            if (tableName) {
+                message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
+            } else {
+                message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
+            }
+            setNotificationModalVisible(false)
+        }).catch(error => {
+            console.log('error', error)
+            setNotificationModalVisible(false)
+        })
     }
 
     return (
