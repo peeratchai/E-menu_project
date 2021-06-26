@@ -2,15 +2,17 @@
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
+import { Row, Col, Button, Modal } from 'react-bootstrap'
 import { message, Spin } from 'antd'
 import useMediaQuery from "../../../utils/utils";
 import RestaurantDetailMobile from '../../../components/MenuFeeding/Mobile/RestaurantDetail'
 import RestaurantDetailWeb from '../../../components/MenuFeeding/Web/RestaurantDetail'
 import restaurantService from '../../../services/restaurant'
-import Geocode from "react-geocode";
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
 import shoppingCartService from '../../../services/shoppingCart'
+import utilStyles from '../../../styles/utils.module.css'
+
 
 export default function Restaurant() {
     const isMobileResolution = useMediaQuery(768)
@@ -23,6 +25,7 @@ export default function Restaurant() {
     const [shoppingCart, setShoppingCart] = React.useState({})
     const [isInitialCart, setIsInitialCart] = React.useState(false)
     const [isUserSignin, setIsUserSignin] = React.useState(false);
+    const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
 
     useEffect(() => {
         if (router.isReady) {
@@ -47,9 +50,17 @@ export default function Restaurant() {
                 } else {
                     setIsUserSignin(true)
                     let shoppingCart = response
-                    if (response === "") {
+                    if (shoppingCart === "") {
                         setShoppingCart(shoppingCart)
                     } else {
+
+                        if (restaurantId === shoppingCart.restaurant.id) {
+                            console.log('Same restaurant')
+                        } else {
+                            console.log('Dif restaurant')
+                            setNotificationModalVisible(true)
+                        }
+
                         let cartItems = []
                         shoppingCart.shopping_cart_items.forEach((cartItem) => {
                             cartItems.push({
@@ -89,7 +100,6 @@ export default function Restaurant() {
                 console.log('error', error)
                 message.warning('Please login before take order.')
             })
-            // await getAddressOnGoogleMaps(restaurantDetail)
             setRestaurantDetail(restaurantDetail)
             setLoading(false)
 
@@ -104,7 +114,7 @@ export default function Restaurant() {
             fetchJson('/api/saveTable', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tableId: tableId }),
+                body: JSON.stringify({ tableId: tableId, restaurantId: restaurantId }),
             })
         )
     }
@@ -114,32 +124,13 @@ export default function Restaurant() {
         return response.data
     }
 
-    const getAddressOnGoogleMaps = async (restaurantDetail) => {
-        let point, substringPotion, splitPotion, latLong, lat, lng
-        point = restaurantDetail.location;
-        substringPotion = point.substring(5)
-        splitPotion = substringPotion.split('(').join('').split(')');
-        latLong = splitPotion[0].split(' ')
-        lat = latLong[0]
-        lng = latLong[1]
-        let address = await Geocode.fromLatLng(lat, lng).then(
-            (response) => {
-                const address = response.results[0].formatted_address;
-                return address
-            },
-            (error) => {
-                console.error(error);
-            }
-        );
-        restaurantDetail.googleMapsAddress = address
-        setRestaurantDetail(restaurantDetail)
-        setLoading(false)
-
-    }
-
     const settingShoppintCart = (shoppingCart) => {
         console.log('setShoppingCart', shoppingCart)
         setShoppingCart(shoppingCart)
+    }
+
+    const resetShoppingCart = () => {
+        setShoppingCart("")
     }
 
     return (
@@ -175,6 +166,73 @@ export default function Restaurant() {
                     />
                 )
             }
+            <NotificationShoppingCartModal
+                show={notificationModalVisible}
+                onHide={() => setNotificationModalVisible(false)}
+                set_shopping_cart={resetShoppingCart}
+            />
         </>
     )
+}
+
+
+function NotificationShoppingCartModal(props) {
+    const [loading, setLoading] = React.useState(false)
+
+    const onDeleteShopping = () => {
+        setLoading(true)
+        shoppingCartService.deleteShoppingCart().then((response) => {
+            if (response && response.is_success) {
+                props.set_shopping_cart()
+            }
+            setLoading(false)
+        }).catch(error => {
+            console.log('error', error)
+            setLoading(false)
+        })
+    }
+
+    return (
+        <Modal
+            {...props}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            style={{ padding: "1.3rem" }}
+        >
+
+            <Modal.Body>
+                <Spin spinning={loading} tip="Loading...">
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
+                                มีรายการสินค้าค้างอยู่ในตะกร้าจากร้านอื่น
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
+                                ต้องการยกเลิกรายการในตะกร้าและสั่งใหม่หรือไม่
+                            </div>
+                        </Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#c0cacc", border: "1px solid #c0cacf" }} onClick={props.onHide} className={utilStyles.fontContent}>ยกเลิก</Button>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Spin>
+            </Modal.Body>
+        </Modal >
+    );
 }

@@ -14,10 +14,11 @@ import EmptyComponent from '../../components/Empty'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 import shoppingCartService from '../../services/shoppingCart'
+import fetchJson from '../../lib/fetchJson'
 
 const axios = require('axios')
 
-const CheckoutPage = ({ user, tableId = null }) => {
+const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const [shoppingCartData, setShoppingCartData] = React.useState({ 'order': [] })
@@ -28,6 +29,9 @@ const CheckoutPage = ({ user, tableId = null }) => {
     const [haveCheckOutPermission, setHaveCheckOutPermission] = React.useState(false)
     const [haveMenuInCart, setHaveMenuInCart] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
+    const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
+
+
     useEffect(() => {
         console.log('user', user)
         console.log('tableId', tableId)
@@ -51,6 +55,10 @@ const CheckoutPage = ({ user, tableId = null }) => {
                 let shoppingCart = response
                 if (shoppingCart === "") {
                     message.warning('Please select order before check out order.')
+                    setShoppingCartData({ 'order': [] })
+                    setCountMenuItems(0)
+                    setHaveMenuInCart(false)
+                    setTotalPrice(0)
                 } else {
                     let shoppingCartItems = shoppingCart.shopping_cart_items
                     setShoppingCartData(shoppingCart)
@@ -149,61 +157,68 @@ const CheckoutPage = ({ user, tableId = null }) => {
                     console.log(userId)
                     console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
-                    let restaurantName = shoppingCartData.restaurant.name
-                    let order_items = []
-                    let orders = shoppingCartData.shopping_cart_items
-                    orders.map((order) => {
-                        order_items.push({
-                            "menu": order.menu.id,
-                            "quantity": order.quantity,
-                            "price": order.price,
-                            "total": order.total,
-                            "special_instruction": order.special_instruction
-                        })
-                    })
-
-                    let data = {
-                        "restaurant": restaurantId,
-                        "restaurant_table": tableId,
-                        "user": userId,
-                        "order_items": order_items
-                    }
-
-                    console.log('order data', data)
-                    let addOrderResponse = await partnerSerivce.addOrder(data)
-                    console.log('addOrderResponse', addOrderResponse)
-                    if (addOrderResponse) {
-                        if (addOrderResponse.is_success) {
-                            shoppingCartService.deleteShoppingCart().then((deleteShoppingCartResponse) => {
-                                if (deleteShoppingCartResponse) {
-                                    if (deleteShoppingCartResponse.is_success) {
-                                        message.success('Check out order successful.')
-                                        router.push({
-                                            pathname: '/menuFeeding/restaurantList/' + restaurantName,
-                                            query: { restaurantId: restaurantId }
-                                        })
-                                        setConfirmModalVisible(false)
-                                        setLoading(false)
-                                    }
-                                }
-                            }).catch(error => {
-                                console.log('error', error)
-                                setLoading(false)
+                    if (shoppingRestaurantId === restaurantId) {
+                        console.log('same restaurant')
+                        let restaurantName = shoppingCartData.restaurant.name
+                        let order_items = []
+                        let orders = shoppingCartData.shopping_cart_items
+                        orders.map((order) => {
+                            order_items.push({
+                                "menu": order.menu.id,
+                                "quantity": order.quantity,
+                                "price": order.price,
+                                "total": order.total,
+                                "special_instruction": order.special_instruction
                             })
+                        })
+
+                        let data = {
+                            "restaurant": restaurantId,
+                            "restaurant_table": tableId,
+                            "user": userId,
+                            "order_items": order_items
                         }
+
+                        console.log('order data', data)
+                        let addOrderResponse = await partnerSerivce.addOrder(data)
+                        console.log('addOrderResponse', addOrderResponse)
+                        if (addOrderResponse) {
+                            if (addOrderResponse.is_success) {
+                                shoppingCartService.deleteShoppingCart().then(async (deleteShoppingCartResponse) => {
+                                    if (deleteShoppingCartResponse) {
+                                        if (deleteShoppingCartResponse.is_success) {
+                                            message.success('Check out order successful.')
+                                            setConfirmModalVisible(false)
+
+                                            await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
+                                                console.log('response', response)
+                                                setLoading(false)
+                                                router.push({
+                                                    pathname: '/menuFeeding/restaurantList/' + restaurantName,
+                                                    query: { restaurantId: restaurantId }
+                                                })
+                                            }).catch(error => {
+                                                setLoading(false)
+                                                console.log('api/checkoutOrder', error)
+                                            })
+                                        }
+                                    }
+                                }).catch(error => {
+                                    console.log('error', error)
+                                    setLoading(false)
+                                })
+                            }
+                        }
+                    } else {
+                        console.log('dif restaurant')
+                        setNotificationModalVisible(true)
+                        setConfirmModalVisible(false)
+                        setLoading(false)
                     }
 
-                    // await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
-                    //     console.log('response', response)
-                    //     setLoading(false)
-                    //     router.push({
-                    //         pathname: '/menuFeeding/restaurantList/' + restaurantName,
-                    //         query: { restaurantId: restaurantId }
-                    //     })
-                    // }).catch(error => {
-                    //     setLoading(false)
-                    //     console.log('api/checkoutOrder', error)
-                    // })
+
+
+
 
                 } else {
                     message.warning('Please select order before check out order.')
@@ -313,13 +328,31 @@ const CheckoutPage = ({ user, tableId = null }) => {
         })
     }
 
+    const redirectToRestaurant = async () => {
+        setLoading(true)
+        let restaurantName = shoppingCartData.restaurant.name
+        let restaurantId = shoppingCartData.restaurant.id
+
+        await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
+            console.log('response', response)
+            setLoading(false)
+            router.push({
+                pathname: '/menuFeeding/restaurantList/' + restaurantName,
+                query: { restaurantId: restaurantId }
+            })
+        }).catch(error => {
+            setLoading(false)
+            console.log('api/checkoutOrder', error)
+        })
+    }
+
     return (
         <>
             {
                 isMobileResolution ? (
                     <>
                         <Layout containerType="mobile">
-                            <Container className={utilStyles.container_sm} style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}>
+                            <Container className={utilStyles.container_sm} >
                                 {
                                     haveMenuInCart && (
                                         <div style={{ width: "100%", textAlign: "right", marginBottom: "15px" }}>
@@ -329,7 +362,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                 }
                                 {
                                     countMenuItems > 0 ? (
-                                        <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                        <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
                                             {MenuListComponentMobile}
                                         </div>) : <EmptyComponent />
 
@@ -349,7 +382,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             </Col>
                                         </Row>
                                         <br />
-                                        <Row>
+                                        <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
                                                     สั่ง {countMenuItems} รายการ
@@ -370,7 +403,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             </Col>
                                         </Row>
                                         <br />
-                                        <Row>
+                                        <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} >
                                                     ไม่มีรายการอาหาร
@@ -402,7 +435,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                 }
                                 {
                                     countMenuItems > 0 ? (
-                                        <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                        <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
                                             {MenuListComponentWeb}
                                         </div>) : <EmptyComponent />
                                 }
@@ -421,7 +454,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             </Col>
                                         </Row>
                                         <br />
-                                        <Row>
+                                        <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} disabled={loading} onClick={() => setConfirmModalVisible(true)}>
                                                     สั่ง {countMenuItems} รายการ
@@ -442,7 +475,7 @@ const CheckoutPage = ({ user, tableId = null }) => {
                                             </Col>
                                         </Row>
                                         <br />
-                                        <Row>
+                                        <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} >
                                                     ไม่มีรายการอาหาร
@@ -459,6 +492,11 @@ const CheckoutPage = ({ user, tableId = null }) => {
                             onHide={() => setConfirmModalVisible(false)}
                             check_out_order={onCheckOutOrder}
                             loading={loading}
+                        />
+                        <NotificationShoppingCartModal
+                            show={notificationModalVisible}
+                            onHide={() => setNotificationModalVisible(false)}
+                            redirect_to_restaurant={redirectToRestaurant}
                         />
                     </>
                 )
@@ -522,6 +560,70 @@ function ConfirmOrderModal(props) {
     );
 }
 
+function NotificationShoppingCartModal(props) {
+    const [loading, setLoading] = React.useState(false)
+
+    const onDeleteShopping = () => {
+        setLoading(true)
+        shoppingCartService.deleteShoppingCart().then((response) => {
+
+            message.success('Delete shopping cart successful.')
+            if (response && response.is_success) {
+                props.redirect_to_restaurant()
+                props.onHide()
+            }
+            setLoading(false)
+        }).catch(error => {
+            console.log('error', error)
+            setLoading(false)
+        })
+    }
+
+    return (
+        <Modal
+            {...props}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            style={{ padding: "1.3rem" }}
+        >
+
+            <Modal.Body>
+                <Spin spinning={loading} tip="Loading...">
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }} className={utilStyles.fontContent}>
+                                มีรายการสินค้าค้างอยู่ในตะกร้าจากร้านอื่น
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center", color: "#85878b" }} className={utilStyles.font_size_sm}>
+                                ต้องการยกเลิกรายการในตะกร้าและสั่งใหม่หรือไม่
+                            </div>
+                        </Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#c0cacc", border: "1px solid #c0cacf" }} onClick={props.onHide} className={utilStyles.fontContent}>ยกเลิก</Button>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div style={{ textAlign: "center" }}>
+                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
+                            </div>
+                        </Col>
+                    </Row>
+                </Spin>
+            </Modal.Body>
+        </Modal >
+    );
+}
+
 
 export default CheckoutPage
 
@@ -534,9 +636,14 @@ CheckoutPage.propTypes = {
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
     let tableId = null
+    let shoppingRestaurantId = null
     let tableIdSession = req.session.get('tableId')
+    let restaurantIdSession = req.session.get('restaurantId')
     if (tableIdSession) {
         tableId = tableIdSession
+    }
+    if (restaurantIdSession) {
+        shoppingRestaurantId = restaurantIdSession
     }
     if (user) {
 
@@ -551,7 +658,7 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         if (profile) {
             user.profile = profile
             return {
-                props: { user, tableId },
+                props: { user, tableId, shoppingRestaurantId },
             }
         }
 

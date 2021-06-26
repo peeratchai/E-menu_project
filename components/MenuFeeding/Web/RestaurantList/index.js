@@ -36,13 +36,27 @@ export default function RestaurantListWeb(props) {
     const [sortValue, setSortValue] = React.useState()
     // limit is number of reataurant list each page 
     const limit = 10
+    const defaultFilter = {
+        what: null,
+        where: null,
+        food_type: null,
+        payment_option: null,
+        distance: 0,
+        price_to_price_from: '0 0',
+        is_open_now: false,
+        have_parking: false,
+        sort_by: null,
+    }
 
     useEffect(() => {
 
         if (location_name) {
-            if (JSON.parse(current_filter_form)) {
+            if (current_filter_form) {
                 onSearch(JSON.parse(current_filter_form), true)
+            }else{
+                onSearch(defaultFilter, true)
             }
+
         }
     }, [location_name])
 
