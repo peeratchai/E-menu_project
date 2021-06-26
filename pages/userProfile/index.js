@@ -250,6 +250,7 @@ const UserProfile = ({ user }) => {
                 "social_id": id,
                 "email": email
             }
+            console.log('syncWithSocial', data)
             profileService.syncWithSocial(data).then(response => {
                 console.log('response', response)
                 message.success('Sync with facebook successful.')
