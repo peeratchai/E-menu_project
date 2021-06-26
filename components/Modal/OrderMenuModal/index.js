@@ -86,7 +86,7 @@ export default function OrderMenuModal(props) {
             console.log('newCartItemData', newCartItemData)
             shoppingCartService.updateShoppingCart(newCartItemData).then((response) => {
                 if (response === 'Not Login') {
-                    message.warning('Please login before take order.')
+                    message.warning('Please login before placing order.')
                 } else {
                     console.log('success')
                     setShoppingCart(newCartItemData)

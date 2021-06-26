@@ -46,7 +46,7 @@ export default function Restaurant() {
             shoppingCartService.getShoppingCart().then((response) => {
                 console.log('shoppingCart response', response)
                 if (response === 'Not Login') {
-                    message.warning('Please login before take order.')
+                    message.warning('Please login before placing order.')
                 } else {
                     setIsUserSignin(true)
                     let shoppingCart = response
@@ -94,7 +94,7 @@ export default function Restaurant() {
 
             }).catch(error => {
                 console.log('error', error)
-                message.warning('Please login before take order.')
+                message.warning('Please login before placing order.')
             })
             setRestaurantDetail(restaurantDetail)
             setLoading(false)
