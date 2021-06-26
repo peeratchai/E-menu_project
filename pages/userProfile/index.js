@@ -239,7 +239,7 @@ const UserProfile = ({ user }) => {
         }
     };
 
-    const responseFacebook = async (response) => {
+    const syncWithFacebook = async (response) => {
         setLoading(true)
         console.log('response facebook', response);
         if (response.id) {
@@ -254,8 +254,12 @@ const UserProfile = ({ user }) => {
                 console.log('response', response)
                 message.success('Sync with facebook successful.')
             }).catch(error => {
-                console.log('error', error)
-                message.error('Cannot sync with facebook!. Please try again.')
+                console.log('error', error.response)
+                if (error && error.response) {
+                    if (error.response.status === 409) {
+                        message.error('Facebook account already registered.')
+                    }
+                }
             })
             setLoading(false)
         } else {
@@ -377,7 +381,7 @@ const UserProfile = ({ user }) => {
                                                         socialId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                                         language="en_US"
                                                         scope="public_profile,email"
-                                                        responseHandler={responseFacebook}
+                                                        responseHandler={syncWithFacebook}
                                                         xfbml={true}
                                                         fields="name,email,picture.height(400).width(300)"
                                                         version="v2.5"

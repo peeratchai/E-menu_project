@@ -178,7 +178,7 @@ const sendRequest = {
                         })
                 } else {
                     console.log(error)
-                    return error
+                    throw error
                 }
             });
 

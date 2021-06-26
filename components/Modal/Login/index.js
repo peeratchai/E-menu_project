@@ -162,7 +162,9 @@ export default function LoginModal(props) {
             if (email === undefined || email === "" || email === 'null') {
                 email_facebook = null
             }
+
             let responseSignin = await signinWithSocial(email, id)
+
             console.log('responseSignin', responseSignin);
 
             if (responseSignin === 401) {
