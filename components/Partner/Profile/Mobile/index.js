@@ -235,6 +235,7 @@ export default function MobileProfileComponent(props) {
         restaurantService.deleteRestaurantById(restaurant_id).then((response) => {
             console.log('response', response)
             message.success('Delete restaurant successful.')
+            window.location.reload()
         }).catch(error => {
             console.log('confirmDeleteRestaurant error', error)
             message.error('Cannot delete restaurant.')
