@@ -30,7 +30,7 @@ export default function MobilePromotionlist(props) {
                     <div className={utilStyles.parent_zoom_bgImg}>
                         <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
                             <div className={styles.bannerText}>
-                                {newspaperDetail.promote_content}
+                                {newspaperDetail.title}
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@ export default function MobilePromotionlist(props) {
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
                     <div className={utilStyles.fontMobileSM}>
-                        {newspaperDetail.title}
+                        {newspaperDetail.promote_content}
                     </div>
                     <div className={utilStyles.fontMobileSM}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
@@ -62,7 +62,7 @@ export default function MobilePromotionlist(props) {
                     <div className={utilStyles.parent_zoom_bgImg}>
                         <div className={utilStyles.child_zoom_bgImg} style={{ backgroundImage: "url(" + newspaperDetail.image_url + ")", backgroundSize: "cover", backgroundPosition: "center", height: heightArray[Math.floor(Math.random() * heightArray.length)] }}>
                             <div className={styles.bannerText}>
-                                {newspaperDetail.promote_content}
+                                {newspaperDetail.title}
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@ export default function MobilePromotionlist(props) {
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
                     <div className={utilStyles.fontMobileSM}>
-                        {newspaperDetail.title}
+                        {newspaperDetail.promote_content}
                     </div>
                     <div className={utilStyles.fontMobileSM}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
