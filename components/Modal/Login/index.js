@@ -325,6 +325,7 @@ export default function LoginModal(props) {
     }
 
     const signupWithEmail = async (event) => {
+        setLoading(true)
         event.preventDefault();
         const newErrors = findSignupFormErrors()
 
@@ -338,6 +339,7 @@ export default function LoginModal(props) {
                 const newErrors = {}
                 newErrors.email = 'Email already registered!'
                 setSignupErrors(newErrors)
+                setLoading(false)
             } else {
                 // let accessToken = response.data.accessToken
                 // await mutateUser(
@@ -353,6 +355,7 @@ export default function LoginModal(props) {
                 // window.location.reload()
                 message.success('Please check your email to verify your account.', 5)
                 props.onHide()
+                setLoading(false)
             }
         }
     }

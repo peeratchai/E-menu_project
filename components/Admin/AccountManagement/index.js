@@ -7,6 +7,7 @@ import AdminEditProfileModal from '../../Modal/AdminEditProfileModal'
 import Highlighter from 'react-highlight-words';
 import adminService from '../../../services/admin'
 import profileService from '../../../services/profile'
+import fetchJson from '../../../lib/fetchJson'
 
 export default function AccountManagement(props) {
     const { restaurant_list, user_profile } = props
@@ -16,7 +17,7 @@ export default function AccountManagement(props) {
     const [userProfilesData, setUserProfilesData] = React.useState();
     const [profileSelected, setProfileSelected] = React.useState();
     const [loading, setLoading] = React.useState(false);
-
+    console.log('user_profile', user_profile)
     var searchInput = React.createRef();
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -233,6 +234,8 @@ export default function AccountManagement(props) {
         let responseProfile = await profileService.adminEditUserProfile(data, profile.userId)
         if (responseProfile) {
             message.success('Edit profile successful.')
+            console.log('profile.userId', profile.userId)
+            console.log('user_profile.id', user_profile.id)
             if (profile.userId === user_profile.id) {
                 await signOut()
             } else {
