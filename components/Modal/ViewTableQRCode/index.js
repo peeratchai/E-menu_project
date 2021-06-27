@@ -11,8 +11,8 @@ export default function ViewTableQRCode(props) {
     const [tableName, setTableName] = React.useState()
     useEffect(() => {
         if (restaurant_name && table_selected) {
-            let restaurantName = restaurant_name.replace(" ", "%20")
-            let tableName = table_selected.name.replace(" ", "%20")
+            let restaurantName = restaurant_name.split(" ").join("%20")
+            let tableName = table_selected.name.split(" ").join("%20")
             console.log(process.env.URL + "/menuFeeding/restaurantList/" + restaurantName + "?restaurantId=" + restaurant_id + "&tableId=" + table_selected.id + "&tableName=" + tableName)
             setRestaurantName(restaurantName)
             setTableName(tableName)

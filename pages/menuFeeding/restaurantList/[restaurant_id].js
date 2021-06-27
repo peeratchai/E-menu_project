@@ -52,6 +52,19 @@ export default function Restaurant() {
                     let shoppingCart = response
                     if (shoppingCart === "") {
                         setShoppingCart(shoppingCart)
+                        if (tableId !== undefined) {
+                            if (tableName) {
+                                message.success(`You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                            } else {
+                                message.success(`You've checked at ${restaurantDetail.name}. Let's start ordering!`, 4)
+                            }
+                            saveTableOnScanQrCode().then((response) => {
+                                console.log('response', response)
+                            }).catch(error => {
+                                console.log('error', error)
+                            })
+
+                        }
                     } else {
                         let cartItems = []
                         shoppingCart.shopping_cart_items.forEach((cartItem) => {
