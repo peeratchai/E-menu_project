@@ -4,26 +4,29 @@ import { Row, Col } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import Link from 'next/link'
 import EmptyComponent from '../../../Empty'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function MobilePromotionlist(props) {
+    const { newspaper_list, total_page, current_page } = props
+    const { on_search } = props
     const [promotionsCardColumn1, setPromotionsCardColumn1] = React.useState()
     const [promotionsCardColumn2, setPromotionsCardColumn2] = React.useState()
 
     useEffect(() => {
-        if (props.newspaper_list !== undefined) {
-            console.log(props.newspaper_list)
-            renderPromotionsCard(props.newspaper_list)
+        if (newspaper_list !== undefined) {
+            console.log(newspaper_list)
+            renderPromotionsCard(newspaper_list)
         }
-    }, [props])
+    }, [newspaper_list])
 
-    const renderPromotionsCard = (newspaper_list) => {
+    const renderPromotionsCard = () => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 2 === 0)
         let heightArray = ["8rem", "12rem", "14rem"]
         let column1 = column1Array && column1Array.map((newspaperDetail) => (
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id},
+                    query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
             >
                 <div className={styles.colCardMobile} >
@@ -55,7 +58,7 @@ export default function MobilePromotionlist(props) {
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id},
+                    query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
             >
                 <div className={styles.colCardMobile} >
@@ -89,15 +92,22 @@ export default function MobilePromotionlist(props) {
     return (
         <>
             {
-                props.newspaper_list.length > 0 ? (
-                    <Row xs={2}>
-                        <Col style={{ padding: "0 7.5px" }}>
-                            {promotionsCardColumn1}
-                        </Col>
-                        <Col style={{ padding: "0 7.5px" }}>
-                            {promotionsCardColumn2}
-                        </Col>
-                    </Row>
+                newspaper_list.length > 0 ? (
+                    <InfiniteScroll
+                        dataLength={newspaper_list.length}
+                        next={on_search}
+                        hasMore={total_page === current_page ? false : true}
+                        loader={<h4>Loading...</h4>}
+                    >
+                        <Row xs={2}>
+                            <Col style={{ padding: "0 7.5px" }}>
+                                {promotionsCardColumn1}
+                            </Col>
+                            <Col style={{ padding: "0 7.5px" }}>
+                                {promotionsCardColumn2}
+                            </Col>
+                        </Row>
+                    </InfiniteScroll>
                 ) : (
                     <EmptyComponent />
                 )

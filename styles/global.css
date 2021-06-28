@@ -392,3 +392,7 @@ div.ant-row.ant-form-item {
   padding: 20px;
   cursor: pointer;
 }
+
+.infinite-scroll-component {
+  overflow: unset !important;
+}

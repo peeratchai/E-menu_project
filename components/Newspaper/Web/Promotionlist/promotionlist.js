@@ -4,21 +4,24 @@ import { Row, Col, Image } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import Link from 'next/link'
 import EmptyComponent from '../../../Empty'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function WebPromotionlist(props) {
 
+    const { newspaper_list, total_page, current_page } = props
+    const { on_search } = props
     const [promotionsCardColumn1, setPromotionsCardColumn1] = React.useState()
     const [promotionsCardColumn2, setPromotionsCardColumn2] = React.useState()
     const [promotionsCardColumn3, setPromotionsCardColumn3] = React.useState()
 
     useEffect(() => {
-        if (props.newspaper_list !== undefined) {
-            console.log(props.newspaper_list)
-            renderPromotionsCard(props.newspaper_list)
+        if (newspaper_list !== undefined) {
+            console.log(newspaper_list)
+            renderPromotionsCard()
         }
-    }, [props])
+    }, [newspaper_list])
 
-    const renderPromotionsCard = (newspaper_list) => {
+    const renderPromotionsCard = () => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]
         let column1 = column1Array && column1Array.map((newspaperDetail) => {
@@ -26,7 +29,7 @@ export default function WebPromotionlist(props) {
                 <Link
                     href={{
                         pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                        query: { restaurantId: newspaperDetail.restaurant.id},
+                        query: { restaurantId: newspaperDetail.restaurant.id },
                     }}
                 >
                     <div className={styles.colCard} >
@@ -90,7 +93,7 @@ export default function WebPromotionlist(props) {
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
-                    query: { restaurantId: newspaperDetail.restaurant.id},
+                    query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
             >
                 <div className={styles.colCard} >
@@ -123,19 +126,25 @@ export default function WebPromotionlist(props) {
     return (
         <>
             {
-                props.newspaper_list.length > 0 ? (
-                    <Row xs={12} md={3} >
-                        <Col style={{ padding: "0 1.2rem" }}>
-                            {promotionsCardColumn1}
-                        </Col>
-                        <Col style={{ padding: "0 1.2rem" }}>
-                            {promotionsCardColumn2}
-                        </Col>
-                        <Col style={{ padding: "0 1.2rem" }}>
-                            {promotionsCardColumn3}
-                        </Col>
-                    </Row >
-
+                newspaper_list.length > 0 ? (
+                    <InfiniteScroll
+                        dataLength={newspaper_list.length}
+                        next={on_search}
+                        hasMore={total_page === current_page ? false : true}
+                        loader={<h4>Loading...</h4>}
+                    >
+                        <Row xs={12} md={3} >
+                            <Col style={{ padding: "0 1.2rem" }}>
+                                {promotionsCardColumn1}
+                            </Col>
+                            <Col style={{ padding: "0 1.2rem" }}>
+                                {promotionsCardColumn2}
+                            </Col>
+                            <Col style={{ padding: "0 1.2rem" }}>
+                                {promotionsCardColumn3}
+                            </Col>
+                        </Row >
+                    </InfiniteScroll>
                 ) : (
                     <div style={{ minHeight: "30vh" }}>
                         <EmptyComponent />

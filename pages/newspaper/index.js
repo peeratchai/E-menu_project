@@ -167,14 +167,10 @@ export default function Newspaper() {
                         />
                         <MobilePromotionlist
                             newspaper_list={newspaperList}
+                            on_search={() => onSearch(filter, true)}
+                            total_page={totalPage}
+                            current_page={currentPage}
                         />
-                        {
-                            currentPage < totalPage && (
-                                <div style={{ width: "100%", textAlign: "center", paddingBottom: "100px" }}>
-                                    <Button onClick={() => onSearch(filter, true)}>Load more</Button>
-                                </div>
-                            )
-                        }
                     </Spin>
                 </Container>
                 <MobileFilter
@@ -202,14 +198,10 @@ export default function Newspaper() {
                             <br />
                             <WebPromotionlist
                                 newspaper_list={newspaperList}
+                                on_search={() => onSearch(filter, true)}
+                                total_page={totalPage}
+                                current_page={currentPage}
                             />
-                            {
-                                currentPage < totalPage && (
-                                    <div style={{ width: "100%", textAlign: "center", paddingBottom: "100px" }}>
-                                        <Button onClick={() => onSearch(filter, true)}>Load more</Button>
-                                    </div>
-                                )
-                            }
                         </div>
                     </div>
                 </Spin >
