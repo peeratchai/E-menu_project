@@ -21,6 +21,7 @@ export default function LocationListWeb(props) {
     const [totalResult, setTotalResult] = React.useState(0);
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
+    const [sortValue, setSortValue] = React.useState()
     const [currentFilterForm, setCurrentFilterForm] = React.useState({
         what: null,
         where: null,
@@ -101,6 +102,20 @@ export default function LocationListWeb(props) {
         setLocationInMaps(LocationInMaps)
     }
 
+    const onSort = (sortValue, newLocationList = locationList) => {
+        setSortValue(sortValue)
+        if (sortValue === 'A-Z') {
+            const sortResult = [].concat(newLocationList)
+                .sort((a, b) => a.name > b.name ? 1 : -1)
+            setLocationList(sortResult)
+        }
+        if (sortValue === 'Z-A') {
+            const sortResult = [].concat(newLocationList)
+                .sort((a, b) => a.name < b.name ? 1 : -1)
+            setLocationList(sortResult)
+        }
+    }
+
     const onSearch = async (filterForm) => {
         setLoading(true)
         console.log('filterForm', filterForm)
@@ -126,7 +141,11 @@ export default function LocationListWeb(props) {
                     }
                 })
                 setTotalResult(totalResult)
-                setLocationList(locationListByFilter)
+                if (sortValue) {
+                    onSort(sortValue, newRestaurantList)
+                } else {
+                    setLocationList(newRestaurantList)
+                }
             }
             setLoading(false)
         }).catch(error => {
@@ -188,16 +207,17 @@ export default function LocationListWeb(props) {
                             </Col>
                             <Col>
                                 <div style={{ position: "absolute", right: "0" }}>
-                                    <b>sort by</b> &nbsp; <Select
+                                    <b>sort by</b> &nbsp;
+                                    <Select
                                         showSearch
                                         style={{ width: "150px" }}
                                         placeholder="Search to Select"
-                                        defaultValue="Lastet"
+                                        defaultValue="-"
+                                        onChange={(value) => onSort(value)}
                                     >
-                                        <Option value="-">-</Option>
-                                        <Option value="Lastet">Lastet</Option>
-                                        <Option value="Bangkok">Bangkok</Option>
-                                        <Option value="Nonthaburi">Nonthaburi</Option>
+                                        {/* <Option value="-">-</Option> */}
+                                        <Option value="A-Z">A-Z</Option>
+                                        <Option value="Z-A">Z-A</Option>
                                     </Select>
                                 </div>
                             </Col>

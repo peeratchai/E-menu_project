@@ -168,7 +168,7 @@ export default function RestaurantList({ masterData }) {
         setLocationInMaps(LocationInMaps)
     }
 
-    const onSort = (sortValue, newRestaurantList = restaurantList) => {
+    const onSort = (sortValue , newRestaurantList = restaurantList) => {
         setSortValue(sortValue)
         if (sortValue === 'A-Z') {
             const sortResult = [].concat(newRestaurantList)

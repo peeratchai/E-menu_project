@@ -102,14 +102,15 @@ export default function RestaurantListWeb(props) {
                         </Col>
                         <Col>
                             <div style={{ position: "absolute", right: "0" }}>
-                                <b>sort by</b> &nbsp; <Select
+                                <b>sort by</b> &nbsp; 
+                                <Select
                                     showSearch
                                     style={{ width: "150px" }}
                                     placeholder="Search to Select"
                                     defaultValue="-"
                                     onChange={(value) => on_sort(value)}
                                 >
-                                    <Option value="-">-</Option>
+                                    {/* <Option value="-">-</Option> */}
                                     <Option value="A-Z">A-Z</Option>
                                     <Option value="Z-A">Z-A</Option>
                                 </Select>
