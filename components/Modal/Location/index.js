@@ -77,7 +77,7 @@ export default function LocationModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => props.on_select_location(markerPosition)}>Save</Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

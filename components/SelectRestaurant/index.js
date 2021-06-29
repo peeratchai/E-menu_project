@@ -18,7 +18,7 @@ export default function SelectRestaurant(props) {
     })
 
     return (
-        <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+        <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100e", padding: "15px" }}>
             Restaurant Name : &nbsp;
             <Select
                 showSearch

@@ -201,7 +201,7 @@ export default function EditApprovePromoteModal(props) {
                 <Button variant="primary" onClick={() => setConfirmModalVisible(true)}>
                     Save
                 </Button>
-                <Button type="primary" onClick={onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
     );
@@ -242,7 +242,7 @@ function ConfirmEditPromoteModal(props) {
                     </Col>
                     <Col>
                         <div style={{ textAlign: "center" }}>
-                            <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.edit_promotion} className={utilStyles.fontContent}>ยืนยัน</Button>
+                            <Button style={{ width: "90%", backgroundColor: "#78100E", border: "#78100E" }} onClick={props.edit_promotion} className={utilStyles.fontContent}>ยืนยัน</Button>
                         </div>
                     </Col>
                 </Row>

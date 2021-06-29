@@ -1,5 +1,6 @@
 
-import { Table, Space, Input, Button, Popconfirm, Spin, message } from 'antd';
+import { Table, Space, Input, Popconfirm, Spin, message } from 'antd';
+import { Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
@@ -65,17 +66,16 @@ export default function ContactUsMessage(props) {
                 />
                 <Space>
                     <Button
-                        type="primary"
                         onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
                         icon={<SearchOutlined />}
                         size="small"
                         style={{ width: 90 }}
                     >
                         Search
-              </Button>
+                    </Button>
                     <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
                         Reset
-              </Button>
+                    </Button>
 
                 </Space>
             </div>
@@ -138,7 +138,7 @@ export default function ContactUsMessage(props) {
             key: 'action',
             render: (message) => (
                 <Space size="middle">
-                    <Button type="primary" onClick={() => (setMessageSelected(message), setViewContactUsMessageModalShow(true))} style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>View Message</Button>
+                    <Button onClick={() => (setMessageSelected(message), setViewContactUsMessageModalShow(true))} style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>View Message</Button>
                 </Space>
             ),
         }
@@ -146,7 +146,7 @@ export default function ContactUsMessage(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Contact us message
             </div>
             <Spin spinning={loading} tip="Loading...">

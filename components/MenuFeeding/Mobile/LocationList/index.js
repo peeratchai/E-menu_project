@@ -132,9 +132,9 @@ export default function LocationListMobile(props) {
             }
         })
         if (sortValue) {
-            onSort(sortValue, newRestaurantList)
+            onSort(sortValue, locationListByFilter)
         } else {
-            setLocationList(newRestaurantList)
+            setLocationList(locationListByFilter)
         }
         setFilter(filterForm)
         setTotalResult(totalResult)

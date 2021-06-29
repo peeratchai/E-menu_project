@@ -142,9 +142,9 @@ export default function LocationListWeb(props) {
                 })
                 setTotalResult(totalResult)
                 if (sortValue) {
-                    onSort(sortValue, newRestaurantList)
+                    onSort(sortValue, locationListByFilter)
                 } else {
-                    setLocationList(newRestaurantList)
+                    setLocationList(locationListByFilter)
                 }
             }
             setLoading(false)

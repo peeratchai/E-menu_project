@@ -221,7 +221,7 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
         <>
             {
                 type === 'partner' && (
-                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                         Zone Management
                     </div>
                 )

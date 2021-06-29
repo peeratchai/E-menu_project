@@ -115,7 +115,6 @@ const UserProfile = ({ user }) => {
 
     const saveProfile = async () => {
         const newErrors = findProfileFormErrors()
-
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors)
         } else {
@@ -137,6 +136,14 @@ const UserProfile = ({ user }) => {
                 avatar: profileImageData,
                 is_active: is_active
             }
+
+            let ObjectKeyData = Object.keys(data)
+
+            ObjectKeyData.forEach((keyData) => {
+                if (data[keyData] === null) {
+                    data[keyData] = ""
+                }
+            })
 
             console.log('data', data)
 

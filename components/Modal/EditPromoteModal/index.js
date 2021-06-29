@@ -192,7 +192,7 @@ export default function EditPromoteModal(props) {
                 <Button variant="primary" onClick={() => editPromotion()}>
                     Save
                 </Button>
-                <Button type="primary" onClick={onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
     );

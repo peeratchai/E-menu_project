@@ -185,7 +185,7 @@ export default function WebFilter(props) {
                     </Col>
 
                     <Col md={1} >
-                        <Button style={{ textAlign: "center", width: "100%", height: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
+                        <Button style={{ textAlign: "center", width: "100%", height: "100%", backgroundColor: "#78100E", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
                             <SearchIcon />
                         </Button>
                     </Col>

@@ -1,5 +1,6 @@
 
-import { Table, Space, Input, Button, Popconfirm, Spin, message } from 'antd';
+import { Table, Space, Input, Popconfirm, Spin, message } from 'antd';
+import { Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
@@ -52,7 +53,7 @@ export default function BanUserManagement(props) {
 
     const getProfileAllUser = () => {
         adminService.getProfileAllUser().then((allUser) => {
-            console.log('allUser',allUser)
+            console.log('allUser', allUser)
             setProfileAllUser(allUser)
         }).catch(error => {
             console.log('getAllUser error', error)
@@ -98,17 +99,16 @@ export default function BanUserManagement(props) {
                 />
                 <Space>
                     <Button
-                        type="primary"
                         onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
                         icon={<SearchOutlined />}
                         size="small"
                         style={{ width: 90 }}
                     >
                         Search
-              </Button>
+                    </Button>
                     <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
                         Reset
-              </Button>
+                    </Button>
 
                 </Space>
             </div>
@@ -189,7 +189,7 @@ export default function BanUserManagement(props) {
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="primary" danger style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Active user</Button>
+                        <Button variant="danger" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }}>Active user</Button>
                     </Popconfirm>
                 </Space>
             ),
@@ -198,7 +198,7 @@ export default function BanUserManagement(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Ban User Management
             </div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>

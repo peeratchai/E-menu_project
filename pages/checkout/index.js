@@ -550,7 +550,7 @@ function ConfirmOrderModal(props) {
                         </Col>
                         <Col>
                             <div style={{ textAlign: "center" }}>
-                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
+                                <Button style={{ width: "90%", backgroundColor: "#78100E", border: "#78100E" }} onClick={props.check_out_order} className={utilStyles.fontContent}>ยืนยัน</Button>
                             </div>
                         </Col>
                     </Row>
@@ -614,7 +614,7 @@ function NotificationShoppingCartModal(props) {
                         </Col>
                         <Col>
                             <div style={{ textAlign: "center" }}>
-                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
+                                <Button style={{ width: "90%", backgroundColor: "#78100E", border: "#78100E" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
                             </div>
                         </Col>
                     </Row>

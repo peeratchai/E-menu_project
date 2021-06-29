@@ -74,7 +74,7 @@ export default function WebComponent(props) {
         <>
             {
                 type === 'partner' && (
-                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                         Menu Management
                     </div>
                 )

@@ -139,7 +139,7 @@ export default function Filter(props) {
                             </Col>
                         </Row>
                         <br />
-                        <Button onClick={() => props.onSearch(form)} style={{ textAlign: "center", width: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md}>
+                        <Button onClick={() => props.onSearch(form)} style={{ textAlign: "center", width: "100%", backgroundColor: "#78100E", border: "none" }} className={utilStyles.font_size_md}>
                             <SearchIcon /> Search
                         </Button>
                     </Form>
@@ -215,7 +215,7 @@ export default function Filter(props) {
                     <Checkbox value={form.have_parking} onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
                 </div>
 
-                <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#ff5a5f", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
+                <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#78100E", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>
                     Filter
                 </Button>
 

@@ -161,6 +161,8 @@ export default function AdminEditProfileModal(props) {
                 let responseProfile = await profileService.adminEditUserProfile(data, userId)
                 console.log('responseProfile', responseProfile)
                 if (responseProfile) {
+                    console.log('userId', userId)
+                    console.log('user_profile', user_profile.id)
                     if (userId === user_profile.id) {
                         window.location.reload()
                     } else {

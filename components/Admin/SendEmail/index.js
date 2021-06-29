@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Form, Checkbox, Select, Input, Button, message } from 'antd';
-import { Row, Col, Image, Tab, Modal, Container, Nav, Tabs } from 'react-bootstrap'
+import { Form, Checkbox, Select, Input, message } from 'antd';
+import { Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -180,7 +180,7 @@ export default function SendEmail() {
 
     return (
         <div>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Email
             </div>
             <div className={styles.tab}>
@@ -289,7 +289,7 @@ export default function SendEmail() {
                     </Form.Item>
 
                     <div style={{ textAlign: "right", marginTop: "20px" }}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="submit">
                             Send email
                         </Button>
                     </div>

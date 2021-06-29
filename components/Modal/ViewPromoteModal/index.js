@@ -58,7 +58,7 @@ export default function ViewPromoteModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button type="primary" onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
     );

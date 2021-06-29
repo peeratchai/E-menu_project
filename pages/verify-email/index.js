@@ -65,7 +65,7 @@ export default function verifyEmail() {
     })
 
     return (
-        <Layout style={{ border: "1px solid #FF4A4F" }}>
+        <Layout style={{ border: "1px solid #78100E" }}>
             <div className={styles.card}>
                 <h3 style={{ textAlign: "center", marginBottom: "25px" }}>
                     Redirect to cee menu home page within {countDown}..

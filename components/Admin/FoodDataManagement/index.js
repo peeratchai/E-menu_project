@@ -1,6 +1,7 @@
 
 import 'antd/dist/antd.css';
-import { Table, Space, Tag, Button, message, Spin } from 'antd';
+import { Table, Space, Tag, message, Spin } from 'antd';
+import { Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'
 import EditMasterDataModal from '../../Modal/EditMasterDataModal'
 import EditFoodDataModal from '../../Modal/EditFoodDataModal'
@@ -171,11 +172,11 @@ export default function FoodDataManagement(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Food Data
             </div>
             <div style={{ textAlign: "right", padding: "15px" }}>
-                <Button type="primary" onClick={() => setEditMasterDataModalShow(true)}>
+                <Button onClick={() => setEditMasterDataModalShow(true)}>
                     Edit master data
                 </Button>
             </div>

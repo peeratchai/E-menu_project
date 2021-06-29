@@ -258,7 +258,7 @@ export default function AccountManagement(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Account Management
             </div>
             <Spin spinning={loading} tip="Loading...">

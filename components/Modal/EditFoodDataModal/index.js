@@ -1,6 +1,6 @@
-import { Row, Col, Form, Modal, Container } from 'react-bootstrap'
+import { Row, Col, Form, Modal, Container, Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Select, Button } from 'antd';
+import { Select } from 'antd';
 import React, { useEffect } from 'react'
 import adminService from '../../../services/admin'
 
@@ -235,10 +235,10 @@ export default function EditFoodDataModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button type="primary" onClick={() => { onEditFoodData() }}>
+                <Button onClick={() => { onEditFoodData() }}>
                     Save
                 </Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

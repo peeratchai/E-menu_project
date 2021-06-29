@@ -167,7 +167,7 @@ export default function BusinessDistrictManagement(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Business District Management
             </div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>

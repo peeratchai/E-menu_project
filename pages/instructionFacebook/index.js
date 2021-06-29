@@ -5,7 +5,7 @@ import styles from './index.module.css'
 export default function instructionFacebook() {
 
     return (
-        <Layout style={{ border: "1px solid #FF4A4F" }}>
+        <Layout style={{ border: "1px solid #78100E" }}>
             <div className={styles.card}>
                 <h4 style={{ textAlign: "center", marginBottom: "25px" }}>
                     คุณสามารถลบข้อมูลจากแอพได้ผ่านฟังชัน Update profile โดยการกดปุ่ม Delete

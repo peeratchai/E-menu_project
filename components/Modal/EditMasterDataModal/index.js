@@ -1,6 +1,6 @@
-import { Row, Col, Modal, Container } from 'react-bootstrap'
+import { Row, Col, Modal, Container,Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Space, Button, Popconfirm, Select, Switch, message, Spin } from 'antd';
+import { Space, Popconfirm, Select, Switch, message, Spin } from 'antd';
 import React, { useEffect } from 'react'
 import { EditableTable } from '../../TableAntdesign/tableAntdesign';
 import adminService from '../../../services/admin'
@@ -470,7 +470,7 @@ export default function EditMasterDataModal(props) {
                         </Col>
                         <Col>
                             <div style={{ textAlign: "right" }}>
-                                <Button onClick={() => addNewItem()} type="primary">
+                                <Button onClick={() => addNewItem()}>
                                     Add new item
                                 </Button>
                             </div>
@@ -490,7 +490,7 @@ export default function EditMasterDataModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

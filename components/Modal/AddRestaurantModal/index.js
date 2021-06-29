@@ -81,7 +81,7 @@ export default function AddRestaurantModal(props) {
                 <Button onClick={() => onAddNewRestaurant()}>
                     Submit
                 </Button>
-                <Button onClick={onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

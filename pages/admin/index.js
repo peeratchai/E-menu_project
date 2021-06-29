@@ -219,7 +219,7 @@ const Admin = ({ user }) => {
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="setting">
-                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                                                <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                                                     Term Agreement
                                                 </div>
                                                 <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>

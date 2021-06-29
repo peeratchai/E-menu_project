@@ -188,7 +188,7 @@ export default function OrderMenuModal(props) {
                             <Button onClick={() => saveMenu()} >
                                 Submit
                             </Button>
-                            <Button onClick={() => closeModal()}>Close</Button>
+                            <Button className="Buttom_Close" onClick={() => closeModal()}>Close</Button>
                         </Modal.Footer>
                     </>
                 ) : (
@@ -250,7 +250,7 @@ export default function OrderMenuModal(props) {
                             <Button onClick={() => saveMenu()}>
                                 Submit
                             </Button>
-                            <Button onClick={() => closeModal()}>Close</Button>
+                            <Button className="Buttom_Close" onClick={() => closeModal()}>Close</Button>
                         </Modal.Footer>
                     </>
                 )

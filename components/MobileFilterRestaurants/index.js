@@ -161,7 +161,7 @@ export default function MobileFilterRestaurants(props) {
                 <Button onClick={() => { onSearch() }}>
                     Search
                 </Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
     );

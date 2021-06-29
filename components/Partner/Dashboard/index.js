@@ -230,7 +230,7 @@ export default function Dashboard(props) {
     let OrderListComponent = (
         <>
             <Col xs={5} style={{ borderRight: "1px solid #DEDEDE", height: "inherit", overflowY: "scroll" }}>
-                <div style={{ color: "white", marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px" }}>
+                <div style={{ color: "white", marginBottom: "20px", backgroundColor: "#78100E", padding: "15px" }}>
                     <div style={{ marginBottom: "10px" }}>
                         <Row>
                             <Col>
@@ -265,7 +265,7 @@ export default function Dashboard(props) {
         <div>
             {
                 type === 'partner' && (
-                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                         Dashboard
                     </div>
                 )

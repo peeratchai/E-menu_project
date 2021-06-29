@@ -109,7 +109,7 @@ export default function ViewContactUsMessageModal(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

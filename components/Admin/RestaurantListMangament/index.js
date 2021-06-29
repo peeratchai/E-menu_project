@@ -1,5 +1,6 @@
 
-import { Table, Space, Input, Button, Popconfirm, Spin, message, Tag, Switch } from 'antd';
+import { Table, Space, Input, Popconfirm, Spin, message, Tag, Switch } from 'antd';
+import { Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
@@ -245,11 +246,11 @@ export default function RestaurantListManagement(props) {
 
     return (
         <>
-            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#0069D9", padding: "15px", textAlign: "center" }}>
+            <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100e", padding: "15px", textAlign: "center" }}>
                 Restaurant List Management
             </div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <Button type='primary' onClick={() => setRestaurantModalShow(true)}>
+                <Button onClick={() => setRestaurantModalShow(true)}>
                     New restaurant
                 </Button>
             </div>

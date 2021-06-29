@@ -103,7 +103,7 @@
   border-radius: 25px;
   margin-left: 10px;
   color: white;
-  background-color: #ff4a4f;
+  background-color: #78100E;
   cursor: pointer;
 }
 .category_first_child_active {
@@ -112,7 +112,7 @@
   padding: 15px;
   align-items: center;
   border-radius: 25px;
-  background-color: #ff4a4f;
+  background-color: #78100E;
   color: white;
   cursor: pointer;
 }

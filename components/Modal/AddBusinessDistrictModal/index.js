@@ -205,7 +205,7 @@ export default function AddBusinessDistrictModal(props) {
                 <Button onClick={() => addBusinessDistrict()}>
                     Save
                 </Button>
-                <Button type="primary" onClick={onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
     );

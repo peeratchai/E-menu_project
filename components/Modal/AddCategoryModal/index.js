@@ -97,7 +97,7 @@ export default function AddCategoryModal(props) {
                 <Button onClick={() => addCategory()}>
                     Submit
                 </Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
 
         </Modal >

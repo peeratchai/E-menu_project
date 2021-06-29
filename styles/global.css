@@ -384,7 +384,7 @@ div.ant-row.ant-form-item {
   border-radius: 25px;
   margin-left: 10px;
   color: white;
-  background-color: #ff4a4f;
+  background-color: #78100e;
   cursor: pointer;
 }
 
@@ -395,4 +395,27 @@ div.ant-row.ant-form-item {
 
 .infinite-scroll-component {
   overflow: unset !important;
+}
+
+.btn-primary {
+  background-color: #78100e !important;
+  color: white !important;
+  border-color: #78100e !important ;
+}
+
+.btn-primary:focus {
+  background-color: #78100e !important;
+  border-color: #78100e !important ;
+  color: white !important;
+  -webkit-box-shadow: 0 0 0 0.2rem rgb(225 83 97 / 50%) !important;
+  box-shadow: 0 0 0 0.2rem rgb(225 83 97 / 50%) !important;
+}
+.Buttom_Close {
+  background-color: white !important;
+  color: rgba(0, 0, 0, 0.85) !important;
+  border: 1px solid #dee2e6 !important;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background-color: #78100e !important;
 }

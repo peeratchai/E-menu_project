@@ -106,13 +106,13 @@ export default function Contact() {
                         <div style={{ textAlign: "center", width: "50%", margin: "auto", padding: "10px", top: "25%", position: "relative" }}>
                             <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
                                 Contact Informations
-                    </div>
+                            </div>
                             <div style={{ color: "#ededed", textShadow: "0 0 3px #000000" }}>
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </div>
+                            </div>
                             <div style={{ marginTop: "50px" }}>
                                 <Link href={process.env.FACEBOOK_PAGE_URL} passHref={true}>
-                                    <Button style={{ border: "none" }}>Contact Us</Button>
+                                    <Button style={{ border: "none", backgroundColor: "#78100E" }}>Contact Us</Button>
                                 </Link>
                             </div>
                         </div>
@@ -123,13 +123,13 @@ export default function Contact() {
                         <div style={{ textAlign: "center", width: "100%", margin: "auto", padding: "10px", position: "relative" }}>
                             <div className={utilStyles.heading2Xl} style={{ color: "white", fontFamily: "Montserrat", textShadow: "0 0 6px #000000" }}>
                                 Contact Informations
-                    </div>
+                            </div>
                             <div style={{ color: "#ededed", textShadow: "0 0 6px #000000" }}>
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </div>
+                            </div>
                             <div style={{ marginTop: "50px" }}>
                                 <Link href={process.env.FACEBOOK_PAGE_URL} passHref={true}>
-                                    <Button style={{ border: "none" }}>Contact Us</Button>
+                                    <Button style={{ border: "none", backgroundColor: "#78100E" }}>Contact Us</Button>
                                 </Link>
                             </div>
                         </div>

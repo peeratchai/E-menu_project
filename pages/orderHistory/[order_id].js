@@ -102,7 +102,7 @@ export default function Order(props) {
                             </Col>
                         </Row>
                         <Row>
-                            <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
+                            <Col style={{ color: "gray", fontSize: "14px" }}>
                                 * {order.special_instruction}
                             </Col>
                         </Row>
@@ -116,7 +116,7 @@ export default function Order(props) {
                                         <Col>
                                             <MinusOutlined style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                         </Col>
-                                        <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
+                                        <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
                                             1
                                         </Col>
                                         <Col>

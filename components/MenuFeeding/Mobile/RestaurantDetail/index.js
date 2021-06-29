@@ -439,7 +439,7 @@ export default function RestaurantDetailMobile(props) {
             />
             <div className={haveShoppingCart ? showBasketButton : utilStyles.hide} onClick={() => linkToCheckOutOrder()} style={{ position: "fixed", bottom: "0", left: "0", width: "100vw", zIndex: "10", height: "70px", backgroundColor: "white" }}>
                 <div style={{ textAlign: "center" }}>
-                    <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#ff4a4f", borderRadius: "5px", color: "white" }}>
+                    <Button style={{ width: "90vw", height: "50px", marginTop: "10px", padding: "5px", backgroundColor: "#78100E", borderRadius: "5px", color: "white" }}>
                         <Row>
                             <Col>
                                 <div stlye={{ textAlign: "left", paddingLeft: "10px" }}>
@@ -510,7 +510,7 @@ function NotificationShoppingCartModal(props) {
                         </Col>
                         <Col>
                             <div style={{ textAlign: "center" }}>
-                                <Button style={{ width: "90%", backgroundColor: "#FF4A4F", border: "#FF4A4F", color: "white" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
+                                <Button style={{ width: "90%", backgroundColor: "#78100E", border: "#78100E", color: "white" }} onClick={() => onDeleteShopping()} className={utilStyles.fontContent}>ยืนยัน</Button>
                             </div>
                         </Col>
                     </Row>
