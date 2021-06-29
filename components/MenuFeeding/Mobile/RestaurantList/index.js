@@ -10,115 +10,29 @@ import React, { useEffect } from 'react'
 import MobileFilterRestaurant from '../Filter'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShowFiilterSelected from '../../../ShowFiilterSelected'
-import changeFormatFilter from '../../../../services/changeFormatFilter'
-import checkLogin from '../../../../services/checkLogin'
-import restaurantService from '../../../../services/restaurant'
-import masterDataService from '../../../../services/masterData'
 import EmptyComponent from '../../../Empty'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function RestaurantListMobile(props) {
-    const { loading, location_name, location_id, master_data_list, user_location, current_filter_form } = props
+
+    const { loading, location_name, location_id, master_data_list, user_location, restaurant_list, current_filter_form, location_in_maps, total_result, total_page, current_page } = props
+    const { on_search, filter_search, on_sort } = props
+    const [restaurantCard, setRestaurantCard] = React.useState()
     const [modalShow, setModalShow] = React.useState(false);
-    const [restaurantCard, setRestaurantCard] = React.useState();
-    const [totalResult, setTotalResult] = React.useState(0);
-    const [restaurantList, setRestaurantList] = React.useState([]);
-    const [filter, setFilter] = React.useState({});
-    const [currentFilterForm, setCurrentFilterForm] = React.useState({})
-    const [spinLoading, setSpinLoading] = React.useState(loading)
-    const [currentPage, setCurrentPage] = React.useState(1)
-    const [nextPage, setNextPage] = React.useState(1)
-    const [totalPage, setTotalPage] = React.useState(0)
-    const [sortValue, setSortValue] = React.useState()
-    // limit is number of reataurant list each page 
-    const limit = 10
-    const defaultFilter = {
-        what: null,
-        where: null,
-        food_type: null,
-        payment_option: null,
-        distance: 0,
-        price_to_price_from: '0 0',
-        is_open_now: false,
-        have_parking: false,
-        sort_by: null,
-    }
+
+    useEffect(() => {
+        if (restaurant_list !== undefined) {
+            console.log(restaurant_list)
+            renderRestaurantCard()
+        }
+    }, [restaurant_list])
 
     const searchFunc = () => {
         setModalShow(true)
     }
 
-    useEffect(() => {
-        if (location_name) {
-            
-            if (current_filter_form) {
-                onSearch(JSON.parse(current_filter_form), true)
-            }else{
-                onSearch(defaultFilter, true)
-            }
-        }
-
-    }, [location_name])
-
-    const onSearch = async (filterForm, isLoadMore = false) => {
-        setFilter(filterForm)
-        setCurrentFilterForm(filterForm)
-        setSpinLoading(true)
-        filterForm.business_location = location_id
-        let filter = changeFormatFilter(filterForm)
-        if (filter.distance !== null) {
-            let splitDistanceArray = filter.distance.split(" ")
-            filter.distance = parseFloat(splitDistanceArray[0]) * 1000
-            filter.current_location = user_location
-        } else {
-            filter.current_location = null
-        }
-        filter.business_district = location_id
-
-        let page = nextPage
-        if (isLoadMore === false) {
-            page = 1
-            setNextPage(2)
-        }
-
-        let response = await restaurantService.getRestaurantSearchWithPaging(page, limit, filter)
-        console.log('response', response)
-        let next_page = response.next_page
-        let current_page = response.current_page
-        let totalPage = response.total_page
-        const results = response.results
-        let newRestaurantList = []
-
-        if (results.length > 0) {
-            if (isLoadMore) {
-                newRestaurantList = [...restaurantList, ...results]
-            } else {
-                newRestaurantList = [...results]
-            }
-            console.log(newRestaurantList)
-            if (sortValue) {
-                onSort(sortValue, newRestaurantList)
-            } else {
-                setRestaurantList(newRestaurantList)
-                renderRestaurantCard(newRestaurantList)
-            }
-            setCurrentPage(current_page)
-            if (next_page !== null && isLoadMore) {
-                setNextPage(next_page)
-            }
-            setTotalPage(totalPage)
-            setTotalResult(newRestaurantList.length)
-        } else {
-            setRestaurantList(newRestaurantList)
-            renderRestaurantCard(newRestaurantList)
-            setTotalResult(0)
-            setNextPage(1)
-        }
-
-        setSpinLoading(false)
-    }
-
-    const renderRestaurantCard = (restaurantList) => {
-        let restaurantCard = restaurantList && restaurantList.map((restaurantDetails) => {
+    const renderRestaurantCard = () => {
+        let restaurantCard = restaurant_list && restaurant_list.map((restaurantDetails) => {
             return (
                 <Col xs={12}>
                     <Link
@@ -160,29 +74,11 @@ export default function RestaurantListMobile(props) {
 
         setRestaurantCard(restaurantCard)
     }
-
-
-    const onSort = (sortValue, newRestaurantList = restaurantList) => {
-        setSortValue(sortValue)
-        if (sortValue === 'A-Z') {
-            const sortResult = [].concat(newRestaurantList)
-                .sort((a, b) => a.name > b.name ? 1 : -1)
-            setRestaurantList(sortResult)
-            renderRestaurantCard(sortResult)
-        }
-        if (sortValue === 'Z-A') {
-            const sortResult = [].concat(newRestaurantList)
-                .sort((a, b) => a.name < b.name ? 1 : -1)
-            setRestaurantList(sortResult)
-            renderRestaurantCard(sortResult)
-        }
-    }
-
     return (
         <Layout containerType="mobile" search searchFunc={searchFunc}>
             <Container className={utilStyles.container_sm} >
 
-                <ShowFiilterSelected filter={filter} />
+                <ShowFiilterSelected filter={current_filter_form} />
 
                 <Breadcrumb>
                     <Link href="/menuFeeding" passHref>
@@ -195,7 +91,7 @@ export default function RestaurantListMobile(props) {
                 <Row style={{ padding: "0 10px 10px 10px" }} className={utilStyles.font_size_sm}>
                     <Col xs={5} style={{ margin: "auto" }}>
                         <div>
-                            <b>{totalResult} Results found</b>
+                            <b>{total_result} Results found</b>
                         </div>
                     </Col>
                     <Col xs={7}>
@@ -206,7 +102,7 @@ export default function RestaurantListMobile(props) {
                                 style={{ width: "25vw", textAlign: "left" }}
                                 placeholder="Search to Select"
                                 defaultValue="-"
-                                onChange={(value) => onSort(value)}
+                                onChange={(value) => on_sort(value)}
                             >
                                 <Option value="-">-</Option>
                                 <Option value="A-Z">A-Z</Option>
@@ -218,19 +114,21 @@ export default function RestaurantListMobile(props) {
 
                 {/* List of Restaurant */}
                 <div style={{ width: "100%" }}>
-                    <Spin spinning={spinLoading} tip="Loading...">
+                    <Spin spinning={loading} tip="Loading...">
                         <Row>
                             {
-                                restaurantList.length > 0 ? (
+                                restaurant_list.length > 0 ? (
                                     <>
-                                        {restaurantCard}
-                                        {
-                                            currentPage < totalPage && (
-                                                <div style={{ width: "100%", textAlign: "center" }}>
-                                                    <Button onClick={() => onSearch(currentFilterForm, true)}>Load more</Button>
-                                                </div>
-                                            )
-                                        }
+                                        <InfiniteScroll
+                                            dataLength={restaurant_list.length}
+                                            next={on_search}
+                                            hasMore={total_page === current_page ? false : true}
+                                            loader={
+                                                <div style={{ width: "100%", textAlign: "center" }}> Loading...</div>
+                                            }
+                                        >
+                                            {restaurantCard}
+                                        </InfiniteScroll>
                                     </>
                                 ) : (
                                     <EmptyComponent />
@@ -243,10 +141,10 @@ export default function RestaurantListMobile(props) {
             <MobileFilterRestaurant
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                on_search={(filterForm) => onSearch(filterForm)}
+                on_search={(filterForm) => filter_search(filterForm)}
                 filter_master_data_list={master_data_list}
                 user_location={user_location}
-                initial_filter_form={currentFilterForm}
+                initial_filter_form={current_filter_form}
             />
         </Layout >
     )

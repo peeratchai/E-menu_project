@@ -22,6 +22,7 @@ import PointInMaps from '../../../PointInMaps'
 import moment from 'moment'
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import shoppingCartService from '../../../../services/shoppingCart';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const { Meta } = Cardantd;
 const MenuItem = ({ text, selected }) => {
