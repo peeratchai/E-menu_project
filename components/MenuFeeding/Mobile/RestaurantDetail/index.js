@@ -39,7 +39,6 @@ export default function RestaurantDetailMobile(props) {
     const [restaurantBannerPicture, setRestaurantBannerPicture] = React.useState()
     const [menuSelected, setMenuSelected] = React.useState()
     const [haveShoppingCart, setHaveShoppingCart] = React.useState(false)
-    const [basket, setBasket] = React.useState({ 'order': [], 'total': 0 })
     const [isViewRestaurantFromPromotionPage, setIsViewRestaurantFromPromotionPage] = React.useState(false);
     const [numberOfCartItem, setNumberOfCartItem] = React.useState(0)
     const [totalOfCartItem, setTotalOfCartItem] = React.useState(0)
@@ -192,6 +191,12 @@ export default function RestaurantDetailMobile(props) {
         })
     ]
 
+    const updateShoppingCart = (shoppingCart) => {
+        console.log('update_shopping_cart', shoppingCart)
+        set_shopping_cart(shoppingCart)
+    }
+
+
     const renderMenuList = (categoryList) => {
         let categorySection = categoryList.map((category, categoryIndex) => {
             let styleCard = styles.menu_card
@@ -272,7 +277,7 @@ export default function RestaurantDetailMobile(props) {
     ))
 
     return (
-        <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={basket}>
+        <Layout containerType="mobile" searchFunc={() => console.log('none')} page="restaurantDetails" menuInBasket={numberOfCartItem} >
             <Container className={utilStyles.container_sm}>
                 <Breadcrumb>
                     {
@@ -427,6 +432,7 @@ export default function RestaurantDetailMobile(props) {
                 shopping_cart={shopping_cart}
                 is_initial_cart={is_initial_cart}
                 set_initial_shopping_cart={setInitialShoppingCart}
+                update_shopping_cart={updateShoppingCart}
             />
             <NotificationShoppingCartModal
                 show={notificationModalVisible}

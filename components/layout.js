@@ -54,10 +54,15 @@ export default function Layout(props) {
         if (user) {
             setIsLogin(user.isLoggedIn)
             checkPermission(user)
-            setInitialCart()
+            // setInitialCart()
+            console.log('menuInBasket', menuInBasket)
+            setTotal_menu_in_basket(menuInBasket)
+            generateButtonNavbar(menuInBasket)
+
+        } else {
+            generateButtonNavbar()
         }
         setStyleOfContainer(containerType)
-        generateButtonNavbar()
 
     }, [containerType, page, islogin, menuInBasket, user])
 
@@ -130,6 +135,7 @@ export default function Layout(props) {
     }
 
     const generateButtonNavbar = (countCartItems = total_menu_in_basket) => {
+        console.log('countCartItems', countCartItems)
         let buttonNavbar
         if (page === 'restaurantDetails') {
             buttonNavbar = (

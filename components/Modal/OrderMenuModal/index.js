@@ -31,6 +31,7 @@ export default function OrderMenuModal(props) {
             setTotal(menu_detail.price)
         }
 
+        console.log('is_initial_cart', is_initial_cart)
         if (shopping_cart !== "" && is_initial_cart) {
             console.log(shopping_cart)
             setShoppingCart(shopping_cart)
@@ -44,7 +45,7 @@ export default function OrderMenuModal(props) {
             let newCartItemData = {}
             let newCartItem = []
             console.log(shoppingCart)
-            if (Object.keys(shoppingCart).length === 0) {
+            if (Object.keys(shoppingCart).length === 0 || (shoppingCart.shopping_cart_items && shoppingCart.shopping_cart_items.length === 0)) {
                 newCartItemData = {
                     "restaurant": restaurant_id,
                     "shopping_cart_items": [
