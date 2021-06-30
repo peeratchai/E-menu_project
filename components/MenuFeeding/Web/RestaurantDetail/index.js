@@ -264,7 +264,7 @@ export default function RestaurantDetailWeb(props) {
             if (restaurantOpenNow) {
                 if (shopping_cart !== "") {
                     let restaurantIdOfCart = shopping_cart.restaurant
-                    if (restaurant_id !== restaurantIdOfCart) {
+                    if (restaurant_id !== restaurantIdOfCart && shopping_cart.shopping_cart_items.length > 0) {
                         console.log('have order in shopping cart and not the same restaurant.')
                         setNotificationModalVisible(true)
                     } else {

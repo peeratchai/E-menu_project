@@ -111,7 +111,7 @@ export default function RestaurantDetailMobile(props) {
                 setLocationId(location_id)
             }
             console.log('shopping_cart', shopping_cart)
-            if (Object.keys(shopping_cart).length > 0) {
+            if (shopping_cart.shopping_cart_items && shopping_cart.shopping_cart_items.length > 0) {
                 setInitialShoppingCart(shopping_cart)
             } else {
                 setNumberOfCartItem(0)
@@ -147,7 +147,7 @@ export default function RestaurantDetailMobile(props) {
             if (restaurantOpenNow) {
                 if (shopping_cart !== "") {
                     let restaurantIdOfCart = shopping_cart.restaurant
-                    if (restaurant_id !== restaurantIdOfCart) {
+                    if (restaurant_id !== restaurantIdOfCart && shopping_cart.shopping_cart_items.length > 0) {
                         console.log('have order in shopping cart and not the same restaurant.')
                         setNotificationModalVisible(true)
                     } else {

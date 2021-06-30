@@ -78,7 +78,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
 
     const reduceOrderMenu = (menuIndex) => {
         let existingCartItem = shoppingCartData.shopping_cart_items
-        let newTotal = shoppingCartData.total
         let newCartItem = [...existingCartItem]
         let newCart = { ...shoppingCartData }
         let newTotalPrice = totalPrice
@@ -122,6 +121,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }
 
     const updateShoppingCart = (newCart) => {
+        setLoading(true)
         console.log('newCart', newCart)
         let shopping_cart_items = []
         newCart.shopping_cart_items.forEach((cartItem) => {
@@ -142,7 +142,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         console.log('cartDataForm', cartDataForm)
         shoppingCartService.updateShoppingCart(cartDataForm).then((response) => {
             console.log('response', response)
+            setLoading(false)
         }).catch(error => {
+            setLoading(false)
             console.log('updateShoppingCart error', error)
         })
     }
@@ -260,7 +262,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     <Col >
                                         <MinusOutlined onClick={() => reduceOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                     </Col>
-                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
+                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
                                         {cartItem.quantity}
                                     </Col>
                                     <Col>
@@ -302,7 +304,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     <Col >
                                         <MinusOutlined onClick={() => reduceOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                     </Col>
-                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
+                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
                                         {cartItem.quantity}
                                     </Col>
                                     <Col>
@@ -360,13 +362,15 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                         </div>
                                     )
                                 }
-                                {
-                                    countMenuItems > 0 ? (
-                                        <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                            {MenuListComponentMobile}
-                                        </div>) : <EmptyComponent />
-
-                                }
+                                <Spin spinning={loading}>
+                                    {
+                                        countMenuItems > 0 ? (
+                                            <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                                {MenuListComponentMobile}
+                                            </div>
+                                        ) : <EmptyComponent />
+                                    }
+                                </Spin>
                             </Container>
                         </Layout >
                         {
@@ -433,12 +437,16 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                         </div>
                                     )
                                 }
-                                {
-                                    countMenuItems > 0 ? (
-                                        <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                            {MenuListComponentWeb}
-                                        </div>) : <EmptyComponent />
-                                }
+                                <Spin spinning={loading}>
+                                    {
+                                        countMenuItems > 0 ? (
+                                            <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                                {MenuListComponentWeb}
+                                            </div>
+                                        ) : <EmptyComponent />
+                                    }
+                                </Spin>
+
                             </Container>
                         </Layout >
                         {
