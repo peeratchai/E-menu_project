@@ -12,6 +12,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ShowFiilterSelected from '../../../ShowFiilterSelected'
 import EmptyComponent from '../../../Empty'
 import InfiniteScroll from "react-infinite-scroll-component";
+import moment from 'moment'
 
 export default function RestaurantListMobile(props) {
 
@@ -33,6 +34,10 @@ export default function RestaurantListMobile(props) {
 
     const renderRestaurantCard = () => {
         let restaurantCard = restaurant_list && restaurant_list.map((restaurantDetails) => {
+            let isRestaurantOpenNow = false
+            if (restaurantDetails.current_business_hour && moment(restaurantDetails.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetails.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
+                isRestaurantOpenNow = true
+            }
             return (
                 <Col xs={12}>
                     <Link
@@ -51,7 +56,13 @@ export default function RestaurantListMobile(props) {
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetails.price_from}-{restaurantDetails.price_to}</b></span> baht
                                         </Col>
                                         <Col style={{ color: "#74b100" }}>
-                                            Open now!
+                                            {
+                                                isRestaurantOpenNow ? (
+                                                    <span>Open now!</span>
+                                                ) : (
+                                                    <span>Close now!</span>
+                                                )
+                                            }
                                         </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>

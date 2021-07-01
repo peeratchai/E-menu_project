@@ -211,8 +211,8 @@ export default function Filter(props) {
                 </div>
 
                 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                    <Checkbox value={form.is_open_now} onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
-                    <Checkbox value={form.have_parking} onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
+                    <Checkbox checked={form.is_open_now} onChange={(e) => setform('is_open_now', e.target.checked)} >Open Now</Checkbox>
+                    <Checkbox checked={form.have_parking} onChange={(e) => setform('have_parking', e.target.checked)} >Parking</Checkbox>
                 </div>
 
                 <Button style={{ textAlign: "center", width: "100%", backgroundColor: "#78100E", border: "none" }} className={utilStyles.font_size_md} onClick={() => props.onSearch(form)}>

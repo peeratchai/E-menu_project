@@ -7,8 +7,7 @@ import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Filter from '../Filter'
-import restaurantService from '../../../../services/restaurant'
-import changeFormatFilter from '../../../../services/changeFormatFilter'
+import moment from 'moment'
 import EmptyComponent from '../../../Empty'
 import InfiniteScroll from "react-infinite-scroll-component";
 const { Option } = Select;
@@ -29,6 +28,10 @@ export default function RestaurantListWeb(props) {
 
     const renderRestaurantCard = () => {
         let restaurantCard = restaurant_list && restaurant_list.map((restaurantDetails) => {
+            let isRestaurantOpenNow = false
+            if (restaurantDetails.current_business_hour && moment(restaurantDetails.current_business_hour.opening_time, 'HH.mm').format('HH.mm') < moment().format('HH.mm') && moment(restaurantDetails.current_business_hour.closing_time, 'HH.mm').format('HH.mm') > moment().format('HH.mm')) {
+                isRestaurantOpenNow = true
+            }
             return (
                 <Col md={6}>
                     <Link
@@ -47,7 +50,13 @@ export default function RestaurantListWeb(props) {
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetails.price_from}-{restaurantDetails.price_to}</b></span> baht
                                         </Col>
                                         <Col style={{ color: "#74b100" }}>
-                                            Open now!
+                                            {
+                                                isRestaurantOpenNow ? (
+                                                    <span>Open now!</span>
+                                                ) : (
+                                                    <span>Close now!</span>
+                                                )
+                                            }
                                         </Col>
                                     </Row>
                                     <Row style={{ marginTop: "10px" }}>
@@ -102,7 +111,7 @@ export default function RestaurantListWeb(props) {
                         </Col>
                         <Col>
                             <div style={{ position: "absolute", right: "0" }}>
-                                <b>sort by</b> &nbsp; 
+                                <b>sort by</b> &nbsp;
                                 <Select
                                     showSearch
                                     style={{ width: "150px" }}
