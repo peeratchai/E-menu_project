@@ -75,16 +75,6 @@ const restaurantService = {
         console.log(filterForm)
         console.log('api url', '/api/restaurant / search_with_paging / ' + page + "/" + limit)
         return await sendRequest.post('/api/restaurant/search_with_paging/' + page + "/" + limit, filterForm)
-        // let response = await axios.post('/api/restaurant/search_by_filter/' + page + "/" + limit, data, config)
-        //     .then(function (response) {
-        //         console.log(response)
-        //         return response.data
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error)
-        //         return error
-        //     });
-        // return response
     },
     getLocationSearchByFilter: async function (accessToken, filterForm) {
         let config = {

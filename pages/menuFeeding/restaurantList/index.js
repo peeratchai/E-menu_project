@@ -44,7 +44,7 @@ export default function RestaurantList({ masterData }) {
         have_parking: false,
         sort_by: null,
     }
-    const [currentFilter, setCurrentFilter] = React.useState(defaultFilter)
+    const [currentFilter, setCurrentFilter] = React.useState()
 
     function success(pos) {
         var crd = pos.coords;
