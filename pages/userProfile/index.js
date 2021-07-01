@@ -160,7 +160,7 @@ const UserProfile = ({ user }) => {
     const findProfileFormErrors = () => {
         const { first_name, last_name, age, phoneNumber } = profileForm
         var patternNumber = new RegExp(/^\d+$/);
-        var patternLetters = new RegExp(/^[a-zA-Z]+$/);
+        var patternLetters = new RegExp(/^[^0-9]+$/);
         const newErrors = {}
         // first_name  errors
         if (!patternLetters.test(first_name)) newErrors.first_name = 'Please enter valid first name!'
