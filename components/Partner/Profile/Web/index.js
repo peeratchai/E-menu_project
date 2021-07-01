@@ -286,7 +286,7 @@ export default function WebProfileComponent(props) {
                             <Row style={{ marginBottom: "10px" }}>
                                 <Col>
                                     <div>
-                                        <b>Restaurant Logo</b>
+                                        <b>Restaurant Logo </b>
                                         <Tooltip title="Recommended ratio is 350x180">
                                             <InfoCircleOutlined style={{ color: "orange" }} />
                                         </Tooltip>
