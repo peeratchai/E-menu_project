@@ -51,7 +51,7 @@ export default function Restaurant() {
                     setIsUserSignin(true)
                     let shoppingCart = response
                     setIsInitialCart(true)
-                    if (shoppingCart === "") {
+                    if (shoppingCart === "" || (shoppingCart && shoppingCart.shopping_cart_items.length === 0)) {
                         setShoppingCart(shoppingCart)
                         if (tableId !== undefined) {
                             if (tableName) {

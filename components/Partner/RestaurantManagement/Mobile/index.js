@@ -18,6 +18,7 @@ export default function MobileComponent(props) {
     const [zoneSelected, setZoneSelected] = React.useState({ id: null })
     const [newOrders, setNewOrders] = React.useState([])
     const [inOrders, setInOrders] = React.useState([])
+    const [currentTab, setCurrentTab] = React.useState('newOrder')
     const [completedOrders, setCompletedOrders] = React.useState([])
     const [newOrderSelected, setNewOrderSelected] = React.useState({})
     const [haveNewOrder, setHaveNewOrder] = React.useState(false)
@@ -693,11 +694,37 @@ export default function MobileComponent(props) {
         let zoneDetails = zone.find(zone => zone.id === zoneId)
         console.log(zoneDetails)
         setZoneSelected(zoneDetails)
-        getOrder(zoneDetails)
+        setRestaurantTable(zoneDetails.restaurant_tables)
+        let tableSelected = zoneDetails.restaurant_tables[0].id
+        setTableIdSelected(tableSelected)
+        if (currentTab === 'newOrder') {
+            getNewOrder(tableSelected)
+        } else {
+            if (currentTab === 'inOrder') {
+                getInOrder(tableSelected)
+            } else {
+                if (currentTab === 'completed') {
+                    getCompletedOrder(tableSelected)
+                }
+            }
+        }
     }
 
     const onChangeTable = (tableId) => {
-        getOrder(tableId)
+        if (currentTab === 'newOrder') {
+            getNewOrder(tableId)
+            setCurrentTab('newOrder')
+        } else {
+            if (currentTab === 'inOrder') {
+                getInOrder(tableId)
+                setCurrentTab('inOrder')
+            } else {
+                if (currentTab === 'completed') {
+                    getCompletedOrder(tableId)
+                    setCurrentTab('completed')
+                }
+            }
+        }
         setTableIdSelected(tableId)
     }
 

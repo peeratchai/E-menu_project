@@ -173,13 +173,20 @@ const Partner = ({ user }) => {
                             <div style={{ padding: "15px" }}>
                                 <Select defaultValue="restaurantManagement" value={menuSelected} style={{ width: '100%' }} onChange={(value) => handleChangeMenu(value)}>
                                     <Option value="restaurantManagement">Restaurant Management</Option>
-                                    <Option value="dashboard">Dashboard</Option>
-                                    <Option value="promote">Promote</Option>
-                                    <Option value="promoteList">Promote List</Option>
-                                    <Option value="menu">Menu</Option>
-                                    <Option value="zone">Zone</Option>
-                                    <Option value="profile">Profile</Option>
-                                    <Option value="setting">Setting</Option>
+                                    {
+                                        roles.find((role) => role === 'partner') ? (
+                                            <>
+                                                <Option value="dashboard">Dashboard</Option>
+                                                <Option value="promote">Promote</Option>
+                                                <Option value="promoteList">Promote List</Option>
+                                                <Option value="menu">Menu</Option>
+                                                <Option value="zone">Zone</Option>
+                                                <Option value="profile">Profile</Option>
+                                                <Option value="setting">Setting</Option>
+                                            </>
+                                        ) : notDisplay
+                                    }
+
                                 </Select>
                             </div>
 
