@@ -21,37 +21,44 @@ export default function Profile(props) {
             {
                 'day': 'Monday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '1'
             },
             {
                 'day': 'Tuesday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '2'
             },
             {
                 'day': 'Wednesday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '3'
             },
             {
                 'day': 'Thursday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '4'
             },
             {
                 'day': 'Friday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '5'
             },
             {
                 'day': 'Saturday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '6'
             },
             {
                 'day': 'Sunday',
                 'opening_time': '8.00',
-                'closing_time': '16.00'
+                'closing_time': '16.00',
+                'sequence_number': '7'
             }
         ],
         facebook: '',
@@ -80,37 +87,44 @@ export default function Profile(props) {
         {
             'day': 'Monday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '1'
         },
         {
             'day': 'Tuesday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '2'
         },
         {
             'day': 'Wednesday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '3'
         },
         {
             'day': 'Thursday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '4'
         },
         {
             'day': 'Friday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '5'
         },
         {
             'day': 'Saturday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '6'
         },
         {
             'day': 'Sunday',
             'opening_time': '8.00',
-            'closing_time': '16.00'
+            'closing_time': '16.00',
+            'sequence_number': '7'
         }
     ]
     const [loading, setLoading] = React.useState(false)
@@ -145,7 +159,7 @@ export default function Profile(props) {
         let businessHour
         if (restaurantDetail) {
 
-            if (restaurantDetail.business_hour.length > 0) {
+            if (restaurantDetail.business_hour && restaurantDetail.business_hour.length > 0) {
                 businessHour = restaurantDetail.business_hour
             } else {
                 businessHour = defaultBusinessHour
@@ -258,7 +272,8 @@ export default function Profile(props) {
                     "restaurant": restaurant_id,
                     "day": business_hour.day,
                     "opening_time": parseFloat(business_hour.opening_time.split(":").join(".")),
-                    "closing_time": parseFloat(business_hour.closing_time.split(":").join("."))
+                    "closing_time": parseFloat(business_hour.closing_time.split(":").join(".")),
+                    'sequence_number': business_hour.sequence_number
                 })
             })
             dataForm.business_hour = businessHour

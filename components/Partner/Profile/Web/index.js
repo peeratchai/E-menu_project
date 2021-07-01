@@ -2,8 +2,8 @@ import utilStyles from '../../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, Slider, TimePicker, Space, Spin, Select, Popconfirm, message } from 'antd';
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { Upload, Slider, TimePicker, Space, Spin, Select, Popconfirm, message, Tooltip } from 'antd';
+import { PlusOutlined, UploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import AntdModal from "../../../AntdModal"
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
@@ -287,6 +287,9 @@ export default function WebProfileComponent(props) {
                                 <Col>
                                     <div>
                                         <b>Restaurant Logo</b>
+                                        <Tooltip title="Recommended ratio is 350x180">
+                                            <InfoCircleOutlined style={{ color: "orange" }} />
+                                        </Tooltip>
                                     </div>
                                 </Col>
                             </Row>
@@ -305,7 +308,6 @@ export default function WebProfileComponent(props) {
                                                 beforeUpload={checkBeforeUpload}
                                                 onChange={(e) => uploadRestaurantLogo(e)}
                                                 style={{ width: "100%" }}
-                                            // onPreview={(e) => onPreview(e)}
                                             >
                                                 <Button disabled={disable} icon={<UploadOutlined />} className={utilStyles.cardText} style={{ width: "100%", backgroundColor: "#cfcfcf", color: "black", border: "none" }}>Click to Upload Restaurant Logo</Button>
                                             </Upload>
@@ -318,7 +320,10 @@ export default function WebProfileComponent(props) {
                             <Row style={{ marginBottom: "10px" }}>
                                 <Col>
                                     <div>
-                                        <b>Restaurant Banner Picture</b>
+                                        <b>Restaurant Banner Picture </b>
+                                        <Tooltip title="Recommended ratio is 1300x300">
+                                            <InfoCircleOutlined style={{ color: "orange" }} />
+                                        </Tooltip>
                                     </div>
                                 </Col>
                             </Row>
