@@ -71,10 +71,12 @@ const OrderHistory = ({ user }) => {
                     </Col>
                     <Col xs={9}>
                         <Row>
-                            <Col style={{ fontSize: "14px" }}>
-                                <LocationOnIcon style={{ fontSize: "12px" }} /> {order.restaurant.name}
+                            <Col style={{ fontSize: "14px" }} xs={6}>
+                                <div style={{ textOverflow: "ellipsis", overflow: "hidden", width: "100%", height: "1.2em", whiteSpace: "nowrap" }}>
+                                    <LocationOnIcon style={{ fontSize: "12px", margin: "auto" }} />{order.restaurant.name}
+                                </div>
                             </Col>
-                            <Col >
+                            <Col xs={6}>
                                 <div style={{ textAlign: "right", fontSize: "12px", margin: "auto" }}>
                                     {moment(order.order_date).format('DD MMM YYYY')}
                                 </div>
@@ -116,10 +118,12 @@ const OrderHistory = ({ user }) => {
                     </Col>
                     <Col xs={9} className={utilStyles.font_size_md}>
                         <Row>
-                            <Col>
-                                <LocationOnIcon className={utilStyles.font_size_sm} /> {order.restaurant.name}
+                            <Col xs={8}>
+                                <div style={{ textOverflow: "ellipsis", overflow: "hidden", width: "100%", height: "1.2em", whiteSpace: "nowrap" }}>
+                                    <LocationOnIcon className={utilStyles.font_size_sm} />{order.restaurant.name}
+                                </div>
                             </Col>
-                            <Col >
+                            <Col xs={4}>
                                 <div style={{ textAlign: "right", margin: "auto" }}>
                                     {moment(order.order_date).format('DD MMM YYYY')}
                                 </div>

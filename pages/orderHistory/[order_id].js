@@ -65,16 +65,14 @@ export default function Order(props) {
                                 <b>฿ {order.total}</b>
                             </Col>
                             <Col xs={8} style={{ textAlign: "right" }}>
-                                <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
+                                <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white", cursor: "default" }}>
                                     <Row>
                                         <Col>
-                                            <MinusOutlined style={{ color: "#DEDEDE" }} />
                                         </Col>
-                                        <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "black" }}>
-                                            1
+                                        <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
+                                            {order.quantity}
                                         </Col>
                                         <Col>
-                                            <PlusOutlined style={{ color: "#DEDEDE" }} />
                                         </Col>
                                     </Row>
                                 </Button>
@@ -111,16 +109,14 @@ export default function Order(props) {
                                 <b>฿ {order.total}</b>
                             </Col>
                             <Col xs={8} style={{ textAlign: "right" }}>
-                                <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
+                                <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white", cursor: "default" }}>
                                     <Row>
                                         <Col>
-                                            <MinusOutlined style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                         </Col>
                                         <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
-                                            1
+                                            {order.quantity}
                                         </Col>
                                         <Col>
-                                            <PlusOutlined style={{ fontSize: "12px", color: "#DEDEDE" }} />
                                         </Col>
                                     </Row>
                                 </Button>
@@ -153,6 +149,11 @@ export default function Order(props) {
                                     </Breadcrumb>
                                 </div>
                                 {MobileOrderListComponent}
+                                <div style={{ width: "100%", fontSize: "16px", marginBottom: "10px" }} className="bg-gray-100">
+                                    <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px", textAlign: "right" }}>
+                                        Total Price : {total}
+                                    </div>
+                                </div>
                             </Container>
                         </Layout >
                     </>
