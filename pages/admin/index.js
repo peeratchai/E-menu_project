@@ -243,7 +243,6 @@ const Admin = ({ user }) => {
                                     <Option value="restaurantListManagement">Restaurant List Management</Option>
                                     <Option value="zone">Zone</Option>
                                     <Option value="email">Email</Option>
-                                    <Option value="directMessage">Direct Message</Option>
                                     <Option value="approvePromotion">Approve Promotion</Option>
                                     <Option value="accountManagement">Account Management</Option>
                                     <Option value="businessDistrict">BusinessDistrict</Option>
@@ -323,11 +322,6 @@ const Admin = ({ user }) => {
                             {
                                 menuSelected == 'email' ? (
                                     <SendEmail />
-                                ) : null
-                            }
-                            {
-                                menuSelected == 'directMessage' ? (
-                                    <DirectMessageAdmin />
                                 ) : null
                             }
                             {
