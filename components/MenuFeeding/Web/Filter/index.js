@@ -64,7 +64,7 @@ export default function Filter(props) {
                 console.log('error', error)
             }
         }
-    }, [location_restaurant_in_maps, initial_filter_form])
+    }, [location_restaurant_in_maps, initial_filter_form, user_location])
 
     const setform = (fieldName, value) => {
         setForm({
