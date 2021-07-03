@@ -35,30 +35,29 @@ const handExitComplete = () => {
 
 export default function App({ Component, pageProps }) {
     const router = useRouter()
+    const { liffRedirectUri } = router.query;
+    const liffState = router.query['liff.state']
+    console.log('router.query', router.query)
+    console.log('liffState', liffState)
+    console.log('liffRedirectUri', liffRedirectUri)
 
-    // useEffect(() => {
-    //     if (typeof window !== 'undefined') {
-    //         let newVersion = '11.06.2021 2.19'
-    //         let currentVersion = window.localStorage.getItem('version')
-    //         if (currentVersion) {
-    //             if (currentVersion !== newVersion) {
-    //                 localStorage.clear();
-    //                 window.localStorage.setItem('version', newVersion)
-    //                 window.location.reload();
-    //                 router.push({
-    //                     pathname: "/"
-    //                 })
-    //             }
-    //         } else {
-    //             localStorage.clear();
-    //             window.localStorage.setItem('version', newVersion)
-    //             window.location.reload();
-    //             router.push({
-    //                 pathname: "/"
-    //             })
-    //         }
-    //     }
-    // }, [])
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const pathname = window.location.pathname
+            console.log('pathname', pathname)
+            if (pathname === '/newspaper') {
+                if (liffRedirectUri && liffState) {
+                    console.log('kiki')
+                    router.push({
+                        pathname: liffState,
+                        query: router.query
+                    })
+                }
+            }
+
+        }
+    }, [liffRedirectUri, liffState])
 
     return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
         <Head>

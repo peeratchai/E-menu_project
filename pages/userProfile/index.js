@@ -92,6 +92,7 @@ const UserProfile = ({ user }) => {
 
         if (liffClientId && code && !inProcessLineSignIn) {
             console.log(liffClientId, code)
+            syncWithLine()
         }
     }, [user])
 
@@ -246,7 +247,8 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile/" });
+            // liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile/" });
+            liff.login();
         }
     };
 
