@@ -65,7 +65,7 @@ const sendRequest = {
                 return response.data
             })
             .catch(function (error) {
-                return error.response.status
+                return error.response
             });
     },
 

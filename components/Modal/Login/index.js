@@ -72,10 +72,10 @@ export default function LoginModal(props) {
             let responseSignin = await signinWithSocial(email, userId)
             console.log('responseSignin', responseSignin)
             if (responseSignin === 401) {
-                if (error.data.message === 'Ban User') {
+                if (responseSignin.data.message === 'Ban User') {
                     message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
-                    if (error.data.message === 'Inactive User') {
+                    if (responseSignin.data.message === 'Inactive User') {
                         message.error('This account inactive. Please contact admin to activate account.')
                     } else {
                         //// Don't have a account 
@@ -174,12 +174,12 @@ export default function LoginModal(props) {
 
             console.log('responseSignin', responseSignin);
 
-            if (responseSignin === 401) {
+            if (responseSignin.status === 401) {
 
-                if (error.data.message === 'Ban User') {
+                if (responseSignin.data.message === 'Ban User') {
                     message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
-                    if (error.data.message === 'Inactive User') {
+                    if (responseSignin.data.message === 'Inactive User') {
                         message.error('This account inactive. Please contact admin to activate account.')
                     } else {
                         let api_url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${accessToken}`
