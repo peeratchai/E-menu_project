@@ -247,8 +247,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            // liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile/" });
-            liff.login();
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile/" });
         }
     };
 
