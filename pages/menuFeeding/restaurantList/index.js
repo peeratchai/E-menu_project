@@ -94,7 +94,7 @@ export default function RestaurantList({ masterData }) {
         if (filter.distance && filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
             filter.distance = parseFloat(splitDistanceArray[0]) * 1000
-            filter.current_location = user_location
+            filter.current_location = userLocation
         } else {
             filter.current_location = null
         }

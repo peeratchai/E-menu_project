@@ -77,7 +77,7 @@ export default function LoginModal(props) {
                     "email": email,
                     "username": email,
                     "social_id": userId,
-                    "first_name": null,
+                    "first_name": displayName,
                     "last_name": null,
                     "avatar": pictureUrl,
                     "signup_type": 'line'
