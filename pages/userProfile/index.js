@@ -237,8 +237,12 @@ const UserProfile = ({ user }) => {
                 console.log('response', response)
                 message.success('Sync with line successful.')
             }).catch(error => {
-                console.log('error', error)
-                message.success('Cannot sync with line!. Please try again.')
+                console.log('error', error.response)
+                if (error && error.response) {
+                    if (error.response.status === 409) {
+                        message.error('Line account already registered.')
+                    }
+                }
             })
 
         } else {
