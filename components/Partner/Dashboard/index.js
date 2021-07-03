@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import { Row, Col, Image } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { DatePicker, Button, Spin } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
 import moment from 'moment'
 import partnerSerivce from '../../../services/partner';
 import EmptyComponent from '../../Empty'
@@ -20,6 +20,14 @@ export default function Dashboard(props) {
     const [tableSelectedNumber, setTableSelectedNumber] = React.useState()
     const [csvData, setCsvData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+    const [disable, setDisable] = React.useState(true)
+
+    useEffect(() => {
+        if (restaurant_id) {
+            setDisable(false)
+        }
+    }, [restaurant_id])
+
     const onChangePeriod = (date, dateString) => {
         const startTime = "00:00:00";
         const endTime = "23:59:59";
@@ -243,7 +251,7 @@ export default function Dashboard(props) {
                             </Col>
                         </Row>
                     </div>
-                    <RangePicker onChange={onChangePeriod} style={{ width: "100%" }} />
+                    <RangePicker onChange={onChangePeriod} style={{ width: "100%" }} disabled={disable} />
                 </div>
                 <Spin spinning={loading} tip="Loading...">
                     {

@@ -10,6 +10,7 @@ import DirectMessageAdmin from '../../components/DirectMessageAdmin'
 import termAgreement from '../../utils/termAgreement.json'
 import AccountManagement from '../../components/Admin/AccountManagement'
 import RestaurantManagement from '../../components/Partner/RestaurantManagement'
+import Dashboard from '../../components/Partner/Dashboard'
 import SelectRestaurant from '../../components/SelectRestaurant'
 import restaurantService from '../../services/restaurant'
 import Promote from '../../components/Partner/Promote'
@@ -36,7 +37,7 @@ const Admin = ({ user }) => {
     const [restaurantList, setRestaurantList] = React.useState([]);
     const [loadingRestaurantList, setLoadingRestaurantList] = React.useState(false);
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
-    const restaurantfeature = ["restaurantManagement", "promote", "menu", "profile", "zone"]
+    const restaurantfeature = ["restaurantManagement", "dashboard", "promote", "menu", "profile", "zone"]
     const [userProfile, setUserProfile] = React.useState()
 
     useEffect(() => {
@@ -91,6 +92,9 @@ const Admin = ({ user }) => {
                                                 <Nav.Link eventKey="restaurantManagement">Table Management</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
+                                                <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
                                                 <Nav.Link eventKey="promote">Promote</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
@@ -112,16 +116,16 @@ const Admin = ({ user }) => {
                                                 <Nav.Link eventKey="approvePromotion">Approve Promotion</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="accountManagement">Account Management</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
                                                 <Nav.Link eventKey="businessDistrict">Business District Management</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="banUser">Ban user</Nav.Link>
+                                                <Nav.Link eventKey="viewContactUs">View Contact Us</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="viewContactUs">View Contact Us</Nav.Link>
+                                                <Nav.Link eventKey="accountManagement">Account Management</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="banUser">Ban user</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="foodData">Food Data</Nav.Link>
@@ -149,6 +153,13 @@ const Admin = ({ user }) => {
                                                     <RestaurantManagement
                                                         restaurant_id={restaurantId}
                                                         current_tab={currentTab}
+                                                    />
+                                                </Spin>
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="dashboard">
+                                                <Spin spinning={loadingRestaurantList} tip="Loading...">
+                                                    <Dashboard
+                                                        restaurant_id={restaurantId}
                                                     />
                                                 </Spin>
                                             </Tab.Pane>
@@ -195,7 +206,8 @@ const Admin = ({ user }) => {
                                             <Tab.Pane eventKey="accountManagement">
                                                 <AccountManagement
                                                     restaurant_list={restaurantList}
-                                                    user_profile={userProfile}
+                                                    current_user_profile={userProfile}
+                                                    current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="businessDistrict">

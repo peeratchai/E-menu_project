@@ -10,14 +10,13 @@ import profileService from '../../../services/profile'
 import fetchJson from '../../../lib/fetchJson'
 
 export default function AccountManagement(props) {
-    const { restaurant_list, user_profile } = props
+    const { restaurant_list, current_user_profile, current_tab } = props
     const [edifProfileModalShow, setEdifProfileModalShow] = React.useState();
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
     const [userProfilesData, setUserProfilesData] = React.useState();
     const [profileSelected, setProfileSelected] = React.useState();
     const [loading, setLoading] = React.useState(false);
-    console.log('user_profile', user_profile)
     var searchInput = React.createRef();
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -32,12 +31,14 @@ export default function AccountManagement(props) {
     };
 
     useEffect(() => {
-        getAllUserProfile()
-    }, [])
+        if (current_tab && current_tab === 'accountManagement') {
+            getAllUserProfile()
+        }
+    }, [current_tab])
 
     const getAllUserProfile = async () => {
         setLoading(true)
-        let allProfile = await adminService.getProfileUser()
+        let allProfile = await adminService.getProfileAllUser()
         let userProfilesData = []
         let restaurant_employee = null
         let restaurant_name = null
@@ -72,8 +73,12 @@ export default function AccountManagement(props) {
                     avatar_url: profile.avatar_url,
                     phone_number: profile.phone_number,
                     is_active: profile.is_active,
+                    facebookId: profile.facebook_id,
+                    lineId: profile.line_id,
                     restaurant_employee: restaurant_employee,
-                    restaurant_name: restaurant_name
+                    restaurant_name: restaurant_name,
+                    ban: profile.ban,
+                    banStatus: profile.ban === null ? 'Active' : 'Baned'
                 })
             })
             setUserProfilesData(userProfilesData)
@@ -141,11 +146,51 @@ export default function AccountManagement(props) {
         setEdifProfileModalShow(true)
     }
 
+    const banUser = (profile) => {
+        setLoading(true)
+        let data = {
+            "user": profile.userId
+        }
+        console.log('data', data)
+        adminService.addUserBan(data).then((response) => {
+            setLoading(false)
+            console.log('response', response)
+            message.success('Ban the user successful.')
+            getAllUserProfile()
+        }).catch(error => {
+            setLoading(false)
+            console.log('error', error)
+            message.error('Cannot ban user! Please try again.')
+        })
+    }
+
+    const confirmActiveUser = (profile) => {
+        setLoading(true)
+        let banId = profile.ban && profile.ban.id
+        console.log('banId', banId)
+        adminService.deleteUserBan(banId).then((response) => {
+            setLoading(false)
+            console.log('response', response)
+            message.success('Active user successful.')
+            getAllUserProfile()
+        }).catch(error => {
+            setLoading(false)
+            console.log('Confirm activeUser error', error)
+            message.error('Cannot active user.')
+        })
+    }
+
     const columnsAccount = [
         {
             title: 'No',
             dataIndex: 'No',
             key: 'No',
+        },
+        {
+            title: 'User ID',
+            dataIndex: 'userId',
+            key: 'userId',
+            ...getColumnSearchProps('userId'),
         },
         {
             title: 'Username',
@@ -182,6 +227,21 @@ export default function AccountManagement(props) {
             key: 'age',
         },
         {
+            title: 'Facebook ID',
+            dataIndex: 'facebookId',
+            key: 'facebookId',
+        },
+        {
+            title: 'Line ID',
+            dataIndex: 'lineId',
+            key: 'lineId',
+        },
+        {
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+        },
+        {
             title: 'Role',
             dataIndex: 'roles',
             key: 'roles',
@@ -194,6 +254,22 @@ export default function AccountManagement(props) {
             }
         },
         {
+            title: 'Ban status',
+            dataIndex: 'banStatus',
+            key: 'banStatus',
+            filters: [
+                {
+                    text: 'Active',
+                    value: 'Active',
+                },
+                {
+                    text: 'Baned',
+                    value: 'Baned',
+                },
+            ],
+            onFilter: (value, record) => record.banStatus.indexOf(value) === 0,
+        },
+        {
             title: 'Action',
             key: 'action',
             render: (profile, record) => (
@@ -201,17 +277,29 @@ export default function AccountManagement(props) {
                     <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => onEditProfile(profile)}>
                         Edit
                     </Tag>
-                    <Popconfirm
+                    {
+                        profile.ban !== null ? (
+                            <Tag color="green" key={record.length} style={{ cursor: "pointer" }} onClick={() => confirmActiveUser(profile)}>
+                                Active
+                            </Tag>
+                        ) : (
+                            <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} onClick={() => banUser(profile)} >
+                                Ban
+                            </Tag>
+                        )
+                    }
+                    < Popconfirm
                         title="Are you sure to delete this account?"
-                        onConfirm={() => onDeleteAccount(profile)}
+                        onConfirm={() => onDeleteAccount(profile)
+                        }
                         okText="Yes"
                         cancelText="No"
                     >
                         <Tag color="red" key={record.length + 1} style={{ cursor: "pointer" }} >
                             Delete
                         </Tag>
-                    </Popconfirm>
-                </Space>
+                    </Popconfirm >
+                </Space >
             ),
         }
     ]
@@ -235,8 +323,8 @@ export default function AccountManagement(props) {
         if (responseProfile) {
             message.success('Edit profile successful.')
             console.log('profile.userId', profile.userId)
-            console.log('user_profile.id', user_profile.id)
-            if (profile.userId === user_profile.id) {
+            console.log('current_user_profile.id', current_user_profile.id)
+            if (profile.userId === current_user_profile.id) {
                 await signOut()
             } else {
                 getAllUserProfile()
@@ -270,7 +358,7 @@ export default function AccountManagement(props) {
                 profile={profileSelected}
                 restaurant_list={restaurant_list}
                 get_all_user_profile={getAllUserProfile}
-                user_profile={user_profile}
+                current_user_profile={current_user_profile}
             />
         </>
     )
