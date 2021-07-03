@@ -29,8 +29,8 @@ export default function LocationListWeb(props) {
         payment_option: null,
         distance: 0,
         price_to_price_from: '0 0',
-        is_open_now: false,
-        have_parking: false,
+        is_open_now: null,
+        have_parking: null,
         sort_by: null,
     })
 
@@ -46,26 +46,8 @@ export default function LocationListWeb(props) {
 
     const getInitialData = async () => {
         setLoading(true)
-        await getLocationList()
+        await onSearch()
         await getFilterMasterData()
-    }
-
-    const getLocationList = async () => {
-        restaurantService.getLocationList().then((LocationList) => {
-            setLocationList(LocationList)
-            setMaps(LocationList)
-            let totalResult = 0
-            LocationList.forEach((locationDetails) => {
-                if (locationDetails.total > 0) {
-                    totalResult++
-                }
-            })
-            setTotalResult(totalResult)
-            setLoading(false)
-        }).catch(error => {
-            console.log(error)
-            message.error('Cannot connect server.')
-        })
     }
 
     const getFilterMasterData = async () => {
@@ -116,7 +98,7 @@ export default function LocationListWeb(props) {
         }
     }
 
-    const onSearch = async (filterForm) => {
+    const onSearch = async (filterForm = currentFilterForm) => {
         setLoading(true)
         console.log('filterForm', filterForm)
         setCurrentFilterForm(filterForm)

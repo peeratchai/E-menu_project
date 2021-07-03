@@ -38,10 +38,10 @@ export default function RestaurantList({ masterData }) {
         where: null,
         food_type: null,
         payment_option: null,
-        distance: 0,
+        distance: null,
         price_to_price_from: '0 0',
-        is_open_now: false,
-        have_parking: false,
+        is_open_now: null,
+        have_parking: null,
         sort_by: null,
     }
     const [currentFilter, setCurrentFilter] = React.useState()
@@ -113,6 +113,7 @@ export default function RestaurantList({ masterData }) {
             let next_page = response.next_page
             let current_page = response.current_page
             let totalPage = response.total_page
+            let totalResult = response.total
             const results = response.results
             let newRestaurantList = []
             if (results.length > 0) {
@@ -132,7 +133,7 @@ export default function RestaurantList({ masterData }) {
                     setNextPage(next_page)
                 }
                 setTotalPage(totalPage)
-                setTotalResult(newRestaurantList.length)
+                setTotalResult(totalResult)
             } else {
                 setRestaurantList(newRestaurantList)
                 setTotalResult(0)

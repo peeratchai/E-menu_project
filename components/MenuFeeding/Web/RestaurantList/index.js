@@ -18,7 +18,6 @@ export default function RestaurantListWeb(props) {
     const { on_search, filter_search, on_sort } = props
     const [restaurantCard, setRestaurantCard] = React.useState()
 
-
     useEffect(() => {
         if (restaurant_list !== undefined) {
             console.log(restaurant_list)

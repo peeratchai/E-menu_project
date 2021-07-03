@@ -78,7 +78,7 @@ export default function AccountManagement(props) {
                     restaurant_employee: restaurant_employee,
                     restaurant_name: restaurant_name,
                     ban: profile.ban,
-                    banStatus: profile.ban === null ? 'Active' : 'Baned'
+                    banStatus: profile.ban === null ? 'Active' : 'Banned'
                 })
             })
             setUserProfilesData(userProfilesData)
@@ -263,8 +263,8 @@ export default function AccountManagement(props) {
                     value: 'Active',
                 },
                 {
-                    text: 'Baned',
-                    value: 'Baned',
+                    text: 'Banned',
+                    value: 'Banned',
                 },
             ],
             onFilter: (value, record) => record.banStatus.indexOf(value) === 0,
