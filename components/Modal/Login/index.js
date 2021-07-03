@@ -71,7 +71,7 @@ export default function LoginModal(props) {
 
             let responseSignin = await signinWithSocial(email, userId)
             console.log('responseSignin', responseSignin)
-            if (responseSignin === 401) {
+            if (responseSignin.status === 401) {
                 if (responseSignin.data.message === 'Ban User') {
                     message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
@@ -175,7 +175,6 @@ export default function LoginModal(props) {
             console.log('responseSignin', responseSignin);
 
             if (responseSignin.status === 401) {
-
                 if (responseSignin.data.message === 'Ban User') {
                     message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
