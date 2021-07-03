@@ -51,6 +51,14 @@ export default function RestaurantList({ masterData }) {
         let userLocation = `POINT(${crd.latitude + " " + crd.longitude})`
         console.log('userLocation', userLocation)
         setUserLocation(userLocation)
+
+        if (currentFilterForm) {
+            onSearch(JSON.parse(currentFilterForm), true, userLocation)
+            console.log('currentFilterForm')
+        } else {
+            onSearch(defaultFilter, true)
+            console.log('defaultFilter')
+        }
     }
 
     function error(err) {
@@ -69,15 +77,18 @@ export default function RestaurantList({ masterData }) {
             } else {
                 setLoading(true)
                 getFilterMasterData()
-                if (currentFilterForm) {
-                    onSearch(JSON.parse(currentFilterForm), true)
-                } else {
-                    onSearch(defaultFilter, true)
-                }
+
 
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(success, error, options)
                 } else {
+                    if (currentFilterForm) {
+                        onSearch(JSON.parse(currentFilterForm), true)
+                        console.log('currentFilterForm')
+                    } else {
+                        onSearch(defaultFilter, true)
+                        console.log('defaultFilter')
+                    }
                     alert('Sorry Not available!');
                 }
             }
@@ -85,16 +96,17 @@ export default function RestaurantList({ masterData }) {
 
     }, [router.isReady])
 
-    const onSearch = async (filterForm = defaultFilter, isLoadMore = false) => {
+    const onSearch = async (filterForm = defaultFilter, isLoadMore = false, currentUserLocation = userLocation) => {
         setCurrentFilter(filterForm)
         setLoading(true)
         let filter = { ...filterForm }
         filter = changeFormatFilter(filter)
         console.log('filter', filter)
+        console.log('userLocation', userLocation)
         if (filter.distance && filter.distance !== null) {
             let splitDistanceArray = filter.distance.split(" ")
             filter.distance = parseFloat(splitDistanceArray[0]) * 1000
-            filter.current_location = userLocation
+            filter.current_location = currentUserLocation
         } else {
             filter.current_location = null
         }
@@ -169,7 +181,7 @@ export default function RestaurantList({ masterData }) {
         setLocationInMaps(LocationInMaps)
     }
 
-    const onSort = (sortValue , newRestaurantList = restaurantList) => {
+    const onSort = (sortValue, newRestaurantList = restaurantList) => {
         setSortValue(sortValue)
         if (sortValue === 'A-Z') {
             const sortResult = [].concat(newRestaurantList)
