@@ -27,6 +27,7 @@ export default function LoginModal(props) {
     const [isRememberMe, setIsRememberMe] = React.useState(false);
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
+    const [autoSigninWithLine, setAutoSigninWithLine] = React.useState(true)
     const [title] = React.useState({ 'login': 'Login', 'register': 'Register', 'forgotPassword': 'Forgot Your Password ?' });
     const notDisplay = null
 
@@ -39,9 +40,10 @@ export default function LoginModal(props) {
             }
         }
         if (user) {
-            if (liff_client_id && liff_client_id !== null && !user.isLoggedIn && !inProcessLineSignIn) {
+            if (liff_client_id && liff_client_id !== null && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
                 //// Automate signin with line when receive liff_client_id from line and user not yet login
                 signInwithLine()
+                setAutoSigninWithLine(false)
             }
         }
 
