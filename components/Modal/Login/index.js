@@ -107,25 +107,28 @@ export default function LoginModal(props) {
                 }
 
             } else {
-                //// Have already a account 
+                if (responseSignin === 409) {
+                    message.error('This account has been banned. Please contact admin to activate account.')
+                } else {
+                    //// Have already a account 
+                    let accessToken = responseSignin.accessToken
 
-                let accessToken = responseSignin.accessToken
+                    await mutateUser(
+                        fetchJson('/api/saveToken', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ accessToken: accessToken }),
+                        })
+                    )
+                    localStorage.setItem('accessToken', accessToken)
 
-                await mutateUser(
-                    fetchJson('/api/saveToken', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ accessToken: accessToken }),
-                    })
-                )
-                localStorage.setItem('accessToken', accessToken)
+                    props.onHide()
+                    props.setlogin(true)
+                    props.check_permission()
+                    message.success('Sign-in successful.')
 
-                props.onHide()
-                props.setlogin(true)
-                props.check_permission()
-                message.success('Sign-in successful.')
-
-                window.location.reload()
+                    window.location.reload()
+                }
             }
             setLoading(false)
             setInProcessLineSignIn(false)
@@ -203,20 +206,24 @@ export default function LoginModal(props) {
 
             } else {
 
-                let accessToken = responseSignin.accessToken
-                await mutateUser(
-                    fetchJson('/api/saveToken', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ accessToken: accessToken }),
-                    })
-                )
-                localStorage.setItem('accessToken', accessToken)
-                props.onHide()
-                props.setlogin(true)
-                props.check_permission()
-                message.success('Sign-in successful.')
-
+                if (responseSignin === 409) {
+                    message.error('This account has been banned. Please contact admin to activate account.')
+                }else{
+                    let accessToken = responseSignin.accessToken
+                    await mutateUser(
+                        fetchJson('/api/saveToken', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ accessToken: accessToken }),
+                        })
+                    )
+                    localStorage.setItem('accessToken', accessToken)
+                    props.onHide()
+                    props.setlogin(true)
+                    props.check_permission()
+                    message.success('Sign-in successful.')
+    
+                }
                 // window.location.reload()
             }
 
