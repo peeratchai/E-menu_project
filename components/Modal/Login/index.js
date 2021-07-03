@@ -72,63 +72,67 @@ export default function LoginModal(props) {
             let responseSignin = await signinWithSocial(email, userId)
             console.log('responseSignin', responseSignin)
             if (responseSignin === 401) {
-                //// Don't have a account 
-                let signupForm = {
-                    "email": email,
-                    "username": email,
-                    "social_id": userId,
-                    "first_name": displayName,
-                    "last_name": null,
-                    "avatar": pictureUrl,
-                    "signup_type": 'line'
-                }
-
-                let responseSignup = await signupWithSocial(signupForm)
-                console.log('responseSignup', responseSignup)
-
-                if (responseSignup) {
-                    let accessToken = responseSignup.accessToken
-
-                    await mutateUser(
-                        fetchJson('/api/saveToken', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ accessToken: accessToken }),
-                        })
-                    )
-                    localStorage.setItem('accessToken', accessToken)
-
-                    props.onHide()
-                    props.setlogin(true)
-                    // window.location.reload()
-                    message.success('Sign-in successful.')
-                } else {
-                    message.error('Cannot sign-up with social.')
-                }
-
-            } else {
-                if (responseSignin === 409) {
+                if (error.data.message === 'Ban User') {
                     message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
-                    //// Have already a account 
-                    let accessToken = responseSignin.accessToken
+                    if (error.data.message === 'Inactive User') {
+                        message.error('This account inactive. Please contact admin to activate account.')
+                    } else {
+                        //// Don't have a account 
+                        let signupForm = {
+                            "email": email,
+                            "username": email,
+                            "social_id": userId,
+                            "first_name": displayName,
+                            "last_name": null,
+                            "avatar": pictureUrl,
+                            "signup_type": 'line'
+                        }
 
-                    await mutateUser(
-                        fetchJson('/api/saveToken', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ accessToken: accessToken }),
-                        })
-                    )
-                    localStorage.setItem('accessToken', accessToken)
+                        let responseSignup = await signupWithSocial(signupForm)
+                        console.log('responseSignup', responseSignup)
 
-                    props.onHide()
-                    props.setlogin(true)
-                    props.check_permission()
-                    message.success('Sign-in successful.')
+                        if (responseSignup) {
+                            let accessToken = responseSignup.accessToken
 
-                    window.location.reload()
+                            await mutateUser(
+                                fetchJson('/api/saveToken', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ accessToken: accessToken }),
+                                })
+                            )
+                            localStorage.setItem('accessToken', accessToken)
+
+                            props.onHide()
+                            props.setlogin(true)
+                            // window.location.reload()
+                            message.success('Sign-in successful.')
+                        } else {
+                            message.error('Cannot sign-up with social.')
+                        }
+                    }
                 }
+            } else {
+
+                //// Have already a account 
+                let accessToken = responseSignin.accessToken
+
+                await mutateUser(
+                    fetchJson('/api/saveToken', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken: accessToken }),
+                    })
+                )
+                localStorage.setItem('accessToken', accessToken)
+
+                props.onHide()
+                props.setlogin(true)
+                props.check_permission()
+                message.success('Sign-in successful.')
+
+                window.location.reload()
             }
             setLoading(false)
             setInProcessLineSignIn(false)
@@ -171,44 +175,52 @@ export default function LoginModal(props) {
             console.log('responseSignin', responseSignin);
 
             if (responseSignin === 401) {
-                let api_url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${accessToken}`
-                const { first_name, last_name } = await authentication.getUserProfileFacebook(api_url)
 
-                let signupForm = {
-                    "email": email,
-                    "username": email,
-                    "social_id": id,
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "avatar": picture.data.url,
-                    "signup_type": 'facebook'
-                }
-
-                let responseSignup = await signupWithSocial(signupForm)
-                if (responseSignup !== 401) {
-                    let accessToken = responseSignup.accessToken
-                    await mutateUser(
-                        fetchJson('/api/saveToken', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ accessToken: accessToken }),
-                        })
-                    )
-                    localStorage.setItem('accessToken', accessToken)
-
-                    props.onHide()
-                    props.setlogin(true)
-                    // window.location.reload()
-                    message.success('Sign-in successful.')
+                if (error.data.message === 'Ban User') {
+                    message.error('This account has been banned. Please contact admin to activate account.')
                 } else {
-                    message.error('Cannot sign-up with social.')
-                }
+                    if (error.data.message === 'Inactive User') {
+                        message.error('This account inactive. Please contact admin to activate account.')
+                    } else {
+                        let api_url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${accessToken}`
+                        const { first_name, last_name } = await authentication.getUserProfileFacebook(api_url)
 
+                        let signupForm = {
+                            "email": email,
+                            "username": email,
+                            "social_id": id,
+                            "first_name": first_name,
+                            "last_name": last_name,
+                            "avatar": picture.data.url,
+                            "signup_type": 'facebook'
+                        }
+
+                        let responseSignup = await signupWithSocial(signupForm)
+                        if (responseSignup !== 401) {
+                            let accessToken = responseSignup.accessToken
+                            await mutateUser(
+                                fetchJson('/api/saveToken', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ accessToken: accessToken }),
+                                })
+                            )
+                            localStorage.setItem('accessToken', accessToken)
+
+                            props.onHide()
+                            props.setlogin(true)
+                            // window.location.reload()
+                            message.success('Sign-in successful.')
+                        } else {
+                            message.error('Cannot sign-up with social.')
+                        }
+                    }
+                }
             } else {
 
                 if (responseSignin === 409) {
                     message.error('This account has been banned. Please contact admin to activate account.')
-                }else{
+                } else {
                     let accessToken = responseSignin.accessToken
                     await mutateUser(
                         fetchJson('/api/saveToken', {
@@ -222,7 +234,7 @@ export default function LoginModal(props) {
                     props.setlogin(true)
                     props.check_permission()
                     message.success('Sign-in successful.')
-    
+
                 }
                 // window.location.reload()
             }
