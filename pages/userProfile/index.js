@@ -48,6 +48,7 @@ const UserProfile = ({ user }) => {
     const { mutateUser } = checkUserPermission()
     const router = useRouter()
     const { liffClientId, code } = router.query;
+    console.log('router.query', router.query)
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
     const [userIsCustomer, setUserIsCustomer] = React.useState(false)
@@ -90,10 +91,12 @@ const UserProfile = ({ user }) => {
             }
         }
 
-        // if (liffClientId && code && !inProcessLineSignIn) {
-        //     console.log(liffClientId, code)
-        //     syncWithLine()
-        // }
+        console.log(liffClientId, code)
+
+        if (liffClientId && code && !inProcessLineSignIn) {
+            console.log(liffClientId, code)
+            // syncWithLine()
+        }
     }, [user])
 
     const onChangeGender = (e) => {
@@ -247,7 +250,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/?liff.state=%2FuserProfile" });
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile?key1=kiki" });
         }
     };
 
