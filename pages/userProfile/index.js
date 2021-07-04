@@ -49,6 +49,7 @@ const UserProfile = ({ user }) => {
     const router = useRouter()
     const { liffClientId, code } = router.query;
     console.log('router.query', router.query)
+    const [autoSigninWithLine, setAutoSigninWithLine] = React.useState(true)
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
     const [userIsCustomer, setUserIsCustomer] = React.useState(false)
@@ -93,9 +94,10 @@ const UserProfile = ({ user }) => {
 
         console.log(liffClientId, code)
 
-        if (liffClientId && code && !inProcessLineSignIn) {
+        if (liffClientId && code && !inProcessLineSignIn && autoSigninWithLine) {
             console.log(liffClientId, code)
-            // syncWithLine()
+            syncWithLine()
+            setAutoSigninWithLine(false)
         }
     }, [user])
 

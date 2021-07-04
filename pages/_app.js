@@ -35,7 +35,7 @@ const handExitComplete = () => {
 
 export default function App({ Component, pageProps }) {
     const router = useRouter()
-    const { liffRedirectUri } = router.query;
+    const { liffRedirectUri, code, liffClientId } = router.query;
     const liffState = router.query['liff.state']
     console.log('router.query', router.query)
     console.log('liffState', liffState)
@@ -45,13 +45,14 @@ export default function App({ Component, pageProps }) {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const pathname = window.location.pathname
+            const lineParams = { code: code, liffClientId: liffClientId }
             console.log('pathname', pathname)
             if (pathname === '/newspaper') {
                 if (liffRedirectUri && liffState) {
-                    console.log('kiki')
+                    console.log('lineParams')
                     router.push({
                         pathname: liffState,
-                        query: router.query
+                        query: lineParams
                     })
                 }
             }
