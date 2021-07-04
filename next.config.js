@@ -9,6 +9,16 @@ module.exports = {
                 source: '/',
                 destination: '/newspaper',
                 permanent: true,
+            },
+            {
+                source: '/liff/newspaper',
+                destination: '/newspaper',
+                permanent: true,
+            },
+            {
+                source: '/liff/userProfile',
+                destination: '/userProfile',
+                permanent: true,
             }
         ]
     },
