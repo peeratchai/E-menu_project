@@ -62,7 +62,14 @@ export default function RestaurantList({ masterData }) {
     }
 
     function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
+        console.log(`ERROR(${err.code}): ${err.message}`);
+        if (currentFilterForm) {
+            onSearch(JSON.parse(currentFilterForm), true)
+            console.log('currentFilterForm')
+        } else {
+            onSearch(defaultFilter, true)
+            console.log('defaultFilter')
+        }
     }
 
     useEffect(async () => {
@@ -80,6 +87,7 @@ export default function RestaurantList({ masterData }) {
 
 
                 if (navigator.geolocation) {
+                    console.log('kiki')
                     navigator.geolocation.getCurrentPosition(success, error, options)
                 } else {
                     if (currentFilterForm) {

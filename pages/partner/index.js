@@ -115,6 +115,7 @@ const Partner = ({ user }) => {
                                                 current_tab={currentTab}
                                                 restaurant_name={restaurantName}
                                                 type="partner"
+                                                current_user_roles={roles}
                                             />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="dashboard">

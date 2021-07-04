@@ -11,7 +11,8 @@ import utilStyles from '../../../../styles/utils.module.css'
 import Link from 'next/link'
 
 export default function WebComponent(props) {
-    const { zone, restaurant_id, restaurant_name, zone_number_selected, type } = props
+    const { zone, restaurant_id, restaurant_name, zone_number_selected, type, current_user_roles } = props
+    console.log('current_user_roles', current_user_roles)
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -20,7 +21,6 @@ export default function WebComponent(props) {
     const [addTableModalShow, setAddTableModalShow] = React.useState(false);
     const [tableSelected, setTableSelected] = React.useState({ id: null, name: '' });
     const [viewOrderModalShow, setViewOrderModalShow] = React.useState(false);
-    const [dragging, setDragging] = React.useState(false);
     const [zoneNumberSelected, setZoneNumberSelected] = React.useState(zone_number_selected);
     const [zoneSelected, setZoneSelected] = React.useState()
     const [disable, setDisable] = React.useState(true)
@@ -104,11 +104,6 @@ export default function WebComponent(props) {
 
         let position_x = data.x
         let position_y = data.y
-        // if (!dragging) {
-        //     onClickTable(tableData)
-        // }
-        setDragging(false)
-
         let tables = [...table]
         let tempTable = {
             ...tables[tableIndex],
@@ -179,7 +174,6 @@ export default function WebComponent(props) {
             bounds="parent"
             defaultPosition={{ x: 0, y: 0 }}
             position={{ x: table.position_x, y: table.position_y }}
-            onDrag={() => setDragging(true)}
             onStop={(event, data) => onStop(event, data, table, tableIndex)}
         >
             <div style={{ position: "absolute", width: containerWidth / 10, height: containerHeight / 5, cursor: "pointer", backgroundImage: `url(${table.image})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: 'contain' }}  >
@@ -266,14 +260,19 @@ export default function WebComponent(props) {
                     </Form>
                 </Col>
                 <Col xs={6}>
-                    <div style={{ textAlign: "right" }}>
-                        <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
-                            New table
-                        </Button>
-                        <Button disabled={disable} onClick={() => updatePositionTable()}>
-                            Save table position
-                        </Button>
-                    </div>
+                    {
+                        current_user_roles && current_user_roles.find((roles) => roles === 'partner') && (
+                            <div style={{ textAlign: "right" }}>
+                                <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
+                                    New table
+                                </Button>
+                                <Button disabled={disable} onClick={() => updatePositionTable()}>
+                                    Save table position
+                                </Button>
+                            </div>
+                        )
+                    }
+
                 </Col>
             </Row>
             <Row>

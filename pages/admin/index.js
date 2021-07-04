@@ -39,11 +39,14 @@ const Admin = ({ user }) => {
     const [menuSelected, setMenuSelected] = React.useState('restaurantManagement');
     const restaurantfeature = ["restaurantManagement", "dashboard", "promote", "menu", "profile", "zone"]
     const [userProfile, setUserProfile] = React.useState()
+    const [currentUserRoles, setCurrentUserRoles] = React.useState([]);
 
     useEffect(() => {
         getRestaurantList()
-        if (user) {
+        if (user && user.profile) {
             setUserProfile(user.profile)
+            let roles = user.profile.roles
+            setCurrentUserRoles(roles)
         }
     }, [])
 
@@ -153,6 +156,7 @@ const Admin = ({ user }) => {
                                                     <RestaurantManagement
                                                         restaurant_id={restaurantId}
                                                         current_tab={currentTab}
+                                                        current_user_roles={currentUserRoles}
                                                     />
                                                 </Spin>
                                             </Tab.Pane>
@@ -206,7 +210,7 @@ const Admin = ({ user }) => {
                                             <Tab.Pane eventKey="accountManagement">
                                                 <AccountManagement
                                                     restaurant_list={restaurantList}
-                                                    current_user_profile={userProfile}
+                                                    currentUserRoles={userProfile}
                                                     current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
@@ -347,6 +351,8 @@ const Admin = ({ user }) => {
                                 menuSelected == 'accountManagement' ? (
                                     <AccountManagement
                                         restaurant_list={restaurantList}
+                                        current_user_profile={userProfile}
+                                        current_tab={menuSelected}
                                     />
                                 ) : null
                             }
