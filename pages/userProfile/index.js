@@ -252,7 +252,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile?key1=kiki" });
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile" });
         }
     };
 
