@@ -235,9 +235,8 @@ export default function LoginModal(props) {
                     props.setlogin(true)
                     props.check_permission()
                     message.success('Sign-in successful.')
-
+                    window.location.reload()
                 }
-                // window.location.reload()
             }
 
             setLoading(false)
