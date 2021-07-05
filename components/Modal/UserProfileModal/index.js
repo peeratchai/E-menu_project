@@ -44,7 +44,7 @@ const UserProfileModal = (props) => {
     const { mutateUser } = checkUserPermission()
     const router = useRouter()
     const { liffClientId, code } = router.query;
-    const [autoSigninWithLine, setAutoSigninWithLine] = React.useState(true)
+    const [autoSyncWithLine, setAutoSyncWithLine] = React.useState(true)
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
     const [userIsCustomer, setUserIsCustomer] = React.useState(false)
@@ -64,10 +64,10 @@ const UserProfileModal = (props) => {
 
         getInitialData()
 
-        if (liffClientId && code && !inProcessLineSignIn && autoSigninWithLine) {
+        if (liffClientId && code && !inProcessLineSignIn && autoSyncWithLine) {
             console.log(liffClientId, code)
             syncWithLine()
-            setAutoSigninWithLine(false)
+            setAutoSyncWithLine(false)
         }
     }, [user])
 
