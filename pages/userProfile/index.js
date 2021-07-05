@@ -213,14 +213,11 @@ const UserProfile = ({ user }) => {
             console.log('error', error)
             message.error('Cannot delete user.')
         })
-
-
     }
 
     const syncWithLine = async () => {
         setInProcessLineSignIn(true)
-        const liff = window.liff;
-
+        const liff = (await import('@line/liff')).default
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
             throw err;
         });
@@ -252,7 +249,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/liff/userProfile" });
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile" });
         }
     };
 
