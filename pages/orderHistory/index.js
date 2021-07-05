@@ -267,14 +267,23 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
 
         if (profile) {
             user.profile = profile
-
+        }else{
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent: false,
+                },
+            }
         }
         return {
             props: { user }
         }
     } else {
         return {
-            props: { user }
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
         }
     }
 
