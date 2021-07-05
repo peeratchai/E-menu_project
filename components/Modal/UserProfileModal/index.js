@@ -1,21 +1,16 @@
-import Layout, { siteTitle } from '../../components/layout'
-import utilStyles from '../../styles/utils.module.css'
+import utilStyles from '../../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Button, Tab, Modal, Container, Tabs } from 'react-bootstrap'
+import { Row, Col, Form, Image, Button, Tab, Modal, Tabs } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { Upload, message, Popconfirm, Radio, Card, Spin } from 'antd';
-import { LoadingOutlined, PlusOutlined, UploadOutlined, DeleteOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
-import termAgreement from '../../utils/termAgreement.json'
-import profileService from '../../services/profile'
-import PropTypes from 'prop-types'
-import withSession from '../../lib/session'
-import checkUserPermission from '../../lib/checkUserPermission'
-import fetchJson from '../../lib/fetchJson'
+import termAgreement from '../../../utils/termAgreement.json'
+import profileService from '../../../services/profile'
+import checkUserPermission from '../../../lib/checkUserPermission'
+import fetchJson from '../../../lib/fetchJson'
 import { FacebookLogin } from 'react-facebook-login-component';
 import { useRouter } from 'next/router'
-
-const axios = require('axios')
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -35,8 +30,9 @@ function beforeUpload(file) {
     return isJpgOrPng && isLt2M;
 }
 
-const UserProfile = ({ user }) => {
+const UserProfileModal = (props) => {
 
+    const { user } = props
     const [profileImage, setProfileImage] = React.useState("data:image/png;base64,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");
     const [errors, setErrors] = React.useState({});
     const [profileForm, setProfileForm] = React.useState({
@@ -48,7 +44,6 @@ const UserProfile = ({ user }) => {
     const { mutateUser } = checkUserPermission()
     const router = useRouter()
     const { liffClientId, code } = router.query;
-    console.log('router.query', router.query)
     const [autoSigninWithLine, setAutoSigninWithLine] = React.useState(true)
     const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
@@ -67,14 +62,25 @@ const UserProfile = ({ user }) => {
 
     useEffect(() => {
 
-        if (user) {
-            try {
-                let userRoles = user.profile.roles
+        getInitialData()
+
+        if (liffClientId && code && !inProcessLineSignIn && autoSigninWithLine) {
+            console.log(liffClientId, code)
+            syncWithLine()
+            setAutoSigninWithLine(false)
+        }
+    }, [user])
+
+    const getInitialData = async () => {
+        await profileService.getProfile().then((profile) => {
+            console.log('profile', profile)
+            if (profile) {
+                console.log('profile.roles', profile.roles)
+                let userRoles = profile.roles
                 let filterRoles = userRoles.filter((role) => role !== 'customer' && role !== 'partner')
                 if (filterRoles.length === 0) {
                     setUserIsCustomer(true)
                 }
-                let profile = user.profile
                 if (profile.avatar_url !== null || profile.avatar_url !== '') {
                     setProfileImage(profile.avatar_url)
                 }
@@ -87,19 +93,11 @@ const UserProfile = ({ user }) => {
                     username: profile.username,
                     is_active: profile.is_active
                 })
-            } catch (error) {
-                console.log('error', error)
             }
-        }
-
-        console.log(liffClientId, code)
-
-        if (liffClientId && code && !inProcessLineSignIn && autoSigninWithLine) {
-            console.log(liffClientId, code)
-            syncWithLine()
-            setAutoSigninWithLine(false)
-        }
-    }, [user])
+        }).catch(error => {
+            console.log('profileService error', error)
+        })
+    }
 
     const onChangeGender = (e) => {
         setProfileform('gender', e.target.value)
@@ -213,14 +211,11 @@ const UserProfile = ({ user }) => {
             console.log('error', error)
             message.error('Cannot delete user.')
         })
-
-
     }
 
     const syncWithLine = async () => {
         setInProcessLineSignIn(true)
         const liff = (await import('@line/liff')).default
-
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
             throw err;
         });
@@ -252,7 +247,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile" });
+            liff.login();
         }
     };
 
@@ -290,8 +285,13 @@ const UserProfile = ({ user }) => {
         <Image src="/images/facebook-icon.png " style={{ marginRight: "15px", cursor: "pointer", width: "50px", height: "50px", objectFit: "contain", display: 'inline' }} />
     )
     return (
-        <Layout containerType="center">
-            <Container className={styles.container}>
+        <Modal
+            {...props}
+            size="xl"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Body style={{ padding: "65px 30px 45px" }}>
                 <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                     <Tab eventKey="profile" title="Profile">
                         <Spin spinning={loading} tip="Loading...">
@@ -441,55 +441,10 @@ const UserProfile = ({ user }) => {
                         </Card>
                     </Tab>
                 </Tabs>
-            </Container>
-
-        </Layout >
-
-
+            </Modal.Body>
+        </Modal >
     )
 }
 
 
-export default UserProfile
-
-UserProfile.propTypes = {
-    user: PropTypes.shape({
-        isLoggedIn: PropTypes.bool,
-    }),
-}
-
-export const getServerSideProps = withSession(async function ({ req, res }) {
-    let user = req.session.get('user')
-    if (user) {
-
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + user.accessToken,
-            }
-        }
-        let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
-        let profile = reponse.data
-
-        if (profile) {
-            user.profile = profile
-            return {
-                props: { user },
-            }
-        } else {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false,
-                },
-            }
-        }
-
-    } else {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-})
+export default UserProfileModal

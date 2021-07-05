@@ -1,0 +1,10 @@
+.container {
+  box-shadow: 5px 10px 18px #888888;
+  padding: 3rem;
+  min-height: 15rem;
+  background-color: white;
+}
+
+.tab {
+  margin-top: 15px;
+}

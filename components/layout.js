@@ -10,7 +10,7 @@ import React, { useEffect } from 'react'
 import LoginModal from './Modal/Login'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import 'react-chat-widget/lib/styles.css';
-import dynamic from 'next/dynamic';
+import UserProfileModal from './Modal/UserProfileModal'
 import MessengerCustomerChat from 'react-messenger-customer-chat';
 import checkUserPermission from '../lib/checkUserPermission'
 import fetchJson from '../lib/fetchJson'
@@ -33,6 +33,7 @@ export default function Layout(props) {
     const [total_menu_in_basket, setTotal_menu_in_basket] = React.useState(0)
     const [isPartner, setIsPartner] = React.useState(false)
     const [isAdmin, setIsAdmin] = React.useState(false)
+    const [userProfileModalShow, setUserProfileModalShow] = React.useState(false)
     ////
 
     const setStyleOfContainer = (containerType) => {
@@ -207,9 +208,7 @@ export default function Layout(props) {
                             islogin === true ? (
                                 <NavDropdown title="Login" id="nav-dropdown">
                                     <NavDropdown.Item >
-                                        <ActiveLink activeClassName="active" href="/userProfile">
-                                            <a className="nav-link">Update user profile</a>
-                                        </ActiveLink>
+                                        <a className="nav-link" onClick={() => setUserProfileModalShow(true)}>Update user profile</a>
                                     </NavDropdown.Item>
                                     <NavDropdown.Item >
                                         <ActiveLink activeClassName="active" href="/orderHistory">
@@ -261,6 +260,11 @@ export default function Layout(props) {
                 setlogin={setIsLogin}
                 check_permission={checkPermission}
                 liff_client_id={liffClientId}
+            />
+            <UserProfileModal
+                show={userProfileModalShow}
+                onHide={() => setUserProfileModalShow(false)}
+                user={user}
             />
         </div >
     )
