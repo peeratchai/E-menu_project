@@ -249,7 +249,7 @@ const UserProfile = ({ user }) => {
             })
 
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/userProfile" });
+            liff.login({ redirectUri: "https://e-menu-project.vercel.app/userProfile" });
         }
     };
 
