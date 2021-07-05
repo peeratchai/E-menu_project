@@ -286,5 +286,4 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
             },
         }
     }
-
 })

@@ -6,24 +6,30 @@ import useMediaQuery from "../../utils/utils";
 import { useRouter } from 'next/router'
 import 'antd/dist/antd.css';
 import { Breadcrumb } from 'antd';
-import { MinusOutlined, PlusOutlined, LeftOutlined } from '@ant-design/icons';
 import Link from 'next/link'
+import withSession from '../../lib/session'
 
-export default function Order(props) {
+const axios = require('axios')
+
+const Order = ({ user }) => {
+
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const { order } = router.query;
-    // const [confirmModalVisible, setConfirmModalVisible] = React.useState(false);
     const [orders, setOrders] = React.useState({ restaurant: { name: '' } });
     const [orderItems, setOrderItems] = React.useState([]);
     const [total, setTotal] = React.useState(0)
     useEffect(() => {
-        if (order) {
+        if (order && user) {
             let parseOrder = JSON.parse(order)
             let orderItmes = parseOrder.order_items
             setOrderItems(orderItmes)
             sumOfPriceTotal(orderItmes)
             setOrders(parseOrder)
+        } else {
+            router.push({
+                pathname: "/orderHistory"
+            })
         }
     }, [order])
 
@@ -35,11 +41,7 @@ export default function Order(props) {
         setTotal(total)
     }
 
-    const viewHistory = (order) => {
-        router.push({
-            pathname: "/orderHistory"
-        })
-    }
+
 
     let MobileOrderListComponent = orderItems && orderItems.map((order) => {
         console.log('order', order)
@@ -188,3 +190,39 @@ export default function Order(props) {
     )
 }
 
+
+export default Order
+
+export const getServerSideProps = withSession(async function ({ req, res }) {
+    let user = req.session.get('user')
+    if (user) {
+
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + user.accessToken,
+            }
+        }
+        let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
+        let profile = reponse.data
+
+        if (!profile) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent: false,
+                },
+            }
+        } else {
+            return {
+                props: user
+            }
+        }
+    } else {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+})
