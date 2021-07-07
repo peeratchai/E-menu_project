@@ -191,18 +191,11 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                         if (deleteShoppingCartResponse.is_success) {
                                             message.success('Check out order successful.')
                                             setConfirmModalVisible(false)
-
-                                            await fetchJson('/api/checkoutOrder', { method: 'POST' }).then((response) => {
-                                                console.log('response', response)
-                                                setLoading(false)
+                                            setLoading(false)
                                                 router.push({
                                                     pathname: '/menuFeeding/restaurantList/' + restaurantName,
                                                     query: { restaurantId: restaurantId }
                                                 })
-                                            }).catch(error => {
-                                                setLoading(false)
-                                                console.log('api/checkoutOrder', error)
-                                            })
                                         }
                                     }
                                 }).catch(error => {

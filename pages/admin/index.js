@@ -210,7 +210,7 @@ const Admin = ({ user }) => {
                                             <Tab.Pane eventKey="accountManagement">
                                                 <AccountManagement
                                                     restaurant_list={restaurantList}
-                                                    currentUserRoles={userProfile}
+                                                    current_user_profile={userProfile}
                                                     current_tab={currentTab}
                                                 />
                                             </Tab.Pane>
@@ -284,6 +284,7 @@ const Admin = ({ user }) => {
                                         <RestaurantManagement
                                             restaurant_id={restaurantId}
                                             current_tab={menuSelected}
+                                            current_user_roles={currentUserRoles}
                                         />
                                     </Spin>
                                 ) : null

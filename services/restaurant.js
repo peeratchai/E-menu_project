@@ -3,15 +3,15 @@ import checkLogin from './checkLogin'
 import sendRequest from './sendRequest'
 
 const restaurantService = {
-    getLocationList: async function () {
+    getLocationList: async function() {
         return await sendRequest.get('/api/location')
     },
 
-    getRestaurantSearchByLocation: async function (locationID) {
+    getRestaurantSearchByLocation: async function(locationID) {
         return await sendRequest.get('/api/restaurant/location_id/' + locationID)
     },
 
-    getAllRestaurant: async function () {
+    getAllRestaurant: async function() {
         let accessToken = await checkLogin()
         let config = {
             headers: {
@@ -19,11 +19,11 @@ const restaurantService = {
             }
         }
         let response = await axios.get('/api/restaurant/all', config)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response)
                 return response.data
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error)
                 return error
             });
@@ -31,7 +31,7 @@ const restaurantService = {
         return response
     },
 
-    getRestaurantById: async function (restaurantId) {
+    getRestaurantById: async function(restaurantId) {
         let accessToken = await checkLogin()
         let config = {
             headers: {
@@ -39,11 +39,11 @@ const restaurantService = {
             }
         }
         let response = await axios.get('/api/restaurant/' + restaurantId, config)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response)
                 return response
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error)
                 return error
             });
@@ -51,7 +51,7 @@ const restaurantService = {
         return response
     },
 
-    getRestaurantSearchByFilter: async function (accessToken, filterForm) {
+    getRestaurantSearchByFilter: async function(accessToken, filterForm) {
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -61,22 +61,22 @@ const restaurantService = {
         let data = filterForm
         console.log(data)
         let response = await axios.post('/api/restaurant/search_by_filter', data, config)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response)
                 return response.data
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error)
                 return error
             });
         return response
     },
-    getRestaurantSearchWithPaging: async function (page, limit, filterForm) {
+    getRestaurantSearchWithPaging: async function(page, limit, filterForm) {
         console.log(filterForm)
         console.log('api url', '/api/restaurant / search_with_paging / ' + page + "/" + limit)
         return await sendRequest.post('/api/restaurant/search_with_paging/' + page + "/" + limit, filterForm)
     },
-    getLocationSearchByFilter: async function (accessToken, filterForm) {
+    getLocationSearchByFilter: async function(accessToken, filterForm) {
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -85,38 +85,38 @@ const restaurantService = {
         }
         let data = filterForm
         let response = await axios.post('/api/location/search_by_filter', data, config)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response)
                 return response.data
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error)
                 return error
             });
         return response
     },
-    updateRestaurantDetails: async function (restaurantForm) {
+    updateRestaurantDetails: async function(restaurantForm) {
         console.log(restaurantForm)
         let accessToken = await checkLogin()
 
         let formData = new FormData()
-        formData.append("description", restaurantForm.description);
-        formData.append("description_eng", restaurantForm.description_eng);
-        formData.append("facebook", restaurantForm.facebook);
-        formData.append("have_parking", restaurantForm.have_parking);
+        formData.append("description", restaurantForm.description === null ? "" : restaurantForm.description);
+        formData.append("description_eng", restaurantForm.description_eng === null ? "" : restaurantForm.description_eng);
+        formData.append("facebook", restaurantForm.facebook === null ? "" : restaurantForm.facebook);
+        formData.append("have_parking", restaurantForm.have_parking === null ? "" : restaurantForm.have_parking);
         formData.append("image_url", restaurantForm.image_url);
-        formData.append("instragram", restaurantForm.instragram);
+        formData.append("instragram", restaurantForm.instragram === null ? "" : restaurantForm.instragram);
         formData.append("location", restaurantForm.location);
-        formData.append("address", restaurantForm.address);
-        formData.append("name", restaurantForm.name);
-        formData.append("name_eng", restaurantForm.name_eng);
-        formData.append("payment_option", restaurantForm.payment_option);
-        formData.append("phone", restaurantForm.phone);
-        formData.append("website", restaurantForm.website);
-        formData.append("food_type", restaurantForm.food_type);
+        formData.append("address", restaurantForm.address === null ? "" : restaurantForm.address);
+        formData.append("name", restaurantForm.name === null ? "" : restaurantForm.name);
+        formData.append("name_eng", restaurantForm.name_eng === null ? "" : restaurantForm.name_eng);
+        formData.append("payment_option", restaurantForm.payment_option === undefined ? "" : restaurantForm.payment_option);
+        formData.append("phone", restaurantForm.phone === null ? "" : restaurantForm.phone);
+        formData.append("website", restaurantForm.website === null ? "" : restaurantForm.website);
+        formData.append("food_type", restaurantForm.food_type === null ? "" : restaurantForm.food_type);
         formData.append("image", restaurantForm.image);
         formData.append("is_active", true);
-        formData.append("Line", restaurantForm.Line);
+        formData.append("Line", restaurantForm.Line === null ? "" : restaurantForm.Line);
         formData.append("business_district", restaurantForm.business_district);
         formData.append("business_hour", JSON.stringify(restaurantForm.business_hour));
 
@@ -141,11 +141,11 @@ const restaurantService = {
             console.log(pair[0] + ', ' + pair[1]);
         }
         let response = await axios.patch('/api/update_restaurant_detail/' + restaurantForm.restaurant_id, formData, config)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response)
                 return response
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error)
                 throw error
             });
@@ -154,11 +154,11 @@ const restaurantService = {
 
     },
 
-    deleteRestaurantById: async function (restaurantId) {
+    deleteRestaurantById: async function(restaurantId) {
         return await sendRequest.delete('/api/delete_restaurant/' + restaurantId)
     },
 
-    addRestaurant: async function (data) {
+    addRestaurant: async function(data) {
         let ContentType = 'multipart/form-data'
 
         let formData = new FormData()
@@ -174,7 +174,7 @@ const restaurantService = {
 
         return await sendRequest.post('/api/add_new_restaurant', formData, ContentType)
     },
-    setActiveStatusRestaurant: async function (data, restaurantId) {
+    setActiveStatusRestaurant: async function(data, restaurantId) {
         let ContentType = 'application/json'
         return await sendRequest.patch('/api/set_active_restaurant/' + restaurantId, data, ContentType)
     }
