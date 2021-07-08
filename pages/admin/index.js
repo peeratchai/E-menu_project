@@ -48,7 +48,7 @@ const Admin = ({ user }) => {
             let roles = user.profile.roles
             setCurrentUserRoles(roles)
         }
-    }, [])
+    }, [user])
 
     const getRestaurantList = async () => {
         setLoadingRestaurantList(true)

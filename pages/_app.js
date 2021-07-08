@@ -34,31 +34,6 @@ const handExitComplete = () => {
 
 
 export default function App({ Component, pageProps }) {
-    const router = useRouter()
-    const { liffRedirectUri, code, liffClientId, state } = router.query;
-    const liffState = router.query['liff.state']
-    console.log('router.query', router.query)
-    console.log('liffState', liffState)
-    console.log('liffRedirectUri', liffRedirectUri)
-
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const pathname = window.location.pathname
-            const lineParams = { code: code, liffClientId: liffClientId, state: state }
-            console.log('pathname', pathname)
-            if (pathname === '/newspaper') {
-                if (liffRedirectUri && liffState) {
-                    console.log('lineParams')
-                    router.push({
-                        pathname: liffState,
-                        query: lineParams
-                    })
-                }
-            }
-
-        }
-    }, [liffRedirectUri, liffState])
 
     return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
         <Head>

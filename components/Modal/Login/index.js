@@ -55,7 +55,9 @@ export default function LoginModal(props) {
         const liff = window.liff;
 
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
-            throw err;
+            setLoading(false)
+            console.log('error not authorize')
+            console.log('err',err)
         });
         if (liff.isLoggedIn()) {
             let token = await liff.getIDToken();
@@ -139,7 +141,7 @@ export default function LoginModal(props) {
             setLoading(false)
             setInProcessLineSignIn(false)
         } else {
-            liff.login();
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=login" });
             setLoading(false)
             setInProcessLineSignIn(false)
         }

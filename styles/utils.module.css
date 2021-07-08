@@ -180,11 +180,11 @@
 }
 
 .backgroundColorTheme {
-  background-color: #78100E !important;
+  background-color: #78100e !important;
 }
 
 .fontColorTheme {
-  color: #78100E !important;
+  color: #78100e !important;
 }
 
 .parent_zoom_bgImg {
@@ -237,4 +237,12 @@
 
 .hide {
   display: none;
+}
+
+.overflowDot {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  height: 1.2em;
+  white-space: nowrap;
 }

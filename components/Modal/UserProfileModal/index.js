@@ -78,6 +78,7 @@ const UserProfileModal = (props) => {
       syncWithLine();
       setAutoSyncWithLine(false);
     }
+
   }, [user]);
 
   const getInitialData = async () => {
@@ -253,7 +254,8 @@ const UserProfileModal = (props) => {
     setInProcessLineSignIn(true);
     const liff = (await import("@line/liff")).default;
     await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
-      throw err;
+      console.log('error not authorize')
+      console.log('err',err)
     });
     if (liff.isLoggedIn()) {
       let token = await liff.getIDToken();
@@ -285,7 +287,7 @@ const UserProfileModal = (props) => {
           }
         });
     } else {
-      liff.login();
+      liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=userProfile" });
     }
   };
 
@@ -371,7 +373,7 @@ const UserProfileModal = (props) => {
                           beforeUpload={beforeUpload}
                           onChange={(e) => handleChangeProfileImage(e)}
                           style={{ width: "100%" }}
-                          // onPreview={(e) => onPreview(e)}
+                        // onPreview={(e) => onPreview(e)}
                         >
                           <Button
                             icon={<UploadOutlined />}

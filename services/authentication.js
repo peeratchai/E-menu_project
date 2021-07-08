@@ -138,12 +138,9 @@ const authentication = {
     signupWithSocial: async function (data) {
         return await sendRequest.postNonToken('/api/auth/signup-with-social', data)
     },
-
     verifyEmail: async function (data) {
         return await sendRequest.postNonToken('/api/auth/verify-email', data)
     },
-
-
 }
 
 export default authentication
