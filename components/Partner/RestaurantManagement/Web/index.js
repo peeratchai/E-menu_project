@@ -12,7 +12,6 @@ import Link from 'next/link'
 
 export default function WebComponent(props) {
     const { zone, restaurant_id, restaurant_name, zone_number_selected, type, current_user_roles } = props
-    console.log('current_user_roles', current_user_roles)
     const { get_zone } = props
     const refTableManagement = React.createRef()
     const [containerWidth, setContainerWidth] = React.useState();
@@ -24,6 +23,8 @@ export default function WebComponent(props) {
     const [zoneNumberSelected, setZoneNumberSelected] = React.useState(zone_number_selected);
     const [zoneSelected, setZoneSelected] = React.useState()
     const [disable, setDisable] = React.useState(true)
+    const [currentUserRoles, setCurrentUserRoles] = React.useState()
+
     useEffect(() => {
         let containerWidth = refTableManagement.current.offsetWidth
         // 50 is padding left and right
@@ -46,7 +47,10 @@ export default function WebComponent(props) {
         if (restaurant_id) {
             setDisable(false)
         }
-    }, [zone])
+        if(current_user_roles){
+            setCurrentUserRoles(current_user_roles)
+        }
+    }, [zone,current_user_roles])
 
     const ratioTableImages = (zone) => {
 
@@ -261,7 +265,7 @@ export default function WebComponent(props) {
                 </Col>
                 <Col xs={6}>
                     {
-                        current_user_roles && current_user_roles.find((roles) => roles === 'partner' || roles === 'admin') && (
+                        currentUserRoles && currentUserRoles.find((roles) => roles === 'partner' || roles === 'admin') && (
                             <div style={{ textAlign: "right" }}>
                                 <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
                                     New table
