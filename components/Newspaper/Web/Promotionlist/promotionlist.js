@@ -41,13 +41,13 @@ export default function WebPromotionlist(props) {
                             </div>
                         </div>
 
-                        <div className={utilStyles.fontContent}>
+                        <div className={utilStyles.fontContent + " " + utilStyles.overflowDot}>
                             <b>{newspaperDetail.restaurant.name}</b>
                         </div>
-                        <div className={utilStyles.font_size_sm}>
+                        <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                             {newspaperDetail.promote_content}
                         </div>
-                        <div className={utilStyles.font_size_sm}>
+                        <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                             {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                         </div>
                     </div>
@@ -73,13 +73,13 @@ export default function WebPromotionlist(props) {
                         </div>
                     </div>
 
-                    <div className={utilStyles.fontContent}>
+                    <div className={utilStyles.fontContent + " " + utilStyles.overflowDot}>
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
-                    <div className={utilStyles.font_size_sm}>
+                    <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                         {newspaperDetail.promote_content}
                     </div>
-                    <div className={utilStyles.font_size_sm}>
+                    <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
@@ -105,13 +105,13 @@ export default function WebPromotionlist(props) {
                         </div>
                     </div>
 
-                    <div className={utilStyles.fontContent}>
+                    <div className={utilStyles.fontContent + " " + utilStyles.overflowDot}>
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
-                    <div className={utilStyles.font_size_sm}>
+                    <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                         {newspaperDetail.promote_content}
                     </div>
-                    <div className={utilStyles.font_size_sm}>
+                    <div className={utilStyles.font_size_sm + " " + utilStyles.overflowDot}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>

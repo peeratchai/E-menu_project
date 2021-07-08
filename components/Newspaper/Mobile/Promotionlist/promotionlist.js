@@ -38,13 +38,13 @@ export default function MobilePromotionlist(props) {
                         </div>
                     </div>
 
-                    <div className={utilStyles.fontMobile}>
+                    <div className={utilStyles.fontMobile + " " + utilStyles.overflowDot}>
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
-                    <div className={utilStyles.fontMobileSM}>
+                    <div className={utilStyles.fontMobileSM + " " + utilStyles.overflowDot}>
                         {newspaperDetail.promote_content}
                     </div>
-                    <div className={utilStyles.fontMobileSM}>
+                    <div className={utilStyles.fontMobileSM + " " + utilStyles.overflowDot}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
@@ -70,13 +70,13 @@ export default function MobilePromotionlist(props) {
                         </div>
                     </div>
 
-                    <div className={utilStyles.fontMobile}>
+                    <div className={utilStyles.fontMobile + " " + utilStyles.overflowDot}>
                         <b>{newspaperDetail.restaurant.name}</b>
                     </div>
-                    <div className={utilStyles.fontMobileSM}>
+                    <div className={utilStyles.fontMobileSM + " " + utilStyles.overflowDot}>
                         {newspaperDetail.promote_content}
                     </div>
-                    <div className={utilStyles.fontMobileSM}>
+                    <div className={utilStyles.fontMobileSM + " " + utilStyles.overflowDot}>
                         {"฿ " + newspaperDetail.price_from + " - " + newspaperDetail.price_to}
                     </div>
                 </div>
