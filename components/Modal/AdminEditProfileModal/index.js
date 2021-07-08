@@ -163,8 +163,7 @@ export default function AdminEditProfileModal(props) {
                 console.log('responseProfile', responseProfile)
                 if (responseProfile) {
                     console.log('userId', userId)
-                    console.log('current_user_profile', current_user_profile.id)
-                    if (userId === current_user_profile.id) {
+                    if (current_user_profile && userId === current_user_profile.id) {
                         window.location.reload()
                     } else {
                         get_all_user_profile()

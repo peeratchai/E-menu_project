@@ -27,18 +27,6 @@ export default function verifyEmail() {
                     setVerifyStatus(true)
                     message.success('Verify email successful.Please sign in again.')
 
-                    // router.push({
-                    //     pathname: "/",
-                    //     query: { 'verifyEmail': '10asdokzclskf0efsf-sef0xkczlv0efie0-s0esfklkvadfadffas-adfvshbostohtrodh' }
-                    // })
-                    // message.success('Verify email successful.Please sign in again.')
-                    // setTimeout(() => {
-                    //     router.push({
-                    //         pathname: "/",
-                    //         query: { 'verifyEmail': true }
-                    //     })
-                    // }, 3000);
-
                 }).catch(error => {
                     console.log('error', error)
                 })
