@@ -261,7 +261,7 @@ export default function WebComponent(props) {
                 </Col>
                 <Col xs={6}>
                     {
-                        current_user_roles && current_user_roles.find((roles) => roles === 'partner') && (
+                        current_user_roles && current_user_roles.find((roles) => roles === 'partner' || roles === 'admin') && (
                             <div style={{ textAlign: "right" }}>
                                 <Button disabled={disable} onClick={() => setAddTableModalShow(true)} style={{ marginRight: "10px" }}>
                                     New table
