@@ -53,11 +53,9 @@ const UserProfileModal = (props) => {
   });
   const { mutateUser } = checkUserPermission();
   const router = useRouter();
-  const { liffClientId, path } = router.query;
+  const { liffClientId, currentPath, currentQuery, functionName } = router.query;
   const liffState = router.query['liff.state']
-  console.log('router.query', router.query)
-  console.log('liffClientId', liffClientId)
-  console.log('liffState', liffState)
+  console.log('router.query', router)
 
   const [autoSyncWithLine, setAutoSyncWithLine] = React.useState(true);
   const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
@@ -77,7 +75,8 @@ const UserProfileModal = (props) => {
 
   useEffect(() => {
     getInitialData();
-    if (((liffState === '/newspaper?path=sync_line' && liffClientId) || path === 'sync_line') && !inProcessLineSignIn && autoSyncWithLine) {
+
+    if (((liffState === '/newspaper?path=sync_line' && liffClientId) || functionName === 'sync_line') && !inProcessLineSignIn && autoSyncWithLine) {
       syncWithLine();
       setAutoSyncWithLine(false);
     }
@@ -280,6 +279,12 @@ const UserProfileModal = (props) => {
         .then((response) => {
           console.log("response", response);
           message.success("Sync with line successful.");
+          if (functionName) {
+            router.push({
+              pathname: currentPath,
+              query: currentQuery
+            })
+          }
         })
         .catch((error) => {
           console.log("error", error.response);
@@ -290,7 +295,7 @@ const UserProfileModal = (props) => {
           }
         });
     } else {
-      liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=sync_line" });
+      liff.login({ redirectUri: `https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?functionName=sync_line&currentPath=${router.pathname}&currentQuery=${router.query}` });
     }
   };
 
