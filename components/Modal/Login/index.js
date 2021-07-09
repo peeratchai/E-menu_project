@@ -13,7 +13,7 @@ import fetchJson from '../../../lib/fetchJson'
 export default function LoginModal(props) {
 
     const { user, mutateUser } = checkUserPermission()
-    const { liff_client_id } = props
+    const { path } = props
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
     const [forgotForm, setForgotForm] = React.useState({})
@@ -40,7 +40,7 @@ export default function LoginModal(props) {
             }
         }
         if (user) {
-            if (liff_client_id && liff_client_id !== null && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
+            if (path === 'login_line' && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
                 //// Automate signin with line when receive liff_client_id from line and user not yet login
                 signInwithLine()
                 setAutoSigninWithLine(false)
@@ -57,7 +57,7 @@ export default function LoginModal(props) {
         await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
             setLoading(false)
             console.log('error not authorize')
-            console.log('err',err)
+            console.log('err', err)
         });
         if (liff.isLoggedIn()) {
             let token = await liff.getIDToken();
@@ -141,7 +141,7 @@ export default function LoginModal(props) {
             setLoading(false)
             setInProcessLineSignIn(false)
         } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=login" });
+            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=login_line" });
             setLoading(false)
             setInProcessLineSignIn(false)
         }

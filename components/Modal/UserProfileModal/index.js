@@ -53,7 +53,7 @@ const UserProfileModal = (props) => {
   });
   const { mutateUser } = checkUserPermission();
   const router = useRouter();
-  const { liffClientId, code } = router.query;
+  const { path } = router.query;
   const [autoSyncWithLine, setAutoSyncWithLine] = React.useState(true);
   const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -72,14 +72,13 @@ const UserProfileModal = (props) => {
 
   useEffect(() => {
     getInitialData();
-
-    if (liffClientId && code && !inProcessLineSignIn && autoSyncWithLine) {
+    if (path === 'sync_line' && !inProcessLineSignIn && autoSyncWithLine) {
       console.log(liffClientId, code);
       syncWithLine();
       setAutoSyncWithLine(false);
     }
 
-  }, [user]);
+  }, [user, path]);
 
   const getInitialData = async () => {
     await profileService
@@ -255,7 +254,7 @@ const UserProfileModal = (props) => {
     const liff = (await import("@line/liff")).default;
     await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
       console.log('error not authorize')
-      console.log('err',err)
+      console.log('err', err)
     });
     if (liff.isLoggedIn()) {
       let token = await liff.getIDToken();
@@ -287,7 +286,7 @@ const UserProfileModal = (props) => {
           }
         });
     } else {
-      liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=userProfile" });
+      liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=sync_line" });
     }
   };
 
