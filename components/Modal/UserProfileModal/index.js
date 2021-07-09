@@ -53,7 +53,7 @@ const UserProfileModal = (props) => {
   });
   const { mutateUser } = checkUserPermission();
   const router = useRouter();
-  const { liffClientId } = router.query;
+  const { liffClientId, path } = router.query;
   const liffState = router.query['liff.state']
   console.log('router.query', router.query)
   console.log('liffClientId', liffClientId)
@@ -77,7 +77,7 @@ const UserProfileModal = (props) => {
 
   useEffect(() => {
     getInitialData();
-    if (liffState === '/newspaper?path=sync_line' && liffClientId && !inProcessLineSignIn && autoSyncWithLine) {
+    if (((liffState === '/newspaper?path=sync_line' && liffClientId) || path === 'sync_line') && !inProcessLineSignIn && autoSyncWithLine) {
       syncWithLine();
       setAutoSyncWithLine(false);
     }

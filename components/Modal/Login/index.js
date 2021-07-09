@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 
 export default function LoginModal(props) {
     const router = useRouter();
-    const { liffClientId } = router.query;
+    const { liffClientId, path } = router.query;
     const liffState = router.query['liff.state']
     console.log('router.query', router.query)
     console.log('liffClientId', liffClientId)
@@ -45,7 +45,7 @@ export default function LoginModal(props) {
             }
         }
         if (user) {
-            if (liffState === '/newspaper?path=login_line' && liffClientId && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
+            if (((liffState === '/newspaper?path=login_line' && liffClientId) || path === 'login_line') && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
                 //// Automate signin with line when receive liff_client_id from line and user not yet login
                 signInwithLine()
                 setAutoSigninWithLine(false)
