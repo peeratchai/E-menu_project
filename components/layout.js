@@ -30,9 +30,6 @@ export default function Layout(props) {
   const { user, mutateUser } = checkUserPermission();
 
   const router = useRouter();
-  const { liffClientId, path } = router.query;
-
-  console.log('query', router.query)
 
   //// Set state
   const [loginModalShow, setLoginModalShow] = React.useState(false);
@@ -311,14 +308,11 @@ export default function Layout(props) {
         onHide={() => setLoginModalShow(false)}
         setlogin={setIsLogin}
         check_permission={checkPermission}
-        liff_client_id={liffClientId}
-        path={path}
       />
       <UserProfileModal
         show={userProfileModalShow}
         onHide={() => setUserProfileModalShow(false)}
         user={user}
-        path={path}
       />
     </div>
   );

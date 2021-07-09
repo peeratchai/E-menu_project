@@ -53,7 +53,12 @@ const UserProfileModal = (props) => {
   });
   const { mutateUser } = checkUserPermission();
   const router = useRouter();
-  const { path } = router.query;
+  const { liffClientId } = router.query;
+  const liffState = router.query['liff.state']
+  console.log('router.query', router.query)
+  console.log('liffClientId', liffClientId)
+  console.log('liffState', liffState)
+
   const [autoSyncWithLine, setAutoSyncWithLine] = React.useState(true);
   const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -72,13 +77,12 @@ const UserProfileModal = (props) => {
 
   useEffect(() => {
     getInitialData();
-    if (path === 'sync_line' && !inProcessLineSignIn && autoSyncWithLine) {
-      console.log(liffClientId, code);
+    if (liffState === '/newspaper?path=sync_line' && liffClientId && !inProcessLineSignIn && autoSyncWithLine) {
       syncWithLine();
       setAutoSyncWithLine(false);
     }
 
-  }, [user, path]);
+  }, [user]);
 
   const getInitialData = async () => {
     await profileService

@@ -9,11 +9,16 @@ import utilStyles from '../../../styles/utils.module.css'
 import { FacebookLogin } from 'react-facebook-login-component';
 import checkUserPermission from '../../../lib/checkUserPermission'
 import fetchJson from '../../../lib/fetchJson'
+import { useRouter } from "next/router";
 
 export default function LoginModal(props) {
-
+    const router = useRouter();
+    const { liffClientId } = router.query;
+    const liffState = router.query['liff.state']
+    console.log('router.query', router.query)
+    console.log('liffClientId', liffClientId)
+    console.log('liffState', liffState)
     const { user, mutateUser } = checkUserPermission()
-    const { path } = props
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
     const [forgotForm, setForgotForm] = React.useState({})
@@ -40,7 +45,7 @@ export default function LoginModal(props) {
             }
         }
         if (user) {
-            if (path === 'login_line' && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
+            if (liffState === '/newspaper?path=login_line' && liffClientId && !user.isLoggedIn && !inProcessLineSignIn && autoSigninWithLine) {
                 //// Automate signin with line when receive liff_client_id from line and user not yet login
                 signInwithLine()
                 setAutoSigninWithLine(false)
