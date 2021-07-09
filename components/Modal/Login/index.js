@@ -112,7 +112,9 @@ export default function LoginModal(props) {
 
                                     props.onHide()
                                     props.setlogin(true)
-                                    window.location.reload()
+                                    if(path !== 'login_line'){
+                                        window.location.reload()
+                                    }
                                     message.success('Sign-in successful.')
                                 } else {
                                     message.error('Cannot sign-up with social.')
