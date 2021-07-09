@@ -171,3 +171,9 @@
   margin: 15px 0 0 0;
   box-shadow: 0 6px 2px -2px rgb(0 0 0 / 8%);
 }
+
+.menu_card {
+  margin-bottom: 15px;
+  padding-top: 15px;
+  cursor: pointer;
+}

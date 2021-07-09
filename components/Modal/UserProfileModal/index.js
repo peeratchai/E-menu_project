@@ -89,7 +89,7 @@ const UserProfileModal = (props) => {
           console.log("profile.roles", profile.roles);
           let userRoles = profile.roles;
           let filterRoles = userRoles.filter(
-            (role) => role !== "customer" && role !== "partner"
+            (role) => role === "employee" || role === "admin"
           );
           if (filterRoles.length === 0) {
             setUserIsCustomer(true);

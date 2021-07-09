@@ -53,16 +53,7 @@ export default function Restaurant() {
           .getShoppingCart()
           .then((response) => {
             console.log("shoppingCart response", response);
-            if (response === "Not Login") {
-              setNotificationLoginModal(true);
-              saveTableOnScanQrCode()
-                .then((response) => {
-                  console.log("response", response);
-                })
-                .catch((error) => {
-                  console.log("error", error);
-                });
-            } else {
+            if (response !== "Not Login") {
               setIsUserSignin(true);
               let shoppingCart = response;
               setIsInitialCart(true);

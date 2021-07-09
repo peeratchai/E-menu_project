@@ -54,97 +54,101 @@ export default function LoginModal(props) {
         setInProcessLineSignIn(true)
         const liff = window.liff;
 
-        await liff.init({ liffId: `1656040863-1vw5lvgd` }).catch((err) => {
-            setLoading(false)
-            console.log('error not authorize')
-            console.log('err', err)
-        });
-        if (liff.isLoggedIn()) {
-            let token = await liff.getIDToken();
-            console.log(token)
+        liff.init({ liffId: `1656040863-1vw5lvgd` })
+            .then(async () => {
+                if (liff.isLoggedIn()) {
+                    let token = await liff.getIDToken();
+                    console.log(token)
 
-            let profile = await liff.getProfile();
-            const { displayName, pictureUrl, userId } = profile
-            console.log(profile)
+                    let profile = await liff.getProfile();
+                    const { displayName, pictureUrl, userId } = profile
+                    console.log(profile)
 
-            let email = await liff.getDecodedIDToken().email;
-            if (email === undefined || email === "" || email === 'null') {
-                email = null
-            }
-            console.log(email)
-
-            let responseSignin = await signinWithSocial(email, userId)
-            console.log('responseSignin', responseSignin)
-            if (responseSignin.status === 401) {
-                if (responseSignin.data.message === 'Ban User') {
-                    message.error('This account has been banned. Please contact admin to activate account.')
-                } else {
-                    if (responseSignin.data.message === 'Inactive User') {
-                        message.error('This account inactive. Please contact admin to activate account.')
-                    } else {
-                        //// Don't have a account 
-                        let signupForm = {
-                            "email": email,
-                            "username": email,
-                            "social_id": userId,
-                            "first_name": displayName,
-                            "last_name": null,
-                            "avatar": pictureUrl,
-                            "signup_type": 'line'
-                        }
-
-                        let responseSignup = await signupWithSocial(signupForm)
-                        console.log('responseSignup', responseSignup)
-
-                        if (responseSignup) {
-                            let accessToken = responseSignup.accessToken
-
-                            await mutateUser(
-                                fetchJson('/api/saveToken', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ accessToken: accessToken }),
-                                })
-                            )
-                            localStorage.setItem('accessToken', accessToken)
-
-                            props.onHide()
-                            props.setlogin(true)
-                            window.location.reload()
-                            message.success('Sign-in successful.')
-                        } else {
-                            message.error('Cannot sign-up with social.')
-                        }
+                    let email = await liff.getDecodedIDToken().email;
+                    if (email === undefined || email === "" || email === 'null') {
+                        email = null
                     }
+                    console.log(email)
+
+                    let responseSignin = await signinWithSocial(email, userId)
+                    console.log('responseSignin', responseSignin)
+                    if (responseSignin.status === 401) {
+                        if (responseSignin.data.message === 'Ban User') {
+                            message.error('This account has been banned. Please contact admin to activate account.')
+                        } else {
+                            if (responseSignin.data.message === 'Inactive User') {
+                                message.error('This account inactive. Please contact admin to activate account.')
+                            } else {
+                                //// Don't have a account 
+                                let signupForm = {
+                                    "email": email,
+                                    "username": email,
+                                    "social_id": userId,
+                                    "first_name": displayName,
+                                    "last_name": null,
+                                    "avatar": pictureUrl,
+                                    "signup_type": 'line'
+                                }
+
+                                let responseSignup = await signupWithSocial(signupForm)
+                                console.log('responseSignup', responseSignup)
+
+                                if (responseSignup) {
+                                    let accessToken = responseSignup.accessToken
+
+                                    await mutateUser(
+                                        fetchJson('/api/saveToken', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ accessToken: accessToken }),
+                                        })
+                                    )
+                                    localStorage.setItem('accessToken', accessToken)
+
+                                    props.onHide()
+                                    props.setlogin(true)
+                                    window.location.reload()
+                                    message.success('Sign-in successful.')
+                                } else {
+                                    message.error('Cannot sign-up with social.')
+                                }
+                            }
+                        }
+                    } else {
+
+                        //// Have already a account 
+                        let accessToken = responseSignin.accessToken
+
+                        await mutateUser(
+                            fetchJson('/api/saveToken', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ accessToken: accessToken }),
+                            })
+                        )
+                        localStorage.setItem('accessToken', accessToken)
+
+                        props.onHide()
+                        props.setlogin(true)
+                        props.check_permission()
+                        message.success('Sign-in successful.')
+
+                        window.location.reload()
+                    }
+                    setLoading(false)
+                    setInProcessLineSignIn(false)
+                } else {
+                    liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=login_line" });
+                    setLoading(false)
+                    setInProcessLineSignIn(false)
                 }
-            } else {
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.log('error not authorize')
+                console.log('err', err)
+            });
 
-                //// Have already a account 
-                let accessToken = responseSignin.accessToken
-
-                await mutateUser(
-                    fetchJson('/api/saveToken', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ accessToken: accessToken }),
-                    })
-                )
-                localStorage.setItem('accessToken', accessToken)
-
-                props.onHide()
-                props.setlogin(true)
-                props.check_permission()
-                message.success('Sign-in successful.')
-
-                window.location.reload()
-            }
-            setLoading(false)
-            setInProcessLineSignIn(false)
-        } else {
-            liff.login({ redirectUri: "https://cee-menu-frontend-nsv2u.ondigitalocean.app/newspaper?path=login_line" });
-            setLoading(false)
-            setInProcessLineSignIn(false)
-        }
     };
 
     const signinWithSocial = async (email, userId) => {
