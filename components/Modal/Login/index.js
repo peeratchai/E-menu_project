@@ -15,9 +15,9 @@ export default function LoginModal(props) {
     const router = useRouter();
     const { liffClientId, currentPath, currentQuery, functionName } = router.query;
     const liffState = router.query['liff.state']
-    console.log('router.query', router.query)
-    console.log('liffClientId', liffClientId)
-    console.log('liffState', liffState)
+    // console.log('router.query', router.query)
+    // console.log('liffClientId', liffClientId)
+    // console.log('liffState', liffState)
     const { user, mutateUser } = checkUserPermission()
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})

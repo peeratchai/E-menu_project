@@ -48,7 +48,7 @@ export default function MobileComponent(props) {
                         <Switch defaultChecked checked={menu.is_active} onChange={(checked) => on_change_menu_status(checked, menu)} />
                         <Button variant="success" style={{ fontSize: "12px", padding: "0.2rem 0.5rem" }} onClick={() => showEditmenuModal(menu)}>Edit</Button>
                         <Popconfirm
-                            title="Are you sure to delete this task?"
+                            title="Are you sure to delete this menu?"
                             onConfirm={() => confirmDeleteCategory(menu)}
                             okText="Yes"
                             cancelText="No"

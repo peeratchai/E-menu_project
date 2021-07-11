@@ -48,12 +48,12 @@ export default function RestaurantListWeb(props) {
                                         <Col style={{ borderRight: "1px solid #dee2e6" }}>
                                             Price <span style={{ color: "#74b100" }}><b>{restaurantDetails.price_from}-{restaurantDetails.price_to}</b></span> baht
                                         </Col>
-                                        <Col style={{ color: "#74b100" }}>
+                                        <Col >
                                             {
                                                 isRestaurantOpenNow ? (
-                                                    <span>Open now!</span>
+                                                    <span style={{ color: "#74b100" }}>Open now!</span>
                                                 ) : (
-                                                    <span>Close now!</span>
+                                                    <span style={{ color: "red" }}>Close now!</span>
                                                 )
                                             }
                                         </Col>

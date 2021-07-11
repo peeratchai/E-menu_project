@@ -101,7 +101,7 @@ export default function BusinessDistrictManagement(props) {
         adminService.deleteBusinessDistrict(businessDistrictId).then(() => {
             setLoading(false)
             getAllLocation()
-            message.success('Deelte business district successful.')
+            message.success('Delete business district successful.')
         }).catch(error => {
             setLoading(false)
             console.log('onChangeBusinessDistrictStatus error', error)

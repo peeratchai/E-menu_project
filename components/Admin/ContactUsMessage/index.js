@@ -7,6 +7,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import contactUsService from '../../../services/contactUsService'
 import ViewContactUsMessageModal from '../../../components/Modal/ViewContactUsMessageModal'
+import moment from 'moment'
 
 export default function ContactUsMessage(props) {
     const { current_tab } = props
@@ -38,9 +39,11 @@ export default function ContactUsMessage(props) {
     const getAllContactUsMessage = async () => {
         setLoading(true)
         contactUsService.getMessage().then((allMessage) => {
+            allMessage.sort((a,b)=> new Date(b.created_date) - new Date(a.created_date))
             allMessage.map((message, index) => {
                 message.key = message.id
                 message.No = index + 1
+                message.created_date = moment(message.created_date).format('DD/MM/YYYY h:mm:ss')
             })
             setAllMessage(allMessage)
             setLoading(false)
@@ -132,6 +135,11 @@ export default function ContactUsMessage(props) {
             dataIndex: 'subject',
             key: 'subject',
             ...getColumnSearchProps('subject'),
+        },
+        {
+            title: 'Created date',
+            dataIndex: 'created_date',
+            key: 'created_date',
         },
         {
             title: 'Action',

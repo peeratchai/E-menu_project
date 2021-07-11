@@ -14,7 +14,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import LanguageIcon from "@material-ui/icons/Language";
 import PhoneIcon from "@material-ui/icons/Phone";
 import FacebookIcon from "@material-ui/icons/Facebook";
-import TwitterIcon from "@material-ui/icons/Twitter";
+import InstagramIcon from "@material-ui/icons/Instagram";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import OrderMenuModal from "../../../Modal/OrderMenuModal";
 import changeFormatLatLong from "../../../../services/chaneformatLatLong";
@@ -470,16 +470,36 @@ export default function RestaurantDetailMobile(props) {
                           <a href="#">{restaurantDetail.website}</a>
                         </div>
                         <div style={{ padding: "10px 0" }}>
-                          <FacebookIcon
-                            style={{
-                              color: "#3b5998",
-                              fontSize: "40px",
-                              marginRight: "5px",
-                            }}
-                          />{" "}
-                          <TwitterIcon
-                            style={{ color: "#1da1f2", fontSize: "40px" }}
-                          />
+                        {restaurantDetail.facebook && (
+                            <Link
+                              href={restaurantDetail.facebook}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <FacebookIcon
+                                style={{
+                                  color: "#3b5998",
+                                  fontSize: "40px",
+                                  marginRight: "5px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Link>
+                          )}
+                          &nbsp;
+                          {restaurantDetail.instragram && (
+                            <Link
+                              href={restaurantDetail.instragram}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <InstagramIcon
+                                style={{
+                                  color: "#1da1f2",
+                                  fontSize: "40px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </div>

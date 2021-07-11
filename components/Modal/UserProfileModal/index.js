@@ -55,7 +55,7 @@ const UserProfileModal = (props) => {
   const router = useRouter();
   const { liffClientId, currentPath, currentQuery, functionName } = router.query;
   const liffState = router.query['liff.state']
-  console.log('router.query', router)
+  // console.log('router.query', router)
 
   const [autoSyncWithLine, setAutoSyncWithLine] = React.useState(true);
   const [inProcessLineSignIn, setInProcessLineSignIn] = React.useState(false);

@@ -145,7 +145,8 @@ export default function Profile(props) {
     }
 
     const getMasterDataFoodType = async () => {
-        let masterDataFoodType = await masterDataService.getFoodType()
+        let masterDataFoodType = await adminService.getMasterFoodCategory()
+        console.log('masterDataFoodType',masterDataFoodType)
         if (masterDataFoodType) {
             setMasterDataFoodType(masterDataFoodType)
         } else {
