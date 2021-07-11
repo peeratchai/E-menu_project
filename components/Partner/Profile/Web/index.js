@@ -253,7 +253,7 @@ export default function WebProfileComponent(props) {
     let foodTypeDropdown = master_Data_Food_Type && master_Data_Food_Type.map((foodType) => {
         console.log('foodType',foodType)
         return (
-            <Option value={foodType.name}>{foodType.name}</Option>
+            <Option value={foodType.name} key={foodType.id}>{foodType.name}</Option>
         )
     }
     )
