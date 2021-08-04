@@ -1,4 +1,3 @@
-
 const { rountingApi } = require('./routingApi')
 
 
@@ -21,7 +20,7 @@ module.exports = {
     env: {
         REACT_APP_FACEBOOK_APP_ID: '259379829306113',
         URL: 'https://cee-menu-frontend-nsv2u.ondigitalocean.app',
-        API_URL: 'https://cee-menu-back-rg3yt.ondigitalocean.app',
+        API_URL: 'https://cee-menu-server-n6496.ondigitalocean.app',
         // URL: 'http://localhost:3000',
         // API_URL: 'http://localhost:8080',
         SECRET_COOKIE_PASSWORD: '2gyZ3GDw3LDCSCDhPmPDL3sjREVRXPr8',
