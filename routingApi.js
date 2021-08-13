@@ -1,7 +1,6 @@
-
 // dev env.
 // Current backend server
-const API_URL = 'https://cee-menu-back-rg3yt.ondigitalocean.app'
+const API_URL = 'https://cee-menu-server-n6496.ondigitalocean.app'
 
 // Old backend server
 // const API_URL = 'https://cee-menu-tvh2o.ondigitalocean.app'
