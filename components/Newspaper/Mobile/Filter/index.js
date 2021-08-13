@@ -15,6 +15,7 @@ const { Option } = Select;
 export default function MobileFilter(props) {
 
     const { filter_master_data_list } = props
+    const {on_search,onHide} = props
     const [form, setForm] = React.useState({
         food_type: '',
         payment_option: '',
@@ -31,21 +32,21 @@ export default function MobileFilter(props) {
         })
     }
 
-    const onSearch = () => {
-        props.onSearch(form)
-        props.onHide()
+    const onClickSearch = () => {
+        on_search(form)
+        onHide()
     }
 
-    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType) => (
-        <option value={foodType.name}>{foodType.name}</option>
+    let FootTypeDropDown = filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType,index) => (
+        <option value={foodType.name} key={'foodType'+index}>{foodType.name}</option>
     ))
 
-    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance) => (
-        <option value={distance.name}>{distance.name}</option>
+    let DistanceDropDown = filter_master_data_list.distanceMasterData && filter_master_data_list.distanceMasterData.map((distance,index) => (
+        <option value={distance.name} key={'distance'+index}>{distance.name}</option>
     ))
 
-    let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions) => (
-        <option value={peymentOptions.name}>{peymentOptions.name}</option>
+    let PeymentOptionsDropDown = filter_master_data_list.peymentOptionsMasterData && filter_master_data_list.peymentOptionsMasterData.map((peymentOptions,index) => (
+        <option value={peymentOptions.name} key={'peymentOptions'+index}>{peymentOptions.name}</option>
     ))
 
     return (
@@ -213,7 +214,7 @@ export default function MobileFilter(props) {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => { onSearch() }}>
+                <Button onClick={() => onClickSearch() }>
                     Search
                 </Button>
                 <Button className="Buttom_Close" onClick={props.onHide}>Close</Button>

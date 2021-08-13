@@ -11,7 +11,7 @@ import shoppingCartService from '../../../services/shoppingCart';
 
 export default function OrderMenuModal(props) {
 
-    const { shopping_cart, restaurant_id, menu_detail, is_initial_cart } = props
+    const { shopping_cart, restaurant_id, restaurant_name, menu_detail, is_initial_cart } = props
     const { set_initial_shopping_cart, update_shopping_cart } = props
     const isMobileResolution = useMediaQuery(768)
     const [specialInstruction, setSpecialInstruction] = React.useState(null);
@@ -32,7 +32,7 @@ export default function OrderMenuModal(props) {
         }
 
         console.log('is_initial_cart', is_initial_cart)
-        if (shopping_cart !== "" && is_initial_cart) {
+        if (shopping_cart && shopping_cart !== "") {
             console.log(shopping_cart)
             setShoppingCart(shopping_cart)
         } else {
@@ -43,9 +43,11 @@ export default function OrderMenuModal(props) {
     const saveMenu = () => {
         if (restaurant_id) {
             let newCartItemData = {}
-            let newCartItem = []
+            let newCartItemDatabase = []
+            let newCartItemLocalstorage = []
             console.log(shoppingCart)
-            if (Object.keys(shoppingCart).length === 0 || (shoppingCart.shopping_cart_items && shoppingCart.shopping_cart_items.length === 0)) {
+            if (Object.keys(shoppingCart).length === 0 || (shoppingCart.hasOwnProperty('shopping_cart_items') && shoppingCart.shopping_cart_items.length === 0)) {
+                //// No menu in shopping cart
                 newCartItemData = {
                     "restaurant": restaurant_id,
                     "shopping_cart_items": [
@@ -54,20 +56,32 @@ export default function OrderMenuModal(props) {
                             "quantity": count,
                             "price": menuDetail.price,
                             "total": total,
-                            "special_instruction": specialInstruction
+                            "special_instruction": specialInstruction,
                         }
                     ]
                 }
             } else {
+                //// Has menu in shopping cart
                 let existingCartItem = [...shoppingCart.shopping_cart_items]
                 console.log('existingCartItem', existingCartItem)
                 existingCartItem.forEach((cartItem) => {
-                    newCartItem.push({
+                    newCartItemLocalstorage.push({
+                        "menu": {
+                            id: menuDetail.id,
+                            name: menuDetail.name,
+                            image_url: menuDetail.image_url
+                        },
+                        "quantity": count,
+                        "price": menuDetail.price,
+                        "total": total,
+                        "special_instruction": specialInstruction,
+                    })
+                    newCartItemDatabase.push({
                         "menu": cartItem.menu,
                         "quantity": cartItem.quantity,
                         "price": cartItem.price,
                         "total": cartItem.total,
-                        "special_instruction": cartItem.special_instruction
+                        "special_instruction": cartItem.special_instruction,
                     })
                 })
                 //// add new item
@@ -76,27 +90,50 @@ export default function OrderMenuModal(props) {
                     "quantity": count,
                     "price": menuDetail.price,
                     "total": total,
-                    "special_instruction": specialInstruction
+                    "special_instruction": specialInstruction,
                 }
-                newCartItem.push(newItem)
+                newCartItemDatabase.push(newItem)
+                newCartItemLocalstorage.push(newItem)
+                
                 newCartItemData = {
                     ...shoppingCart,
-                    shopping_cart_items: newCartItem
+                    shopping_cart_items: newCartItemDatabase
                 }
             }
             console.log('newCartItemData', newCartItemData)
             shoppingCartService.updateShoppingCart(newCartItemData).then((response) => {
                 if (response === 'Not Login') {
-                    message.warning('Please login before placing order.')
+                    newCartItemData = {
+                        ...shoppingCart,
+                        shopping_cart_items: newCartItemLocalstorage
+                    }
+                    newCartItemData.shopping_cart_items[newCartItemData.shopping_cart_items.length - 1] = {
+                        "menu": {
+                            id: menuDetail.id,
+                            name: menuDetail.name,
+                            image_url: menuDetail.image_url
+                        },
+                        "quantity": count,
+                        "price": menuDetail.price,
+                        "total": total,
+                        "special_instruction": specialInstruction,
+                    }
+
+                    newCartItemData.restaurant = {
+                        id: restaurant_id,
+                        name: restaurant_name
+                    }
+                    window.localStorage.setItem('shoppingCart', JSON.stringify(newCartItemData))
                 } else {
                     console.log('success')
                     setShoppingCart(newCartItemData)
-                    if (update_shopping_cart) {
-                        update_shopping_cart(newCartItemData)
-                    }
-                    if (set_initial_shopping_cart !== undefined) {
-                        set_initial_shopping_cart(newCartItemData, true)
-                    }
+                }
+                if (update_shopping_cart) {
+                    update_shopping_cart(newCartItemData)
+                }
+                if (set_initial_shopping_cart !== undefined) {
+                    //// For mobile version
+                    set_initial_shopping_cart(newCartItemData, true)
                 }
             }).catch(error => {
                 console.log('error', error)

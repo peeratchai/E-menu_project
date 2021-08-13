@@ -24,13 +24,14 @@ export default function WebPromotionlist(props) {
     const renderPromotionsCard = () => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 3 === 0)
         let heightArray = ["16rem", "18rem", "20rem", "22rem", "24rem", "25rem"]
-        let column1 = column1Array && column1Array.map((newspaperDetail) => {
+        let column1 = column1Array && column1Array.map((newspaperDetail,columnIndex) => {
             return (
                 <Link
                     href={{
                         pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
                         query: { restaurantId: newspaperDetail.restaurant.id },
                     }}
+                    key={'column2'+columnIndex}
                 >
                     <div className={styles.colCard} >
                         <div className={utilStyles.parent_zoom_bgImg}>
@@ -57,12 +58,13 @@ export default function WebPromotionlist(props) {
 
         let column2Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 1)
 
-        let column2 = column2Array && column2Array.map((newspaperDetail) => (
+        let column2 = column2Array && column2Array.map((newspaperDetail,columnIndex) => (
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
                     query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
+                key={'column2'+columnIndex}
             >
                 <div className={styles.colCard} >
                     <div className={utilStyles.parent_zoom_bgImg}>
@@ -89,12 +91,13 @@ export default function WebPromotionlist(props) {
 
         let column3Array = newspaper_list.filter((newspaperDetail, index) => index % 3 === 2)
 
-        let column3 = column3Array && column3Array.map((newspaperDetail) => (
+        let column3 = column3Array && column3Array.map((newspaperDetail,columnIndex) => (
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
                     query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
+                key={"column3"+columnIndex}
             >
                 <div className={styles.colCard} >
                     <div className={utilStyles.parent_zoom_bgImg}>

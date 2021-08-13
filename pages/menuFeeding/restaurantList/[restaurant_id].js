@@ -22,7 +22,7 @@ export default function Restaurant() {
   const [restaurantDetail, setRestaurantDetail] = React.useState();
   const [loading, setLoading] = React.useState(false);
   const { mutateUser } = checkUserPermission();
-  const [shoppingCart, setShoppingCart] = React.useState({});
+  const [shoppingCart, setShoppingCart] = React.useState();
   const [isInitialCart, setIsInitialCart] = React.useState(false);
   const [isShowLoginModal, setIsShowLoginModal] = React.useState(false);
   const [numberOfCartItem, setNumberOfCartItem] = React.useState(0);
@@ -48,89 +48,119 @@ export default function Restaurant() {
   const setInitialData = async () => {
     getRestaurantDetail(restaurantId)
       .then(async (restaurantDetail) => {
-        console.log("restaurantDetail", restaurantDetail);
+        // console.log("restaurantDetail", restaurantDetail);
         shoppingCartService
           .getShoppingCart()
-          .then((response) => {
+          .then(async (response) => {
             console.log("shoppingCart response", response);
-            if (response !== "Not Login") {
+            if (response === "Not Login") {
+              //// Not yet login 
+              //// Get shopping cart from localstorage
+              let shoppingCart = window.localStorage.getItem('shoppingCart')
+              console.log('shoppingCart', shoppingCart)
+              if (shoppingCart) {
+                shoppingCart = JSON.parse(shoppingCart)
+                if (shoppingCart.hasOwnProperty('shopping_cart_items')) {
+                  if (shoppingCart.shopping_cart_items.length === 0) {
+                    setShoppingCart(shoppingCart);
+                    setNumberOfCartItem(0);
+                  } else {
+                    let cartItems = [];
+                    let numberOfCartItem = 0;
+
+                    shoppingCart.shopping_cart_items.forEach((cartItem) => {
+                      numberOfCartItem += cartItem.quantity;
+                      cartItems.push({
+                        menu: cartItem.menu,
+                        quantity: cartItem.quantity,
+                        price: cartItem.price,
+                        total: cartItem.total,
+                        special_instruction: cartItem.special_instruction,
+                      });
+                    });
+                    let newShoppingCart = {
+                      restaurant: shoppingCart.restaurant,
+                      shopping_cart_items: cartItems,
+                    };
+                    setNumberOfCartItem(numberOfCartItem);
+                    setShoppingCart(newShoppingCart);
+                  }
+                } else {
+                  setNumberOfCartItem(0);
+                }
+                console.log('shoppingCart', shoppingCart)
+              } else {
+                setNumberOfCartItem(0);
+              }
+            } else {
+              //// Get cart from database
               setIsUserSignin(true);
               let shoppingCart = response;
               setIsInitialCart(true);
-              if (
-                shoppingCart === "" ||
-                (shoppingCart && shoppingCart.shopping_cart_items.length === 0)
-              ) {
-                setShoppingCart(shoppingCart);
-                if (tableId !== undefined) {
-                  if (tableName) {
-                    message.success(
-                      `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
-                      4
-                    );
-                  } else {
-                    message.success(
-                      `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
-                      4
-                    );
-                  }
-                  saveTableOnScanQrCode()
-                    .then((response) => {
-                      console.log("response", response);
-                    })
-                    .catch((error) => {
-                      console.log("error", error);
+              if (shoppingCart === "" || (shoppingCart && shoppingCart.shopping_cart_items)) {
+                if (shoppingCart.shopping_cart_items.length === 0) {
+                  //// Not have menu in cart
+                  setShoppingCart(shoppingCart);
+                  setNumberOfCartItem(0);
+                } else {
+                  //// Has menu in cart
+                  let cartItems = [];
+                  let numberOfCartItem = 0;
+
+                  shoppingCart.shopping_cart_items.forEach((cartItem) => {
+                    numberOfCartItem += cartItem.quantity;
+                    cartItems.push({
+                      menu: cartItem.menu.id,
+                      quantity: cartItem.quantity,
+                      price: cartItem.price,
+                      total: cartItem.total,
+                      special_instruction: cartItem.special_instruction,
                     });
-                }
-                setNumberOfCartItem(0);
-              } else {
-                let cartItems = [];
-                let numberOfCartItem = 0;
-
-                shoppingCart.shopping_cart_items.forEach((cartItem) => {
-                  numberOfCartItem += cartItem.quantity;
-                  cartItems.push({
-                    menu: cartItem.menu.id,
-                    quantity: cartItem.quantity,
-                    price: cartItem.price,
-                    total: cartItem.total,
-                    special_instruction: cartItem.special_instruction,
                   });
-                });
-                let newShoppingCart = {
-                  restaurant: shoppingCart.restaurant.id,
-                  shopping_cart_items: cartItems,
-                };
+                  let newShoppingCart = {
+                    restaurant: shoppingCart.restaurant.id,
+                    shopping_cart_items: cartItems,
+                  };
 
-                setNumberOfCartItem(numberOfCartItem);
-                setShoppingCart(newShoppingCart);
-                console.log("shoppingCart", shoppingCart);
-                if (tableId !== undefined) {
-                  if (tableName) {
-                    message.success(
-                      `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
-                      4
-                    );
-                  } else {
-                    message.success(
-                      `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
-                      4
-                    );
-                  }
-                  if (restaurantId === shoppingCart.restaurant.id) {
-                    console.log("Same restaurant");
-                    saveTableOnScanQrCode()
-                      .then((response) => {
-                        console.log("response", response);
-                      })
-                      .catch((error) => {
-                        console.log("error", error);
-                      });
-                  } else {
-                    console.log("Dif restaurant");
-                    setNotificationModalVisible(true);
-                  }
+                  setNumberOfCartItem(numberOfCartItem);
+                  setShoppingCart(newShoppingCart);
                 }
+              } else {
+              }
+            }
+            // if (restaurantId === shoppingCart.restaurant.id) {
+            //   console.log("Same restaurant");
+            //   try {
+            //     await saveTableOnScanQrCode();
+            //   } catch (error) {
+            //     console.log(
+            //       "saveTableOnScanQrCode",
+            //       saveTableOnScanQrCode
+            //     );
+            //   }
+            // } else {
+            //   console.log("Dif restaurant");
+            //   setNotificationModalVisible(true);
+            // }
+            if (tableId !== undefined) {
+              if (tableName) {
+                message.success(
+                  `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
+                  4
+                );
+              } else {
+                message.success(
+                  `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
+                  4
+                );
+              }
+              try {
+                await saveTableOnScanQrCode();
+              } catch (error) {
+                console.log(
+                  "saveTableOnScanQrCode",
+                  saveTableOnScanQrCode
+                );
               }
             }
           })

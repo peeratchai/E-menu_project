@@ -176,7 +176,7 @@ export default function Newspaper() {
                 <MobileFilter
                     show={modalShow}
                     onHide={() => setModalShow(false)}
-                    onSearch={(form) => onSearch(form)}
+                    on_search={(form) => onSearch(form)}
                     filter_master_data_list={masterDataList}
                     user_location={userLocation}
                 />

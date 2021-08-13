@@ -22,12 +22,13 @@ export default function MobilePromotionlist(props) {
     const renderPromotionsCard = () => {
         let column1Array = newspaper_list.filter((newspaperDetail, index) => index === 0 || index % 2 === 0)
         let heightArray = ["8rem", "12rem", "14rem"]
-        let column1 = column1Array && column1Array.map((newspaperDetail) => (
+        let column1 = column1Array && column1Array.map((newspaperDetail,index) => (
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
                     query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
+                key={'column1'+index}
             >
                 <div className={styles.colCardMobile} >
                     <div className={utilStyles.parent_zoom_bgImg}>
@@ -54,12 +55,13 @@ export default function MobilePromotionlist(props) {
 
         let column2Array = newspaper_list.filter((newspaperDetail, index) => index === 1 || index % 2 !== 0)
 
-        let column2 = column2Array && column2Array.map((newspaperDetail) => (
+        let column2 = column2Array && column2Array.map((newspaperDetail,index) => (
             <Link
                 href={{
                     pathname: '/menuFeeding/restaurantList/' + newspaperDetail.restaurant.name,
                     query: { restaurantId: newspaperDetail.restaurant.id },
                 }}
+                key={'column2'+index}
             >
                 <div className={styles.colCardMobile} >
                     <div className={utilStyles.parent_zoom_bgImg}>

@@ -41,37 +41,40 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         if (user) {
             if (user.profile) {
                 setUserProfile(user.profile)
-                setInitialCart()
             }
         }
+        setInitialCart()
 
     }, [user])
 
     const setInitialCart = () => {
         shoppingCartService.getShoppingCart().then((response) => {
+            console.log('response',response)
+            let shoppingCart
             if (response === 'Not Login') {
-                message.warning('Please login and scan qr code again.')
+                shoppingCart = window.localStorage.getItem('shoppingCart')
+                shoppingCart = JSON.parse(shoppingCart)
             } else {
-                let shoppingCart = response
-                if (shoppingCart === "") {
-                    message.warning('Please select order before check out order.')
-                    setShoppingCartData({ 'order': [] })
-                    setCountMenuItems(0)
-                    setHaveMenuInCart(false)
-                    setTotalPrice(0)
-                } else {
-                    let shoppingCartItems = shoppingCart.shopping_cart_items
-                    setShoppingCartData(shoppingCart)
-                    let countCartItems = 0
-                    shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
-                    setCountMenuItems(countCartItems)
-                    if (countCartItems > 0) {
-                        setHaveMenuInCart(true)
-                    }
-                    let total_price = 0
-                    shoppingCartItems.map((menu) => total_price += menu.total)
-                    setTotalPrice(total_price)
+                shoppingCart = response
+            }
+            if (shoppingCart && shoppingCart !== "") {
+                let shoppingCartItems = shoppingCart.shopping_cart_items
+                setShoppingCartData(shoppingCart)
+                let countCartItems = 0
+                shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
+                setCountMenuItems(countCartItems)
+                if (countCartItems > 0) {
+                    setHaveMenuInCart(true)
                 }
+                let total_price = 0
+                shoppingCartItems.map((menu) => total_price += menu.total)
+                setTotalPrice(total_price)
+            } else {
+                message.warning('Please select order before check out order.')
+                setShoppingCartData({ 'order': [] })
+                setCountMenuItems(0)
+                setHaveMenuInCart(false)
+                setTotalPrice(0)
             }
         })
     }
@@ -192,10 +195,10 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                             message.success('Check out order successful.')
                                             setConfirmModalVisible(false)
                                             setLoading(false)
-                                                router.push({
-                                                    pathname: '/menuFeeding/restaurantList/' + restaurantName,
-                                                    query: { restaurantId: restaurantId }
-                                                })
+                                            router.push({
+                                                pathname: '/menuFeeding/restaurantList/' + restaurantName,
+                                                query: { restaurantId: restaurantId }
+                                            })
                                         }
                                     }
                                 }).catch(error => {
@@ -210,16 +213,12 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                         setConfirmModalVisible(false)
                         setLoading(false)
                     }
-
-
-
-
-
                 } else {
                     message.warning('Please select order before check out order.')
                 }
             } else {
                 message.warning('User not found. Please login and try again.')
+                //// login show
             }
         } else {
             message.warning('Please scan qr code for check out menu.')
@@ -507,7 +506,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
 }
 
 function ConfirmOrderModal(props) {
-    console.log('loading', props.loading)
     return (
         <Modal
             {...props}
@@ -635,7 +633,7 @@ CheckoutPage.propTypes = {
 }
 
 export const getServerSideProps = withSession(async function ({ req, res }) {
-    let user = req.session.get('user')
+    let user = req.session.get('user') ? req.session.get('user') : null
     let tableId = null
     let shoppingRestaurantId = null
     let tableIdSession = req.session.get('tableId')
@@ -664,11 +662,6 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         }
 
     } else {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
+        return { props: { user, tableId, shoppingRestaurantId } }
     }
 })

@@ -35,7 +35,7 @@ export default function RestaurantDetailMobile(props) {
   const router = useRouter();
   //// Set State
   const showBasketButton = "";
-  const [modalShow, setModalShow] = React.useState(false);
+  const [orderModalShow, setOrderModalShow] = React.useState(false);
   const [categoryList, setCategoryList] = React.useState([]);
   const [menuEachCategory, setMenuEachCategory] = React.useState("");
   const [categorySelected, setCategorySelected] = React.useState("");
@@ -94,24 +94,28 @@ export default function RestaurantDetailMobile(props) {
     if (restaurant_detail) {
       let { restaurant_detail, location_id, location_name } = props;
       let categoryList = [];
-      restaurant_detail.menu_categories
-        .sort((a, b) => a.sequence_number - b.sequence_number)
-        .map((category, index) => {
-          if (category.is_active === true && category.menus.length > 0) {
-            console.log("category", category);
-            if (index === 0) {
-              categoryList.push({
-                categoryName: category.name,
-                isActive: true,
-              });
-            } else {
-              categoryList.push({
-                categoryName: category.name,
-                isActive: false,
-              });
+      if (restaurant_detail && restaurant_detail.hasOwnProperty('menu_categories')) {
+        restaurant_detail.menu_categories
+          .sort((a, b) => a.sequence_number - b.sequence_number)
+          .map((category, index) => {
+            if (category.is_active === true && category.menus.length > 0) {
+              if (index === 0) {
+                categoryList.push({
+                  categoryName: category.name,
+                  isActive: true,
+                });
+              } else {
+                categoryList.push({
+                  categoryName: category.name,
+                  isActive: false,
+                });
+              }
             }
-          }
-        });
+          });
+      } else {
+        console.log('restaurant_detail not found!')
+      }
+
 
       let { lat, lng } = changeFormatLatLong(restaurant_detail.location);
       setLat(parseFloat(lat));
@@ -150,7 +154,8 @@ export default function RestaurantDetailMobile(props) {
       }
       console.log("shopping_cart", shopping_cart);
       if (
-        shopping_cart.shopping_cart_items &&
+        shopping_cart &&
+        shopping_cart.hasOwnProperty('shopping_cart_items') &&
         shopping_cart.shopping_cart_items.length > 0
       ) {
         setInitialShoppingCart(shopping_cart);
@@ -184,34 +189,35 @@ export default function RestaurantDetailMobile(props) {
     console.log("shopping_cart", shopping_cart);
     console.log("restaurantOpenNow", restaurantOpenNow);
     setMenuSelected(menu);
-    if (is_user_signin) {
-      if (restaurantOpenNow) {
-        if (shopping_cart !== "") {
-          let restaurantIdOfCart = shopping_cart.restaurant;
-          if (
-            restaurant_id !== restaurantIdOfCart &&
-            shopping_cart.shopping_cart_items.length > 0
-          ) {
-            console.log(
-              "have order in shopping cart and not the same restaurant."
-            );
-            setNotificationModalVisible(true);
-          } else {
-            setModalShow(true);
-          }
+    if (restaurantOpenNow) {
+      if (shopping_cart && shopping_cart.shopping_cart_items) {
+        let restaurantIdOfCart = shopping_cart.restaurant;
+        if (shopping_cart.restaurant.hasOwnProperty('id')) {
+          restaurantIdOfCart = shopping_cart.restaurant.id
         } else {
-          setModalShow(true);
+          restaurantIdOfCart = shopping_cart.restaurant
+        }
+        if (
+          restaurant_id !== restaurantIdOfCart &&
+          shopping_cart.shopping_cart_items.length > 0
+        ) {
+          console.log(
+            "have order in shopping cart and not the same restaurant."
+          );
+          setNotificationModalVisible(true);
+        } else {
+          setOrderModalShow(true);
         }
       } else {
-        setNotificationRestaurantClosingModalVisible(true);
+        setOrderModalShow(true);
       }
     } else {
-      notification_login_modal_show();
+      setNotificationRestaurantClosingModalVisible(true);
     }
   };
 
   const onTakeNewCart = () => {
-    setModalShow(true);
+    setOrderModalShow(true);
     setHaveShoppingCart(false);
     setNotificationModalVisible(false);
     set_shopping_cart("");
@@ -470,7 +476,7 @@ export default function RestaurantDetailMobile(props) {
                           <a href="#">{restaurantDetail.website}</a>
                         </div>
                         <div style={{ padding: "10px 0" }}>
-                        {restaurantDetail.facebook && (
+                          {restaurantDetail.facebook && (
                             <Link
                               href={restaurantDetail.facebook}
                               style={{ cursor: "pointer" }}
@@ -552,10 +558,11 @@ export default function RestaurantDetailMobile(props) {
         </Spin>
       </Container>
       <OrderMenuModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+        show={orderModalShow}
+        onHide={() => setOrderModalShow(false)}
         menu_detail={menuSelected}
         restaurant_id={restaurant_id}
+        restaurant_name={restaurantDetail.name}
         shopping_cart={shopping_cart}
         is_initial_cart={is_initial_cart}
         set_initial_shopping_cart={setInitialShoppingCart}

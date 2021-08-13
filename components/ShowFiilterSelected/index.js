@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import styles from './index.module.css'
 import utilStyles from '../../styles/utils.module.css'
 
@@ -49,8 +49,7 @@ export default function ShowFiilterSelected(props) {
         }
     }
 
-    useLayoutEffect(() => {
-
+    useEffect(() => {
         if (props.filter !== undefined) {
             if (Object.keys(props.filter).length > 0) {
                 setFilterData(props.filter)

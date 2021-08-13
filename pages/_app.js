@@ -3,8 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AnimatePresence } from "framer-motion";
 import Head from 'next/head'
 import Geocode from "react-geocode";
-import { useEffect } from 'react';
-import { useRouter } from 'next/router'
 
 Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
 Geocode.setLanguage("th");
@@ -33,9 +31,10 @@ const handExitComplete = () => {
 };
 
 
-export default function App({ Component, pageProps }) {
-
-    return (<AnimatePresence exitBeforeEnter onExitComplete={handExitComplete}>
+export default function App({ Component, pageProps ,router}) {
+console.log('router',router.route)
+    return (
+    <AnimatePresence exitBeforeEnter onExitComplete={handExitComplete} >
         <Head>
             <link
                 href="https://fonts.googleapis.com/css?family=Work Sans"
@@ -55,6 +54,7 @@ export default function App({ Component, pageProps }) {
             font-family: 'Work Sans', sans-serif;
         }
       `}</style>
-        <Component {...pageProps} />
-    </AnimatePresence>)
+        <Component key={router.route} {...pageProps}  />
+    </AnimatePresence>
+    )
 }

@@ -59,7 +59,6 @@ export default function Layout(props) {
   };
 
   useEffect(() => {
-    console.log("is_show_login_modal", is_show_login_modal);
     if (is_show_login_modal) {
       setLoginModalShow(true);
       set_is_show_login_modal();
@@ -126,7 +125,6 @@ export default function Layout(props) {
   };
 
   const generateButtonNavbar = (countCartItems = total_menu_in_basket) => {
-    console.log("countCartItems", countCartItems);
     let buttonNavbar;
     if (page === "restaurantDetails") {
       buttonNavbar = (
