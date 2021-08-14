@@ -25,6 +25,33 @@ const shoppingCartService = {
             });
     },
     updateShoppingCart: async (data) => {
+        console.log('data', data)
+        console.log('data.restaurant', data.restaurant)
+        let restaurantId
+        let shoppingCartItems = []
+        let dataReq = {}
+        if (data.restaurant.id) {
+            //// For shopping cart from localstorage
+            restaurantId = data.restaurant.id
+            console.log('has id')
+            data.shopping_cart_items.map((cartItem) => {
+                shoppingCartItems.push({
+                    menu: cartItem.menu.id,
+                    price: cartItem.price,
+                    quantity: cartItem.quantity,
+                    special_instruction: cartItem.special_instruction,
+                    total: cartItem.total,
+                })
+            })
+        } else {
+            restaurantId = data.restaurant
+            console.log('no id')
+        }
+        dataReq = {
+            restaurant : restaurantId,
+            shopping_cart_items : shoppingCartItems
+        }
+        console.log('dataReq', dataReq)
         let accessTokenlocalStorage = window.localStorage.getItem('accessToken');
         if (accessTokenlocalStorage === null) {
             return 'Not Login'

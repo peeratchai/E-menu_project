@@ -11,7 +11,7 @@ import shoppingCartService from '../../../services/shoppingCart';
 
 export default function OrderMenuModal(props) {
 
-    const { shopping_cart, restaurant_id, restaurant_name, menu_detail, is_initial_cart } = props
+    const { shopping_cart, restaurant_id, restaurant_name, menu_detail, is_initial_cart, is_user_signin } = props
     const { set_initial_shopping_cart, update_shopping_cart } = props
     const isMobileResolution = useMediaQuery(768)
     const [specialInstruction, setSpecialInstruction] = React.useState(null);
@@ -32,6 +32,7 @@ export default function OrderMenuModal(props) {
         }
 
         console.log('is_initial_cart', is_initial_cart)
+        console.log('shopping_cart', shopping_cart)
         if (shopping_cart && shopping_cart !== "") {
             console.log(shopping_cart)
             setShoppingCart(shopping_cart)
@@ -40,19 +41,42 @@ export default function OrderMenuModal(props) {
         }
     }, [menu_detail, shopping_cart, is_initial_cart])
 
-    const saveMenu = () => {
+    const saveMenu = async () => {
+        let newShoppingCart = shoppingCart
         if (restaurant_id) {
+
+            //// Check order in cart have restaurant id same the new order
+            if (newShoppingCart.restaurant && newShoppingCart.restaurant.id !== restaurant_id) {
+                //// Remove old cart before submit new cart
+                if (is_user_signin) {
+                    try {
+                        let res_delete_shopping_cart = await shoppingCartService.deleteShoppingCart()
+                        console.log('res_delete_shopping_cart', res_delete_shopping_cart)
+                    } catch (error) {
+                        console.log('res_delete_shopping_cart error', res_delete_shopping_cart)
+                    }
+                } else {
+                    window.localStorage.removeItem('shoppingCart')
+                }
+                newShoppingCart = {}
+                console.log('differrent')
+            }
+
+
             let newCartItemData = {}
-            let newCartItemDatabase = []
-            let newCartItemLocalstorage = []
-            console.log(shoppingCart)
-            if (Object.keys(shoppingCart).length === 0 || (shoppingCart.hasOwnProperty('shopping_cart_items') && shoppingCart.shopping_cart_items.length === 0)) {
+            let newCartItem = []
+            console.log(newShoppingCart)
+            if (Object.keys(newShoppingCart).length === 0 || (newShoppingCart.hasOwnProperty('shopping_cart_items') && newShoppingCart.shopping_cart_items.length === 0)) {
                 //// No menu in shopping cart
                 newCartItemData = {
                     "restaurant": restaurant_id,
                     "shopping_cart_items": [
                         {
-                            "menu": menuDetail.id,
+                            "menu": {
+                                id: menuDetail.id,
+                                name: menuDetail.name,
+                                image_url: menuDetail.image_url
+                            },
                             "quantity": count,
                             "price": menuDetail.price,
                             "total": total,
@@ -62,22 +86,15 @@ export default function OrderMenuModal(props) {
                 }
             } else {
                 //// Has menu in shopping cart
-                let existingCartItem = [...shoppingCart.shopping_cart_items]
+                let existingCartItem = [...newShoppingCart.shopping_cart_items]
                 console.log('existingCartItem', existingCartItem)
                 existingCartItem.forEach((cartItem) => {
-                    newCartItemLocalstorage.push({
+                    newCartItem.push({
                         "menu": {
-                            id: menuDetail.id,
-                            name: menuDetail.name,
-                            image_url: menuDetail.image_url
+                            id: cartItem.menu.id,
+                            name: cartItem.menu.name,
+                            image_url: cartItem.menu.image_url
                         },
-                        "quantity": count,
-                        "price": menuDetail.price,
-                        "total": total,
-                        "special_instruction": specialInstruction,
-                    })
-                    newCartItemDatabase.push({
-                        "menu": cartItem.menu,
                         "quantity": cartItem.quantity,
                         "price": cartItem.price,
                         "total": cartItem.total,
@@ -86,27 +103,27 @@ export default function OrderMenuModal(props) {
                 })
                 //// add new item
                 let newItem = {
-                    "menu": menuDetail.id,
+                    "menu": {
+                        id: menuDetail.id,
+                        name: menuDetail.name,
+                        image_url: menuDetail.image_url
+                    },
                     "quantity": count,
                     "price": menuDetail.price,
                     "total": total,
                     "special_instruction": specialInstruction,
                 }
-                newCartItemDatabase.push(newItem)
-                newCartItemLocalstorage.push(newItem)
-                
+                newCartItem.push(newItem)
+
                 newCartItemData = {
-                    ...shoppingCart,
-                    shopping_cart_items: newCartItemDatabase
+                    ...newShoppingCart,
+                    shopping_cart_items: newCartItem
                 }
             }
             console.log('newCartItemData', newCartItemData)
             shoppingCartService.updateShoppingCart(newCartItemData).then((response) => {
                 if (response === 'Not Login') {
-                    newCartItemData = {
-                        ...shoppingCart,
-                        shopping_cart_items: newCartItemLocalstorage
-                    }
+                    //// Edit new menu structure database to localstorage
                     newCartItemData.shopping_cart_items[newCartItemData.shopping_cart_items.length - 1] = {
                         "menu": {
                             id: menuDetail.id,

@@ -57,7 +57,6 @@ export default function Restaurant() {
               //// Not yet login 
               //// Get shopping cart from localstorage
               let shoppingCart = window.localStorage.getItem('shoppingCart')
-              console.log('shoppingCart', shoppingCart)
               if (shoppingCart) {
                 shoppingCart = JSON.parse(shoppingCart)
                 if (shoppingCart.hasOwnProperty('shopping_cart_items')) {
@@ -65,25 +64,13 @@ export default function Restaurant() {
                     setShoppingCart(shoppingCart);
                     setNumberOfCartItem(0);
                   } else {
-                    let cartItems = [];
+                    setIsInitialCart(true);
                     let numberOfCartItem = 0;
-
                     shoppingCart.shopping_cart_items.forEach((cartItem) => {
                       numberOfCartItem += cartItem.quantity;
-                      cartItems.push({
-                        menu: cartItem.menu,
-                        quantity: cartItem.quantity,
-                        price: cartItem.price,
-                        total: cartItem.total,
-                        special_instruction: cartItem.special_instruction,
-                      });
                     });
-                    let newShoppingCart = {
-                      restaurant: shoppingCart.restaurant,
-                      shopping_cart_items: cartItems,
-                    };
                     setNumberOfCartItem(numberOfCartItem);
-                    setShoppingCart(newShoppingCart);
+                    setShoppingCart(shoppingCart);
                   }
                 } else {
                   setNumberOfCartItem(0);
@@ -95,38 +82,163 @@ export default function Restaurant() {
             } else {
               //// Get cart from database
               setIsUserSignin(true);
-              let shoppingCart = response;
+              let shoppingCartDatabase = response;
               setIsInitialCart(true);
-              if (shoppingCart === "" || (shoppingCart && shoppingCart.shopping_cart_items)) {
-                if (shoppingCart.shopping_cart_items.length === 0) {
-                  //// Not have menu in cart
-                  setShoppingCart(shoppingCart);
-                  setNumberOfCartItem(0);
-                } else {
-                  //// Has menu in cart
-                  let cartItems = [];
-                  let numberOfCartItem = 0;
 
-                  shoppingCart.shopping_cart_items.forEach((cartItem) => {
+              //// Check have shopping cart in localstorage shoppingCartService.updateShoppingCart(newCartItemData).then((response) => {
+              let shoppingCartLocal = window.localStorage.getItem('shoppingCart')
+              let haveShoppingCartInLocal = false
+              if (shoppingCartLocal) {
+                shoppingCartLocal = JSON.parse(shoppingCartLocal)
+                if (shoppingCartLocal.hasOwnProperty('shopping_cart_items')) {
+                  if (shoppingCartLocal.shopping_cart_items.length !== 0) {
+                    haveShoppingCartInLocal = true
+                  }
+                }
+              }
+              ////
+
+              if (shoppingCartDatabase === "") {
+
+                //// No have menu in cart of this account
+                if (haveShoppingCartInLocal) {
+
+                  //// Have menu in localstorage and update the shopping cart to database 
+                  let numberOfCartItem = 0;
+                  let cartItems = [];
+                  let newShoppingCart
+
+                  shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
                     numberOfCartItem += cartItem.quantity;
                     cartItems.push({
-                      menu: cartItem.menu.id,
+                      menu: {
+                        id: cartItem.menu.id,
+                        name: cartItem.menu.name,
+                        image_url: cartItem.menu.image_url
+                      },
                       quantity: cartItem.quantity,
                       price: cartItem.price,
                       total: cartItem.total,
                       special_instruction: cartItem.special_instruction,
                     });
                   });
-                  let newShoppingCart = {
-                    restaurant: shoppingCart.restaurant.id,
+
+                  newShoppingCart = {
+                    restaurant: shoppingCartLocal.restaurant.id,
                     shopping_cart_items: cartItems,
                   };
 
+                  try {
+                    let res = await shoppingCartService.updateShoppingCart(newShoppingCart)
+                    window.localStorage.removeItem('shoppingCart')
+                    console.log('updateShoppingCart', res)
+                  } catch (error) {
+                    console.log('error', error)
+                  }
+
+                  setShoppingCart(shoppingCartLocal);
                   setNumberOfCartItem(numberOfCartItem);
-                  setShoppingCart(newShoppingCart);
+                } else {
+
+                  //// No have menu in cart of localstorage
+                  setShoppingCart(shoppingCartDatabase);
+                  setNumberOfCartItem(0);
                 }
+
               } else {
+                //// Has menu in cart in database
+                let cartItems = [];
+                let numberOfCartItem = 0;
+                let newShoppingCart
+
+                shoppingCartDatabase.shopping_cart_items.forEach((cartItem) => {
+                  numberOfCartItem += cartItem.quantity;
+                  cartItems.push({
+                    menu: {
+                      id: cartItem.menu.id,
+                      name: cartItem.menu.name,
+                      image_url: cartItem.menu.image_url
+                    },
+                    quantity: cartItem.quantity,
+                    price: cartItem.price,
+                    total: cartItem.total,
+                    special_instruction: cartItem.special_instruction,
+                  });
+                });
+
+                newShoppingCart = {
+                  restaurant: shoppingCartDatabase.restaurant.id,
+                  shopping_cart_items: cartItems,
+                };
+
+                if (haveShoppingCartInLocal) {
+                  //// Have menu in localstorage and merge shopping cart between local stroage and database 
+
+                  if (shoppingCartLocal.restaurant.id === shoppingCartDatabase.restaurant.id) {
+                    //// Shopping cart between localstorage and database is the same restaurant 
+                    //// Sum all menu and update shopping cart to database
+
+                    shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
+                      numberOfCartItem += cartItem.quantity;
+                      cartItems.push({
+                        menu: {
+                          id: cartItem.menu.id,
+                          name: cartItem.menu.name,
+                          image_url: cartItem.menu.image_url
+                        },
+                        quantity: cartItem.quantity,
+                        price: cartItem.price,
+                        total: cartItem.total,
+                        special_instruction: cartItem.special_instruction,
+                      });
+                    });
+
+                    newShoppingCart = {
+                      restaurant: shoppingCartDatabase.restaurant.id,
+                      shopping_cart_items: cartItems,
+                    };
+
+                    try {
+                      let res = await shoppingCartService.updateShoppingCart(newShoppingCart)
+                      console.log('updateShoppingCart', res)
+                      window.localStorage.removeItem('shoppingCart')
+                    } catch (error) {
+                      console.log('error', error)
+                    }
+                  } else {
+                    ////  Shopping cart between local storage and database has different restaurant 
+                    cartItems = []
+                    numberOfCartItem = 0
+                    shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
+                      numberOfCartItem += cartItem.quantity;
+                      cartItems.push({
+                        menu: {
+                          id: cartItem.menu.id,
+                          name: cartItem.menu.name,
+                          image_url: cartItem.menu.image_url
+                        },
+                        quantity: cartItem.quantity,
+                        price: cartItem.price,
+                        total: cartItem.total,
+                        special_instruction: cartItem.special_instruction,
+                      });
+                    });
+
+                    newShoppingCart = {
+                      restaurant: shoppingCartLocal.restaurant.id,
+                      shopping_cart_items: cartItems,
+                    };
+
+                    let res_delete_shopping_cart = await shoppingCartService.deleteShoppingCart()
+                    let res_update_shopping_cart = await shoppingCartService.updateShoppingCart(newShoppingCart)
+                    window.localStorage.removeItem('shoppingCart')
+                  }
+                }
+
+                setNumberOfCartItem(numberOfCartItem);
+                setShoppingCart(newShoppingCart);
               }
+
             }
             // if (restaurantId === shoppingCart.restaurant.id) {
             //   console.log("Same restaurant");
@@ -191,8 +303,13 @@ export default function Restaurant() {
     return response.data;
   };
 
+  const settingNumberOfCart = (numberOfCart) => {
+    setNumberOfCartItem(numberOfCart);
+  }
+
   const settingShoppintCart = (shoppingCart) => {
     console.log("setShoppingCart", shoppingCart);
+
     setShoppingCart(shoppingCart);
   };
 
@@ -267,6 +384,7 @@ export default function Restaurant() {
             table_id={tableId}
             loading={loading}
             shopping_cart={shoppingCart}
+            set_number_of_cart={settingNumberOfCart}
             set_shopping_cart={settingShoppintCart}
             is_initial_cart={isInitialCart}
             is_user_signin={isUserSignin}

@@ -31,7 +31,7 @@ export default function RestaurantDetailMobile(props) {
     restaurant_id,
     is_user_signin,
   } = props;
-  const { set_shopping_cart, notification_login_modal_show } = props;
+  const { set_shopping_cart, notification_login_modal_show, set_number_of_cart } = props;
   const router = useRouter();
   //// Set State
   const showBasketButton = "";
@@ -182,14 +182,15 @@ export default function RestaurantDetailMobile(props) {
     if (update) {
       console.log("update");
       set_shopping_cart(shoppingCart);
+      set_number_of_cart(numberOfCartItem)
     }
   };
 
-  const onAddMenu = (menu) => {
+  const onAddMenu = async (menu) => {
     console.log("shopping_cart", shopping_cart);
     console.log("restaurantOpenNow", restaurantOpenNow);
     setMenuSelected(menu);
-    if (restaurantOpenNow) {
+    if (!restaurantOpenNow) {
       if (shopping_cart && shopping_cart.shopping_cart_items) {
         let restaurantIdOfCart = shopping_cart.restaurant;
         if (shopping_cart.restaurant.hasOwnProperty('id')) {
@@ -197,6 +198,8 @@ export default function RestaurantDetailMobile(props) {
         } else {
           restaurantIdOfCart = shopping_cart.restaurant
         }
+        console.log('restaurant_id', restaurant_id)
+        console.log('restaurantIdOfCart', restaurantIdOfCart)
         if (
           restaurant_id !== restaurantIdOfCart &&
           shopping_cart.shopping_cart_items.length > 0
@@ -204,7 +207,18 @@ export default function RestaurantDetailMobile(props) {
           console.log(
             "have order in shopping cart and not the same restaurant."
           );
-          setNotificationModalVisible(true);
+          // if (is_user_signin) {
+          //   try {
+          //     let res_delete_shopping_cart = await shoppingCartService.deleteShoppingCart()
+          //     console.log('res_delete_shopping_cart', res_delete_shopping_cart)
+          //   } catch (error) {
+          //     console.log('res_delete_shopping_cart error', res_delete_shopping_cart)
+          //   }
+          // } else {
+          //   window.localStorage.removeItem('shoppingCart')
+          // }
+          // setNotificationModalVisible(true);
+          setOrderModalShow(true);
         } else {
           setOrderModalShow(true);
         }
@@ -567,6 +581,7 @@ export default function RestaurantDetailMobile(props) {
         is_initial_cart={is_initial_cart}
         set_initial_shopping_cart={setInitialShoppingCart}
         update_shopping_cart={updateShoppingCart}
+        is_user_signin={is_user_signin}
       />
       <NotificationShoppingCartModal
         show={notificationModalVisible}

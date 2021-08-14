@@ -63,11 +63,11 @@ export default function WebComponent(props) {
         let menus = record.menus;
         menus.map((menu, index) => {
             menu.categoryId = record.id
-            menu.index = index
+            menu.index = index + 1
             menu.key = menu.name + index
             menu.image = (<img src={menu.image_url} />)
         })
-        return <Table columns={columns} dataSource={menus} pagination={false} />;
+        return <Table columns={columns} dataSource={menus} pagination={false} scroll={{ x: 'max-content' }} />;
     };
 
     return (
@@ -84,7 +84,7 @@ export default function WebComponent(props) {
                     <Button disabled={disable} className={utilStyles.fontContent} onClick={() => show_add_Category_Modal(true)}>Add Category</Button>
                 </div>
                 <Spin spinning={spin_loading} tip="Loading...">
-                    <Table columns={columns_table} dataSource={categoryData} expandable={{ expandedRowRender }} />
+                    <Table columns={columns_table} dataSource={categoryData} expandable={{ expandedRowRender }} scroll={{ x: 'max-content' }} />
                 </Spin>
             </div>
         </>

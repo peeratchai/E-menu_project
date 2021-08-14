@@ -49,33 +49,107 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }, [user])
 
     const setInitialCart = () => {
-        shoppingCartService.getShoppingCart().then((response) => {
+        shoppingCartService.getShoppingCart().then(async (response) => {
             console.log('response', response)
             let shoppingCart
             if (response === 'Not Login') {
                 shoppingCart = window.localStorage.getItem('shoppingCart')
-                shoppingCart = JSON.parse(shoppingCart)
+                if (shoppingCart) {
+                    shoppingCart = JSON.parse(shoppingCart)
+                    if (shoppingCart.hasOwnProperty('shopping_cart_items')) {
+                        if (shoppingCart.shopping_cart_items.length === 0) {
+                            setShoppingCartData(shoppingCart);
+                        } else {
+                            let total_price = 0
+                            let countCartItems = 0
+
+                            shoppingCart.shopping_cart_items.forEach((cartItem) => {
+                                total_price += cartItem.total;
+                                countCartItems += cartItem.quantity
+                            });
+                            if (countCartItems > 0) {
+                                setHaveMenuInCart(true)
+                            }
+                            setCountMenuItems(countCartItems)
+                            setTotalPrice(total_price);
+                            console.log('shoppingCart', shoppingCart)
+                            console.log('shoppingCart', shoppingCart.shopping_cart_items)
+                            setShoppingCartData(shoppingCart);
+                        }
+                    } else {
+                        message.warning('Please select order before check out order.')
+                        setShoppingCartData({ 'order': [] })
+                        setCountMenuItems(0)
+                        setHaveMenuInCart(false)
+                        setTotalPrice(0)
+                    }
+                } else {
+                    message.warning('Please select order before check out order.')
+                    setShoppingCartData({ 'order': [] })
+                    setCountMenuItems(0)
+                    setHaveMenuInCart(false)
+                    setTotalPrice(0)
+                }
             } else {
                 shoppingCart = response
-            }
-            if (shoppingCart && shoppingCart !== "") {
-                let shoppingCartItems = shoppingCart.shopping_cart_items
-                setShoppingCartData(shoppingCart)
-                let countCartItems = 0
-                shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
-                setCountMenuItems(countCartItems)
-                if (countCartItems > 0) {
-                    setHaveMenuInCart(true)
+                if (shoppingCart && shoppingCart !== "") {
+                    let shoppingCartItems = shoppingCart.shopping_cart_items
+
+                    //// Check shopping cart in local storage
+                    let shoppingCartLocal = window.localStorage.getItem('shoppingCart')
+                    if (shoppingCartLocal) {
+                        shoppingCartLocal = JSON.parse(shoppingCartLocal)
+                        if (shoppingCartLocal.hasOwnProperty('shopping_cart_items')) {
+                            if (shoppingCartLocal.shopping_cart_items.length > 0) {
+                                shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
+                                    shoppingCartItems.push({
+                                        menu: {
+                                            id: cartItem.menu.id,
+                                            name: cartItem.menu.name,
+                                            image_url: cartItem.menu.image_url
+                                        },
+                                        quantity: cartItem.quantity,
+                                        price: cartItem.price,
+                                        total: cartItem.total,
+                                        special_instruction: cartItem.special_instruction,
+                                    });
+                                });
+
+                                shoppingCart = {
+                                    restaurant: response.restaurant.id,
+                                    shopping_cart_items: shoppingCartItems,
+                                }
+
+
+                                console.log('shoppingCart', shoppingCart)
+                                try {
+                                    let res = await shoppingCartService.updateShoppingCart(shoppingCart)
+                                    console.log('updateShoppingCart', res)
+                                    window.localStorage.removeItem('shoppingCart')
+                                } catch (error) {
+                                    console.log('error', error)
+                                }
+                            }
+                        }
+                    }
+
+                    setShoppingCartData(shoppingCart)
+                    let countCartItems = 0
+                    shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
+                    setCountMenuItems(countCartItems)
+                    if (countCartItems > 0) {
+                        setHaveMenuInCart(true)
+                    }
+                    let total_price = 0
+                    shoppingCartItems.map((menu) => total_price += menu.total)
+                    setTotalPrice(total_price)
+                } else {
+                    message.warning('Please select order before check out order.')
+                    setShoppingCartData({ 'order': [] })
+                    setCountMenuItems(0)
+                    setHaveMenuInCart(false)
+                    setTotalPrice(0)
                 }
-                let total_price = 0
-                shoppingCartItems.map((menu) => total_price += menu.total)
-                setTotalPrice(total_price)
-            } else {
-                message.warning('Please select order before check out order.')
-                setShoppingCartData({ 'order': [] })
-                setCountMenuItems(0)
-                setHaveMenuInCart(false)
-                setTotalPrice(0)
             }
         })
     }
@@ -157,7 +231,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }
 
     const onCheckOutOrder = async () => {
-        if (!haveCheckOutPermission) {
+        if (haveCheckOutPermission) {
             if (userProfile) {
                 if (haveMenuInCart) {
                     setLoading(true)
@@ -165,6 +239,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     console.log(userId)
                     console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
+                    console.log('shoppingRestaurantId',shoppingRestaurantId)
                     if (shoppingRestaurantId === restaurantId) {
                         console.log('same restaurant')
                         let restaurantName = shoppingCartData.restaurant.name
@@ -233,8 +308,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }
 
     let MenuListComponentMobile = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
+        console.log('cartItem', cartItem)
         return (
-            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.id}>
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.menu.name + index}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
                     <Image src={cartItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
