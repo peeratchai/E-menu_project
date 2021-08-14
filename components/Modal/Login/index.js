@@ -12,6 +12,7 @@ import fetchJson from '../../../lib/fetchJson'
 import { useRouter } from "next/router";
 
 export default function LoginModal(props) {
+    const { sub_header } = props
     const router = useRouter();
     const { liffClientId, currentPath, currentQuery, functionName } = router.query;
     const liffState = router.query['liff.state']
@@ -507,10 +508,15 @@ export default function LoginModal(props) {
         >
             <Modal.Body style={{ padding: "65px 30px 45px" }}>
                 <Spin spinning={loading} tip="Loading...">
-                    <Row style={{ textAlign: "center", marginBottom: "2rem", fontWeight: "bold" }}>
+                    <Row style={{ textAlign: "center", marginBottom: "1.5rem", fontWeight: "bold" }}>
                         <div style={{ padding: "0.5rem", margin: "auto", borderRadius: "100px" }}>
                             <Col style={{ cursor: "pointer" }} onClick={() => { changeTab('login') }}>
                                 <h4 style={{ fontWeight: "1000", margin: "0" }}> {title[tab]} </h4>
+                                {sub_header && (
+                                    <div style={{ fontSize: "10px", color: 'red', marginTop: '0.5rem' }}>
+                                        {sub_header}
+                                    </div>
+                                )}
                             </Col>
                         </div>
                     </Row>

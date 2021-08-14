@@ -26,6 +26,7 @@ export default function Layout(props) {
     menuInBasket,
     is_show_login_modal = false,
     set_is_show_login_modal,
+    sub_header = null
   } = props;
   const { user, mutateUser } = checkUserPermission();
 
@@ -306,6 +307,7 @@ export default function Layout(props) {
         onHide={() => setLoginModalShow(false)}
         setlogin={setIsLogin}
         check_permission={checkPermission}
+        sub_header={sub_header}
       />
       <UserProfileModal
         show={userProfileModalShow}

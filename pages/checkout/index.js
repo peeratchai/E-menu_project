@@ -30,7 +30,8 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     const [haveMenuInCart, setHaveMenuInCart] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
-
+    const [isShowLoginModal, setIsShowLoginModal] = React.useState(false);
+    const [subHeaderLoginModal, setSubHeaderLoginModal] = React.useState(null)
 
     useEffect(() => {
         console.log('user', user)
@@ -49,7 +50,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
 
     const setInitialCart = () => {
         shoppingCartService.getShoppingCart().then((response) => {
-            console.log('response',response)
+            console.log('response', response)
             let shoppingCart
             if (response === 'Not Login') {
                 shoppingCart = window.localStorage.getItem('shoppingCart')
@@ -145,6 +146,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         console.log('cartDataForm', cartDataForm)
         shoppingCartService.updateShoppingCart(cartDataForm).then((response) => {
             console.log('response', response)
+            if (response === 'Not Login') {
+                window.localStorage.setItem('shoppingCart', JSON.stringify(newCart))
+            }
             setLoading(false)
         }).catch(error => {
             setLoading(false)
@@ -153,8 +157,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }
 
     const onCheckOutOrder = async () => {
-
-        if (haveCheckOutPermission) {
+        if (!haveCheckOutPermission) {
             if (userProfile) {
                 if (haveMenuInCart) {
                     setLoading(true)
@@ -219,6 +222,8 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
             } else {
                 message.warning('User not found. Please login and try again.')
                 //// login show
+                setSubHeaderLoginModal('(Food in basket will not be stored in system if not logged in.)')
+                setIsShowLoginModal(true)
             }
         } else {
             message.warning('Please scan qr code for check out menu.')
@@ -340,12 +345,21 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         })
     }
 
+    const setDefaultShowLoginModal = () => {
+        setIsShowLoginModal(false);
+    };
+
     return (
         <>
             {
                 isMobileResolution ? (
                     <>
-                        <Layout containerType="mobile">
+                        <Layout
+                            containerType="mobile"
+                            is_show_login_modal={isShowLoginModal}
+                            set_is_show_login_modal={setDefaultShowLoginModal}
+                            sub_header={subHeaderLoginModal}
+                        >
                             <Container className={utilStyles.container_sm} >
                                 {
                                     haveMenuInCart && (
