@@ -7,8 +7,6 @@
 
 # testing
 /coverage
-/next.config
-/routingApi
 
 # next.js
 /.next/
