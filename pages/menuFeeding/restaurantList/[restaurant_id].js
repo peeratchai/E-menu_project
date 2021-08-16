@@ -12,6 +12,7 @@ import fetchJson from "../../../lib/fetchJson";
 import shoppingCartService from "../../../services/shoppingCart";
 import utilStyles from "../../../styles/utils.module.css";
 import Layout from "../../../components/layout";
+import LayoutMobile from "../../../components/layoutMobile";
 
 export default function Restaurant() {
   const isMobileResolution = useMediaQuery(768);
@@ -368,13 +369,14 @@ export default function Restaurant() {
         </Layout>
       ) : (
         // Mobile Version
-        <Layout
+        <LayoutMobile
           containerType="mobile"
           searchFunc={() => console.log("none")}
           page="restaurantDetails"
           menuInBasket={numberOfCartItem}
           is_show_login_modal={isShowLoginModal}
           set_is_show_login_modal={setDefaultShowLoginModal}
+          haveMenuFooter={false}
         >
           <RestaurantDetailMobile
             restaurant_detail={restaurantDetail}
@@ -392,7 +394,7 @@ export default function Restaurant() {
               setNotificationLoginModal(true)
             }
           />
-        </Layout>
+        </LayoutMobile>
       )}
       <NotificationShoppingCartModal
         show={notificationModalVisible}

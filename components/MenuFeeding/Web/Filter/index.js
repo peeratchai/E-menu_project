@@ -15,17 +15,6 @@ export default function Filter(props) {
     const [priceMaxSearch, setPriceMaxSearch] = React.useState();
     const [locationInMaps, setLocationInMaps] = React.useState([]);
     const defaultCenterMaps = { lat: 13.7641482, lng: 100.5388393 }
-    // const [form, setForm] = React.useState({
-    //     what: null,
-    //     where: null,
-    //     food_type: null,
-    //     payment_option: null,
-    //     distance: 0,
-    //     price_to_price_from: '0 0',
-    //     is_open_now: false,
-    //     have_parking: false,
-    //     sort_by: null,
-    // })
     const [form, setForm] = React.useState({})
 
     const onChangePriceFilter = (value) => {
@@ -95,7 +84,7 @@ export default function Filter(props) {
 
     return (
         <div>
-            <div style={{ height: '10rem', width: '100%' }}>
+            {/* <div style={{ height: '10rem', width: '100%' }}>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: 'AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw' }}
                     center={{
@@ -108,7 +97,7 @@ export default function Filter(props) {
                 </GoogleMapReact>
             </div>
             <br />
-            <br />
+            <br /> */}
 
             <div style={{ width: '100%', padding: "1.875rem", backgroundColor: "white" }} className={utilStyles.font_size_sm}>
                 <div className={utilStyles.headingMd}>

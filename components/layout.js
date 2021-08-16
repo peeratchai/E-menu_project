@@ -1,10 +1,8 @@
-import Head from "next/head";
 import styles from "./layout.module.css";
 import { Navbar, Nav, NavDropdown, Image } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { Badge, message } from "antd";
 import ActiveLink from "./ActiveLink";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
 import SearchIcon from "@material-ui/icons/Search";
 import React, { useEffect } from "react";
 import LoginModal from "./Modal/Login";
@@ -15,7 +13,6 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import checkUserPermission from "../lib/checkUserPermission";
 import fetchJson from "../lib/fetchJson";
 import profileService from "../services/profile";
-import shoppingCartService from "../services/shoppingCart";
 
 export default function Layout(props) {
   const {

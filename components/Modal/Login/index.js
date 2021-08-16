@@ -26,7 +26,7 @@ export default function LoginModal(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState(null);
     const [retypePassword, setRetypePassword] = React.useState(null);
-    const [tab, setTab] = React.useState('login');
+    const [tab, setTab] = React.useState('register');
     const [signinErrors, setSigninErrors] = React.useState({});
     const [signupErrors, setSignupErrors] = React.useState({});
     const [forgotErrors, setForgotErrors] = React.useState({});
@@ -385,18 +385,6 @@ export default function LoginModal(props) {
                 setSignupErrors(newErrors)
                 setLoading(false)
             } else {
-                // let accessToken = response.data.accessToken
-                // await mutateUser(
-                //     fetchJson('/api/saveToken', {
-                //         method: 'POST',
-                //         headers: { 'Content-Type': 'application/json' },
-                //         body: JSON.stringify({ accessToken: accessToken }),
-                //     })
-                // )
-                // localStorage.setItem('accessToken', accessToken)
-                // props.onHide()
-                // props.setlogin(true)
-                // window.location.reload()
                 message.success('Please check your email to verify your account.', 5)
                 props.onHide()
                 setLoading(false)

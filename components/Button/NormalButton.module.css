@@ -1,0 +1,8 @@
+.normalButton {
+  border-radius: 0;
+  width: 100%;
+  background-color: #78100e !important;
+  border: none;
+  color: white !important;
+  box-shadow: none !important;
+}
