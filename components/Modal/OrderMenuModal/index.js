@@ -47,6 +47,8 @@ export default function OrderMenuModal(props) {
 
             //// Check order in cart have restaurant id same the new order
             if (newShoppingCart.restaurant && newShoppingCart.restaurant.id !== restaurant_id) {
+                console.log('newShoppingCart.restaurant.id',newShoppingCart.restaurant.id)
+                console.log('restaurant_id',restaurant_id)
                 //// Remove old cart before submit new cart
                 if (is_user_signin) {
                     try {

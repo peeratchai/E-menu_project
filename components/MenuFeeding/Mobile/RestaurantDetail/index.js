@@ -189,7 +189,7 @@ export default function RestaurantDetailMobile(props) {
     console.log("shopping_cart", shopping_cart);
     console.log("restaurantOpenNow", restaurantOpenNow);
     setMenuSelected(menu);
-    if (restaurantOpenNow) {
+    if (true || restaurantOpenNow) {
       if (shopping_cart && shopping_cart.shopping_cart_items) {
         let restaurantIdOfCart = shopping_cart.restaurant;
         if (shopping_cart.restaurant.hasOwnProperty('id')) {

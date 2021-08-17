@@ -168,7 +168,9 @@ export default function Restaurant() {
                 });
 
                 newShoppingCart = {
-                  restaurant: shoppingCartDatabase.restaurant.id,
+                  restaurant: {
+                    id: shoppingCartDatabase.restaurant.id
+                  },
                   shopping_cart_items: cartItems,
                 };
 
@@ -195,7 +197,9 @@ export default function Restaurant() {
                     });
 
                     newShoppingCart = {
-                      restaurant: shoppingCartDatabase.restaurant.id,
+                      restaurant: {
+                        id: shoppingCartDatabase.restaurant.id
+                      },
                       shopping_cart_items: cartItems,
                     };
 
@@ -232,6 +236,9 @@ export default function Restaurant() {
 
                     let res_delete_shopping_cart = await shoppingCartService.deleteShoppingCart()
                     let res_update_shopping_cart = await shoppingCartService.updateShoppingCart(newShoppingCart)
+
+                    console.log('res_delete_shopping_cart',res_delete_shopping_cart)
+                    console.log('res_update_shopping_cart',res_update_shopping_cart)
                     window.localStorage.removeItem('shoppingCart')
                   }
                 }
@@ -375,6 +382,8 @@ export default function Restaurant() {
           page="restaurantDetails"
           menuInBasket={numberOfCartItem}
           is_show_login_modal={isShowLoginModal}
+          is_show_filter={false}
+          is_show_search={false}
           set_is_show_login_modal={setDefaultShowLoginModal}
           haveMenuFooter={false}
         >

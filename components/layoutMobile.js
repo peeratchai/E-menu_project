@@ -26,6 +26,8 @@ export default function LayoutMobile(props) {
     menuInBasket,
     is_show_login_modal = false,
     set_is_show_login_modal,
+    is_show_filter = true,
+    is_show_search = true,
     sub_header = null
   } = props;
   const { user, mutateUser } = checkUserPermission();
@@ -154,8 +156,27 @@ export default function LayoutMobile(props) {
       <Image
         src="/images/CeeMenuLogo.png"
         style={{ margin: "auto", width: "40px", height: "40px" }}
+        onClick={() => {
+          router.push({
+            pathname: "/newspaper",
+          })
+        }}
       />
-      <div style={{ display: 'inline-block', marginLeft: "10px" }}>
+      {
+        is_show_filter && (
+          <div style={{ display: 'inline-block', marginLeft: "10px" }}>
+            <FilterOutlined style={{ fontSize: "25px" }} />
+          </div>
+        )
+      }
+      {
+        is_show_search && (
+          <div style={{ display: 'inline-block', marginLeft: "10px", width: "35%" }}>
+            <Search size="small" placeholder="ค้นหาอาหาร" onSearch={onSearch} style={{ verticalAlign: "middle" }} />
+          </div>
+        )
+      }
+      <div style={{ float: 'right' }}>
         {
           islogin ? (
             <UserOutlined style={{ fontSize: "20px" }} onClick={() => expandableSubMenu()} />
@@ -164,30 +185,10 @@ export default function LayoutMobile(props) {
           )
         }
       </div>
-      <div style={{ display: 'inline-block', marginLeft: "10px", width: "35%" }}>
-        <Search size="small" placeholder="ค้นหาอาหาร" onSearch={onSearch} style={{ verticalAlign: "middle" }} />
-      </div>
-      <div style={{ float: 'right' }}>
-        <FilterOutlined style={{ fontSize: "25px" }} />
-      </div>
     </div>
   )
 
-  const dataSubmenu = [
-    'Update User Profile',
-    'Order History',
-    'Contact Us',
-    'Setting',
-    'Log out',
-  ];
-
   const Submenu = (
-    // <List
-    //   size="large"
-    //   bordered
-    //   dataSource={dataSubmenu}
-    //   renderItem={item => <List.Item>{item}</List.Item>}
-    // />
     <>
       <div style={{ padding: '16px 24px' }}>
         Update User Profile

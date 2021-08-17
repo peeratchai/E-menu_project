@@ -187,6 +187,10 @@ module.exports = {
             destination: API_URL + '/order/search_by_filter2',
         },
         {
+            source: '/api/order/active',
+            destination: API_URL + '/order/active',
+        },
+        {
             source: '/api/take_order/:orderId',
             destination: API_URL + '/order-item/take_order/:orderId',
         },

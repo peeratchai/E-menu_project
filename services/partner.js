@@ -1,5 +1,3 @@
-const axios = require('axios')
-import checkLogin from './checkLogin'
 import sendRequest from './sendRequest'
 
 const partnerSerivce = {

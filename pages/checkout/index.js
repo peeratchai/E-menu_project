@@ -1,4 +1,5 @@
 import Layout, { siteTitle } from '../../components/layout'
+import LayoutMobile from '../../components/layoutMobile'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import React, { useEffect } from 'react'
@@ -15,6 +16,7 @@ import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
 import shoppingCartService from '../../services/shoppingCart'
 import fetchJson from '../../lib/fetchJson'
+import orderService from '../../services/order'
 
 const axios = require('axios')
 
@@ -32,6 +34,14 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
     const [isShowLoginModal, setIsShowLoginModal] = React.useState(false);
     const [subHeaderLoginModal, setSubHeaderLoginModal] = React.useState(null)
+    const mappingOrderStatus = {
+        'New Order': 'Pending',
+        'In Order': 'Cooking',
+        'Completed': 'Completed'
+    }
+    const [orderActiveData, setOrderActiveData] = React.useState([])
+    const [countOrderActiveItems, setCountOrderActiveItems] = React.useState(0);
+    const [totalOrder, setTotalOrder] = React.useState(0);
 
     useEffect(() => {
         console.log('user', user)
@@ -45,6 +55,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
             }
         }
         setInitialCart()
+        getOrderActive()
 
     }, [user])
 
@@ -154,6 +165,38 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         })
     }
 
+    const getOrderActive = async () => {
+        try {
+            let responseOrderActive = await orderService.getOrderActive()
+            console.log('responseOrderActive', responseOrderActive)
+            let orderActiveData = []
+            let countOrderActive = 0
+            let totalOrder = 0
+            if (responseOrderActive) {
+                if (responseOrderActive.length > 0) {
+                    responseOrderActive.forEach((order) => {
+                        if (order.order_items) {
+                            order.order_items.forEach((orderItem) => {
+                                console.log('orderItem', orderItem)
+                                totalOrder += orderItem.total
+                                countOrderActive++
+                                orderActiveData.push(orderItem)
+                            })
+                        }
+                    })
+                    setOrderActiveData(orderActiveData)
+                    setCountOrderActiveItems(countOrderActive)
+                    setTotalOrder(totalOrder)
+                }
+
+            }
+
+        } catch (error) {
+            console.log('error', error)
+            message.error(error)
+        }
+    }
+
     const reduceOrderMenu = (menuIndex) => {
         let existingCartItem = shoppingCartData.shopping_cart_items
         let newCartItem = [...existingCartItem]
@@ -236,12 +279,8 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                 if (haveMenuInCart) {
                     setLoading(true)
                     let userId = userProfile.id
-                    console.log(userId)
-                    console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
-                    console.log('shoppingRestaurantId',shoppingRestaurantId)
                     if (shoppingRestaurantId === restaurantId) {
-                        console.log('same restaurant')
                         let restaurantName = shoppingCartData.restaurant.name
                         let order_items = []
                         let orders = shoppingCartData.shopping_cart_items
@@ -262,9 +301,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             "order_items": order_items
                         }
 
-                        console.log('order data', data)
                         let addOrderResponse = await partnerSerivce.addOrder(data)
-                        console.log('addOrderResponse', addOrderResponse)
                         if (addOrderResponse) {
                             if (addOrderResponse.is_success) {
                                 shoppingCartService.deleteShoppingCart().then(async (deleteShoppingCartResponse) => {
@@ -307,7 +344,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
 
     }
 
-    let MenuListComponentMobile = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
+    let MenuListMobileComponent = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
         console.log('cartItem', cartItem)
         return (
             <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.menu.name + index}>
@@ -315,11 +352,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     <Image src={cartItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
-                    <Row>
-                        <Col>
-                            <b>{cartItem.menu.name}</b>
-                        </Col>
-                    </Row>
                     <Row>
                         <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
                             * {cartItem.special_instruction}
@@ -340,6 +372,49 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     </Col>
                                     <Col>
                                         <PlusOutlined onClick={() => AddOrderMenu(index)} style={{ fontSize: "12px", color: "#DEDEDE" }} />
+                                    </Col>
+                                </Row>
+                            </Button>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+        )
+    })
+
+    let OrderActiveListMobileComponent = orderActiveData && orderActiveData.map((orderItem, index) => {
+        return (
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={orderItem.id}>
+                <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
+                    <Image src={orderItem.menu.image_url} rounded style={{ height: "100%" }} />
+                </Col>
+                <Col xs={8}>
+                    <Row>
+                        <Col>
+                            <b>{orderItem.menu.name}</b>
+                        </Col>
+                        <Col style={{ fontSize: "12px", textAlign: "right" }}>
+                            {mappingOrderStatus[orderItem.status]}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
+                            * {orderItem.special_instruction}
+                        </Col>
+                    </Row>
+                    <Row >
+                        <Col xs={4} style={{ margin: "auto" }}>
+                            <b>{orderItem.price}</b>
+                        </Col>
+                        <Col xs={8} style={{ textAlign: "right" }}>
+                            <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
+                                <Row>
+                                    <Col >
+                                    </Col>
+                                    <Col style={{ fontSize: "0.7rem", margin: "auto", padding: "0px 5px", color: "white" }}>
+                                        {orderItem.quantity}
+                                    </Col>
+                                    <Col>
                                     </Col>
                                 </Row>
                             </Button>
@@ -430,11 +505,15 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
             {
                 isMobileResolution ? (
                     <>
-                        <Layout
+                        <LayoutMobile
                             containerType="mobile"
                             is_show_login_modal={isShowLoginModal}
                             set_is_show_login_modal={setDefaultShowLoginModal}
                             sub_header={subHeaderLoginModal}
+                            is_show_filter={false}
+                            is_show_search={false}
+                            haveMenuFooter={false}
+
                         >
                             <Container className={utilStyles.container_sm} >
                                 {
@@ -445,16 +524,33 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     )
                                 }
                                 <Spin spinning={loading}>
+                                    <h5>
+                                        ตะกร้า
+                                    </h5>
                                     {
                                         countMenuItems > 0 ? (
-                                            <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                                {MenuListComponentMobile}
-                                            </div>
+                                            <>
+                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                                    {MenuListMobileComponent}
+                                                </div>
+                                            </>
                                         ) : <EmptyComponent />
+                                    }
+                                    {
+                                        countOrderActiveItems > 0 && (
+                                            <div className="filterGray" style={{ marginTop: "20px" }}>
+                                                <h5>
+                                                    ออเดอร์ที่สั่งแล้ว
+                                                </h5>
+                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                                    {OrderActiveListMobileComponent}
+                                                </div>
+                                            </div>
+                                        )
                                     }
                                 </Spin>
                             </Container>
-                        </Layout >
+                        </LayoutMobile >
                         {
                             countMenuItems > 0 ? (
                                 <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
@@ -467,6 +563,18 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                                 <b> {totalPrice} ฿</b>
                                             </Col>
                                         </Row>
+                                        {
+                                            totalOrder > 0 && (
+                                                <Row style={{ fontSize: "14px", color: "#929292" }}>
+                                                    <Col>
+                                                        รวมค่าอาหาร ทั้งหมด
+                                                    </Col>
+                                                    <Col style={{ textAlign: "right" }}>
+                                                        <b> {totalOrder} ฿</b>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
                                         <br />
                                         <Row style={{ marginBottom: "10px" }}>
                                             <Col>
@@ -488,6 +596,18 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                                 <b>฿ </b>
                                             </Col>
                                         </Row>
+                                        {
+                                            totalOrder > 0 && (
+                                                <Row style={{ fontSize: "14px", color: "#929292" }}>
+                                                    <Col>
+                                                        รวมค่าอาหาร ทั้งหมด
+                                                    </Col>
+                                                    <Col style={{ textAlign: "right" }}>
+                                                        <b> {totalOrder} ฿</b>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
                                         <br />
                                         <Row style={{ marginBottom: "10px" }}>
                                             <Col>
