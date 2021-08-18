@@ -311,10 +311,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                             message.success('Check out order successful.')
                                             setConfirmModalVisible(false)
                                             setModalLoading(false)
-                                            router.push({
-                                                pathname: '/menuFeeding/restaurantList/' + restaurantName,
-                                                query: { restaurantId: restaurantId }
-                                            })
+                                            window.location.reload()
                                         }
                                     }
                                 }).catch(error => {
