@@ -31,6 +31,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     const [haveCheckOutPermission, setHaveCheckOutPermission] = React.useState(false)
     const [haveMenuInCart, setHaveMenuInCart] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
+    const [modalLoading, setModalLoading] = React.useState(false)
     const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
     const [isShowLoginModal, setIsShowLoginModal] = React.useState(false);
     const [subHeaderLoginModal, setSubHeaderLoginModal] = React.useState(null)
@@ -88,14 +89,14 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             setShoppingCartData(shoppingCart);
                         }
                     } else {
-                        message.warning('Please select order before check out order.')
+                        // message.warning('Please select order before check out order.')
                         setShoppingCartData({ 'order': [] })
                         setCountMenuItems(0)
                         setHaveMenuInCart(false)
                         setTotalPrice(0)
                     }
                 } else {
-                    message.warning('Please select order before check out order.')
+                    // message.warning('Please select order before check out order.')
                     setShoppingCartData({ 'order': [] })
                     setCountMenuItems(0)
                     setHaveMenuInCart(false)
@@ -155,7 +156,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     shoppingCartItems.map((menu) => total_price += menu.total)
                     setTotalPrice(total_price)
                 } else {
-                    message.warning('Please select order before check out order.')
+                    // message.warning('Please select order before check out order.')
                     setShoppingCartData({ 'order': [] })
                     setCountMenuItems(0)
                     setHaveMenuInCart(false)
@@ -277,7 +278,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         if (haveCheckOutPermission) {
             if (userProfile) {
                 if (haveMenuInCart) {
-                    setLoading(true)
+                    setModalLoading(true)
                     let userId = userProfile.id
                     let restaurantId = shoppingCartData.restaurant.id
                     if (shoppingRestaurantId === restaurantId) {
@@ -309,7 +310,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                         if (deleteShoppingCartResponse.is_success) {
                                             message.success('Check out order successful.')
                                             setConfirmModalVisible(false)
-                                            setLoading(false)
+                                            setModalLoading(false)
                                             router.push({
                                                 pathname: '/menuFeeding/restaurantList/' + restaurantName,
                                                 query: { restaurantId: restaurantId }
@@ -318,7 +319,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     }
                                 }).catch(error => {
                                     console.log('error', error)
-                                    setLoading(false)
+                                    setModalLoading(false)
                                 })
                             }
                         }
@@ -326,10 +327,10 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                         console.log('dif restaurant')
                         setNotificationModalVisible(true)
                         setConfirmModalVisible(false)
-                        setLoading(false)
+                        setModalLoading(false)
                     }
                 } else {
-                    message.warning('Please select order before check out order.')
+                    // message.warning('Please select order before check out order.')
                 }
             } else {
                 message.warning('User not found. Please login and try again.')
@@ -538,7 +539,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     }
                                     {
                                         countOrderActiveItems > 0 && (
-                                            <div className="filterGray" style={{ marginTop: "20px" }}>
+                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #DEDEDE" }}>
                                                 <h5>
                                                     ออเดอร์ที่สั่งแล้ว
                                                 </h5>
@@ -701,7 +702,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             show={confirmModalVisible}
                             onHide={() => setConfirmModalVisible(false)}
                             check_out_order={onCheckOutOrder}
-                            loading={loading}
+                            loading={modalLoading}
                         />
                         <NotificationShoppingCartModal
                             show={notificationModalVisible}
