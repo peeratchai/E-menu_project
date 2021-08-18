@@ -321,10 +321,8 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             }
                         }
                     } else {
-                        console.log('dif restaurant')
-                        setNotificationModalVisible(true)
+                        message.warning('Please scan qr code for check out menu.')
                         setConfirmModalVisible(false)
-                        setModalLoading(false)
                     }
                 } else {
                     // message.warning('Please select order before check out order.')
@@ -345,11 +343,16 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     let MenuListMobileComponent = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
         console.log('cartItem', cartItem)
         return (
-            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={cartItem.menu.name + index}>
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px", marginBottom: "10px" }} key={cartItem.menu.name + index}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
                     <Image src={cartItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
+                    <Row>
+                        <Col>
+                            {cartItem.menu.name}
+                        </Col>
+                    </Row>
                     <Row>
                         <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
                             * {cartItem.special_instruction}
@@ -530,20 +533,37 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                             <>
                                                 <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
                                                     {MenuListMobileComponent}
+                                                    {
+                                                        countOrderActiveItems > 0 && (
+                                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                                <h5>
+                                                                    ออเดอร์ที่สั่งแล้ว
+                                                                </h5>
+                                                                {OrderActiveListMobileComponent}
+                                                            </div>
+                                                        )
+                                                    }
                                                 </div>
                                             </>
                                         ) : <EmptyComponent />
                                     }
+
                                     {
-                                        countOrderActiveItems > 0 && (
-                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #DEDEDE" }}>
-                                                <h5>
-                                                    ออเดอร์ที่สั่งแล้ว
-                                                </h5>
-                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                                    {OrderActiveListMobileComponent}
+                                        countMenuItems === 0 && (
+                                            <>
+                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 400px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                                    {
+                                                        countOrderActiveItems > 0 && (
+                                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                                <h5>
+                                                                    ออเดอร์ที่สั่งแล้ว
+                                                                </h5>
+                                                                {OrderActiveListMobileComponent}
+                                                            </div>
+                                                        )
+                                                    }
                                                 </div>
-                                            </div>
+                                            </>
                                         )
                                     }
                                 </Spin>
@@ -624,6 +644,11 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             onHide={() => setConfirmModalVisible(false)}
                             check_out_order={onCheckOutOrder}
                             loading={loading}
+                        />
+                        <NotificationShoppingCartModal
+                            show={notificationModalVisible}
+                            onHide={() => setNotificationModalVisible(false)}
+                            redirect_to_restaurant={redirectToRestaurant}
                         />
                     </>
                 ) : (
@@ -768,8 +793,8 @@ function ConfirmOrderModal(props) {
 }
 
 function NotificationShoppingCartModal(props) {
-    const [loading, setLoading] = React.useState(false)
 
+    const [loading, setLoading] = React.useState(false)
     const onDeleteShopping = () => {
         setLoading(true)
         shoppingCartService.deleteShoppingCart().then((response) => {
@@ -786,10 +811,11 @@ function NotificationShoppingCartModal(props) {
         })
     }
 
+
     return (
         <Modal
             {...props}
-            size="md"
+            size="sm"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             style={{ padding: "1.3rem" }}
@@ -827,7 +853,7 @@ function NotificationShoppingCartModal(props) {
                     </Row>
                 </Spin>
             </Modal.Body>
-        </Modal >
+        </Modal>
     );
 }
 

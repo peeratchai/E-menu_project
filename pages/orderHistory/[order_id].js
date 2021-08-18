@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 import { Breadcrumb } from 'antd';
 import Link from 'next/link'
 import withSession from '../../lib/session'
+import PropTypes from 'prop-types'
 
 const axios = require('axios')
 
@@ -20,6 +21,7 @@ const Order = ({ user }) => {
     const [orderItems, setOrderItems] = React.useState([]);
     const [total, setTotal] = React.useState(0)
     useEffect(() => {
+        console.log('user', user)
         if (order && user) {
             let parseOrder = JSON.parse(order)
             let orderItmes = parseOrder.order_items
@@ -31,7 +33,7 @@ const Order = ({ user }) => {
                 pathname: "/orderHistory"
             })
         }
-    }, [order])
+    }, [order,user])
 
     const sumOfPriceTotal = (orderItmes) => {
         let total = 0
@@ -193,8 +195,15 @@ const Order = ({ user }) => {
 
 export default Order
 
+Order.propTypes = {
+    user: PropTypes.shape({
+        isLoggedIn: PropTypes.bool,
+    }),
+}
+
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user')
+    console.log('user', user)
     if (user) {
 
         let config = {
@@ -205,17 +214,20 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         let reponse = await axios.get(`${process.env.API_URL}/profile`, config)
         let profile = reponse.data
 
-        if (!profile) {
+        console.log('profile', profile)
+
+        if (profile) {
+            user.profile = profile
+        }else{
             return {
                 redirect: {
                     destination: '/',
                     permanent: false,
                 },
             }
-        } else {
-            return {
-                props: user
-            }
+        }
+        return {
+            props: { user }
         }
     } else {
         return {
