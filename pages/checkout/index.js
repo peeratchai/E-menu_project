@@ -35,6 +35,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     const [notificationModalVisible, setNotificationModalVisible] = React.useState(false);
     const [isShowLoginModal, setIsShowLoginModal] = React.useState(false);
     const [subHeaderLoginModal, setSubHeaderLoginModal] = React.useState(null)
+    const [restaurantDetails, setRestaurantDetails] = React.useState()
     const mappingOrderStatus = {
         'New Order': 'Pending',
         'In Order': 'Cooking',
@@ -92,14 +93,12 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                         // message.warning('Please select order before check out order.')
                         setShoppingCartData({ 'order': [] })
                         setCountMenuItems(0)
-                        setHaveMenuInCart(false)
                         setTotalPrice(0)
                     }
                 } else {
                     // message.warning('Please select order before check out order.')
                     setShoppingCartData({ 'order': [] })
                     setCountMenuItems(0)
-                    setHaveMenuInCart(false)
                     setTotalPrice(0)
                 }
             } else {
@@ -163,6 +162,11 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     setTotalPrice(0)
                 }
             }
+
+            if (shoppingCart && shoppingCart.restaurant) {
+                setRestaurantDetails(shoppingCart.restaurant)
+            }
+
         })
     }
 
@@ -175,6 +179,8 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
             let totalOrder = 0
             if (responseOrderActive) {
                 if (responseOrderActive.length > 0) {
+                    setRestaurantDetails(responseOrderActive[0].restaurant)
+
                     responseOrderActive.forEach((order) => {
                         if (order.order_items) {
                             order.order_items.forEach((orderItem) => {
@@ -185,6 +191,10 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             })
                         }
                     })
+                    console.log('countOrderActive',countOrderActive)
+                    if (countOrderActive > 0) {
+                        setHaveMenuInCart(true)
+                    }
                     setOrderActiveData(orderActiveData)
                     setCountOrderActiveItems(countOrderActive)
                     setTotalOrder(totalOrder)
@@ -469,9 +479,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     })
 
     const additionalOrder = () => {
-
-        let restaurantName = shoppingCartData.restaurant.name
-        let restaurantId = shoppingCartData.restaurant.id
+        console.log('restaurantDetails', restaurantDetails)
+        let restaurantName = restaurantDetails.name
+        let restaurantId = restaurantDetails.id
 
         router.push({
             pathname: '/menuFeeding/restaurantList/' + restaurantName,
@@ -525,53 +535,55 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     )
                                 }
                                 <Spin spinning={loading}>
-                                    <h5>
-                                        ตะกร้า
-                                    </h5>
-                                    {
-                                        countMenuItems > 0 ? (
-                                            <>
-                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                                    {MenuListMobileComponent}
-                                                    {
-                                                        countOrderActiveItems > 0 && (
-                                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
-                                                                <h5>
-                                                                    ออเดอร์ที่สั่งแล้ว
-                                                                </h5>
-                                                                {OrderActiveListMobileComponent}
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </>
-                                        ) : <EmptyComponent />
-                                    }
+                                    <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 260px)", overflowY: "scroll", overflowX: "hidden" }}>
+                                        <h5>
+                                            ตะกร้า
+                                        </h5>
+                                        {
+                                            countMenuItems > 0 ? (
+                                                <>
+                                                    <div style={{ maringTop: "15px" }}>
+                                                        {MenuListMobileComponent}
+                                                        {
+                                                            countOrderActiveItems > 0 && (
+                                                                <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                                    <h5>
+                                                                        ออเดอร์ที่สั่งแล้ว
+                                                                    </h5>
+                                                                    {OrderActiveListMobileComponent}
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                </>
+                                            ) : <EmptyComponent />
+                                        }
 
-                                    {
-                                        countMenuItems === 0 && (
-                                            <>
-                                                <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 400px)", overflowY: "scroll", overflowX: "hidden" }}>
-                                                    {
-                                                        countOrderActiveItems > 0 && (
-                                                            <div style={{ marginTop: "20px", paddingTop: "20px" }}>
-                                                                <h5>
-                                                                    ออเดอร์ที่สั่งแล้ว
-                                                                </h5>
-                                                                {OrderActiveListMobileComponent}
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </>
-                                        )
-                                    }
+                                        {
+                                            countMenuItems === 0 && (
+                                                <>
+                                                    <div >
+                                                        {
+                                                            countOrderActiveItems > 0 && (
+                                                                <div style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                                    <h5>
+                                                                        ออเดอร์ที่สั่งแล้ว
+                                                                    </h5>
+                                                                    {OrderActiveListMobileComponent}
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
                                 </Spin>
                             </Container>
                         </LayoutMobile >
                         {
                             countMenuItems > 0 ? (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
+                                <div style={{ position: "fixed", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
@@ -604,7 +616,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
+                                <div style={{ position: "fixed", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
