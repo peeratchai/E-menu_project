@@ -387,7 +387,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
         return (
             <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={orderItem.id}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
-                    <Image src={orderItem.menu.image_url} rounded style={{ height: "100%" }} />
+                    <Image className="filterGray" src={orderItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>
                 <Col xs={8}>
                     <Row>
@@ -408,7 +408,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             <b>{orderItem.price}</b>
                         </Col>
                         <Col xs={8} style={{ textAlign: "right" }}>
-                            <Button style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
+                            <Button className="filterGray" style={{ padding: "1px 6px", border: "1px solid #DEDEDE", backgroundColor: "white" }}>
                                 <Row>
                                     <Col >
                                     </Col>
@@ -554,7 +554,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                                 <div style={{ maringTop: "15px", maxHeight: "calc(100vh - 400px)", overflowY: "scroll", overflowX: "hidden" }}>
                                                     {
                                                         countOrderActiveItems > 0 && (
-                                                            <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                            <div style={{ marginTop: "20px", paddingTop: "20px" }}>
                                                                 <h5>
                                                                     ออเดอร์ที่สั่งแล้ว
                                                                 </h5>
