@@ -63,7 +63,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
 
     const setInitialCart = () => {
         shoppingCartService.getShoppingCart().then(async (response) => {
-            console.log('response', response)
             let shoppingCart
             if (response === 'Not Login') {
                 shoppingCart = window.localStorage.getItem('shoppingCart')
@@ -85,8 +84,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             }
                             setCountMenuItems(countCartItems)
                             setTotalPrice(total_price);
-                            console.log('shoppingCart', shoppingCart)
-                            console.log('shoppingCart', shoppingCart.shopping_cart_items)
                             setShoppingCartData(shoppingCart);
                         }
                     } else {
@@ -102,65 +99,86 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     setTotalPrice(0)
                 }
             } else {
-                shoppingCart = response
-                if (shoppingCart && shoppingCart !== "") {
-                    let shoppingCartItems = shoppingCart.shopping_cart_items
+                let shoppingCart = response
+                let shoppingCartDatabase = response
+                let restaurantId
+                let shoppingCartItems = []
+                console.log('shoppingCartDatabase', shoppingCartDatabase)
+                if (shoppingCartDatabase && shoppingCartDatabase !== "") {
+                    //// Has menu in cart in database
+                    shoppingCartItems = shoppingCartDatabase.shopping_cart_items
+                    restaurantId = shoppingCartDatabase.restaurant.id
+                }
+                //// Check shopping cart in local storage
+                let shoppingCartLocal = window.localStorage.getItem('shoppingCart')
+                if (shoppingCartLocal) {
+                    shoppingCartLocal = JSON.parse(shoppingCartLocal)
+                    if (shoppingCartLocal.hasOwnProperty('shopping_cart_items')) {
+                        if (shoppingCartLocal.shopping_cart_items.length > 0) {
 
-                    //// Check shopping cart in local storage
-                    let shoppingCartLocal = window.localStorage.getItem('shoppingCart')
-                    if (shoppingCartLocal) {
-                        shoppingCartLocal = JSON.parse(shoppingCartLocal)
-                        if (shoppingCartLocal.hasOwnProperty('shopping_cart_items')) {
-                            if (shoppingCartLocal.shopping_cart_items.length > 0) {
-                                shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
-                                    shoppingCartItems.push({
-                                        menu: {
-                                            id: cartItem.menu.id,
-                                            name: cartItem.menu.name,
-                                            image_url: cartItem.menu.image_url
-                                        },
-                                        quantity: cartItem.quantity,
-                                        price: cartItem.price,
-                                        total: cartItem.total,
-                                        special_instruction: cartItem.special_instruction,
-                                    });
+                            if (shoppingCartDatabase && shoppingCartDatabase !== "") {
+                                if (shoppingCartLocal.restaurant.id !== shoppingCartDatabase.restaurant.id) {
+                                    ////  Shopping cart between local storage and database has different restaurant 
+                                    console.log('dif')
+                                    console.log('shoppingCartLocal.restaurant.id', shoppingCartLocal.restaurant.id)
+                                    shoppingCartItems = []
+                                    restaurantId = shoppingCartLocal.restaurant.id
+                                }
+                            }
+
+                            shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
+                                shoppingCartItems.push({
+                                    menu: {
+                                        id: cartItem.menu.id,
+                                        name: cartItem.menu.name,
+                                        image_url: cartItem.menu.image_url
+                                    },
+                                    quantity: cartItem.quantity,
+                                    price: cartItem.price,
+                                    total: cartItem.total,
+                                    special_instruction: cartItem.special_instruction,
                                 });
+                            });
 
-                                shoppingCart = {
-                                    restaurant: response.restaurant.id,
-                                    shopping_cart_items: shoppingCartItems,
-                                }
+                            shoppingCart = {
+                                restaurant: {
+                                    id: restaurantId
+                                },
+                                shopping_cart_items: shoppingCartItems,
+                            }
 
-
-                                console.log('shoppingCart', shoppingCart)
-                                try {
-                                    let res = await shoppingCartService.updateShoppingCart(shoppingCart)
-                                    console.log('updateShoppingCart', res)
-                                    window.localStorage.removeItem('shoppingCart')
-                                } catch (error) {
-                                    console.log('error', error)
-                                }
+                            try {
+                                let res = await shoppingCartService.updateShoppingCart(shoppingCart)
+                                console.log('updateShoppingCart', res)
+                                window.localStorage.removeItem('shoppingCart')
+                            } catch (error) {
+                                console.log('error', error)
                             }
                         }
                     }
-
-                    setShoppingCartData(shoppingCart)
-                    let countCartItems = 0
-                    shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
-                    setCountMenuItems(countCartItems)
-                    if (countCartItems > 0) {
-                        setHaveMenuInCart(true)
-                    }
-                    let total_price = 0
-                    shoppingCartItems.map((menu) => total_price += menu.total)
-                    setTotalPrice(total_price)
-                } else {
-                    // message.warning('Please select order before check out order.')
-                    setShoppingCartData({ 'order': [] })
-                    setCountMenuItems(0)
-                    setHaveMenuInCart(false)
-                    setTotalPrice(0)
                 }
+                console.log('restaurantId', restaurantId)
+                console.log('shoppingCart', shoppingCart)
+                setShoppingCartData(shoppingCart)
+                let countCartItems = 0
+                shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
+                setCountMenuItems(countCartItems)
+                if (countCartItems > 0) {
+                    setHaveMenuInCart(true)
+                }
+                let total_price = 0
+                shoppingCartItems.map((menu) => total_price += menu.total)
+                setTotalPrice(total_price)
+                //  else {
+                //     // message.warning('Please select order before check out order.')
+                //     //// No have menu in cart of this account
+
+
+                //     setShoppingCartData({ 'order': [] })
+                //     setCountMenuItems(0)
+                //     setHaveMenuInCart(false)
+                //     setTotalPrice(0)
+                // }
             }
 
             if (shoppingCart && shoppingCart.restaurant) {
@@ -191,7 +209,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             })
                         }
                     })
-                    console.log('countOrderActive',countOrderActive)
+                    console.log('countOrderActive', countOrderActive)
                     if (countOrderActive > 0) {
                         setHaveMenuInCart(true)
                     }
@@ -290,9 +308,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                 if (haveMenuInCart) {
                     setModalLoading(true)
                     let userId = userProfile.id
+                    console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
                     if (shoppingRestaurantId === restaurantId) {
-                        let restaurantName = shoppingCartData.restaurant.name
                         let order_items = []
                         let orders = shoppingCartData.shopping_cart_items
                         orders.map((order) => {
@@ -312,6 +330,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             "order_items": order_items
                         }
 
+                        message.success('Check out order successful.')
+                        setConfirmModalVisible(false)
+                        setModalLoading(false)
                         let addOrderResponse = await partnerSerivce.addOrder(data)
                         if (addOrderResponse) {
                             if (addOrderResponse.is_success) {
@@ -331,7 +352,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             }
                         }
                     } else {
-                        message.warning('Please scan qr code for check out menu.')
+                        message.warning('Please scan qr code for check out menu2.')
                         setConfirmModalVisible(false)
                     }
                 } else {
@@ -344,7 +365,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                 setIsShowLoginModal(true)
             }
         } else {
-            message.warning('Please scan qr code for check out menu.')
+            message.warning('Please scan qr code for check out menu1.')
             setConfirmModalVisible(false)
         }
 
