@@ -122,9 +122,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                                     console.log('dif')
                                     console.log('shoppingCartLocal.restaurant.id', shoppingCartLocal.restaurant.id)
                                     shoppingCartItems = []
-                                    restaurantId = shoppingCartLocal.restaurant.id
                                 }
                             }
+                            restaurantId = shoppingCartLocal.restaurant.id
 
                             shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
                                 shoppingCartItems.push({
@@ -330,9 +330,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             "order_items": order_items
                         }
 
-                        message.success('Check out order successful.')
-                        setConfirmModalVisible(false)
-                        setModalLoading(false)
                         let addOrderResponse = await partnerSerivce.addOrder(data)
                         if (addOrderResponse) {
                             if (addOrderResponse.is_success) {
@@ -352,7 +349,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             }
                         }
                     } else {
-                        message.warning('Please scan qr code for check out menu2.')
+                        message.warning('Dif.')
                         setConfirmModalVisible(false)
                     }
                 } else {
@@ -365,7 +362,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                 setIsShowLoginModal(true)
             }
         } else {
-            message.warning('Please scan qr code for check out menu1.')
+            message.warning('Please scan qr code for check out menu.')
             setConfirmModalVisible(false)
         }
 
