@@ -20,7 +20,7 @@ import orderService from '../../services/order'
 
 const axios = require('axios')
 
-const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => {
+const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => {
     const isMobileResolution = useMediaQuery(768)
     const router = useRouter()
     const [shoppingCartData, setShoppingCartData] = React.useState({ 'order': [] })
@@ -310,7 +310,9 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                     let userId = userProfile.id
                     console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
-                    if (shoppingRestaurantId === restaurantId) {
+                    console.log('qr_code_restaurantID',qr_code_restaurantID)
+                    console.log('restaurantId',restaurantId)
+                    if (qr_code_restaurantID === restaurantId) {
                         let order_items = []
                         let orders = shoppingCartData.shopping_cart_items
                         orders.map((order) => {
@@ -349,7 +351,7 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
                             }
                         }
                     } else {
-                        message.warning('Dif.')
+                        message.warning('กรุณาสแกน QR Code ใหม่อีกครั้ง (QR Code ไม่ตรงกับร้านค้า)')
                         setConfirmModalVisible(false)
                     }
                 } else {
@@ -369,7 +371,6 @@ const CheckoutPage = ({ user, tableId = null, shoppingRestaurantId = null }) => 
     }
 
     let MenuListMobileComponent = shoppingCartData.shopping_cart_items && shoppingCartData.shopping_cart_items.map((cartItem, index) => {
-        console.log('cartItem', cartItem)
         return (
             <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px", marginBottom: "10px" }} key={cartItem.menu.name + index}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
@@ -899,14 +900,14 @@ CheckoutPage.propTypes = {
 export const getServerSideProps = withSession(async function ({ req, res }) {
     let user = req.session.get('user') ? req.session.get('user') : null
     let tableId = null
-    let shoppingRestaurantId = null
+    let qr_code_restaurantID = null
     let tableIdSession = req.session.get('tableId')
     let restaurantIdSession = req.session.get('restaurantId')
     if (tableIdSession) {
         tableId = tableIdSession
     }
     if (restaurantIdSession) {
-        shoppingRestaurantId = restaurantIdSession
+        qr_code_restaurantID = restaurantIdSession
     }
     if (user) {
 
@@ -921,11 +922,11 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
         if (profile) {
             user.profile = profile
             return {
-                props: { user, tableId, shoppingRestaurantId },
+                props: { user, tableId, qr_code_restaurantID },
             }
         }
 
     } else {
-        return { props: { user, tableId, shoppingRestaurantId } }
+        return { props: { user, tableId, qr_code_restaurantID } }
     }
 })
