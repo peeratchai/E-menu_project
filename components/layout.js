@@ -295,10 +295,10 @@ export default function Layout(props) {
       </Navbar>
       <div className={containerStyle}>{children}</div>
 
-      <MessengerCustomerChat
+      {/* <MessengerCustomerChat
         pageId={process.env.FACEBOOK_PAGE_ID}
         appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-      />
+      /> */}
       <LoginModal
         show={loginModalShow}
         onHide={() => setLoginModalShow(false)}
