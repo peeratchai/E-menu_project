@@ -99,7 +99,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                     setTotalPrice(0)
                 }
             } else {
-                let shoppingCart = response
+                shoppingCart = response
                 let shoppingCartDatabase = response
                 let restaurantId
                 let shoppingCartItems = []
@@ -124,7 +124,6 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                     shoppingCartItems = []
                                 }
                             }
-                            restaurantId = shoppingCartLocal.restaurant.id
 
                             shoppingCartLocal.shopping_cart_items.forEach((cartItem) => {
                                 shoppingCartItems.push({
@@ -141,9 +140,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                             });
 
                             shoppingCart = {
-                                restaurant: {
-                                    id: restaurantId
-                                },
+                                restaurant: shoppingCartLocal.restaurant,
                                 shopping_cart_items: shoppingCartItems,
                             }
 
@@ -180,8 +177,9 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                 //     setTotalPrice(0)
                 // }
             }
-
+            console.log('shoppingCart',shoppingCart)
             if (shoppingCart && shoppingCart.restaurant) {
+                console.log('shoppingCart.restaurant',shoppingCart.restaurant)
                 setRestaurantDetails(shoppingCart.restaurant)
             }
 
@@ -221,8 +219,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
             }
 
         } catch (error) {
-            console.log('error', error)
-            message.error(error)
+            console.log('error', error.response)
         }
     }
 

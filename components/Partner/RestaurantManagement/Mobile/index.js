@@ -388,7 +388,7 @@ export default function MobileComponent(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div >
                                         <div className={styles.overFlow}>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>* {order_items.special_instruction}</b>
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
@@ -519,7 +519,7 @@ export default function MobileComponent(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div>
                                         <div className={styles.overFlow}>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>* {order_items.special_instruction}</b>
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
@@ -630,7 +630,7 @@ export default function MobileComponent(props) {
                                             <b>x {order_items.quantity}</b>
                                         </div>
                                         <div className={styles.overFlow}>
-                                            <b>x {order_items.special_instruction}</b>
+                                            <b>* {order_items.special_instruction}</b>
                                         </div>
                                         <div className={styles.overFlow} style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB

@@ -35,7 +35,7 @@ const handExitComplete = () => {
 export default function App({ Component, pageProps, router }) {
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            window.localStorage.setItem("version", '1.0.1')
+            window.localStorage.setItem("version", '1.0.2')
         }
     }, [])
     return (
