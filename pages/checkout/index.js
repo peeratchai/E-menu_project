@@ -562,7 +562,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                                         {MenuListMobileComponent}
                                                         {
                                                             countOrderActiveItems > 0 && (
-                                                                <div className="filterGray" style={{ marginTop: "20px", paddingTop: "20px" }}>
+                                                                <div style={{ marginTop: "20px", paddingTop: "20px" }}>
                                                                     <h5>
                                                                         ออเดอร์ที่สั่งแล้ว
                                                                     </h5>
