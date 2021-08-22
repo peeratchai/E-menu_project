@@ -602,7 +602,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         </LayoutMobile >
                         {
                             countMenuItems > 0 ? (
-                                <div style={{ position: "fixed", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
@@ -635,7 +635,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ position: "fixed", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
+                                <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>

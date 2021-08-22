@@ -33,6 +33,8 @@ const handExitComplete = () => {
 
 export default function App({ Component, pageProps ,router}) {
 console.log('router',router.route)
+
+    window.localStorage.setItem("version",'1.0.1')
     return (
     <AnimatePresence exitBeforeEnter onExitComplete={handExitComplete} >
         <Head>
