@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AnimatePresence } from "framer-motion";
 import Head from 'next/head'
 import Geocode from "react-geocode";
+import { useEffect } from 'react';
 
 Geocode.setApiKey("AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw");
 Geocode.setLanguage("th");
@@ -31,32 +32,34 @@ const handExitComplete = () => {
 };
 
 
-export default function App({ Component, pageProps ,router}) {
-console.log('router',router.route)
-
-    window.localStorage.setItem("version",'1.0.1')
+export default function App({ Component, pageProps, router }) {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem("version", '1.0.1')
+        }
+    }, [])
     return (
-    <AnimatePresence exitBeforeEnter onExitComplete={handExitComplete} >
-        <Head>
-            <link
-                href="https://fonts.googleapis.com/css?family=Work Sans"
-                rel="stylesheet"
-                key="google-font-cabin"
-            />
-            <script
-                type="text/javascript"
-                src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
-            ></script>
-            <script src="https://static.line-scdn.net/liff/edge/2.1/liff.js"></script>
-            <title>CeeMenu</title>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <style global jsx>{`
+        <AnimatePresence exitBeforeEnter onExitComplete={handExitComplete} >
+            <Head>
+                <link
+                    href="https://fonts.googleapis.com/css?family=Work Sans"
+                    rel="stylesheet"
+                    key="google-font-cabin"
+                />
+                <script
+                    type="text/javascript"
+                    src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
+                ></script>
+                <script src="https://static.line-scdn.net/liff/edge/2.1/liff.js"></script>
+                <title>CeeMenu</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <style global jsx>{`
         body {
             font-family: 'Work Sans', sans-serif;
         }
       `}</style>
-        <Component key={router.route} {...pageProps}  />
-    </AnimatePresence>
+            <Component key={router.route} {...pageProps} />
+        </AnimatePresence>
     )
 }

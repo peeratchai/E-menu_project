@@ -575,7 +575,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                                         }
                                                     </div>
                                                 </>
-                                            ) : <EmptyComponent />
+                                            ) : <EmptyComponent description="ไม่มีรายการอาหาร"/>
                                         }
 
                                         {
@@ -699,7 +699,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                             <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
                                                 {MenuListComponentWeb}
                                             </div>
-                                        ) : <EmptyComponent />
+                                        ) : <EmptyComponent description="ไม่มีรายการอาหาร"/>
                                     }
                                 </Spin>
 
