@@ -603,7 +603,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
-                                                {countMenuItems} รายการ
+                                                {totalOrder > 0 && (<span>สั่งเพิ่ม </span>)}{countMenuItems} รายการ
                                             </Col>
                                             <Col style={{ textAlign: "right" }}>
                                                 <b> {totalPrice} ฿</b>
@@ -625,7 +625,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                         <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
-                                                    สั่ง {countMenuItems} รายการ
+                                                    {totalOrder > 0 ? (<span>สั่งเพิ่ม </span>) : (<span>สั่ง </span>)} {countMenuItems} รายการ
                                                 </Button>
                                             </Col>
                                         </Row>
