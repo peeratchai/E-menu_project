@@ -420,7 +420,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                 </Col>
                 <Col xs={8}>
                     <Row>
-                        <Col>
+                        <Col className={utilStyles.overflowDot}>
                             <b>{orderItem.menu.name}</b>
                         </Col>
                         <Col style={{ fontSize: "12px", textAlign: "right" }}>
@@ -428,8 +428,8 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         </Col>
                     </Row>
                     <Row>
-                        <Col style={{ color: "#D1D1D1", fontSize: "14px" }}>
-                            * {orderItem.special_instruction}
+                        <Col className={utilStyles.overflowDot} style={{ color: "#D1D1D1", fontSize: "14px",margin:"10px 0 " }}>
+                            * fssfosoefsofsoefosefesofosfsofeosfsofosefose{orderItem.special_instruction}
                         </Col>
                     </Row>
                     <Row >
