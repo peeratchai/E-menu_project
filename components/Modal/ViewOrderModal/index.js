@@ -8,7 +8,7 @@ import React, { useEffect } from 'react'
 import partnerService from '../../../services/partner'
 import moment from 'moment'
 import EmptyComponent from '../../Empty'
-
+import NormalButton from '../../Button/NormalButton'
 
 export default function ViewOrderModal(props) {
 
@@ -30,7 +30,7 @@ export default function ViewOrderModal(props) {
     const startTime = "00:00:00";
     const endTime = "23:59:59";
     const currentDate = moment().format('YYYY-MM-DD')
-    const startDate = moment(currentDate + ' ' + startTime).subtract(1,'months')
+    const startDate = moment(currentDate + ' ' + startTime)
     const endDate = moment(currentDate + ' ' + endTime)
 
     useEffect(() => {
@@ -308,6 +308,10 @@ export default function ViewOrderModal(props) {
         }
     }
 
+    const checkbill = () =>{
+        console.log('checkbill')
+    }
+
     let newOrderTableListComponent = newOrders && newOrders.map((order) => {
 
         return (
@@ -401,7 +405,7 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                    <div style={{ position: "relative",textAlign:"right"}}>
                         <b>Total is {newOrderSelected.total} THB</b>
                     </div>
                 </>
@@ -508,9 +512,9 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        {/* <div style={{ textAlign: "right" }}>
+                                        <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div> */}
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -522,7 +526,7 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                    <div style={{ position: "relative",textAlign:"right"}}>
                         <b>Total is {inOrderSelected.total} THB</b>
                     </div>
                 </>
@@ -622,7 +626,10 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "absolute", bottom: "0", right: "10px" }}>
+                    <div>
+                        <NormalButton button_name="เช็คบิล" function_on_click={()=> checkbill()}/>
+                    </div>
+                    <div style={{ position: "relative",textAlign:"right"}}>
                         <b>Total is {completedOrderSelected.total} THB</b>
                     </div>
                 </>

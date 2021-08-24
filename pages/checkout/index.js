@@ -823,6 +823,7 @@ function ConfirmOrderModal(props) {
 function NotificationShoppingCartModal(props) {
 
     const [loading, setLoading] = React.useState(false)
+    
     const onDeleteShopping = () => {
         setLoading(true)
         shoppingCartService.deleteShoppingCart().then((response) => {
