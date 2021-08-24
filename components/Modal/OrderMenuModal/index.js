@@ -201,7 +201,7 @@ export default function OrderMenuModal(props) {
                             <Container>
                                 <Row>
                                     <Col xs={12} md={3}>
-                                        <Image height="100%" width="100%" src={menuDetail.image_url}/>
+                                        <Image height="100%" width="100%" src={menuDetail.image_url} />
                                     </Col>
                                     <Col xs={6} md={9}>
                                         <Row style={{ margin: "10px -15px" }}>
@@ -227,10 +227,14 @@ export default function OrderMenuModal(props) {
                                         </Row>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col>
-                                                ราคา : {menuDetail.price}
+                                                ราคาต่อหน่วย : {menuDetail.price}
                                             </Col>
                                         </Row>
-
+                                        <Row style={{ marginTop: "15px" }}>
+                                            <Col>
+                                                ราคาทั้งหมด : {(menuDetail.price * count)}
+                                            </Col>
+                                        </Row>
                                     </Col>
                                 </Row>
                                 <Form style={{ marginTop: "15px" }}>
@@ -263,7 +267,7 @@ export default function OrderMenuModal(props) {
                             <Container>
                                 <Row>
                                     <Col xs={12} md={3}>
-                                        <Image  src={menuDetail.image_url} />
+                                        <Image src={menuDetail.image_url} />
                                     </Col>
                                     <Col xs={12} md={9} style={{ marginTop: "15px" }}>
                                         <Row style={{ marginTop: "15px" }}>
@@ -289,7 +293,12 @@ export default function OrderMenuModal(props) {
                                         </Row>
                                         <Row style={{ marginTop: "15px" }}>
                                             <Col>
-                                                ราคา : {menuDetail.price}
+                                                ราคาต่อหน่วย : {menuDetail.price}
+                                            </Col>
+                                        </Row>
+                                        <Row style={{ marginTop: "15px" }}>
+                                            <Col>
+                                                ราคาทั้งหมด : {(menuDetail.price * count)}
                                             </Col>
                                         </Row>
 
