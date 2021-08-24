@@ -2,7 +2,7 @@ import utilStyles from '../../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Table, Spin, Space, Switch, Popconfirm } from 'antd';
+import { Table, Spin, Space, Switch, Popconfirm, Image } from 'antd';
 import React, { useEffect } from 'react'
 
 
@@ -65,7 +65,7 @@ export default function WebComponent(props) {
             menu.categoryId = record.id
             menu.index = index + 1
             menu.key = menu.name + index
-            menu.image = (<img src={menu.image_url} />)
+            menu.image = (<Image width="100%" height="200px" style={{maxHeight:"200px"}}  src={menu.image_url} />)
         })
         return <Table columns={columns} dataSource={menus} pagination={false} scroll={{ x: 'max-content' }} />;
     };

@@ -1,12 +1,12 @@
 import utilStyles from '../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
-import { Row, Col, Image, Button, Modal, Form } from 'react-bootstrap'
+import { Row, Col, Button, Modal, Form } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import useMediaQuery from "../../../utils/utils";
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { message } from 'antd';
+import { message, Image } from 'antd';
 import shoppingCartService from '../../../services/shoppingCart';
 
 export default function OrderMenuModal(props) {
@@ -46,9 +46,9 @@ export default function OrderMenuModal(props) {
         let restaurantIdShoppingCart
         if (restaurant_id) {
 
-            if(newShoppingCart.restaurant && newShoppingCart.restaurant.hasOwnProperty('id')){
+            if (newShoppingCart.restaurant && newShoppingCart.restaurant.hasOwnProperty('id')) {
                 restaurantIdShoppingCart = newShoppingCart.restaurant.id
-            }else{
+            } else {
                 restaurantIdShoppingCart = newShoppingCart.restaurant
             }
 
@@ -201,7 +201,7 @@ export default function OrderMenuModal(props) {
                             <Container>
                                 <Row>
                                     <Col xs={12} md={3}>
-                                        <Image src={menuDetail.image_url} />
+                                        <Image height="100%" width="100%" src={menuDetail.image_url}/>
                                     </Col>
                                     <Col xs={6} md={9}>
                                         <Row style={{ margin: "10px -15px" }}>
@@ -263,7 +263,7 @@ export default function OrderMenuModal(props) {
                             <Container>
                                 <Row>
                                     <Col xs={12} md={3}>
-                                        <Image src={menuDetail.image_url} />
+                                        <Image  src={menuDetail.image_url} />
                                     </Col>
                                     <Col xs={12} md={9} style={{ marginTop: "15px" }}>
                                         <Row style={{ marginTop: "15px" }}>

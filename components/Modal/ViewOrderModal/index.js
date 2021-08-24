@@ -30,8 +30,8 @@ export default function ViewOrderModal(props) {
     const startTime = "00:00:00";
     const endTime = "23:59:59";
     const currentDate = moment().format('YYYY-MM-DD')
-    const startDate = moment(currentDate + ' ' + startTime).format()
-    const endDate = moment(currentDate + ' ' + endTime).format()
+    const startDate = moment(currentDate + ' ' + startTime).subtract(1,'months')
+    const endDate = moment(currentDate + ' ' + endTime)
 
     useEffect(() => {
         if (restaurant_id && table_selected) {
@@ -338,8 +338,6 @@ export default function ViewOrderModal(props) {
                 </Row>
             </>
         )
-
-        return tableList
     })
 
     const renderNewOrderList = () => {
@@ -389,9 +387,9 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        <div style={{ textAlign: "right" }}>
+                                        {/* <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div>
+                                        </div> */}
                                     </Col>
                                 </Row>
                             </div>
@@ -421,7 +419,7 @@ export default function ViewOrderModal(props) {
             <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {newOrderTableListComponent}
             </Col>
-            <Col xs={8} style={{ overflowY: "scroll" }}>
+            <Col xs={8} style={{ overflowY: "scroll" , height: "inherit"}}>
                 {newOrderList}
             </Col>
         </>
@@ -510,9 +508,9 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        <div style={{ textAlign: "right" }}>
+                                        {/* <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div>
+                                        </div> */}
                                     </Col>
                                 </Row>
                             </div>
@@ -543,7 +541,7 @@ export default function ViewOrderModal(props) {
             <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {inOrderTableList}
             </Col>
-            <Col xs={8} style={{ overflowY: "scroll" }}>
+            <Col xs={8} style={{ overflowY: "scroll", height: "inherit" }}>
                 {inOrderList}
             </Col>
         </>
@@ -610,9 +608,9 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        <div style={{ textAlign: "right" }}>
+                                        {/* <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div>
+                                        </div> */}
                                     </Col>
                                 </Row>
                             </div>
@@ -643,7 +641,7 @@ export default function ViewOrderModal(props) {
             <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {completedOrderTableList}
             </Col>
-            <Col xs={8} style={{ overflowY: "scroll" }}>
+            <Col xs={8} style={{ overflowY: "scroll" , height: "inherit"}}>
                 {completedOrderList}
             </Col>
         </>

@@ -426,7 +426,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                     </Row>
                     <Row>
                         <Col className={utilStyles.overflowDot} style={{ color: "#D1D1D1", fontSize: "14px",margin:"10px 0 " }}>
-                            * fssfosoefsofsoefosefesofosfsofeosfsofosefose{orderItem.special_instruction}
+                            * {orderItem.special_instruction}
                         </Col>
                     </Row>
                     <Row >

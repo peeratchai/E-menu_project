@@ -423,3 +423,12 @@ div.ant-row.ant-form-item {
   -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
+
+.ant-image-img{
+  height: 100% !important;
+  max-height: 150px;
+}
+
+.ant-image-preview-img{
+  object-fit: fill !important;
+}

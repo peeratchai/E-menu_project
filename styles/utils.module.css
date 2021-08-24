@@ -246,3 +246,7 @@
   height: 1.2em;
   white-space: nowrap;
 }
+
+.menuImage{
+  height: 50%;
+}
