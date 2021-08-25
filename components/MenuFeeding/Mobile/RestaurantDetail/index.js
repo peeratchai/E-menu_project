@@ -20,12 +20,15 @@ import changeFormatLatLong from "../../../../services/chaneformatLatLong";
 import PointInMaps from "../../../PointInMaps";
 import shoppingCartService from "../../../../services/shoppingCart";
 import moment from "moment";
+import qrCodeSession from "../../../../lib/qrCodeSession";
 
 export default function RestaurantDetailMobile(props) {
+  const qr_code_details = qrCodeSession();
   const {
     loading,
     shopping_cart,
     is_initial_cart,
+    table_id,
     restaurant_detail,
     restaurant_id,
     is_user_signin,
@@ -33,6 +36,7 @@ export default function RestaurantDetailMobile(props) {
   const { set_shopping_cart, notification_login_modal_show, set_number_of_cart } = props;
   const router = useRouter();
   //// Set State
+  const [alreadyScanQrcode, setAlreadyScanQrcode] = React.useState(false)
   const showBasketButton = "";
   const [orderModalShow, setOrderModalShow] = React.useState(false);
   const [categoryList, setCategoryList] = React.useState([]);
@@ -115,7 +119,6 @@ export default function RestaurantDetailMobile(props) {
         console.log('restaurant_detail not found!')
       }
 
-
       let { lat, lng } = changeFormatLatLong(restaurant_detail.location);
       setLat(parseFloat(lat));
       setLng(parseFloat(lng));
@@ -162,8 +165,14 @@ export default function RestaurantDetailMobile(props) {
         setNumberOfCartItem(0);
         setTotalOfCartItem(0);
       }
+      console.log('qr_code_details', qr_code_details)
+      console.log('table_id', table_id)
+      if (qr_code_details && qr_code_details.restaurantId) {
+        setAlreadyScanQrcode(true)
+      }
+
     }
-  }, [restaurant_detail, shopping_cart, restaurantOpenNow]);
+  }, [restaurant_detail, shopping_cart, restaurantOpenNow, qr_code_details]);
 
   const setInitialShoppingCart = (shoppingCart, update = false) => {
     console.log("shoppingCart", shoppingCart);
@@ -359,32 +368,37 @@ export default function RestaurantDetailMobile(props) {
   return (
     <>
       <Container className={utilStyles.container_sm}>
-        <Breadcrumb>
-          {isViewRestaurantFromPromotionPage ? (
-            <>
-              <Link href="/" passHref>
-                <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/menuFeeding" passHref>
-                <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
-              </Link>
-              <Link
-                href={{
-                  pathname: "/menuFeeding/restaurantList",
-                  query: { locationId: locationId, locationName: locationName },
-                }}
-                passHref
-              >
-                <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
-              </Link>
-            </>
-          )}
+        {
+          !alreadyScanQrcode && (
+            <Breadcrumb>
+              {isViewRestaurantFromPromotionPage ? (
+                <>
+                  <Link href="/" passHref>
+                    <Breadcrumb.Item>All Promotions</Breadcrumb.Item>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/menuFeeding" passHref>
+                    <Breadcrumb.Item>{locationName}</Breadcrumb.Item>
+                  </Link>
+                  <Link
+                    href={{
+                      pathname: "/menuFeeding/restaurantList",
+                      query: { locationId: locationId, locationName: locationName },
+                    }}
+                    passHref
+                  >
+                    <Breadcrumb.Item>Restaurant List</Breadcrumb.Item>
+                  </Link>
+                </>
+              )}
 
-          <Breadcrumb.Item active>{restaurantDetail.name}</Breadcrumb.Item>
-        </Breadcrumb>
+              <Breadcrumb.Item active>{restaurantDetail.name}</Breadcrumb.Item>
+            </Breadcrumb>
+          )
+        }
+
         <Carousel>{restaurantBannerPicture}</Carousel>
         <Spin spinning={loading} tip="Loading...">
           <Card>

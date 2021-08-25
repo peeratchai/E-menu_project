@@ -1,4 +1,6 @@
 import sendRequest from './sendRequest'
+import authentication from "./authentication";
+import axios from 'axios'
 
 const partnerSerivce = {
     addPromotion: async (data) => {
@@ -105,6 +107,24 @@ const partnerSerivce = {
     getTableByTableId: async (tableId) => {
         return await sendRequest.get('/api/get_table_by_tableId/' + tableId)
     },
+    checkHaveTableBycustomer: async (tableId) => {
+        let accessToken = await authentication.getAdminToken();
+        let config = {
+            headers: {
+                Authorization: "Bearer " + accessToken,
+            },
+        };
+
+        return await axios
+            .get('/api/get_table_by_tableId/' + tableId, config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(async function (error) {
+                console.log('error',error)
+                throw error
+            });
+    },
     addTable: async (data) => {
         return await sendRequest.post('/api/add_table', data)
     },
@@ -139,9 +159,9 @@ const partnerSerivce = {
     getOrderByPeriod: async (data) => {
         return await sendRequest.post('/api/get_order_by_period/', data)
     },
-    checkbill: async (tableId) =>{
+    checkbill: async (tableId) => {
         let data = {}
-        return await sendRequest.patch('/api/order/check_bill/'+tableId , data)
+        return await sendRequest.patch('/api/order/check_bill/' + tableId, data)
     }
 }
 

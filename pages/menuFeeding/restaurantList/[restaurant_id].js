@@ -13,6 +13,7 @@ import shoppingCartService from "../../../services/shoppingCart";
 import utilStyles from "../../../styles/utils.module.css";
 import Layout from "../../../components/layout";
 import LayoutMobile from "../../../components/layoutMobile";
+import partnerSerivce from "../../../services/partner";
 
 export default function Restaurant() {
   const isMobileResolution = useMediaQuery(768);
@@ -50,7 +51,6 @@ export default function Restaurant() {
     console.log("shoppingCart response");
     getRestaurantDetail(restaurantId)
       .then(async (restaurantDetail) => {
-        // console.log("restaurantDetail", restaurantDetail);
         shoppingCartService
           .getShoppingCart()
           .then(async (response) => {
@@ -238,8 +238,8 @@ export default function Restaurant() {
                     let res_delete_shopping_cart = await shoppingCartService.deleteShoppingCart()
                     let res_update_shopping_cart = await shoppingCartService.updateShoppingCart(newShoppingCart)
 
-                    console.log('res_delete_shopping_cart',res_delete_shopping_cart)
-                    console.log('res_update_shopping_cart',res_update_shopping_cart)
+                    console.log('res_delete_shopping_cart', res_delete_shopping_cart)
+                    console.log('res_update_shopping_cart', res_update_shopping_cart)
                     window.localStorage.removeItem('shoppingCart')
                   }
                 }
@@ -249,40 +249,42 @@ export default function Restaurant() {
               }
 
             }
-            // if (restaurantId === shoppingCart.restaurant.id) {
-            //   console.log("Same restaurant");
-            //   try {
-            //     await saveTableOnScanQrCode();
-            //   } catch (error) {
-            //     console.log(
-            //       "saveTableOnScanQrCode",
-            //       saveTableOnScanQrCode
-            //     );
-            //   }
-            // } else {
-            //   console.log("Dif restaurant");
-            //   setNotificationModalVisible(true);
-            // }
+
+
+
             if (tableId !== undefined) {
-              if (tableName) {
-                message.success(
-                  `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
-                  4
-                );
-              } else {
-                message.success(
-                  `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
-                  4
-                );
-              }
               try {
-                await saveTableOnScanQrCode();
+                let responseTableData = await partnerSerivce.checkHaveTableBycustomer(tableId)
+                console.log('responseTableData', responseTableData)
+                if (responseTableData) {
+                  if (responseTableData.id) {
+                    if (tableName) {
+                      message.success(
+                        `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
+                        4
+                      );
+                    } else {
+                      message.success(
+                        `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
+                        4
+                      );
+                    }
+                    try {
+                      await saveTableOnScanQrCode();
+                    } catch (error) {
+                      console.log(
+                        "saveTableOnScanQrCode",
+                        saveTableOnScanQrCode
+                      );
+                    }
+                  }
+                } else {
+                  message.warning('Qr code ไม่ถูกต้อง! กรุณาแสกนใหม่อีกครั้งค่ะ')
+                }
               } catch (error) {
-                console.log(
-                  "saveTableOnScanQrCode",
-                  saveTableOnScanQrCode
-                );
+                console.log('error', error)
               }
+
             }
           })
           .catch((error) => {

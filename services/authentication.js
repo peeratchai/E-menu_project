@@ -104,7 +104,7 @@ const authentication = {
         //     email: 'guest@test.com',
         //     password: 'p@assword_guestuser'
         // }
-
+        
         let data = {
             "email": "guest_user@test.com",
             "password": "123"
@@ -115,6 +115,30 @@ const authentication = {
         //     email: 'markpeeratchai@gmail.com',
         //     password: '123'
         // }
+
+        let response = await axios.post('/api/auth/signin-with-email', data, config)
+            .then(function (response) {
+                return response.data.accessToken
+            })
+            .catch(function (error) {
+                console.log(error)
+                return error
+            });
+
+        return response
+    },
+
+    getAdminToken: async function () {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        
+        let data = {
+            email: 'markpeeratchai@gmail.com',
+            password: '123'
+        }
 
         let response = await axios.post('/api/auth/signin-with-email', data, config)
             .then(function (response) {
