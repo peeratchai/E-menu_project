@@ -32,7 +32,7 @@ export default function ViewOrderModal(props) {
     const startTime = "00:00:00";
     const endTime = "23:59:59";
     const currentDate = moment().format('YYYY-MM-DD')
-    const startDate = moment(currentDate + ' ' + startTime).subtract(1,'months')
+    const startDate = moment(currentDate + ' ' + startTime)
     const endDate = moment(currentDate + ' ' + endTime)
 
     useEffect(() => {
@@ -60,6 +60,7 @@ export default function ViewOrderModal(props) {
             if (tableDetails.length > 0) {
                 setInitailNewOrder(tableDetails, countOrderItmes)
                 setNewOrders(tableDetails[0].orders)
+                setTableNewOrderSelectedNumber(tableDetails[0].orders[0].id)
             } else {
                 if (!setinitialOrder) {
                     get_zone()
@@ -112,6 +113,7 @@ export default function ViewOrderModal(props) {
             if (tableDetails.length > 0) {
                 setInitailInOrder(tableDetails, countOrderItmes)
                 setInOrders(tableDetails[0].orders)
+                setTableInOrderSelectedNumber(tableDetails[0].orders[0].id)
             } else {
                 if (!setinitialOrder) {
                     get_zone()
@@ -204,29 +206,33 @@ export default function ViewOrderModal(props) {
 
     const confirmTakeOrder = async (order_items, index) => {
         console.log('order_items', order_items)
-        let orderId = order_items.id
-        let response = await partnerService.takeOrder(orderId)
-        console.log('response', response)
-        if (response) {
-            if (response.is_success === true) {
-                let newOrder = { ...newOrderSelected }
-                let orderItems = [...newOrderSelected.order_items]
-                orderItems.splice(index, 1)
-                newOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getNewOrder()
-                } else {
-                    getNewOrder(tableNewOrderSelectedNumber)
-                }
-                console.log('newOrder', newOrder)
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.takeOrder(orderId)
+            console.log('response', response)
+            if (response) {
+                if (response.is_success === true) {
+                    let newOrder = { ...newOrderSelected }
+                    let orderItems = [...newOrderSelected.order_items]
+                    orderItems.splice(index, 1)
+                    newOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getNewOrder()
+                    } else {
+                        getNewOrder(tableNewOrderSelectedNumber)
+                    }
+                    console.log('newOrder', newOrder)
 
-                setNewOrderSelected(newOrder)
-                message.success('Take order successful.')
+                    setNewOrderSelected(newOrder)
+                    message.success('Take order successful.')
+                } else {
+                    message.error('Cannot take order.Please try again.')
+                }
             } else {
                 message.error('Cannot take order.Please try again.')
             }
-        } else {
-            message.error('Cannot take order.Please try again.')
+        } catch (error) {
+            message.error('Cannot take order.Please try again.', error)
         }
 
     }
@@ -347,6 +353,73 @@ export default function ViewOrderModal(props) {
         });
     }
 
+    const acceptAlNewOrder = async () => {
+        try {
+            let haveError = false
+            console.log('newOrderSelected', newOrderSelected)
+            setLoading(true)
+            if (newOrderSelected) {
+                await Promise.all(newOrderSelected.order_items.forEach(async (orderItem) => {
+                    console.log('order_item', orderItem)
+                    let orderId = orderItem.id
+                    let response = await partnerService.takeOrder(orderId)
+                    console.log('response', response)
+                    if (response) {
+                        if (response.is_success === false) {
+                            haveError = true
+                        }
+                    } else {
+                        message.error('Cannot take order.Please try again.')
+                    }
+                }));
+
+                if (haveError) {
+                    let newOrder = { ...newOrderSelected }
+                    newOrder.order_item = []
+                    getNewOrder()
+                    setNewOrderSelected(newOrder)
+                }
+            }
+            message.success('Take order successful.')
+            setLoading(false)
+        } catch (error) {
+            console.log('error', error)
+            // message.error('Cannot take order.Please try again.', error)
+            setLoading(false)
+        }
+    }
+
+    const acceptAllInOrder = async () => {
+        try {
+            console.log('newOrderSelected', inOrderSelected)
+            setLoading(true)
+            if (inOrderSelected) {
+                await Promise.all(inOrderSelected.order_items.forEach(async (orderItem) => {
+                    let orderId = orderItem.id
+                    let response = await partnerService.completeOrder(orderId)
+                    console.log('response', response)
+                    if (response) {
+                        if (response.is_success === true) {
+                            let inOrder = { ...inOrderSelected }
+                            inOrder.order_items = []
+                            getInOrder()
+                            setInOrderSelected(inOrder)
+                        } else {
+                            message.error('Cannot complete order.Please try again.')
+                        }
+                    } else {
+                        message.error('Cannot complete order.Please try again.')
+                    }
+                }));
+            }
+            message.success('Complete order successful.')
+            setLoading(false)
+        } catch (error) {
+            console.log('error', error)
+            setLoading(false)
+        }
+    }
+
     let newOrderTableListComponent = newOrders && newOrders.map((order) => {
 
         return (
@@ -462,13 +535,25 @@ export default function ViewOrderModal(props) {
                 {newOrderTableListComponent}
             </Col>
             <Col xs={8} style={{ overflowY: "scroll", height: "inherit" }}>
+                <div style={{ textAlign: "right", marginBottom: "15px" }}>
+                    <Popconfirm
+                        title="คุณแน่ใจหรือไม่ที่จะรับออเดอร์ทั้งหมด"
+                        onConfirm={() => acceptAlNewOrder()}
+                        okText="ยืนยัน"
+                        cancelText="ยกเลิก"
+                    >
+                        <Button >
+                            รับออเดอร์ทั้งหมด
+                        </Button>
+                    </Popconfirm>
+                </div>
+
                 {newOrderList}
             </Col>
         </>
     )
 
     let inOrderTableList = inOrders && inOrders.map((order) => {
-
         return (
             <>
                 {/* Table list */}
@@ -587,6 +672,18 @@ export default function ViewOrderModal(props) {
                 {inOrderTableList}
             </Col>
             <Col xs={8} style={{ overflowY: "scroll", height: "inherit" }}>
+                <div style={{ textAlign: "right", marginBottom: "15px" }}>
+                    <Popconfirm
+                        title="คุณแน่ใจหรือไม่ที่จะรับออเดอร์ทั้งหมด"
+                        onConfirm={() => acceptAllInOrder()}
+                        okText="ยืนยัน"
+                        cancelText="ยกเลิก"
+                    >
+                        <Button >
+                            รับออเดอร์ทั้งหมด
+                        </Button>
+                    </Popconfirm>
+                </div>
                 {inOrderList}
             </Col>
         </>
