@@ -47,6 +47,7 @@ export default function Restaurant() {
   }, [router.isReady]);
 
   const setInitialData = async () => {
+    console.log("shoppingCart response");
     getRestaurantDetail(restaurantId)
       .then(async (restaurantDetail) => {
         // console.log("restaurantDetail", restaurantDetail);

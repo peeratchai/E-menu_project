@@ -1,16 +1,18 @@
 import styles from './index.module.css'
 import { Row, Col, Image, Button, Tab, Tabs, Form } from 'react-bootstrap'
-import { message, Popconfirm, Spin, Select } from 'antd'
+import { message, Popconfirm, Spin, Select, Modal as ModalAntd } from 'antd'
 import 'antd/dist/antd.css';
 import React, { useEffect } from 'react'
 import partnerService from '../../../../services/partner'
 import EmptyComponent from '../../../Empty'
 import utilStyles from '../../../../styles/utils.module.css'
 import moment from 'moment'
-import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { DeleteOutlined, CheckOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link'
+import NormalButton from '../../../Button/NormalButton'
 
 const { Option } = Select
+const { confirm } = ModalAntd;
 
 export default function MobileComponent(props) {
     const { zone, restaurant_id, restaurant_name } = props
@@ -352,7 +354,7 @@ export default function MobileComponent(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>
@@ -483,7 +485,7 @@ export default function MobileComponent(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>
@@ -614,7 +616,7 @@ export default function MobileComponent(props) {
                             <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
                                 <Row >
                                     <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100%" }} />
+                                        <Image src={order_items.menu.image_url} rounded style={{ height: "100px" }} />
                                     </Col>
                                     <Col xs={8}>
                                         <div>
@@ -646,9 +648,12 @@ export default function MobileComponent(props) {
             let orderList = (
                 <>
                     {menuList}
+                    <div style={{ margin: "10px 0" }}>
+                        <NormalButton button_name="เช็คบิล" function_on_click={() => confirmCheckBill()} />
+                    </div>
                     {
                         menuList.length > 0 && (
-                            <div style={{ textAlign: "right" }}>
+                            <div style={{ textAlign: "right", marginBottom: "10px" }}>
                                 <b>Total is {completedOrderSelected.total} THB</b>
                             </div>
                         )
@@ -740,6 +745,43 @@ export default function MobileComponent(props) {
                 }
             }
         }
+    }
+
+    const checkBill = async () => {
+        try {
+            let response = await partnerService.checkbill(tableIdSelected.id);
+            if (response) {
+                if (response.is_success === true) {
+                    message.success('เช็คบิลสำเร็จ')
+                } else {
+                    message.warning('ไม่พบรายการอาหาร')
+                }
+            }
+            console.log('response', response)
+        } catch (error) {
+            console.log('Check bill error', error)
+            message.error('ไม่สามารถเช็คบิลได้')
+        }
+    }
+
+    const confirmCheckBill = () => {
+        confirm({
+            title: 'ยืนยันการเช็คบิลหรือไม่?',
+            icon: <ExclamationCircleOutlined />,
+            content: '',
+            okText: 'ยืนยัน',
+            okType: 'danger',
+            cancelText: 'ยกเลิก',
+            centered: true,
+            destroyOnClose: true,
+            onOk() {
+                console.log('OK');
+                checkBill()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
     return (

@@ -279,7 +279,7 @@ export default function RestaurantDetailMobile(props) {
               onClick={() => onAddMenu(menu)}
             >
               <Row style={{ height: "100%" }}>
-                <Col xs={9}>
+                <Col xs={8}>
                   <Row>
                     <Col style={{ fontSize: "14px", fontWeight: "bold" }}>
                       {menu.name}
@@ -294,11 +294,11 @@ export default function RestaurantDetailMobile(props) {
                     <Col>{menu.price + " Baht"}</Col>
                   </Row>
                 </Col>
-                <Col xs={3} style={{ paddingRight: "0px", height: "100%" }}>
+                <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
                   <Image
                     src={menu.image_url}
                     rounded
-                    style={{ height: "100%" }}
+                    style={{ height: "100px" }}
                   />
                 </Col>
               </Row>

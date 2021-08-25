@@ -1,14 +1,16 @@
 import utilStyles from '../../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Image, Button, Tab, Tabs, Modal } from 'react-bootstrap'
-import { Popconfirm, message, Spin } from 'antd';
+import { Popconfirm, message, Spin, Modal as ModalAntd } from 'antd';
 import 'antd/dist/antd.css';
-import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { DeleteOutlined, CheckOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useEffect } from 'react'
 import partnerService from '../../../services/partner'
 import moment from 'moment'
 import EmptyComponent from '../../Empty'
 import NormalButton from '../../Button/NormalButton'
+
+const { confirm } = ModalAntd;
 
 export default function ViewOrderModal(props) {
 
@@ -30,7 +32,7 @@ export default function ViewOrderModal(props) {
     const startTime = "00:00:00";
     const endTime = "23:59:59";
     const currentDate = moment().format('YYYY-MM-DD')
-    const startDate = moment(currentDate + ' ' + startTime)
+    const startDate = moment(currentDate + ' ' + startTime).subtract(1,'months')
     const endDate = moment(currentDate + ' ' + endTime)
 
     useEffect(() => {
@@ -308,8 +310,41 @@ export default function ViewOrderModal(props) {
         }
     }
 
-    const checkbill = () =>{
-        console.log('checkbill')
+    const checkBill = async () => {
+        try {
+            let response = await partnerService.checkbill(table_selected.id);
+            if (response) {
+                if (response.is_success === true) {
+                    message.success('เช็คบิลสำเร็จ')
+                } else {
+                    message.warning('ไม่พบรายการอาหาร')
+                }
+            }
+            console.log('response', response)
+        } catch (error) {
+            console.log('Check bill error', error)
+            message.error('ไม่สามารถเช็คบิลได้')
+        }
+    }
+
+    const confirmCheckBill = () => {
+        confirm({
+            title: 'ยืนยันการเช็คบิลหรือไม่?',
+            icon: <ExclamationCircleOutlined />,
+            content: '',
+            okText: 'ยืนยัน',
+            okType: 'danger',
+            cancelText: 'ยกเลิก',
+            centered: true,
+            destroyOnClose: true,
+            onOk() {
+                console.log('OK');
+                checkBill()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
     let newOrderTableListComponent = newOrders && newOrders.map((order) => {
@@ -333,7 +368,7 @@ export default function ViewOrderModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                     </div>
                                 </Col>
                             </Row>
@@ -391,9 +426,12 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        {/* <div style={{ textAlign: "right" }}>
+                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                            <b>รหัสลูกค้า : {newOrderSelected.order_by}</b>
+                                        </div>
+                                        <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div> */}
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -405,7 +443,7 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "relative",textAlign:"right"}}>
+                    <div style={{ position: "relative", textAlign: "right" }}>
                         <b>Total is {newOrderSelected.total} THB</b>
                     </div>
                 </>
@@ -423,7 +461,7 @@ export default function ViewOrderModal(props) {
             <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {newOrderTableListComponent}
             </Col>
-            <Col xs={8} style={{ overflowY: "scroll" , height: "inherit"}}>
+            <Col xs={8} style={{ overflowY: "scroll", height: "inherit" }}>
                 {newOrderList}
             </Col>
         </>
@@ -451,7 +489,7 @@ export default function ViewOrderModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                     </div>
                                 </Col>
                             </Row>
@@ -512,6 +550,9 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
+                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                            <b>รหัสลูกค้า : {inOrderSelected.order_by}</b>
+                                        </div>
                                         <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
                                         </div>
@@ -526,7 +567,7 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "relative",textAlign:"right"}}>
+                    <div style={{ position: "relative", textAlign: "right" }}>
                         <b>Total is {inOrderSelected.total} THB</b>
                     </div>
                 </>
@@ -572,7 +613,7 @@ export default function ViewOrderModal(props) {
                             <Row>
                                 <Col>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss - DD/MMM/YYYY')}
+                                        {moment(order.order_date, 'YYYY-MM-DDHH:mm:ss').format('HH:mm:ss - DD/MMM/YYYY')}
                                     </div>
                                 </Col>
                             </Row>
@@ -612,9 +653,12 @@ export default function ViewOrderModal(props) {
                                         <div>
                                             <b>{order_items.special_instruction}</b>
                                         </div>
-                                        {/* <div style={{ textAlign: "right" }}>
+                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                            <b>รหัสลูกค้า : {completedOrderSelected.order_by}</b>
+                                        </div>
+                                        <div style={{ textAlign: "right" }}>
                                             Price : {order_items.total} THB
-                                        </div> */}
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -626,10 +670,10 @@ export default function ViewOrderModal(props) {
             let orderList = (
                 <>
                     {menuList}
-                    <div>
-                        <NormalButton button_name="เช็คบิล" function_on_click={()=> checkbill()}/>
+                    <div style={{ marginBottom: "15px" }}>
+                        <NormalButton button_name="เช็คบิล" function_on_click={() => confirmCheckBill()} />
                     </div>
-                    <div style={{ position: "relative",textAlign:"right"}}>
+                    <div style={{ position: "relative", textAlign: "right" }}>
                         <b>Total is {completedOrderSelected.total} THB</b>
                     </div>
                 </>
@@ -648,7 +692,7 @@ export default function ViewOrderModal(props) {
             <Col xs={4} style={{ borderRight: "1px solid #DEDEDE", overflowY: "scroll", height: "inherit" }}>
                 {completedOrderTableList}
             </Col>
-            <Col xs={8} style={{ overflowY: "scroll" , height: "inherit"}}>
+            <Col xs={8} style={{ overflowY: "scroll", height: "inherit" }}>
                 {completedOrderList}
             </Col>
         </>

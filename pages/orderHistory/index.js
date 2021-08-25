@@ -88,7 +88,7 @@ const OrderHistory = ({ user }) => {
                             </Col>
                             <Col xs={4}>
                                 <div style={{ textAlign: "right", fontSize: "12px" }}>
-                                    {moment(order.order_date).format('hh:mm A')}
+                                    {moment(order.order_date).add(7,'hours').format('hh:mm A')}
                                 </div>
                             </Col>
                         </Row>

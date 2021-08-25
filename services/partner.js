@@ -139,6 +139,10 @@ const partnerSerivce = {
     getOrderByPeriod: async (data) => {
         return await sendRequest.post('/api/get_order_by_period/', data)
     },
+    checkbill: async (tableId) =>{
+        let data = {}
+        return await sendRequest.patch('/api/order/check_bill/'+tableId , data)
+    }
 }
 
 export default partnerSerivce

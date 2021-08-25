@@ -191,6 +191,10 @@ module.exports = {
             destination: API_URL + '/order/active',
         },
         {
+            source: '/api/order/check_bill/:tableId',
+            destination: API_URL + '/order/check_bill/:tableId',
+        },
+        {
             source: '/api/take_order/:orderId',
             destination: API_URL + '/order-item/take_order/:orderId',
         },

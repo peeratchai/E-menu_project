@@ -146,11 +146,11 @@ const sendRequest = {
             })
             .catch(function (error) {
               console.log(error);
-              return error;
+              throw error;
             });
         } else {
           console.log(error);
-          return error;
+          throw error;
         }
       });
   },
