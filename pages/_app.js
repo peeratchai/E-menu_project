@@ -41,11 +41,10 @@ export default function App({ Component, pageProps, router }) {
     return (
         <AnimatePresence exitBeforeEnter onExitComplete={handExitComplete} >
             <Head>
-                <link
-                    href="https://fonts.googleapis.com/css?family=Work Sans"
-                    rel="stylesheet"
-                    key="google-font-cabin"
-                />
+
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300&family=Kanit:wght@300&family=Prompt:wght@100&display=swap" rel="stylesheet" />
                 <script
                     type="text/javascript"
                     src="//maps.googleapis.com/maps/api/js?key=AIzaSyAqDX2CqFjdgUBY2QqPfUMlMDGS1gjttPw&language=en&libraries=places"
@@ -56,7 +55,7 @@ export default function App({ Component, pageProps, router }) {
             </Head>
             <style global jsx>{`
         body {
-            font-family: 'Work Sans', sans-serif;
+            font-family:'Kanit', sans-serif
         }
       `}</style>
             <Component key={router.route} {...pageProps} />
