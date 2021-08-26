@@ -355,31 +355,24 @@ export default function ViewOrderModal(props) {
 
     const acceptAlNewOrder = async () => {
         try {
-            let haveError = false
-            console.log('newOrderSelected', newOrderSelected)
             setLoading(true)
             if (newOrderSelected) {
-                await Promise.all(newOrderSelected.order_items.forEach(async (orderItem) => {
+                await Promise.all(newOrderSelected.order_items.map(async (orderItem) => {
                     console.log('order_item', orderItem)
                     let orderId = orderItem.id
                     let response = await partnerService.takeOrder(orderId)
                     console.log('response', response)
                     if (response) {
-                        if (response.is_success === false) {
-                            haveError = true
+                        if (response.is_success === true) {
+                            let newOrder = { ...newOrderSelected }
+                            newOrder.order_items = []
+                            getNewOrder()
+                            setNewOrderSelected(newOrder)
                         }
-                    } else {
-                        message.error('Cannot take order.Please try again.')
                     }
                 }));
-
-                if (haveError) {
-                    let newOrder = { ...newOrderSelected }
-                    newOrder.order_item = []
-                    getNewOrder()
-                    setNewOrderSelected(newOrder)
-                }
             }
+            console.log('done')
             message.success('Take order successful.')
             setLoading(false)
         } catch (error) {
@@ -394,7 +387,7 @@ export default function ViewOrderModal(props) {
             console.log('newOrderSelected', inOrderSelected)
             setLoading(true)
             if (inOrderSelected) {
-                await Promise.all(inOrderSelected.order_items.forEach(async (orderItem) => {
+                await Promise.all(inOrderSelected.order_items.map(async (orderItem) => {
                     let orderId = orderItem.id
                     let response = await partnerService.completeOrder(orderId)
                     console.log('response', response)
