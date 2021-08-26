@@ -32,6 +32,7 @@ export default function RestaurantDetailMobile(props) {
     restaurant_detail,
     restaurant_id,
     is_user_signin,
+    qrcode_details_from_url
   } = props;
   const { set_shopping_cart, notification_login_modal_show, set_number_of_cart } = props;
   const router = useRouter();
@@ -167,12 +168,14 @@ export default function RestaurantDetailMobile(props) {
       }
       console.log('qr_code_details', qr_code_details)
       console.log('table_id', table_id)
-      if (qr_code_details && qr_code_details.restaurantId) {
+      console.log('qrcode_details_from_url', qrcode_details_from_url)
+      //// Check qrcode from url and session if has qr code breadcrumb will removed.
+      if ((qr_code_details && qr_code_details.restaurantId) || (qrcode_details_from_url && qrcode_details_from_url.tableId)) {
         setAlreadyScanQrcode(true)
       }
 
     }
-  }, [restaurant_detail, shopping_cart, restaurantOpenNow, qr_code_details]);
+  }, [restaurant_detail, shopping_cart, restaurantOpenNow, qr_code_details, qrcode_details_from_url]);
 
   const setInitialShoppingCart = (shoppingCart, update = false) => {
     console.log("shoppingCart", shoppingCart);

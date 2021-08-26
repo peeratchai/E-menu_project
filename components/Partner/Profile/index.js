@@ -156,7 +156,7 @@ export default function Profile(props) {
 
     const getRestaurantDetails = async () => {
         let responseRestaurantDetail = await restaurantService.getRestaurantById(restaurant_id)
-        let restaurantDetail = responseRestaurantDetail.data
+        let restaurantDetail = responseRestaurantDetail
         let businessHour
         if (restaurantDetail) {
 
