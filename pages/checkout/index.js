@@ -43,7 +43,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
     }
     const [orderActiveData, setOrderActiveData] = React.useState([])
     const [countOrderActiveItems, setCountOrderActiveItems] = React.useState(0);
-    const [totalOrder, setTotalOrder] = React.useState(0);
+    const [totalOrderActive, setTotalOrderActive] = React.useState(0);
 
     useEffect(() => {
         console.log('user', user)
@@ -194,7 +194,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
             let responseOrderActive = await orderService.getOrderActive()
             let orderActiveData = []
             let countOrderActive = 0
-            let totalOrder = 0
+            let totalOrderActive = 0
             if (responseOrderActive) {
                 if (responseOrderActive.length > 0) {
                     setRestaurantDetails(responseOrderActive[0].restaurant)
@@ -203,7 +203,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         if (order.order_items) {
                             order.order_items.forEach((orderItem) => {
                                 console.log('orderItem', orderItem)
-                                totalOrder += orderItem.total
+                                totalOrderActive += orderItem.total
                                 countOrderActive++
                                 orderActiveData.push(orderItem)
                             })
@@ -214,11 +214,11 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                     }
 
                     if (shoppingCartData && shoppingCartData.totalPriceInShoppingCart > 0) {
-                        totalOrder += shoppingCartData.totalPriceInShoppingCart
+                        totalOrderActive += shoppingCartData.totalPriceInShoppingCart
                     }
                     setOrderActiveData(orderActiveData)
                     setCountOrderActiveItems(countOrderActive)
-                    setTotalOrder(totalOrder)
+                    setTotalOrderActive(totalOrderActive)
                 }
 
             }
@@ -234,23 +234,23 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
         let newCart = { ...shoppingCartData }
         let newTotalPrice = totalPrice
 
-        if (newCartItem[menuIndex].quantity === 1) {
-            newTotalPrice = newTotalPrice - newCartItem[menuIndex].price
-            setTotalPrice(newTotalPrice)
-            newCartItem.splice(menuIndex, 1)
+        newTotalPrice = newTotalPrice - newCartItem[menuIndex].price
+        setTotalPrice(newTotalPrice)
+        let newTotalOrderActive = totalOrderActive
+        newTotalOrderActive -= newCartItem[menuIndex].price
+        setTotalOrderActive(newTotalOrderActive)
 
+        if (newCartItem[menuIndex].quantity === 1) {
+            newCartItem.splice(menuIndex, 1)
         } else {
             newCartItem[menuIndex].quantity = newCartItem[menuIndex].quantity - 1
             newCartItem[menuIndex].total = newCartItem[menuIndex].total - newCartItem[menuIndex].price
-            newTotalPrice = newTotalPrice - newCartItem[menuIndex].price
-            setTotalPrice(newTotalPrice)
         }
         let newCountMenuItems = countMenuItems
         setCountMenuItems(newCountMenuItems - 1)
 
         newCart.shopping_cart_items = newCartItem
         newCart.total = newTotalPrice
-        console.log('newCart', newCart)
         setShoppingCartData({ ...newCart })
         updateShoppingCart(newCart)
     }
@@ -259,13 +259,17 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
         let existingCartItem = shoppingCartData.shopping_cart_items
         let newCartItem = [...existingCartItem]
         let newCart = { ...shoppingCartData }
+
         newCartItem[menuIndex].quantity = newCartItem[menuIndex].quantity + 1
         newCartItem[menuIndex].total = newCartItem[menuIndex].total + newCartItem[menuIndex].price
         let newTotalPrice = totalPrice
+        let newTotalOrderActive = totalOrderActive
         newTotalPrice = newTotalPrice + newCartItem[menuIndex].price
+        newTotalOrderActive += newCartItem[menuIndex].price
         newCart.shopping_cart_items = newCartItem
         newCart.total = newTotalPrice
         let newCountMenuItems = countMenuItems
+        setTotalOrderActive(newTotalOrderActive)
         setCountMenuItems(newCountMenuItems + 1)
         setShoppingCartData({ ...newCart })
         setTotalPrice(newTotalPrice)
@@ -609,20 +613,20 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                     <div className="bg-gray-100 container-sm " style={{ paddingTop: "10px" }}>
                                         <Row>
                                             <Col>
-                                                {totalOrder > 0 && (<span>สั่งเพิ่ม </span>)}{countMenuItems} รายการ
+                                                {totalOrderActive > 0 && (<span>สั่งเพิ่ม </span>)}{countMenuItems} รายการ
                                             </Col>
                                             <Col style={{ textAlign: "right" }}>
                                                 <b> {totalPrice} ฿</b>
                                             </Col>
                                         </Row>
                                         {
-                                            totalOrder > 0 && (
+                                            totalOrderActive > 0 && (
                                                 <Row style={{ fontSize: "14px", color: "#929292" }}>
                                                     <Col>
                                                         รวมค่าอาหาร ทั้งหมด
                                                     </Col>
                                                     <Col style={{ textAlign: "right" }}>
-                                                        <b> {totalOrder} ฿</b>
+                                                        <b> {totalOrderActive} ฿</b>
                                                     </Col>
                                                 </Row>
                                             )
@@ -631,7 +635,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                         <Row style={{ marginBottom: "10px" }}>
                                             <Col>
                                                 <Button className={styles.checkout_button} onClick={() => setConfirmModalVisible(true)}>
-                                                    {totalOrder > 0 ? (<span>สั่งเพิ่ม </span>) : (<span>สั่ง </span>)} {countMenuItems} รายการ
+                                                    {totalOrderActive > 0 ? (<span>สั่งเพิ่ม </span>) : (<span>สั่ง </span>)} {countMenuItems} รายการ
                                                 </Button>
                                             </Col>
                                         </Row>
@@ -649,13 +653,13 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                             </Col>
                                         </Row>
                                         {
-                                            totalOrder > 0 && (
+                                            totalOrderActive > 0 && (
                                                 <Row style={{ fontSize: "14px", color: "#929292" }}>
                                                     <Col>
                                                         รวมค่าอาหาร ทั้งหมด
                                                     </Col>
                                                     <Col style={{ textAlign: "right" }}>
-                                                        <b> {totalOrder} ฿</b>
+                                                        <b> {totalOrderActive} ฿</b>
                                                     </Col>
                                                 </Row>
                                             )

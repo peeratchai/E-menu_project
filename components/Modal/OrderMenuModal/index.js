@@ -69,7 +69,6 @@ export default function OrderMenuModal(props) {
                 console.log('differrent')
             }
 
-
             let newCartItemData = {}
             let newCartItem = []
             console.log(newShoppingCart)

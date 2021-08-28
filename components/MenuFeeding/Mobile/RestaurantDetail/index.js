@@ -54,6 +54,7 @@ export default function RestaurantDetailMobile(props) {
     React.useState();
   const [menuSelected, setMenuSelected] = React.useState();
   const [haveShoppingCart, setHaveShoppingCart] = React.useState(false);
+  const [haveOrderActive, setHaveOrderActive] = React.useState(false);
   const [
     isViewRestaurantFromPromotionPage,
     setIsViewRestaurantFromPromotionPage,
@@ -67,8 +68,6 @@ export default function RestaurantDetailMobile(props) {
     setNotificationRestaurantClosingModalVisible,
   ] = React.useState(false);
   const [restaurantOpenNow, setRestaurantOpenNow] = React.useState(false);
-  const [totalOrderActive, setTotalOrderActive] = React.useState(0)
-  const [countOrderActive, setCountOrderActive] = React.useState(0)
   const [restaurantDetail, setRestaurantDetail] = React.useState({
     name: "",
     description: "",
@@ -114,8 +113,6 @@ export default function RestaurantDetailMobile(props) {
 
       getShoppingCartData()
 
-
-
       //// Check qrcode from url and session if has qr code breadcrumb will removed.
       if ((qr_code_details && qr_code_details.restaurantId) || (qrcode_details_from_url && qrcode_details_from_url.tableId)) {
         setAlreadyScanQrcode(true)
@@ -128,32 +125,19 @@ export default function RestaurantDetailMobile(props) {
   const getShoppingCartData = async () => {
 
     let { totalOrderActive, countOrderActive } = await getOrderActive()
-
-
+    if (totalOrderActive > 0 && countOrderActive > 0) {
+      setHaveOrderActive(true)
+      setHaveShoppingCart(true)
+    }
     if (
       shopping_cart &&
       shopping_cart.hasOwnProperty('shopping_cart_items') &&
       shopping_cart.shopping_cart_items.length > 0
     ) {
-      if (totalOrderActive > 0 && countOrderActive > 0) {
-        let haveOrderActive = true
-        let orderActiveData = {
-          totalOrderActive,
-          countOrderActive,
-          haveOrderActive
-        }
-        await setInitialShoppingCart({ shoppingCart: shopping_cart, orderActiveData });
-        setTotalOrderActive(totalOrderActive)
-        setCountOrderActive(countOrderActive)
-      } else {
-        setInitialShoppingCart({ shoppingCart: shopping_cart });
-      }
+      setInitialShoppingCart({ shoppingCart: shopping_cart });
     } else {
-      setNumberOfCartItem(countOrderActive);
-      setTotalOfCartItem(totalOrderActive);
-      if (totalOrderActive > 0 && countOrderActive > 0) {
-        setHaveShoppingCart(true)
-      }
+      setNumberOfCartItem(0);
+      setTotalOfCartItem(0);
     }
   }
 
@@ -212,7 +196,7 @@ export default function RestaurantDetailMobile(props) {
 
   }
 
-  const setInitialShoppingCart = ({ shoppingCart, update = false, orderActiveData }) => {
+  const setInitialShoppingCart = ({ shoppingCart, update = false }) => {
     let cartItems = shoppingCart.shopping_cart_items;
     let numberOfCartItem = 0;
     let total = 0;
@@ -220,21 +204,6 @@ export default function RestaurantDetailMobile(props) {
       numberOfCartItem += cartItem.quantity;
       total += cartItem.total;
     });
-
-    console.log()
-
-    if (orderActiveData.haveOrderActive) {
-      if (orderActiveData.totalOrderActive > 0 && orderActiveData.countOrderActive > 0) {
-        total += orderActiveData.totalOrderActive
-        numberOfCartItem += orderActiveData.countOrderActive
-      }
-    } else {
-      if (totalOrderActive > 0 && countOrderActive > 0) {
-        total += totalOrderActive
-        numberOfCartItem += countOrderActive
-      }
-    }
-
 
     setNumberOfCartItem(numberOfCartItem);
     setHaveShoppingCart(true);
@@ -410,7 +379,6 @@ export default function RestaurantDetailMobile(props) {
           responseOrderActive.forEach((order) => {
             if (order.order_items) {
               order.order_items.forEach((orderItem) => {
-                console.log('orderItem', orderItem)
                 totalOrderActive += orderItem.total
                 countOrderActive++
                 orderActiveData.push(orderItem)
@@ -710,18 +678,31 @@ export default function RestaurantDetailMobile(props) {
               color: "white",
             }}
           >
-            <Row>
-              <Col>
-                <div stlye={{ textAlign: "left", paddingLeft: "10px" }}>
-                  Basket : {numberOfCartItem} Item
-                </div>
-              </Col>
-              <Col>
-                <div style={{ textAlign: "right", paddingRight: "10px" }}>
-                  {totalOfCartItem} Baht
-                </div>
-              </Col>
-            </Row>
+            {
+              numberOfCartItem > 0 && (
+                <Row>
+                  <Col>
+                    <div stlye={{ textAlign: "left", paddingLeft: "10px" }}>
+                      Basket : {numberOfCartItem} Item
+                    </div>
+                  </Col>
+                  <Col>
+                    <div style={{ textAlign: "right", paddingRight: "10px" }}>
+                      {totalOfCartItem} Baht
+                    </div>
+                  </Col>
+                </Row>
+              )
+            }
+            {
+              numberOfCartItem === 0 && haveOrderActive && (
+                <Row>
+                  <Col>
+                    ดูรายการอาหาร
+                  </Col>
+                </Row>
+              )
+            }
           </Button>
         </div>
       </div>
