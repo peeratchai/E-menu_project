@@ -321,6 +321,7 @@ export default function ViewOrderModal(props) {
             let response = await partnerService.checkbill(table_selected.id);
             if (response) {
                 if (response.is_success === true) {
+                    await getCompletedOrder()
                     message.success('เช็คบิลสำเร็จ')
                 } else {
                     message.warning('ไม่พบรายการอาหาร')

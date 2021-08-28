@@ -63,10 +63,8 @@ export default function MobileComponent(props) {
             "start_date": startDate,
             "end_date": endDate
         }
-        console.log('dataForm', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
-            console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
                 setInitailNewOrder(tableDetails, countOrderItmes)
                 setNewOrders(tableDetails[0].orders)
@@ -88,7 +86,6 @@ export default function MobileComponent(props) {
         tableDetails.map((tableDetail) => {
             tableDetail.orders.forEach((orderItem) => {
                 orderItem.total = orderItem.order_items.reduce(sum, 0)
-                console.log(orderItem.total)
             })
         })
 
@@ -112,10 +109,8 @@ export default function MobileComponent(props) {
             "start_date": startDate,
             "end_date": endDate
         }
-        console.log('dataForm', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
-            console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
                 setInitailInOrder(tableDetails, countOrderItmes)
                 setInOrders(tableDetails[0].orders)
@@ -142,7 +137,6 @@ export default function MobileComponent(props) {
         tableDetails.map((tableDetail) => {
             tableDetail.orders.map((orderItem, index) => {
                 orderItem.total = orderItem.order_items.reduce(sum, 0)
-                console.log(orderItem.total)
                 if (IndexOfFirstOrder === 0) {
                     IndexOfFirstOrder = index
                 }
@@ -169,10 +163,8 @@ export default function MobileComponent(props) {
             "start_date": startDate,
             "end_date": endDate
         }
-        console.log('dataForm', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
-            console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
                 setInitailCompletedOrder(tableDetails, countOrderItmes)
                 setCompletedOrders(tableDetails[0].orders)
@@ -194,7 +186,6 @@ export default function MobileComponent(props) {
         tableDetails.map((tableDetail) => {
             tableDetail.orders.forEach((orderItem) => {
                 orderItem.total = orderItem.order_items.reduce(sum, 0)
-                console.log(orderItem.total)
             })
         })
 
@@ -207,10 +198,8 @@ export default function MobileComponent(props) {
     }
 
     const confirmTakeOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
         let orderId = order_items.id
         let response = await partnerService.takeOrder(orderId)
-        console.log('response', response)
         if (response) {
             if (response.is_success === true) {
                 let newOrder = { ...newOrderSelected }
@@ -222,7 +211,6 @@ export default function MobileComponent(props) {
                 } else {
                     getNewOrder(tableIdSelected, tableNewOrderSelectedNumber)
                 }
-                console.log('newOrder', newOrder)
                 setNewOrderSelected(newOrder)
                 message.success('Take order successful.')
             } else {
@@ -235,10 +223,8 @@ export default function MobileComponent(props) {
     }
 
     const confirmCompleteOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
         let orderId = order_items.id
         let response = await partnerService.completeOrder(orderId)
-        console.log('response', response)
         if (response) {
             if (response.is_success === true) {
                 let inOrder = { ...inOrderSelected }
@@ -262,10 +248,8 @@ export default function MobileComponent(props) {
     }
 
     const confirmCancelNewOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
         let orderId = order_items.id
         let response = await partnerService.cancelOrder(orderId)
-        console.log('response', response)
         if (response) {
             if (response.is_success === true) {
                 let newOrder = { ...newOrderSelected }
@@ -288,10 +272,8 @@ export default function MobileComponent(props) {
     }
 
     const confirmCancelInOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
         let orderId = order_items.id
         let response = await partnerService.cancelOrder(orderId)
-        console.log('response', response)
         if (response) {
             if (response.is_success === true) {
                 let inOrder = { ...inOrderSelected }
@@ -697,7 +679,6 @@ export default function MobileComponent(props) {
 
     const onChangeZone = (zoneId) => {
         let zoneDetails = zone.find(zone => zone.id === zoneId)
-        console.log(zoneDetails)
         setZoneSelected(zoneDetails)
         setRestaurantTable(zoneDetails.restaurant_tables)
         let tableSelected = zoneDetails.restaurant_tables[0].id
@@ -752,12 +733,12 @@ export default function MobileComponent(props) {
             let response = await partnerService.checkbill(tableIdSelected.id);
             if (response) {
                 if (response.is_success === true) {
+                    await getCompletedOrder()
                     message.success('เช็คบิลสำเร็จ')
                 } else {
                     message.warning('ไม่พบรายการอาหาร')
                 }
             }
-            console.log('response', response)
         } catch (error) {
             console.log('Check bill error', error)
             message.error('ไม่สามารถเช็คบิลได้')
@@ -775,11 +756,7 @@ export default function MobileComponent(props) {
             centered: true,
             destroyOnClose: true,
             onOk() {
-                console.log('OK');
                 checkBill()
-            },
-            onCancel() {
-                console.log('Cancel');
             },
         });
     }
