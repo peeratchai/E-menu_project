@@ -21,6 +21,7 @@ import PointInMaps from "../../../PointInMaps";
 import shoppingCartService from "../../../../services/shoppingCart";
 import moment from "moment";
 import qrCodeSession from "../../../../lib/qrCodeSession";
+import orderService from "../../../../services/order"
 
 export default function RestaurantDetailMobile(props) {
   const qr_code_details = qrCodeSession();
@@ -28,12 +29,14 @@ export default function RestaurantDetailMobile(props) {
     loading,
     shopping_cart,
     is_initial_cart,
-    table_id,
+    location_id,
     restaurant_detail,
     restaurant_id,
     is_user_signin,
-    qrcode_details_from_url
+    qrcode_details_from_url,
+    location_name
   } = props;
+
   const { set_shopping_cart, notification_login_modal_show, set_number_of_cart } = props;
   const router = useRouter();
   //// Set State
@@ -64,6 +67,8 @@ export default function RestaurantDetailMobile(props) {
     setNotificationRestaurantClosingModalVisible,
   ] = React.useState(false);
   const [restaurantOpenNow, setRestaurantOpenNow] = React.useState(false);
+  const [totalOrderActive, setTotalOrderActive] = React.useState(0)
+  const [countOrderActive, setCountOrderActive] = React.useState(0)
   const [restaurantDetail, setRestaurantDetail] = React.useState({
     name: "",
     description: "",
@@ -96,89 +101,118 @@ export default function RestaurantDetailMobile(props) {
 
   useEffect(() => {
     if (restaurant_detail) {
-      let { restaurant_detail, location_id, location_name } = props;
-      let categoryList = [];
-      if (restaurant_detail && restaurant_detail.hasOwnProperty('menu_categories')) {
-        restaurant_detail.menu_categories
-          .sort((a, b) => a.sequence_number - b.sequence_number)
-          .map((category, index) => {
-            if (category.is_active === true && category.menus.length > 0) {
-              if (index === 0) {
-                categoryList.push({
-                  categoryName: category.name,
-                  isActive: true,
-                });
-              } else {
-                categoryList.push({
-                  categoryName: category.name,
-                  isActive: false,
-                });
-              }
-            }
-          });
-      } else {
-        console.log('restaurant_detail not found!')
-      }
 
-      let { lat, lng } = changeFormatLatLong(restaurant_detail.location);
-      setLat(parseFloat(lat));
-      setLng(parseFloat(lng));
-      setCategoryList(categoryList);
-      setCategorySelected(categoryList[0] && categoryList[0].categoryName);
-      let menuCategory = restaurant_detail.menu_categories.filter(
-        (menuCategory) =>
-          menuCategory.is_active === true && menuCategory.menus.length > 0
-      );
-      renderMenuList(menuCategory);
-      setRestaurantDetail(restaurant_detail);
+      setInitialRestaurantDetails()
 
-      if (
-        restaurant_detail.current_business_hour &&
-        moment(
-          restaurant_detail.current_business_hour.opening_time,
-          "HH.mm"
-        ).format("HH.mm") < moment().format("HH.mm") &&
-        moment(
-          restaurant_detail.current_business_hour.closing_time,
-          "HH.mm"
-        ).format("HH.mm") > moment().format("HH.mm")
-      ) {
-        console.log("Open");
-        setRestaurantOpenNow(true);
-      }
-
-      setRestaurantBanner(restaurant_detail);
-
+      //// Check user come from promotions page? If yes : set breadcrumb is all promotions/restaurant name
       if (location_id === undefined && location_name === undefined) {
         setIsViewRestaurantFromPromotionPage(true);
       } else {
         setLocationName(location_name);
         setLocationId(location_id);
       }
-      console.log("shopping_cart", shopping_cart);
-      if (
-        shopping_cart &&
-        shopping_cart.hasOwnProperty('shopping_cart_items') &&
-        shopping_cart.shopping_cart_items.length > 0
-      ) {
-        setInitialShoppingCart(shopping_cart);
-      } else {
-        setNumberOfCartItem(0);
-        setTotalOfCartItem(0);
-      }
-      console.log('qr_code_details', qr_code_details)
-      console.log('table_id', table_id)
-      console.log('qrcode_details_from_url', qrcode_details_from_url)
+
+      getShoppingCartData()
+
+
+
       //// Check qrcode from url and session if has qr code breadcrumb will removed.
       if ((qr_code_details && qr_code_details.restaurantId) || (qrcode_details_from_url && qrcode_details_from_url.tableId)) {
         setAlreadyScanQrcode(true)
       }
 
+
     }
   }, [restaurant_detail, shopping_cart, restaurantOpenNow, qr_code_details, qrcode_details_from_url]);
 
-  const setInitialShoppingCart = (shoppingCart, update = false) => {
-    console.log("shoppingCart", shoppingCart);
+  const getShoppingCartData = async () => {
+
+    let { totalOrderActive, countOrderActive } = await getOrderActive()
+
+
+    if (
+      shopping_cart &&
+      shopping_cart.hasOwnProperty('shopping_cart_items') &&
+      shopping_cart.shopping_cart_items.length > 0
+    ) {
+      if (totalOrderActive > 0 && countOrderActive > 0) {
+        let haveOrderActive = true
+        let orderActiveData = {
+          totalOrderActive,
+          countOrderActive,
+          haveOrderActive
+        }
+        await setInitialShoppingCart({ shoppingCart: shopping_cart, orderActiveData });
+        setTotalOrderActive(totalOrderActive)
+        setCountOrderActive(countOrderActive)
+      } else {
+        setInitialShoppingCart({ shoppingCart: shopping_cart });
+      }
+    } else {
+      setNumberOfCartItem(countOrderActive);
+      setTotalOfCartItem(totalOrderActive);
+      if (totalOrderActive > 0 && countOrderActive > 0) {
+        setHaveShoppingCart(true)
+      }
+    }
+  }
+
+  const setInitialRestaurantDetails = () => {
+    let categoryList = [];
+    if (restaurant_detail && restaurant_detail.hasOwnProperty('menu_categories')) {
+      restaurant_detail.menu_categories
+        .sort((a, b) => a.sequence_number - b.sequence_number)
+        .map((category, index) => {
+          if (category.is_active === true && category.menus.length > 0) {
+            if (index === 0) {
+              categoryList.push({
+                categoryName: category.name,
+                isActive: true,
+              });
+            } else {
+              categoryList.push({
+                categoryName: category.name,
+                isActive: false,
+              });
+            }
+          }
+        });
+    } else {
+      console.log('restaurant_detail not found!')
+    }
+
+    let { lat, lng } = changeFormatLatLong(restaurant_detail.location);
+    setLat(parseFloat(lat));
+    setLng(parseFloat(lng));
+    setCategoryList(categoryList);
+    setCategorySelected(categoryList[0] && categoryList[0].categoryName);
+    let menuCategory = restaurant_detail.menu_categories.filter(
+      (menuCategory) =>
+        menuCategory.is_active === true && menuCategory.menus.length > 0
+    );
+    renderMenuList(menuCategory);
+    setRestaurantDetail(restaurant_detail);
+
+    if (
+      restaurant_detail.current_business_hour &&
+      moment(
+        restaurant_detail.current_business_hour.opening_time,
+        "HH.mm"
+      ).format("HH.mm") < moment().format("HH.mm") &&
+      moment(
+        restaurant_detail.current_business_hour.closing_time,
+        "HH.mm"
+      ).format("HH.mm") > moment().format("HH.mm")
+    ) {
+      console.log("Open");
+      setRestaurantOpenNow(true);
+    }
+
+    setRestaurantBanner(restaurant_detail);
+
+  }
+
+  const setInitialShoppingCart = ({ shoppingCart, update = false, orderActiveData }) => {
     let cartItems = shoppingCart.shopping_cart_items;
     let numberOfCartItem = 0;
     let total = 0;
@@ -186,6 +220,21 @@ export default function RestaurantDetailMobile(props) {
       numberOfCartItem += cartItem.quantity;
       total += cartItem.total;
     });
+
+    console.log()
+
+    if (orderActiveData.haveOrderActive) {
+      if (orderActiveData.totalOrderActive > 0 && orderActiveData.countOrderActive > 0) {
+        total += orderActiveData.totalOrderActive
+        numberOfCartItem += orderActiveData.countOrderActive
+      }
+    } else {
+      if (totalOrderActive > 0 && countOrderActive > 0) {
+        total += totalOrderActive
+        numberOfCartItem += countOrderActive
+      }
+    }
+
 
     setNumberOfCartItem(numberOfCartItem);
     setHaveShoppingCart(true);
@@ -348,6 +397,34 @@ export default function RestaurantDetailMobile(props) {
 
     setMenuEachCategory(categorySection);
   };
+
+  const getOrderActive = async () => {
+    try {
+      let responseOrderActive = await orderService.getOrderActive()
+      //// order active is order already checkout 
+      let orderActiveData = []
+      let countOrderActive = 0
+      let totalOrderActive = 0
+      if (responseOrderActive) {
+        if (responseOrderActive.length > 0) {
+          responseOrderActive.forEach((order) => {
+            if (order.order_items) {
+              order.order_items.forEach((orderItem) => {
+                console.log('orderItem', orderItem)
+                totalOrderActive += orderItem.total
+                countOrderActive++
+                orderActiveData.push(orderItem)
+              })
+            }
+          })
+        }
+      }
+
+      return { totalOrderActive, countOrderActive }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
   const business_hourHTML =
     restaurantDetail &&

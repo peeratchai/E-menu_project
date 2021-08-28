@@ -57,14 +57,28 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
             }
         }
         setInitialCart()
-        getOrderActive()
 
     }, [user])
 
-    const setInitialCart = () => {
-        shoppingCartService.getShoppingCart().then(async (response) => {
+    const setInitialCart = async () => {
+
+        let { totalPrice: totalPriceInShoppingCart } = await getShoppingCartData()
+        let shoppingCartData
+        if (totalPriceInShoppingCart && totalPriceInShoppingCart > 0) {
+            shoppingCartData = {
+                totalPriceInShoppingCart
+            }
+        }
+
+        await getOrderActive({ shoppingCartData })
+    }
+
+    const getShoppingCartData = async () => {
+        try {
+            let response_shopping_cart = await shoppingCartService.getShoppingCart()
             let shoppingCart
-            if (response === 'Not Login') {
+            let totalPrice = 0
+            if (response_shopping_cart === 'Not Login') {
                 shoppingCart = window.localStorage.getItem('shoppingCart')
                 if (shoppingCart) {
                     shoppingCart = JSON.parse(shoppingCart)
@@ -72,18 +86,17 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         if (shoppingCart.shopping_cart_items.length === 0) {
                             setShoppingCartData(shoppingCart);
                         } else {
-                            let total_price = 0
                             let countCartItems = 0
 
                             shoppingCart.shopping_cart_items.forEach((cartItem) => {
-                                total_price += cartItem.total;
+                                totalPrice += cartItem.total;
                                 countCartItems += cartItem.quantity
                             });
                             if (countCartItems > 0) {
                                 setHaveMenuInCart(true)
                             }
                             setCountMenuItems(countCartItems)
-                            setTotalPrice(total_price);
+                            setTotalPrice(totalPrice);
                             setShoppingCartData(shoppingCart);
                         }
                     } else {
@@ -99,11 +112,10 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                     setTotalPrice(0)
                 }
             } else {
-                shoppingCart = response
-                let shoppingCartDatabase = response
+                shoppingCart = response_shopping_cart
+                let shoppingCartDatabase = response_shopping_cart
                 let restaurantId
                 let shoppingCartItems = []
-                console.log('shoppingCartDatabase', shoppingCartDatabase)
                 if (shoppingCartDatabase && shoppingCartDatabase !== "") {
                     //// Has menu in cart in database
                     shoppingCartItems = shoppingCartDatabase.shopping_cart_items
@@ -154,8 +166,6 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         }
                     }
                 }
-                console.log('restaurantId', restaurantId)
-                console.log('shoppingCart', shoppingCart)
                 setShoppingCartData(shoppingCart)
                 let countCartItems = 0
                 shoppingCartItems.forEach((cartItem) => countCartItems += cartItem.quantity)
@@ -163,33 +173,25 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                 if (countCartItems > 0) {
                     setHaveMenuInCart(true)
                 }
-                let total_price = 0
-                shoppingCartItems.map((menu) => total_price += menu.total)
-                setTotalPrice(total_price)
-                //  else {
-                //     // message.warning('Please select order before check out order.')
-                //     //// No have menu in cart of this account
 
+                shoppingCartItems.map((menu) => totalPrice += menu.total)
+                setTotalPrice(totalPrice)
 
-                //     setShoppingCartData({ 'order': [] })
-                //     setCountMenuItems(0)
-                //     setHaveMenuInCart(false)
-                //     setTotalPrice(0)
-                // }
+                console.log('shoppingCart', shoppingCart)
+                if (shoppingCart && shoppingCart.restaurant) {
+                    setRestaurantDetails(shoppingCart.restaurant)
+                }
+
+                return { totalPrice }
             }
-            console.log('shoppingCart',shoppingCart)
-            if (shoppingCart && shoppingCart.restaurant) {
-                console.log('shoppingCart.restaurant',shoppingCart.restaurant)
-                setRestaurantDetails(shoppingCart.restaurant)
-            }
-
-        })
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
-    const getOrderActive = async () => {
+    const getOrderActive = async ({ shoppingCartData }) => {
         try {
             let responseOrderActive = await orderService.getOrderActive()
-            console.log('responseOrderActive', responseOrderActive)
             let orderActiveData = []
             let countOrderActive = 0
             let totalOrder = 0
@@ -207,9 +209,12 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                             })
                         }
                     })
-                    console.log('countOrderActive', countOrderActive)
                     if (countOrderActive > 0) {
                         setHaveMenuInCart(true)
+                    }
+
+                    if (shoppingCartData && shoppingCartData.totalPriceInShoppingCart > 0) {
+                        totalOrder += shoppingCartData.totalPriceInShoppingCart
                     }
                     setOrderActiveData(orderActiveData)
                     setCountOrderActiveItems(countOrderActive)
@@ -307,8 +312,8 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                     let userId = userProfile.id
                     console.log(shoppingCartData)
                     let restaurantId = shoppingCartData.restaurant.id
-                    console.log('qr_code_restaurantID',qr_code_restaurantID)
-                    console.log('restaurantId',restaurantId)
+                    console.log('qr_code_restaurantID', qr_code_restaurantID)
+                    console.log('restaurantId', restaurantId)
                     if (qr_code_restaurantID === restaurantId) {
                         let order_items = []
                         let orders = shoppingCartData.shopping_cart_items
@@ -425,7 +430,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         </Col>
                     </Row>
                     <Row>
-                        <Col className={utilStyles.overflowDot} style={{ color: "#D1D1D1", fontSize: "14px",margin:"10px 0 " }}>
+                        <Col className={utilStyles.overflowDot} style={{ color: "#D1D1D1", fontSize: "14px", margin: "10px 0 " }}>
                             * {orderItem.special_instruction}
                         </Col>
                     </Row>
@@ -531,6 +536,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
         <>
             {
                 isMobileResolution ? (
+                    //// Mobile Version
                     <>
                         <LayoutMobile
                             containerType="mobile"
@@ -572,7 +578,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                                         }
                                                     </div>
                                                 </>
-                                            ) : <EmptyComponent descriptionText="ไม่มีรายการอาหาร"/>
+                                            ) : <EmptyComponent descriptionText="ไม่มีรายการอาหาร" />
                                         }
 
                                         {
@@ -680,6 +686,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         />
                     </>
                 ) : (
+                    //// PC Version
                     <>
                         <Layout>
                             <Container className={utilStyles.container}>
@@ -696,7 +703,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                             <div style={{ maxHeight: "calc(100vh - 300px)", overflowY: "scroll", overflowX: "hidden" }}>
                                                 {MenuListComponentWeb}
                                             </div>
-                                        ) : <EmptyComponent descriptionText="ไม่มีรายการอาหาร"/>
+                                        ) : <EmptyComponent descriptionText="ไม่มีรายการอาหาร" />
                                     }
                                 </Spin>
 
@@ -823,7 +830,7 @@ function ConfirmOrderModal(props) {
 function NotificationShoppingCartModal(props) {
 
     const [loading, setLoading] = React.useState(false)
-    
+
     const onDeleteShopping = () => {
         setLoading(true)
         shoppingCartService.deleteShoppingCart().then((response) => {

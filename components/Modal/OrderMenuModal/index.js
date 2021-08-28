@@ -157,7 +157,7 @@ export default function OrderMenuModal(props) {
                 }
                 if (set_initial_shopping_cart !== undefined) {
                     //// For mobile version
-                    set_initial_shopping_cart(newCartItemData, true)
+                    set_initial_shopping_cart({ shoppingCart: newCartItemData, update: true })
                 }
             }).catch(error => {
                 console.log('error', error)
