@@ -1,4 +1,5 @@
-import Layout from '../../components/layout'
+import LayoutMobile from '../../components/LayoutMobile'
+import Layout from '../../components/Layout'
 import utilStyles from '../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import useMediaQuery from "../../utils/utils";
@@ -159,7 +160,7 @@ export default function Newspaper() {
     if (isMobileResolution) {
         //Layout for mobile
         component = (
-            <Layout containerType="mobile" search searchFunc={searchFunc}>
+            <LayoutMobile containerType="mobile" search searchFunc={searchFunc}>
                 <Container className={utilStyles.container_sm}>
                     <Spin spinning={loading} tip="Loading...">
                         <ShowFiilterSelected
@@ -180,7 +181,7 @@ export default function Newspaper() {
                     filter_master_data_list={masterDataList}
                     user_location={userLocation}
                 />
-            </Layout>
+            </LayoutMobile>
         )
 
     } else {

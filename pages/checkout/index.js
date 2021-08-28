@@ -547,6 +547,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                             is_show_login_modal={isShowLoginModal}
                             set_is_show_login_modal={setDefaultShowLoginModal}
                             sub_header={subHeaderLoginModal}
+                            is_show_shopping_cart={false}
                             is_show_filter={false}
                             is_show_search={false}
                             haveMenuFooter={false}

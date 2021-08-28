@@ -97,7 +97,7 @@ const UserProfileModal = (props) => {
           if (filterRoles.length === 0) {
             setUserIsCustomer(true);
           }
-          if (profile.avatar_url !== null || profile.avatar_url !== "") {
+          if (profile.avatar_url !== null && profile.avatar_url !== "") {
             setProfileImage(profile.avatar_url);
           }
           setProfileForm({

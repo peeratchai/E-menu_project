@@ -435,3 +435,8 @@ div.ant-row.ant-form-item {
 .ant-image-preview-img{
   object-fit: fill !important;
 }
+
+
+.ant-layout-content{
+  min-height: calc(100% - 150px) !important;
+}

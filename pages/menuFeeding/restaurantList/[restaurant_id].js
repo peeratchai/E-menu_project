@@ -391,6 +391,7 @@ export default function Restaurant() {
           menuInBasket={numberOfCartItem}
           is_show_login_modal={isShowLoginModal}
           is_show_filter={false}
+          is_show_shopping_cart={false}
           is_show_search={false}
           set_is_show_login_modal={setDefaultShowLoginModal}
           haveMenuFooter={false}

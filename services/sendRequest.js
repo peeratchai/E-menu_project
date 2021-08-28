@@ -76,7 +76,6 @@ const sendRequest = {
 
   post: async function (api_url, data, ContentType = "application/json") {
     let accessToken = await checkLogin();
-    console.log("accessToken", accessToken);
     let config = {
       headers: {
         Authorization: "Bearer " + accessToken,
