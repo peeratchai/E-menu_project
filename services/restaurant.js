@@ -41,7 +41,7 @@ const restaurantService = {
         let response = await axios.get('/api/restaurant/' + restaurantId, config)
             .then(function(response) {
                 console.log(response)
-                return response
+                return response.data
             })
             .catch(function(error) {
                 console.log(error)

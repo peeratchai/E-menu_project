@@ -30,6 +30,7 @@ export default function Restaurant() {
   const [numberOfCartItem, setNumberOfCartItem] = React.useState(0);
   const [notificationLoginModal, setNotificationLoginModal] =
     React.useState(false);
+  const [qrcodeDetails, setQrcodeDetails] = React.useState()
   const [isUserSignin, setIsUserSignin] = React.useState(false);
   const [notificationModalVisible, setNotificationModalVisible] =
     React.useState(false);
@@ -252,23 +253,26 @@ export default function Restaurant() {
 
 
 
-            if (tableId !== undefined) {
+            if (tableId && restaurantId) {
               try {
-                let responseTableData = await partnerSerivce.checkHaveTableBycustomer(tableId)
+                let await_responseTableData = partnerSerivce.checkHaveTableBycustomer(tableId)
+                let await_restaurantData = restaurantService.getRestaurantById(restaurantId)
+
+                let responseTableData = await await_responseTableData
+                let restaurantData = await await_restaurantData
                 console.log('responseTableData', responseTableData)
-                if (responseTableData) {
-                  if (responseTableData.id) {
-                    if (tableName) {
-                      message.success(
-                        `You've checked in ${tableName} at ${restaurantDetail.name}. Let's start ordering!`,
-                        4
-                      );
-                    } else {
-                      message.success(
-                        `You've checked at ${restaurantDetail.name}. Let's start ordering!`,
-                        4
-                      );
-                    }
+                console.log('restaurantData', restaurantData)
+                if (responseTableData && restaurantData) {
+                  if (responseTableData.id && restaurantData.id) {
+                    setQrcodeDetails({
+                      tableId: tableId,
+                      restaurantId: restaurantId
+                    })
+                    message.success(
+                      `You've checked in ${responseTableData.name} at ${restaurantDetail.name}. Let's start ordering!`,
+                      4
+                    );
+
                     try {
                       await saveTableOnScanQrCode();
                     } catch (error) {
@@ -311,7 +315,7 @@ export default function Restaurant() {
 
   const getRestaurantDetail = async (restaurantId) => {
     let response = await restaurantService.getRestaurantById(restaurantId);
-    return response.data;
+    return response;
   };
 
   const settingNumberOfCart = (numberOfCart) => {
@@ -368,6 +372,7 @@ export default function Restaurant() {
             restaurant_id={restaurantId}
             table_id={tableId}
             loading={loading}
+            qrcode_details_from_url={qrcodeDetails}
             shopping_cart={shoppingCart}
             set_shopping_cart={settingShoppintCart}
             is_initial_cart={isInitialCart}
@@ -397,6 +402,7 @@ export default function Restaurant() {
             restaurant_id={restaurantId}
             table_id={tableId}
             loading={loading}
+            qrcode_details_from_url={qrcodeDetails}
             shopping_cart={shoppingCart}
             set_number_of_cart={settingNumberOfCart}
             set_shopping_cart={settingShoppintCart}
