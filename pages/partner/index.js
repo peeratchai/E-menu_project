@@ -1,16 +1,13 @@
 import Layout from '../../components/Layout'
+import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
-import { Row, Col, Form, Image, Button, Tab, Tabs, Modal, Container, Nav } from 'react-bootstrap'
+import { Row, Col, Tab, Container, Nav } from 'react-bootstrap'
 import 'antd/dist/antd.css';
-import { Upload, message, Table, Space, Switch, Select, Slider, Card, TimePicker } from 'antd';
-import { PlusOutlined, UploadOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { Select, Card } from 'antd';
 import React, { useEffect } from 'react'
-import Draggable from "react-draggable";
-import AntdModal from "../../components/AntdModal"
 import useMediaQuery from "../../utils/utils";
 import termAgreement from '../../utils/termAgreement.json'
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import Promote from '../../components/Partner/Promote'
 import Menu from '../../components/Partner/Menu'
 import Profile from '../../components/Partner/Profile'
@@ -20,10 +17,9 @@ import Dashboard from '../../components/Partner/Dashboard'
 import PromoteList from '../../components/Partner/PromoteList'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
+
 const axios = require('axios')
 const { Option } = Select;
-
-
 
 const Partner = ({ user }) => {
 
@@ -51,126 +47,122 @@ const Partner = ({ user }) => {
         setMenuSelected(value)
         console.log(value)
     }
-    function onChangePeriod(value) {
-        console.log(`selected ${value}`);
-    }
-
-    function onSearchPeriod(val) {
-        console.log('search:', val);
-    }
 
     const onChangeTab = (key) => {
         setCurrentTab(key)
     }
 
     return (
-        <Layout containerType="center">
-            <Container className={!isMobileResolution ? styles.container : utilStyles.container_sm + " " + utilStyles.background_white}>
+        <>
+            {
+                !isMobileResolution ? (
+                    //PC Version
+                    <Layout containerType="center">
+                        <Container className={styles.container}>
 
-                {
-                    !isMobileResolution ? (
-                        //PC Version
-                        <Tab.Container id="left-tabs-management-partner" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
-                            <Row>
-                                <Col sm={2}>
-                                    <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="restaurantManagement">Restaurant Management</Nav.Link>
-                                        </Nav.Item>
-                                        {
-                                            roles.find((role) => role === 'partner') ? (
-                                                <>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="promote">Promote</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="promoteList">Promote List</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="menu">Menu</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="zone">Zone Management</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="profile">Profile</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="setting">Setting</Nav.Link>
-                                                    </Nav.Item>
-                                                </>
-                                            ) : notDisplay
-                                        }
+                            <Tab.Container id="left-tabs-management-partner" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
+                                <Row>
+                                    <Col sm={2}>
+                                        <Nav variant="pills" className="flex-column" style={{ fontSize: "16px" }}>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="restaurantManagement">Restaurant Management</Nav.Link>
+                                            </Nav.Item>
+                                            {
+                                                roles.find((role) => role === 'partner') ? (
+                                                    <>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="dashboard">Dashboard</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="promote">Promote</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="promoteList">Promote List</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="menu">Menu</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="zone">Zone Management</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="profile">Profile</Nav.Link>
+                                                        </Nav.Item>
+                                                        <Nav.Item>
+                                                            <Nav.Link eventKey="setting">Setting</Nav.Link>
+                                                        </Nav.Item>
+                                                    </>
+                                                ) : notDisplay
+                                            }
 
-                                    </Nav>
-                                </Col>
-                                <Col sm={10}>
-                                    <Tab.Content>
-                                        <Tab.Pane eventKey="restaurantManagement">
-                                            <RestaurantManagement
-                                                restaurant_id={restaurantId}
-                                                current_tab={currentTab}
-                                                restaurant_name={restaurantName}
-                                                type="partner"
-                                                current_user_roles={roles}
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="dashboard">
-                                            <Dashboard
-                                                restaurant_id={restaurantId}
-                                                type="partner"
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="promote">
-                                            <Promote
-                                                restaurant_id={restaurantId}
-                                                type="partner"
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="promoteList">
-                                            <PromoteList
-                                                restaurant_id={restaurantId}
-                                                current_tab={currentTab}
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="menu">
-                                            <Menu
-                                                restaurant_id={restaurantId}
-                                                current_tab={currentTab}
-                                                type="partner"
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="zone">
-                                            <ZoneManagement
-                                                restaurant_id={restaurantId}
-                                                current_tab={currentTab}
-                                                type="partner"
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="profile">
-                                            <Profile
-                                                restaurant_id={restaurantId}
-                                                current_tab={currentTab}
-                                                user_profile={user}
-                                                type="partner"
-                                            />
-                                        </Tab.Pane>
-                                        <Tab.Pane eventKey="setting">
-                                            <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
-                                                {termAgreement.text}
-                                            </Card>
-                                        </Tab.Pane>
-                                    </Tab.Content>
-                                </Col>
-                            </Row>
-                        </Tab.Container>
-
-                    ) : (
-                        //Mobile Version
-                        <>
+                                        </Nav>
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Tab.Content>
+                                            <Tab.Pane eventKey="restaurantManagement">
+                                                <RestaurantManagement
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                    restaurant_name={restaurantName}
+                                                    type="partner"
+                                                    current_user_roles={roles}
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="dashboard">
+                                                <Dashboard
+                                                    restaurant_id={restaurantId}
+                                                    type="partner"
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="promote">
+                                                <Promote
+                                                    restaurant_id={restaurantId}
+                                                    type="partner"
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="promoteList">
+                                                <PromoteList
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="menu">
+                                                <Menu
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                    type="partner"
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="zone">
+                                                <ZoneManagement
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                    type="partner"
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="profile">
+                                                <Profile
+                                                    restaurant_id={restaurantId}
+                                                    current_tab={currentTab}
+                                                    user_profile={user}
+                                                    type="partner"
+                                                />
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="setting">
+                                                <Card title="Term Agreements" style={{ marginTop: "15px", maxHeight: "60vh", overflow: "auto" }}>
+                                                    {termAgreement.text}
+                                                </Card>
+                                            </Tab.Pane>
+                                        </Tab.Content>
+                                    </Col>
+                                </Row>
+                            </Tab.Container>
+                        </Container>
+                    </Layout>
+                ) : (
+                    //Mobile Version
+                    <MobileLayout containerType="center" is_show_shopping_cart={false} is_show_filter={false} is_show_search={false}>
+                        <Container className={utilStyles.container_sm + " " + utilStyles.background_white}>
                             <div style={{ padding: "15px" }}>
                                 <Select defaultValue="restaurantManagement" value={menuSelected} style={{ width: '100%' }} onChange={(value) => handleChangeMenu(value)}>
                                     <Option value="restaurantManagement">Restaurant Management</Option>
@@ -254,15 +246,11 @@ const Partner = ({ user }) => {
                                     </Card>
                                 )
                             }
-                        </>
-                    )
-                }
-
-            </Container>
-
-        </Layout>
-
-
+                        </Container>
+                    </MobileLayout>
+                )
+            }
+        </>
     )
 }
 

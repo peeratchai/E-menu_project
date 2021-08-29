@@ -174,6 +174,7 @@ export default function MobileLayout(props) {
   };
 
   const expandableSubMenu = () => {
+    console.log('bbbbbb')
     setIsExpandedSubMenu(!isExpandedSubMenu)
   }
 
@@ -242,6 +243,28 @@ export default function MobileLayout(props) {
 
   const Submenu = (
     <>
+
+
+      {
+        isPartner && (
+          <div style={{ padding: '16px 24px' }}>
+            <ActiveLink href="/partner">
+              <span>จัดการร้านค้า</span>
+            </ActiveLink>
+          </div>
+        )
+      }
+
+      {
+        isAdmin && (
+          <div style={{ padding: '16px 24px' }}>
+            <ActiveLink href="/admin">
+              <span>แอดมิน</span>
+            </ActiveLink>
+          </div>
+        )
+      }
+
       <div style={{ padding: '16px 24px' }} onClick={() => onShowUserProfileModal()}>
         <span>ข้อมูลโปรไฟล์</span>
       </div>
@@ -271,7 +294,9 @@ export default function MobileLayout(props) {
       <Layout>
         <Header style={{ backgroundColor: 'white', padding: '0 25px' }}>{MenuHeader}</Header>
         <Content>
-          <div style={{ height: isExpandedSubMenu ? '45vh' : '0', width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
+
+              <div style={{ maxHeight: isExpandedSubMenu ? '100vh': 0, width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
+
           <div className={containerStyle} style={{ minHeight: "90vh" }}> {children}</div>
         </Content>
         {

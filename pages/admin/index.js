@@ -1,4 +1,5 @@
 import Layout from '../../components/Layout'
+import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Tab, Container, Nav } from 'react-bootstrap'
@@ -26,6 +27,7 @@ import RestaurantListManagemnet from '../../components/Admin/RestaurantListManga
 import ZoneManagement from '../../components/Partner/ZoneManagement'
 import PropTypes from 'prop-types'
 import withSession from '../../lib/session'
+
 const axios = require('axios')
 
 const { Option } = Select;
@@ -78,15 +80,13 @@ const Admin = ({ user }) => {
         setCurrentTab(key)
     }
 
-
     return (
-        <Layout containerType="center">
-            <Container className={!isMobileResolution ? styles.container : utilStyles.container_sm + " " + utilStyles.background_white}>
-
-                {
-                    !isMobileResolution ? (
-                        //PC Version
-                        <>
+        <>
+            {
+                !isMobileResolution ? (
+                    //PC Version
+                    <Layout containerType="center">
+                        <Container className={styles.container}>
                             <Tab.Container id="left-tabs-management-admin" defaultActiveKey="restaurantManagement" onSelect={onChangeTab}>
                                 <Row>
                                     <Col sm={2}>
@@ -246,10 +246,12 @@ const Admin = ({ user }) => {
                                     </Col>
                                 </Row>
                             </Tab.Container>
-                        </>
-                    ) : (
-                        //Mobile Version
-                        <>
+                        </Container >
+                    </Layout >
+                ) : (
+                    //Mobile Version
+                    <MobileLayout containerType="center" is_show_shopping_cart={false} is_show_filter={false} is_show_search={false}>
+                        <Container className={utilStyles.container_sm + " " + utilStyles.background_white}>
                             <div style={{ padding: "15px" }}>
                                 <Select defaultValue="restaurantManagement" value={menuSelected} style={{ width: '100%' }} onChange={(value) => handleChangeMenu(value)}>
                                     <Option value="restaurantManagement">Restaurant Management</Option>
@@ -392,13 +394,13 @@ const Admin = ({ user }) => {
                                     </Card>
                                 ) : null
                             }
+                        </Container >
+                    </MobileLayout >
+                )
+            }
+        </>
 
-                        </>
-                    )
-                }
 
-            </Container >
-        </Layout >
     )
 }
 
