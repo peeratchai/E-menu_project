@@ -179,6 +179,10 @@ module.exports = {
             destination: API_URL + '/order',
         },
         {
+            source: '/api/order/check_bill_except/:tableId',
+            destination: API_URL + '/order/check_bill_except/:tableId',
+        },
+        {
             source: '/api/get_order_by_filter',
             destination: API_URL + '/order/search_by_filter',
         },

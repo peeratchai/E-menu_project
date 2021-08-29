@@ -131,7 +131,6 @@ export default function AdminEditProfileModal(props) {
     const saveProfile = async () => {
         const { userId, first_name, last_name, gender, age, phoneNumber, profileImage, username, roles, is_active, restaurant_employee } = profileForm
 
-        console.log('restaurant_employee', restaurant_employee)
         if (roles.length > 0) {
             let partnerRole = roles.filter((role) => role === 'partner' || role === 'employee')
             if (partnerRole.length > 0 && (!restaurant_employee || restaurant_employee === '' || restaurant_employee === null)) {
@@ -157,21 +156,22 @@ export default function AdminEditProfileModal(props) {
                     is_active: is_active
                 }
 
-                console.log('data', data)
-
-                let responseProfile = await profileService.adminEditUserProfile(data, userId)
-                console.log('responseProfile', responseProfile)
-                if (responseProfile) {
-                    console.log('userId', userId)
-                    if (current_user_profile && userId === current_user_profile.id) {
-                        window.location.reload()
+                try {
+                    let responseProfile = await profileService.adminEditUserProfile(data, userId)
+                    if (responseProfile) {
+                        if (current_user_profile && userId === current_user_profile.id) {
+                            window.location.reload()
+                        } else {
+                            get_all_user_profile()
+                        }
+                        message.success('Edit profile successful.')
                     } else {
-                        get_all_user_profile()
+                        message.error('Cannot edit profile !')
                     }
-                    message.success('Edit profile successful.')
-                } else {
-                    message.error('Cannot edit profile !')
+                } catch (error) {
+                    console.log('adminEditUserProfile error', error)
                 }
+
             }
         } else {
             message.error('Please select one or more roles.')

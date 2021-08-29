@@ -47,10 +47,10 @@ export default function WebComponent(props) {
         if (restaurant_id) {
             setDisable(false)
         }
-        if(current_user_roles){
+        if (current_user_roles) {
             setCurrentUserRoles(current_user_roles)
         }
-    }, [zone,current_user_roles])
+    }, [zone, current_user_roles])
 
     const ratioTableImages = (zone) => {
 
@@ -215,7 +215,11 @@ export default function WebComponent(props) {
                         "is_active": true
                     }
                     console.log(data)
-                    await partnerSerivce.editTable(data, table.id)
+                    try {
+                        await partnerSerivce.editTable(data, table.id)
+                    } catch (error) {
+                        console.log('editTable error', error)
+                    }
                 }))
 
                 get_zone(zoneNumberSelected)

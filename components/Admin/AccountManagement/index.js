@@ -318,20 +318,24 @@ export default function AccountManagement(props) {
             is_active: false
         }
 
-
-        let responseProfile = await profileService.adminEditUserProfile(data, profile.userId)
-        if (responseProfile) {
-            message.success('Edit profile successful.')
-            console.log('profile.userId', profile.userId)
-            console.log('current_user_profile.id', current_user_profile.id)
-            if (profile.userId === current_user_profile.id) {
-                await signOut()
+        try {
+            let responseProfile = await profileService.adminEditUserProfile(data, profile.userId)
+            if (responseProfile) {
+                message.success('Edit profile successful.')
+                console.log('profile.userId', profile.userId)
+                console.log('current_user_profile.id', current_user_profile.id)
+                if (profile.userId === current_user_profile.id) {
+                    await signOut()
+                } else {
+                    getAllUserProfile()
+                }
             } else {
-                getAllUserProfile()
+                message.error('Cannot edit profile !')
             }
-        } else {
-            message.error('Cannot edit profile !')
+        } catch (error) {
+            console.log('adminEditUserProfile error', error)
         }
+
     }
 
     const signOut = async () => {

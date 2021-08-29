@@ -32,7 +32,7 @@ export default function ViewOrderModal(props) {
     const startTime = "00:00:00";
     const endTime = "23:59:59";
     const currentDate = moment().format('YYYY-MM-DD')
-    const startDate = moment(currentDate + ' ' + startTime)
+    const startDate = moment(currentDate + ' ' + startTime).subtract(1, 'days')
     const endDate = moment(currentDate + ' ' + endTime)
 
     useEffect(() => {
@@ -53,14 +53,35 @@ export default function ViewOrderModal(props) {
             "start_date": startDate,
             "end_date": endDate
         }
-        console.log('dataForm', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
             console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
-                setInitailNewOrder(tableDetails, countOrderItmes)
-                setNewOrders(tableDetails[0].orders)
-                setTableNewOrderSelectedNumber(tableDetails[0].orders[0].id)
+                let haveNewOrder = false
+                let newOrder = []
+                tableDetails[0].orders.forEach((order) => {
+                    if (order.status !== "Canceled") {
+                        newOrder.push(order)
+                    }
+                    order.order_items.forEach((orderItem) => {
+                        if (orderItem.status !== 'Canceled') {
+                            haveNewOrder = true
+                        }
+                    })
+                })
+                setInitailNewOrder(newOrder, countOrderItmes)
+                if (haveNewOrder) {
+                    setNewOrders(newOrder)
+                    setTableNewOrderSelectedNumber(newOrder[0].id)
+                } else {
+                    if (!setinitialOrder) {
+                        get_zone()
+                    }
+                    setNewOrderSelected({})
+                    setNewOrders([])
+                    setTableNewOrderSelectedNumber(undefined)
+                }
+
             } else {
                 if (!setinitialOrder) {
                     get_zone()
@@ -77,19 +98,21 @@ export default function ViewOrderModal(props) {
         }
     }
 
-    const setInitailNewOrder = (tableDetails, countOrderItmes) => {
+    const setInitailNewOrder = (newOrder, countOrderItmes) => {
         let firstOrder
-        tableDetails.map((tableDetail) => {
-            tableDetail.orders.forEach((orderItem) => {
-                orderItem.total = orderItem.order_items.reduce(sum, 0)
-                console.log(orderItem.total)
-            })
+        console.log('newOrder', newOrder)
+
+        newOrder.forEach((order) => {
+            order.total = order.order_items.reduce(sum, 0)
         })
 
-        firstOrder = tableDetails[0].orders[0]
+        firstOrder = newOrder[0]
+        let currentNewOrder = newOrder.find((orderDetails) => orderDetails.id === countOrderItmes)
         if (countOrderItmes === null) {
             setTableNewOrderSelectedNumber(firstOrder.id)
             setNewOrderSelected(firstOrder)
+        } else {
+            setNewOrderSelected(currentNewOrder)
         }
         setHaveNewOrder(true)
     }
@@ -106,14 +129,35 @@ export default function ViewOrderModal(props) {
             "start_date": startDate,
             "end_date": endDate
         }
-        console.log('dataForm', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
             console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
-                setInitailInOrder(tableDetails, countOrderItmes)
-                setInOrders(tableDetails[0].orders)
-                setTableInOrderSelectedNumber(tableDetails[0].orders[0].id)
+                let haveInOrder = false
+                let inOrder = []
+                tableDetails[0].orders.forEach((order) => {
+                    if (order.status !== 'Canceled') {
+                        inOrder.push(order)
+                    }
+                    order.order_items.forEach((orderItem) => {
+                        if (orderItem.status !== 'Canceled') {
+                            haveInOrder = true
+                        }
+                    })
+                })
+                setInitailInOrder(inOrder, countOrderItmes)
+
+                if (haveInOrder) {
+                    setInOrders(inOrder)
+                    setTableInOrderSelectedNumber(inOrder[0].id)
+                } else {
+                    if (!setinitialOrder) {
+                        get_zone()
+                    }
+                    setInOrders([])
+                    setInOrderSelected({})
+                    setTableInOrderSelectedNumber(undefined)
+                }
             } else {
                 if (!setinitialOrder) {
                     get_zone()
@@ -134,23 +178,20 @@ export default function ViewOrderModal(props) {
         return accumulator + a.total;
     }
 
-    const setInitailInOrder = (tableDetails, countOrderItmes) => {
-        let IndexOfFirstOrder = 0
+    const setInitailInOrder = (inOrder, countOrderItmes) => {
         let firstOrder
-        tableDetails.map((tableDetail) => {
-            tableDetail.orders.map((orderItem, index) => {
-                orderItem.total = orderItem.order_items.reduce(sum, 0)
-                console.log(orderItem.total)
-                if (IndexOfFirstOrder === 0) {
-                    IndexOfFirstOrder = index
-                }
-            })
+        inOrder.map((order) => {
+            order.total = order.order_items.reduce(sum, 0)
         })
 
-        firstOrder = tableDetails[0].orders[0]
+        firstOrder = inOrder[0]
+        let currentInOrder = inOrder.find((orderDetails) => orderDetails.id === countOrderItmes)
+
         if (countOrderItmes === null) {
             setTableInOrderSelectedNumber(firstOrder.id)
             setInOrderSelected(firstOrder)
+        } else {
+            setInOrderSelected(currentInOrder)
         }
         setHaveOrderInProcess(true)
     }
@@ -172,8 +213,25 @@ export default function ViewOrderModal(props) {
             let tableDetails = await partnerService.getOrderByfilter2(data)
             console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
-                setInitailCompletedOrder(tableDetails, countOrderItmes)
-                setCompletedOrders(tableDetails[0].orders)
+                let haveOrderCompleted = false
+
+                tableDetails[0].orders.forEach((order) => {
+                    order.order_items.forEach((orderItem) => {
+                        if (orderItem.status !== 'Canceled') {
+                            haveOrderCompleted = true
+                        }
+                    })
+                })
+
+                if (haveOrderCompleted) {
+                    setInitailCompletedOrder(tableDetails, countOrderItmes)
+                    setCompletedOrders(tableDetails[0].orders)
+                } else {
+                    setCompletedOrders([])
+                    setCompletedOrderSelected({})
+                    setTableCompletedOrderSelectedNumber(undefined)
+                }
+
             } else {
                 setCompletedOrders([])
                 setCompletedOrderSelected({})
@@ -238,82 +296,91 @@ export default function ViewOrderModal(props) {
     }
 
     const confirmCompleteOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
-        let orderId = order_items.id
-        let response = await partnerService.completeOrder(orderId)
-        console.log('response', response)
-        if (response) {
-            if (response.is_success === true) {
-                let inOrder = { ...inOrderSelected }
-                let orderItems = [...inOrder.order_items]
-                orderItems.splice(index, 1)
-                inOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getInOrder()
-                } else {
-                    getInOrder(tableInOrderSelectedNumber)
-                }
-                setInOrderSelected(inOrder)
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.completeOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let inOrder = { ...inOrderSelected }
+                    let orderItems = [...inOrder.order_items]
+                    orderItems.splice(index, 1)
+                    inOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getInOrder()
+                    } else {
+                        getInOrder(tableInOrderSelectedNumber)
+                    }
+                    setInOrderSelected(inOrder)
 
-                message.success('Complete order successful.')
+                    message.success('Complete order successful.')
+                } else {
+                    message.error('Cannot complete order.Please try again.')
+                }
             } else {
                 message.error('Cannot complete order.Please try again.')
             }
-        } else {
-            message.error('Cannot complete order.Please try again.')
+        } catch (error) {
+            console.log('completeOrder error', error)
         }
+
     }
 
     const confirmCancelNewOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
-        let orderId = order_items.id
-        let response = await partnerService.cancelOrder(orderId)
-        console.log('response', response)
-        if (response) {
-            if (response.is_success === true) {
-                let newOrder = { ...newOrderSelected }
-                let orderItems = [...newOrderSelected.order_items]
-                orderItems.splice(index, 1)
-                newOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getNewOrder()
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.cancelOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let newOrder = { ...newOrderSelected }
+                    let orderItems = [...newOrderSelected.order_items]
+                    orderItems.splice(index, 1)
+                    newOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getNewOrder()
+                    } else {
+                        getNewOrder(tableNewOrderSelectedNumber)
+                    }
+                    setNewOrderSelected(newOrder)
+                    message.success('Cancel order successful.')
                 } else {
-                    getNewOrder(tableNewOrderSelectedNumber)
+                    message.error('Cannot cancel order.Please try again.')
                 }
-                setNewOrderSelected(newOrder)
-                message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
             }
-        } else {
-            message.error('Cannot cancel order.Please try again.')
+        } catch (error) {
+            console.log('cancelOrder error', error)
         }
+
     }
 
     const confirmCancelInOrder = async (order_items, index) => {
-        console.log('order_items', order_items)
-        let orderId = order_items.id
-        let response = await partnerService.cancelOrder(orderId)
-        console.log('response', response)
-        if (response) {
-            if (response.is_success === true) {
-                let inOrder = { ...inOrderSelected }
-                let orderItems = [...inOrder.order_items]
-                orderItems.splice(index, 1)
-                inOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getInOrder()
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.cancelOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let inOrder = { ...inOrderSelected }
+                    let orderItems = [...inOrder.order_items]
+                    orderItems.splice(index, 1)
+                    inOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getInOrder()
+                    } else {
+                        getInOrder(tableInOrderSelectedNumber)
+                    }
+                    setInOrderSelected(inOrder)
+                    message.success('Cancel order successful.')
                 } else {
-                    getInOrder(tableInOrderSelectedNumber)
+                    message.error('Cannot cancel order.Please try again.')
                 }
-                setInOrderSelected(inOrder)
-                message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
             }
-        } else {
-            message.error('Cannot cancel order.Please try again.')
+        } catch (error) {
+            console.log('cancelOrder error', error)
         }
+
     }
 
     const checkBill = async () => {
@@ -449,69 +516,120 @@ export default function ViewOrderModal(props) {
     const renderNewOrderList = () => {
         if (newOrderSelected.order_items) {
             let menuList = newOrderSelected.order_items.map((order_items, index) => {
-                return (
-                    <Row style={{ paddingBottom: "10px" }}>
-                        <Col>
-                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                <Row >
-                                    <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
-                                    </Col>
-                                    <Col xs={8}>
-                                        <div>
-                                            <Row>
-                                                <Col xs={8}>
-                                                    <div>
-                                                        <b>{order_items.menu.name}</b>
-                                                    </div>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
-                                                        <Popconfirm
-                                                            title="Are you sure to take order?"
-                                                            onConfirm={() => confirmTakeOrder(order_items, index)}
-                                                            okText="Yes"
-                                                            cancelText="No"
-                                                        >
-                                                            <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
-                                                        </Popconfirm>
-                                                        <Popconfirm
-                                                            title="Are you sure to cancel this order?"
-                                                            onConfirm={() => confirmCancelNewOrder(order_items, index)}
-                                                            okText="Yes"
-                                                            cancelText="No"
-                                                        >
-                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
-                                                        </Popconfirm>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                        <div>
-                                            <b>x {order_items.quantity}</b>
-                                        </div>
-                                        <div>
-                                            <b>{order_items.special_instruction}</b>
-                                        </div>
-                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
-                                            <b>รหัสลูกค้า : {newOrderSelected.order_by}</b>
-                                        </div>
-                                        <div style={{ textAlign: "right" }}>
-                                            Price : {order_items.total} THB
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                )
+                if (order_items.status === 'New Order') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            <Popconfirm
+                                                                title="Are you sure to take order?"
+                                                                onConfirm={() => confirmTakeOrder(order_items, index)}
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                            >
+                                                                <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                            </Popconfirm>
+                                                            <Popconfirm
+                                                                title="Are you sure to cancel this order?"
+                                                                onConfirm={() => confirmCancelNewOrder(order_items, index)}
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                            >
+                                                                <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                            </Popconfirm>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {newOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
+            })
+
+            let menuListCanceled = newOrderSelected.order_items.map((order_items, index) => {
+                if (order_items.status === 'Canceled') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            Deleted
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {newOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
             })
 
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "relative", textAlign: "right" }}>
+                    <div style={{ position: "relative", textAlign: "right", margin: "10px 0 20px 0" }}>
                         <b>Total is {newOrderSelected.total} THB</b>
+                    </div>
+                    <div style={{ filter: "grayscale(1)" }}>
+                        {menuListCanceled}
                     </div>
                 </>
 
@@ -585,69 +703,120 @@ export default function ViewOrderModal(props) {
     const renderInOrderList = () => {
         if (inOrderSelected.order_items) {
             let menuList = inOrderSelected.order_items.map((order_items, index) => {
-                return (
-                    <Row style={{ paddingBottom: "10px" }}>
-                        <Col>
-                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                <Row >
-                                    <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
-                                    </Col>
-                                    <Col xs={8}>
-                                        <div>
-                                            <Row>
-                                                <Col xs={8}>
-                                                    <div>
-                                                        <b>{order_items.menu.name}</b>
-                                                    </div>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
-                                                        <Popconfirm
-                                                            title="Are you sure to take order?"
-                                                            onConfirm={() => confirmCompleteOrder(order_items, index)}
-                                                            okText="Yes"
-                                                            cancelText="No"
-                                                        >
-                                                            <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
-                                                        </Popconfirm>
-                                                        <Popconfirm
-                                                            title="Are you sure to cancel this order?"
-                                                            onConfirm={() => confirmCancelInOrder(order_items, index)}
-                                                            okText="Yes"
-                                                            cancelText="No"
-                                                        >
-                                                            <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
-                                                        </Popconfirm>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                        <div>
-                                            <b>x {order_items.quantity}</b>
-                                        </div>
-                                        <div>
-                                            <b>{order_items.special_instruction}</b>
-                                        </div>
-                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
-                                            <b>รหัสลูกค้า : {inOrderSelected.order_by}</b>
-                                        </div>
-                                        <div style={{ textAlign: "right" }}>
-                                            Price : {order_items.total} THB
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                )
+                if (order_items.status === 'In Order') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            <Popconfirm
+                                                                title="Are you sure to take order?"
+                                                                onConfirm={() => confirmCompleteOrder(order_items, index)}
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                            >
+                                                                <Button variant="primary" style={{ padding: ".1rem .5rem", marginRight: "10px" }}><CheckOutlined style={{ fontSize: "12px" }} /></Button>
+                                                            </Popconfirm>
+                                                            <Popconfirm
+                                                                title="Are you sure to cancel this order?"
+                                                                onConfirm={() => confirmCancelInOrder(order_items, index)}
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                            >
+                                                                <Button variant="danger" style={{ padding: ".1rem .5rem" }}><DeleteOutlined style={{ fontSize: "12px" }} /></Button>
+                                                            </Popconfirm>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {inOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
+            })
+
+            let menuListCanceled = inOrderSelected.order_items.map((order_items, index) => {
+                if (order_items.status === 'Canceled') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs={4}>
+                                                        <div className={utilStyles.font_size_sm} style={{ textAlign: "right" }}>
+                                                            Deleted
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {inOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
             })
 
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ position: "relative", textAlign: "right" }}>
+                    <div style={{ position: "relative", textAlign: "right", margin: "10px 0 20px 0" }}>
                         <b>Total is {inOrderSelected.total} THB</b>
+                    </div>
+                    <div style={{ filter: "grayscale(1)" }}>
+                        {menuListCanceled}
                     </div>
                 </>
 
@@ -720,42 +889,90 @@ export default function ViewOrderModal(props) {
     const renderCompletedOrderList = () => {
         if (completedOrderSelected.order_items) {
             let menuList = completedOrderSelected.order_items.map((order_items) => {
-                return (
-                    <Row style={{ paddingBottom: "10px" }}>
-                        <Col>
-                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                <Row >
-                                    <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
-                                    </Col>
-                                    <Col xs={8}>
-                                        <div>
-                                            <Row>
-                                                <Col>
-                                                    <div>
-                                                        <b>{order_items.menu.name}</b>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                        <div>
-                                            <b>x {order_items.quantity}</b>
-                                        </div>
-                                        <div>
-                                            <b>{order_items.special_instruction}</b>
-                                        </div>
-                                        <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
-                                            <b>รหัสลูกค้า : {completedOrderSelected.order_by}</b>
-                                        </div>
-                                        <div style={{ textAlign: "right" }}>
-                                            Price : {order_items.total} THB
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                )
+                if (order_items.status === 'Completed') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {completedOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
+            })
+
+            let menuListCanceled = completedOrderSelected.order_items.map((order_items) => {
+                if (order_items.status === 'Canceled') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col xs={8}>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                    <Col>
+                                                        <div style={{ textAlign: "right" }}>
+                                                            Deleted
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>{order_items.special_instruction}</b>
+                                            </div>
+                                            <div className={utilStyles.overflowDot} style={{ fontSize: "12px", margin: "5px 0 10px 0" }}>
+                                                <b>รหัสลูกค้า : {completedOrderSelected.order_by}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
             })
 
             let orderList = (
@@ -764,8 +981,11 @@ export default function ViewOrderModal(props) {
                     <div style={{ marginBottom: "15px" }}>
                         <NormalButton button_name="เช็คบิล" function_on_click={() => confirmCheckBill()} />
                     </div>
-                    <div style={{ position: "relative", textAlign: "right" }}>
+                    <div style={{ position: "relative", textAlign: "right", margin: "10px 0 20px 0" }}>
                         <b>Total is {completedOrderSelected.total} THB</b>
+                    </div>
+                    <div style={{ filter: "grayscale(1)" }}>
+                        {menuListCanceled}
                     </div>
                 </>
 

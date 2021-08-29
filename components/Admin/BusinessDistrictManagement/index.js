@@ -152,17 +152,22 @@ export default function BusinessDistrictManagement(props) {
             image_url: image_url_formData,
             is_active: is_active
         }
-        let response = await adminService.editBusinessDistrict(data, businessDistrictSelected.id)
-        console.log('response', response)
-        if (response) {
-            getAllLocation()
-            message.success('Edit business district successful.')
-        } else {
-            message.error('Cannot edit business district. Please try again.')
+        try {
+            let response = await adminService.editBusinessDistrict(data, businessDistrictSelected.id)
+            console.log('response', response)
+            if (response) {
+                getAllLocation()
+                message.success('Edit business district successful.')
+            } else {
+                message.error('Cannot edit business district. Please try again.')
+            }
+        } catch (error) {
+            console.log('editBusinessDistrict error', error)
         }
+
     }
 
-    
+
 
 
     return (

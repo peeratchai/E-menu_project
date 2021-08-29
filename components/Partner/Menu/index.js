@@ -60,6 +60,8 @@ export default function Menu(props) {
         setSpinLoading(true)
         partnerService.editCategory(categoryId, data).then(() => {
             getAllMenu()
+        }).catch((error) => {
+            console.log('editCategory error', error)
         })
     }
 
@@ -82,6 +84,8 @@ export default function Menu(props) {
         setSpinLoading(true)
         partnerService.editMenu(data, menuId).then(() => {
             getAllMenu()
+        }).catch((error) => {
+            console.log('editMenu error', error)
         })
     }
 
@@ -194,6 +198,8 @@ export default function Menu(props) {
         setSpinLoading(true)
         partnerService.editCategory(categoryId, data).then(() => {
             getAllMenu()
+        }).catch((error) => {
+            console.log('editCategory error', error)
         })
     }
 
@@ -345,6 +351,8 @@ export default function Menu(props) {
         setSpinLoading(true)
         partnerService.editMenu(data, menuId).then(() => {
             getAllMenu()
+        }).catch((error) => {
+            console.log('editMenu error', error)
         })
     }
 

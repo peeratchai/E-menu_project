@@ -65,6 +65,7 @@ export default function MobileComponent(props) {
         }
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
+            console.log('tableDetails', tableDetails)
             if (tableDetails.length > 0) {
                 setInitailNewOrder(tableDetails, countOrderItmes)
                 setNewOrders(tableDetails[0].orders)
@@ -199,100 +200,120 @@ export default function MobileComponent(props) {
 
     const confirmTakeOrder = async (order_items, index) => {
         let orderId = order_items.id
-        let response = await partnerService.takeOrder(orderId)
-        if (response) {
-            if (response.is_success === true) {
-                let newOrder = { ...newOrderSelected }
-                let orderItems = [...newOrderSelected.order_items]
-                orderItems.splice(index, 1)
-                newOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getNewOrder(tableIdSelected)
+        try {
+            let response = await partnerService.takeOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let newOrder = { ...newOrderSelected }
+                    let orderItems = [...newOrderSelected.order_items]
+                    orderItems.splice(index, 1)
+                    newOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getNewOrder(tableIdSelected)
+                    } else {
+                        getNewOrder(tableIdSelected, tableNewOrderSelectedNumber)
+                    }
+                    setNewOrderSelected(newOrder)
+                    message.success('Take order successful.')
                 } else {
-                    getNewOrder(tableIdSelected, tableNewOrderSelectedNumber)
+                    message.error('Cannot take order.Please try again.')
                 }
-                setNewOrderSelected(newOrder)
-                message.success('Take order successful.')
             } else {
                 message.error('Cannot take order.Please try again.')
             }
-        } else {
-            message.error('Cannot take order.Please try again.')
+        } catch (error) {
+            console.log('takeOrder error', error)
         }
+
 
     }
 
     const confirmCompleteOrder = async (order_items, index) => {
-        let orderId = order_items.id
-        let response = await partnerService.completeOrder(orderId)
-        if (response) {
-            if (response.is_success === true) {
-                let inOrder = { ...inOrderSelected }
-                let orderItems = [...inOrder.order_items]
-                orderItems.splice(index, 1)
-                inOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getInOrder(tableIdSelected)
-                } else {
-                    getInOrder(tableIdSelected, tableInOrderSelectedNumber)
-                }
-                setInOrderSelected(inOrder)
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.completeOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let inOrder = { ...inOrderSelected }
+                    let orderItems = [...inOrder.order_items]
+                    orderItems.splice(index, 1)
+                    inOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getInOrder(tableIdSelected)
+                    } else {
+                        getInOrder(tableIdSelected, tableInOrderSelectedNumber)
+                    }
+                    setInOrderSelected(inOrder)
 
-                message.success('Complete order successful.')
+                    message.success('Complete order successful.')
+                } else {
+                    message.error('Cannot complete order.Please try again.')
+                }
             } else {
                 message.error('Cannot complete order.Please try again.')
             }
-        } else {
-            message.error('Cannot complete order.Please try again.')
+        } catch (error) {
+            console.log('completeOrder error', error)
         }
+
     }
 
     const confirmCancelNewOrder = async (order_items, index) => {
-        let orderId = order_items.id
-        let response = await partnerService.cancelOrder(orderId)
-        if (response) {
-            if (response.is_success === true) {
-                let newOrder = { ...newOrderSelected }
-                let orderItems = [...newOrderSelected.order_items]
-                orderItems.splice(index, 1)
-                newOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getNewOrder(tableIdSelected)
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.cancelOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let newOrder = { ...newOrderSelected }
+                    let orderItems = [...newOrderSelected.order_items]
+                    orderItems.splice(index, 1)
+                    newOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getNewOrder(tableIdSelected)
+                    } else {
+                        getNewOrder(tableIdSelected, tableNewOrderSelectedNumber)
+                    }
+                    setNewOrderSelected(newOrder)
+                    message.success('Cancel order successful.')
                 } else {
-                    getNewOrder(tableIdSelected, tableNewOrderSelectedNumber)
+                    message.error('Cannot cancel order.Please try again.')
                 }
-                setNewOrderSelected(newOrder)
-                message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
             }
-        } else {
-            message.error('Cannot cancel order.Please try again.')
+        } catch (error) {
+            console.log('cancelOrder error', error)
         }
+
     }
 
     const confirmCancelInOrder = async (order_items, index) => {
-        let orderId = order_items.id
-        let response = await partnerService.cancelOrder(orderId)
-        if (response) {
-            if (response.is_success === true) {
-                let inOrder = { ...inOrderSelected }
-                let orderItems = [...inOrder.order_items]
-                orderItems.splice(index, 1)
-                inOrder.order_items = orderItems
-                if (orderItems.length === 0) {
-                    getInOrder(tableIdSelected)
+        try {
+            let orderId = order_items.id
+            let response = await partnerService.cancelOrder(orderId)
+            if (response) {
+                if (response.is_success === true) {
+                    let inOrder = { ...inOrderSelected }
+                    let orderItems = [...inOrder.order_items]
+                    orderItems.splice(index, 1)
+                    inOrder.order_items = orderItems
+                    if (orderItems.length === 0) {
+                        getInOrder(tableIdSelected)
+                    } else {
+                        getInOrder(tableIdSelected, tableInOrderSelectedNumber)
+                    }
+                    setInOrderSelected(inOrder)
+                    message.success('Cancel order successful.')
                 } else {
-                    getInOrder(tableIdSelected, tableInOrderSelectedNumber)
+                    message.error('Cannot cancel order.Please try again.')
                 }
-                setInOrderSelected(inOrder)
-                message.success('Cancel order successful.')
             } else {
                 message.error('Cannot cancel order.Please try again.')
             }
-        } else {
-            message.error('Cannot cancel order.Please try again.')
+        } catch (error) {
+            console.log('cancelOrder error', error)
         }
+
     }
 
     let newOrderTableListComponent = newOrders && newOrders.map((order) => {

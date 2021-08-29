@@ -118,14 +118,19 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
             "is_active": table.is_active
         }
 
-        let response = await partnerSerivce.editTable(data, table.id)
-        console.log(response)
-        if (response) {
-            getZone()
-            message.success('Edit table successful.')
-        } else {
-            message.error('Cannot edit table.')
+        try {
+            let response = await partnerSerivce.editTable(data, table.id)
+            console.log(response)
+            if (response) {
+                getZone()
+                message.success('Edit table successful.')
+            } else {
+                message.error('Cannot edit table.')
+            }
+        } catch (error) {
+            console.log('editTable error', error)
         }
+
     }
 
     const onChangeTableStatus = (checked, table) => {
@@ -191,14 +196,19 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
             'name': zone.name,
             'is_active': checked
         }
-        let response = await partnerSerivce.editZone(data, zone.id)
-        console.log(response)
-        if (!response) {
-            message.error('Cannot new zone.')
-        } else {
-            message.success('Edit zone successful.')
-            getZone()
+        try {
+            let response = await partnerSerivce.editZone(data, zone.id)
+            console.log(response)
+            if (!response) {
+                message.error('Cannot new zone.')
+            } else {
+                message.success('Edit zone successful.')
+                getZone()
+            }
+        } catch (error) {
+            console.log('editZone error', error)
         }
+
     }
 
     const editZone = async (zone) => {
@@ -207,14 +217,19 @@ export default function ZoneManagement({ restaurant_id, current_tab, type }) {
             'name': zone.name,
             'is_active': zone.is_active
         }
-        let response = await partnerSerivce.editZone(data, zone.id)
-        console.log(response)
-        if (!response) {
-            message.error('Cannot new zone.')
-        } else {
-            message.success('Edit zone successful.')
-            getZone()
+        try {
+            let response = await partnerSerivce.editZone(data, zone.id)
+            console.log(response)
+            if (!response) {
+                message.error('Cannot new zone.')
+            } else {
+                message.success('Edit zone successful.')
+                getZone()
+            }
+        } catch (error) {
+            console.log('editZone error', error)
         }
+
     }
 
     return (

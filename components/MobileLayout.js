@@ -269,7 +269,9 @@ export default function MobileLayout(props) {
         <span>ข้อมูลโปรไฟล์</span>
       </div>
       <div style={{ padding: '16px 24px' }}>
-        ประวัติการสั่งอาหาร
+        <ActiveLink href="/orderHistory">
+          <span>ประวัติการสั่งอาหาร</span>
+        </ActiveLink>
       </div>
       <div style={{ padding: '16px 24px' }}>
         <ActiveLink href="/checkout">
@@ -295,7 +297,7 @@ export default function MobileLayout(props) {
         <Header style={{ backgroundColor: 'white', padding: '0 25px' }}>{MenuHeader}</Header>
         <Content>
 
-              <div style={{ maxHeight: isExpandedSubMenu ? '100vh': 0, width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
+          <div style={{ maxHeight: isExpandedSubMenu ? '100vh' : 0, width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
 
           <div className={containerStyle} style={{ minHeight: "90vh" }}> {children}</div>
         </Content>

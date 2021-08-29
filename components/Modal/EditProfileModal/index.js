@@ -111,35 +111,29 @@ export default function EditProfileModal(props) {
     }
 
     const saveProfile = async () => {
-        // const newErrors = findProfileFormErrors()
 
-        // if (Object.keys(newErrors).length > 0) {
-        //     setErrors(newErrors)
-        // } else {
-            const { first_name, last_name, gender, age, phoneNumber, profileImage, username, roles, is_active } = profileForm
-            let profileImageData
-            if (profileImage) {
-                profileImageData = profileImage
-            } else {
-                profileImageData = null
-            }
+        const { first_name, last_name, gender, age, phoneNumber, profileImage, username, roles, is_active } = profileForm
+        let profileImageData
+        if (profileImage) {
+            profileImageData = profileImage
+        } else {
+            profileImageData = null
+        }
 
-            let data = {
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                gender: gender,
-                age: age,
-                phone_number: phoneNumber,
-                avatar: profileImageData,
-                roles: roles,
-                is_active: is_active
-            }
+        let data = {
+            username: username,
+            first_name: first_name,
+            last_name: last_name,
+            gender: gender,
+            age: age,
+            phone_number: phoneNumber,
+            avatar: profileImageData,
+            roles: roles,
+            is_active: is_active
+        }
 
-            console.log('data', data)
-
+        try {
             let responseProfile = await profileService.editUserProfile(data)
-            console.log(responseProfile)
             if (responseProfile) {
                 let profile = await profileService.getProfile()
                 window.localStorage.setItem('profile', JSON.stringify(profile))
@@ -148,7 +142,10 @@ export default function EditProfileModal(props) {
             } else {
                 message.error('Cannot edit profile !')
             }
-        // }
+        } catch (error) {
+            console.log('editUserProfile erorr', error)
+        }
+
     }
 
 
@@ -313,7 +310,7 @@ export default function EditProfileModal(props) {
                             <Row style={{ marginBottom: ".5rem" }}>
                                 <Col>
                                     Sync with Facebook or Line
-                                            </Col>
+                                </Col>
                             </Row>
                             <Row style={{ marginBottom: "16px" }}>
                                 <Col>

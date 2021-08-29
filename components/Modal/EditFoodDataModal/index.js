@@ -63,11 +63,11 @@ export default function EditFoodDataModal(props) {
             "cook_method": foodDataForm.cookMethod
         }
         let foodDataId = foodDataForm.id
-        adminService.updateFoodData(foodDataId, data).then((response) => {
+        adminService.updateFoodData(foodDataId, data).then(() => {
             props.onHide()
             get_all_menu()
         }).catch((error) => {
-            console.log('error', error)
+            console.log('updateFoodData error', error)
         })
 
     }

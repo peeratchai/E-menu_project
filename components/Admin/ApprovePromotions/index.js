@@ -119,28 +119,38 @@ export default function ApprovePromotions(props) {
         let data = {
             status: 'approved'
         }
-        let response = await adminService.updatePromotionStatus(promotionsId, data)
-        console.log('response', response)
-        if (response) {
-            message.success('Approve promotion successful.')
-            getAllPromotions()
-        } else {
-            message.error('Cannot change promotion status!. Please try again.')
+        try {
+            let response = await adminService.updatePromotionStatus(promotionsId, data)
+            console.log('response', response)
+            if (response) {
+                message.success('Approve promotion successful.')
+                getAllPromotions()
+            } else {
+                message.error('Cannot change promotion status!. Please try again.')
+            }
+        } catch (error) {
+            console.log('updatePromotionStatus error', error)
         }
+
     }
 
     const confirmRejectPromotion = async (promotionsId) => {
         let data = {
             status: 'reject'
         }
-        let response = await adminService.updatePromotionStatus(promotionsId, data)
-        console.log('response', response)
-        if (response) {
-            message.success('Reject promotion successful.')
-            getAllPromotions()
-        } else {
-            message.error('Cannot rejest promotion. Please try again.')
+        try {
+            let response = await adminService.updatePromotionStatus(promotionsId, data)
+            console.log('response', response)
+            if (response) {
+                message.success('Reject promotion successful.')
+                getAllPromotions()
+            } else {
+                message.error('Cannot rejest promotion. Please try again.')
+            }
+        } catch (error) {
+            console.log('updatePromotionStatus error', error)
         }
+
     }
 
     const confirmDeletePromotion = async (promotionsId) => {
@@ -274,7 +284,7 @@ export default function ApprovePromotions(props) {
         <>
             <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                 Approve Promotion
-             </div>
+            </div>
 
             <Spin spinning={loading} tip='loading...'>
                 <Tabs defaultActiveKey="pending" >

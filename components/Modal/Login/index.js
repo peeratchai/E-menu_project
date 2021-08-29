@@ -8,8 +8,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import utilStyles from '../../../styles/utils.module.css'
 import { FacebookLogin } from 'react-facebook-login-component';
 import checkUserPermission from '../../../lib/checkUserPermission'
+import qrCodeSession from "../../../lib/qrCodeSession";
 import fetchJson from '../../../lib/fetchJson'
 import { useRouter } from "next/router";
+import orderService from '../../../services/order'
 
 export default function LoginModal(props) {
     const { sub_header } = props
@@ -20,6 +22,7 @@ export default function LoginModal(props) {
     // console.log('liffClientId', liffClientId)
     // console.log('liffState', liffState)
     const { user, mutateUser } = checkUserPermission()
+    const qr_code_details = qrCodeSession();
     const [signinForm, setSigninForm] = React.useState({})
     const [signupForm, setSignupForm] = React.useState({})
     const [forgotForm, setForgotForm] = React.useState({})
@@ -177,8 +180,20 @@ export default function LoginModal(props) {
             "social_id": userId
         }
 
-        return await authentication.signinWithSocial(data)
+        try {
+            let response = await authentication.signinWithSocial(data)
+            let accessToken = response.accessToken
+            try {
+                await checkLeftoverOrder(accessToken)
+            } catch (error) {
+                console.log('signinWithSocial error', error)
+            }
+        } catch (error) {
+            console.log('signinWithSocial error', error)
+        }
 
+
+        return response
     }
 
     const signupWithSocial = async (signupForm) => {
@@ -302,6 +317,13 @@ export default function LoginModal(props) {
         })
     }
 
+    const checkLeftoverOrder = async (accessToken) => {
+        //// Check qrcode from url and session if has qr code breadcrumb will removed.
+        if (qr_code_details && qr_code_details.tableId) {
+            let response_check_bill_except = await orderService.checkBillExcept(qr_code_details.tableId, accessToken)
+            console.log('response_check_bill_except', response_check_bill_except)
+        }
+    }
 
     const setSignupField = (field, value) => {
         setSignupForm({
@@ -408,7 +430,6 @@ export default function LoginModal(props) {
                     body: JSON.stringify(signinForm),
                 })
             ).then(async (response) => {
-                console.log('response', response)
                 let accessToken = response.accessToken
                 localStorage.setItem('accessToken', accessToken)
                 props.onHide()
@@ -423,9 +444,9 @@ export default function LoginModal(props) {
                 props.check_permission()
                 window.location.reload()
                 setLoading(false)
+                await checkLeftoverOrder(accessToken)
                 message.success('Sign-in successful.')
             }).catch((error) => {
-                console.log('error.data', error.data)
                 if (error.data.statusCode === 401) {
                     const newErrors = {}
                     if (error.data.message === 'Ban User') {
@@ -476,11 +497,6 @@ export default function LoginModal(props) {
         changeTab('register')
         setEmail(null)
         setPassword(null)
-    }
-
-    const setFacebookLoginOn2 = (response) => {
-        console.log('response', response)
-        setFacebookLoginOn(true)
     }
 
     const buttonText = (

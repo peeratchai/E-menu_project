@@ -1,4 +1,4 @@
-import { Row, Col, Modal, Container,Button } from 'react-bootstrap'
+import { Row, Col, Modal, Container, Button } from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import { Space, Popconfirm, Select, Switch, message, Spin } from 'antd';
 import React, { useEffect } from 'react'
@@ -118,7 +118,12 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Category') {
             setLoading(true)
-            await adminService.updateMasterFoodCategory(masterDataId, data);
+            try {
+                await adminService.updateMasterFoodCategory(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterFoodCategory error', error)
+            }
+
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -132,7 +137,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'National') {
             setLoading(true)
-            await adminService.updateMasterNational(masterDataId, data);
+            try {
+                await adminService.updateMasterNational(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterNational error', error)
+            }
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -146,7 +155,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Food Kind') {
             setLoading(true)
-            await adminService.updateMasterFoodKind(masterDataId, data);
+            try {
+                await adminService.updateMasterFoodKind(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterFoodKind error', error)
+            }
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -160,7 +173,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Sub Kind') {
             setLoading(true)
-            await adminService.updateMasterSubKind(masterDataId, data);
+            try {
+                await adminService.updateMasterSubKind(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterSubKind error', error)
+            }
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -174,7 +191,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Cook Method') {
             setLoading(true)
-            await adminService.updateMasterCookMethod(masterDataId, data);
+            try {
+                await adminService.updateMasterCookMethod(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterCookMethod error', error)
+            }
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -221,7 +242,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Category') {
             setLoading(true)
-            await adminService.updateMasterFoodCategory(masterDataId, data);
+            try {
+                await adminService.updateMasterFoodCategory(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterFoodCategory error', error)
+            }
             adminService.getMasterFoodCategory().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -235,7 +260,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'National') {
             setLoading(true)
-            await adminService.updateMasterNational(masterDataId, data);
+            try {
+                await adminService.updateMasterNational(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterNational error', error)
+            }
             adminService.getMasterNational().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -249,7 +278,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Food Kind') {
             setLoading(true)
-            await adminService.updateMasterFoodKind(masterDataId, data);
+            try {
+                await adminService.updateMasterFoodKind(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterFoodKind error', error)
+            }
             adminService.getMasterFoodKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -263,7 +296,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Sub Kind') {
             setLoading(true)
-            await adminService.updateMasterSubKind(masterDataId, data);
+            try {
+                await adminService.updateMasterSubKind(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterSubKind error', error)
+            }
             adminService.getMasterSubKind().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
@@ -277,7 +314,11 @@ export default function EditMasterDataModal(props) {
 
         if (dataSelected === 'Cook Method') {
             setLoading(true)
-            await adminService.updateMasterCookMethod(masterDataId, data);
+            try {
+                await adminService.updateMasterCookMethod(masterDataId, data);
+            } catch (error) {
+                console.log('updateMasterCookMethod error', error)
+            }
             adminService.getMasterCookMethod().then((masterData) => {
                 setLoading(false)
                 setMasterData(masterData)
