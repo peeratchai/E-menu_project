@@ -1,4 +1,4 @@
-import Layout from '../../../layout'
+import Layout from '../../../Layout'
 import utilStyles from '../../../../styles/utils.module.css'
 import { Row, Col, Card, Button, Form } from 'react-bootstrap'
 import Link from 'next/link'

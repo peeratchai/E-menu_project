@@ -11,8 +11,8 @@ import checkUserPermission from "../../../lib/checkUserPermission";
 import fetchJson from "../../../lib/fetchJson";
 import shoppingCartService from "../../../services/shoppingCart";
 import utilStyles from "../../../styles/utils.module.css";
-import Layout from "../../../components/layout";
-import LayoutMobile from "../../../components/layoutMobile";
+import Layout from "../../../components/Layout";
+import MobileLayout from "../../../components/MobileLayout";
 import partnerSerivce from "../../../services/partner";
 
 export default function Restaurant() {
@@ -384,7 +384,7 @@ export default function Restaurant() {
         </Layout>
       ) : (
         // Mobile Version
-        <LayoutMobile
+        <MobileLayout
           containerType="mobile"
           searchFunc={() => console.log("none")}
           page="restaurantDetails"
@@ -413,7 +413,7 @@ export default function Restaurant() {
               setNotificationLoginModal(true)
             }
           />
-        </LayoutMobile>
+        </MobileLayout>
       )}
       <NotificationShoppingCartModal
         show={notificationModalVisible}

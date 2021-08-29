@@ -1,4 +1,4 @@
-import Layout from '../../../layout'
+import MobileLayout from '../../../MobileLayout'
 import utilStyles from '../../../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import { Row, Col, Card } from 'react-bootstrap'
@@ -142,7 +142,8 @@ export default function LocationListMobile(props) {
         setLoading(false)
     }
 
-    const searchFunc = () => {
+    const filterFunc = () => {
+        console.log('filter')
         setModalShow(true)
     }
 
@@ -188,7 +189,7 @@ export default function LocationListMobile(props) {
     })
 
     return (
-        <Layout containerType="mobile" search searchFunc={searchFunc}>
+        <MobileLayout containerType="mobile" filterFunc={filterFunc}>
             <Container className={utilStyles.container_sm}>
 
                 <ShowFiilterSelected filter={filter} />
@@ -249,7 +250,7 @@ export default function LocationListMobile(props) {
                 user_location={user_location}
                 initial_filter_form={currentFilterForm}
             />
-        </Layout >
+        </MobileLayout >
     )
 }
 

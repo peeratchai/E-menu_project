@@ -1,4 +1,4 @@
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import { Row, Col, Form, Image, Button, Tab, Tabs, Modal, Container, Nav } from 'react-bootstrap'

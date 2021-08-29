@@ -168,3 +168,8 @@
   margin-bottom: 15px;
   cursor: pointer;
 }
+
+
+.colCardMobile {
+  height: 350px;
+}

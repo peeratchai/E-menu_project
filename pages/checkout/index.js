@@ -1,5 +1,5 @@
-import Layout, { siteTitle } from '../../components/layout'
-import LayoutMobile from '../../components/layoutMobile'
+import Layout, { siteTitle } from '../../components/Layout'
+import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import React, { useEffect } from 'react'
@@ -542,7 +542,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                 isMobileResolution ? (
                     //// Mobile Version
                     <>
-                        <LayoutMobile
+                        <MobileLayout
                             containerType="mobile"
                             is_show_login_modal={isShowLoginModal}
                             set_is_show_login_modal={setDefaultShowLoginModal}
@@ -607,7 +607,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                                     </div>
                                 </Spin>
                             </Container>
-                        </LayoutMobile >
+                        </MobileLayout >
                         {
                             countMenuItems > 0 ? (
                                 <div style={{ position: "absolute", bottom: 0, width: "100%", fontSize: "16px", borderTop: "1px solid #DEDEDE", backgroundColor: "#eaeff3" }} className="bg-gray-100">

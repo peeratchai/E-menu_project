@@ -1,4 +1,4 @@
-import Layout from '../../components/layout'
+import Layout from '../../components/Layout'
 import utilStyles from '../../styles/utils.module.css'
 import React, { useEffect } from 'react'
 import { Row, Col, Image, Button, Container } from 'react-bootstrap'

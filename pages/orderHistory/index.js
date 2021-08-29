@@ -1,4 +1,4 @@
-import Layout, { siteTitle } from '../../components/layout'
+import Layout, { siteTitle } from '../../components/Layout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import React, { useEffect } from 'react'

@@ -1,9 +1,8 @@
-import styles from "./layoutMobile.module.css";
+import styles from "./MobileLayout.module.css";
 import { Image } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { Button, Layout, Input, Row, Col, Badge, Typography, Divider } from "antd";
 import ActiveLink from "./ActiveLink";
-import SearchIcon from "@material-ui/icons/Search";
 import React, { useEffect } from "react";
 import LoginModal from "./Modal/Login";
 import { ShoppingCartOutlined, FilterOutlined, UserOutlined } from "@ant-design/icons";
@@ -13,21 +12,24 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import checkUserPermission from "../lib/checkUserPermission";
 import fetchJson from "../lib/fetchJson";
 import profileService from "../services/profile";
-import NormalButton from "../components/Button/NormalButton"
+import NormalButton from "./Button/NormalButton"
 import shoppingCartService from "../services/shoppingCart";
 import orderService from "../services/order";
 import HomeIcon from '@material-ui/icons/Home';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Search } = Input;
 
-export default function LayoutMobile(props) {
+export default function MobileLayout(props) {
   const {
     children,
     containerType,
     searchFunc,
+    filterFunc,
     haveMenuFooter = true,
     is_show_shopping_cart = true,
     is_show_login_modal = false,
@@ -171,39 +173,13 @@ export default function LayoutMobile(props) {
     window.location.reload();
   };
 
-  const navToCheckout = () => {
-    router.push({
-      pathname: "/checkout",
-    });
-  };
-
-  const onSearch = (value) => {
-    console.log('value', value)
-  }
-
-  const MenuFooter = (
-    <Row style={{ height: '100%', position: "relative" }}>
-      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
-        <ActiveLink href="/">
-          <HomeIcon className={styles.menuIcon} />
-        </ActiveLink>
-      </Col>
-      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
-        <ActiveLink href="/menuFeeding">
-          <ImportContactsIcon className={styles.menuIcon} />
-        </ActiveLink>
-      </Col>
-      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
-        <MailOutlineIcon className={styles.menuIcon} />
-      </Col>
-      <Col span={6} style={{ textAlign: "center", margin: 'auto', fontSize: '19px' }}>
-        <UserOutlined className={styles.menuIcon} />
-      </Col>
-    </Row>
-  )
-
   const expandableSubMenu = () => {
     setIsExpandedSubMenu(!isExpandedSubMenu)
+  }
+
+  const onShowUserProfileModal = () => {
+    setUserProfileModalShow(true)
+    setIsExpandedSubMenu(false)
   }
 
   const MenuHeader = (
@@ -220,14 +196,14 @@ export default function LayoutMobile(props) {
       {
         is_show_filter && (
           <div style={{ display: 'inline-block', marginLeft: "10px" }}>
-            <FilterOutlined style={{ fontSize: "25px" }} />
+            <FilterOutlined style={{ fontSize: "25px" }} onClick={() => filterFunc()} />
           </div>
         )
       }
       {
         is_show_search && (
           <div style={{ display: 'inline-block', marginLeft: "10px", width: "35%" }}>
-            <Search size="small" placeholder="ค้นหาอาหาร" onSearch={onSearch} style={{ verticalAlign: "middle" }} />
+            <Search size="small" placeholder="ค้นหาอาหาร" onSearch={() => searchFunc()} style={{ verticalAlign: "middle" }} />
           </div>
         )
       }
@@ -243,11 +219,26 @@ export default function LayoutMobile(props) {
     </div>
   )
 
-  const onShowUserProfileModal = () => {
-    setUserProfileModalShow(true)
-    setIsExpandedSubMenu(false)
-  }
-
+  const MenuFooter = (
+    <Row style={{ height: '100%', position: "relative" }}>
+      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
+        <ActiveLink href="/">
+          <HomeIcon className={styles.menuIcon} />
+        </ActiveLink>
+      </Col>
+      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
+        <ActiveLink href="/menuFeeding">
+          <ImportContactsIcon className={styles.menuIcon} />
+        </ActiveLink>
+      </Col>
+      <Col span={6} style={{ textAlign: "center", margin: 'auto' }}>
+        <LocationOnIcon className={styles.menuIcon} />
+      </Col>
+      <Col span={6} style={{ textAlign: "center", margin: 'auto', fontSize: '19px' }}>
+        <AttachMoneyIcon className={styles.menuIcon} />
+      </Col>
+    </Row>
+  )
 
   const Submenu = (
     <>
@@ -259,7 +250,7 @@ export default function LayoutMobile(props) {
       </div>
       <div style={{ padding: '16px 24px' }}>
         <ActiveLink href="/checkout">
-          <span>ตะกร้า2</span>
+          <span>ตะกร้า</span>
         </ActiveLink>
       </div>
       <div style={{ padding: '16px 24px' }}>
@@ -280,8 +271,8 @@ export default function LayoutMobile(props) {
       <Layout>
         <Header style={{ backgroundColor: 'white', padding: '0 25px' }}>{MenuHeader}</Header>
         <Content>
-          <div style={{ height: isExpandedSubMenu ? '50vh' : '0', width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
-          <div className={containerStyle} style={{ minHeight: "calc(100% - 150px)" }}> {children}</div>
+          <div style={{ height: isExpandedSubMenu ? '45vh' : '0', width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
+          <div className={containerStyle} style={{ minHeight: "90vh" }}> {children}</div>
         </Content>
         {
           haveMenuFooter && (
@@ -292,9 +283,11 @@ export default function LayoutMobile(props) {
       {
         is_show_shopping_cart && (haveOrderActive || total_menu_in_basket > 0) && (
           <div className={styles.button_circle}>
-            <Badge count={total_menu_in_basket} size="default">
-              <ShoppingCartOutlined className={styles.shopping_cart_icon} />
-            </Badge>
+            <ActiveLink href="/checkout">
+              <Badge count={total_menu_in_basket} size="default">
+                <ShoppingCartOutlined className={styles.shopping_cart_icon} />
+              </Badge>
+            </ActiveLink>
           </div>
         )
       }

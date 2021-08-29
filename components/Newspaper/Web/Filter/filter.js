@@ -65,11 +65,11 @@ export default function WebFilter(props) {
     }
 
 
-    let FootTypeDropDown = filter_master_data_list && filter_master_data_list.foodTypeMasterData.map((foodType, index) => (
+    let FootTypeDropDown = filter_master_data_list && filter_master_data_list.foodTypeMasterData && filter_master_data_list.foodTypeMasterData.map((foodType, index) => (
         <Option value={foodType.name} key={foodType.name + index}>{foodType.name}</Option>
     ))
 
-    let DistanceDropDown = filter_master_data_list && filter_master_data_list.distanceMasterData.map((distance, index) => (
+    let DistanceDropDown = filter_master_data_list && filter_master_data_list.foodTypeMasterData && filter_master_data_list.distanceMasterData.map((distance, index) => (
         <Option value={distance.name} key={distance.name + index}>{distance.name}</Option>
     ))
 
