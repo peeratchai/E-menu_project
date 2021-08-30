@@ -69,8 +69,8 @@ export default function ViewOrderModal(props) {
                         }
                     })
                 })
-                setInitailNewOrder(newOrder, countOrderItmes)
                 if (haveNewOrder) {
+                    setInitailNewOrder(newOrder, countOrderItmes)
                     setNewOrders(newOrder)
                     setTableNewOrderSelectedNumber(newOrder[0].id)
                 } else {
@@ -145,9 +145,8 @@ export default function ViewOrderModal(props) {
                         }
                     })
                 })
-                setInitailInOrder(inOrder, countOrderItmes)
-
                 if (haveInOrder) {
+                    setInitailInOrder(inOrder, countOrderItmes)
                     setInOrders(inOrder)
                     setTableInOrderSelectedNumber(inOrder[0].id)
                 } else {
@@ -186,7 +185,7 @@ export default function ViewOrderModal(props) {
 
         firstOrder = inOrder[0]
         let currentInOrder = inOrder.find((orderDetails) => orderDetails.id === countOrderItmes)
-
+        console.log('inOrder', inOrder)
         if (countOrderItmes === null) {
             setTableInOrderSelectedNumber(firstOrder.id)
             setInOrderSelected(firstOrder)
@@ -424,6 +423,7 @@ export default function ViewOrderModal(props) {
     const acceptAlNewOrder = async () => {
         try {
             setLoading(true)
+            console.log('newOrderSelected', newOrderSelected)
             if (newOrderSelected) {
                 await Promise.all(newOrderSelected.order_items.map(async (orderItem) => {
                     console.log('order_item', orderItem)

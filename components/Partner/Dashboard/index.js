@@ -159,8 +159,7 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={8}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').format('DD/MMM/YYYY')}
-
+                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(14, 'hours').format('DD/MMM/YYYY')}
                                     </div>
                                 </Col>
                             </Row>
@@ -170,7 +169,7 @@ export default function Dashboard(props) {
                                 </Col>
                                 <Col xs={6}>
                                     <div style={{ textAlign: "right" }} className={utilStyles.font_size_sm}>
-                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(7, 'hours').format('HH:mm:ss')}
+                                        {moment(order.created_date, 'YYYY-MM-DDHH:mm:ss').add(14, 'hours').format('HH:mm:ss')}
                                     </div>
                                 </Col>
                             </Row>
@@ -183,47 +182,90 @@ export default function Dashboard(props) {
 
     const renderOrderList = () => {
         if (orderSelected.order_items) {
-            let menuList = orderSelected.order_items.map((order_items, index) => {
-                return (
-                    <Row style={{ paddingBottom: "10px" }}>
-                        <Col>
-                            <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
-                                <Row >
-                                    <Col xs={4}>
-                                        <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
-                                    </Col>
-                                    <Col xs={8}>
-                                        <div>
-                                            <Row>
-                                                <Col>
-                                                    <div>
-                                                        <b>{order_items.menu.name}</b>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                        <div>
-                                            <b>x {order_items.quantity}</b>
-                                        </div>
-                                        <div>
-                                            <b>* {order_items.special_instruction}</b>
-                                        </div>
-                                        <div style={{ textAlign: "right" }}>
-                                            Price : {order_items.total} THB
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                )
+            let menuList = orderSelected.order_items.map((order_items) => {
+                if (order_items.status === 'Completed') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>* {order_items.special_instruction}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
+            })
+
+            let menuListCanceled = orderSelected.order_items.map((order_items) => {
+                if (order_items.status === 'Canceled') {
+                    return (
+                        <Row style={{ paddingBottom: "10px" }}>
+                            <Col>
+                                <div style={{ borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }}>
+                                    <Row >
+                                        <Col xs={4}>
+                                            <Image src={order_items.menu.image_url} rounded style={{ height: "130px" }} />
+                                        </Col>
+                                        <Col xs={8}>
+                                            <div>
+                                                <Row>
+                                                    <Col>
+                                                        <div>
+                                                            <b>{order_items.menu.name}</b>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                            <div>
+                                                <b>x {order_items.quantity}</b>
+                                            </div>
+                                            <div>
+                                                <b>* {order_items.special_instruction}</b>
+                                            </div>
+                                            <div style={{ textAlign: "right" }}>
+                                                Price : {order_items.total} THB
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    )
+                }
             })
 
             let orderList = (
                 <>
                     {menuList}
-                    <div style={{ textAlign: "right" }}>
+                    <div style={{ textAlign: "right", margin: "10px 0 20px 0" }}>
                         <b>Total is {orderSelected.total} THB</b>
+                    </div>
+                    <div style={{ filter: "grayscale(1)" }}>
+                        {menuListCanceled}
                     </div>
                 </>
 

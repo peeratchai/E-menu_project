@@ -26,7 +26,7 @@ export default function ViewTableQRCode(props) {
             .replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = `QRCode-${table_selected.name}.png`;
+        downloadLink.download = `QRCode-${restaurant_name + ' - ' + table_selected.name}.png`;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
