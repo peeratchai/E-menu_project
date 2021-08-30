@@ -1,4 +1,5 @@
 import Layout, { siteTitle } from '../../components/Layout'
+import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'
 import React, { useEffect } from 'react'
@@ -88,7 +89,7 @@ const OrderHistory = ({ user }) => {
                             </Col>
                             <Col xs={4}>
                                 <div style={{ textAlign: "right", fontSize: "12px" }}>
-                                    {moment(order.order_date).add(7,'hours').format('hh:mm A')}
+                                    {moment(order.order_date).add(7, 'hours').format('hh:mm A')}
                                 </div>
                             </Col>
                         </Row>
@@ -158,13 +159,13 @@ const OrderHistory = ({ user }) => {
             {
                 isMobileResolution ? (
                     <>
-                        <Layout containerType="mobile">
+                        <MobileLayout containerType="mobile" is_show_filter={false} is_show_search={false}>
                             <Container className={utilStyles.container_sm}>
                                 {
                                     haveOrderHistory ? MobileOrderHistoryComponent : <EmptyComponent />
                                 }
                             </Container>
-                        </Layout >
+                        </MobileLayout >
 
                         <ConfirmOrderModal
                             show={confirmModalVisible}
@@ -267,7 +268,7 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
 
         if (profile) {
             user.profile = profile
-        }else{
+        } else {
             return {
                 redirect: {
                     destination: '/',

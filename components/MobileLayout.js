@@ -303,7 +303,7 @@ export default function MobileLayout(props) {
 
           <div style={{ maxHeight: isExpandedSubMenu ? '100vh' : 0, width: '100vw', position: 'absolute', backgroundColor: "#eaeff3", borderBottom: "2px solid #DEDEDE", transition: "all .5s ease-in-out", zIndex: "1000", overflow: 'hidden' }} >{Submenu}</div>
 
-          <div className={containerStyle} style={{ minHeight: "90vh" }}> {children}</div>
+          <div className={styles.containerMobile} style={{ minHeight: "90vh" }}> {children}</div>
         </Content>
         {
           haveMenuFooter && (

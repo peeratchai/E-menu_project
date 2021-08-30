@@ -1,4 +1,5 @@
 import Layout from '../../components/Layout'
+import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import React, { useEffect } from 'react'
 import { Row, Col, Image, Button, Container } from 'react-bootstrap'
@@ -33,7 +34,7 @@ const Order = ({ user }) => {
                 pathname: "/orderHistory"
             })
         }
-    }, [order,user])
+    }, [order, user])
 
     const sumOfPriceTotal = (orderItmes) => {
         let total = 0
@@ -138,7 +139,7 @@ const Order = ({ user }) => {
             {
                 isMobileResolution ? (
                     <>
-                        <Layout containerType="mobile">
+                        <MobileLayout is_show_filter={false} is_show_search={false}>
                             <Container className={utilStyles.container_sm}>
                                 <div style={{ marginBottom: "15px" }}>
                                     <Breadcrumb>
@@ -159,7 +160,7 @@ const Order = ({ user }) => {
                                     </div>
                                 </div>
                             </Container>
-                        </Layout >
+                        </MobileLayout >
                     </>
                 ) : (
                     <>
@@ -218,7 +219,7 @@ export const getServerSideProps = withSession(async function ({ req, res }) {
 
         if (profile) {
             user.profile = profile
-        }else{
+        } else {
             return {
                 redirect: {
                     destination: '/',
