@@ -62,11 +62,12 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
 
     const setInitialCart = async () => {
 
-        let { totalPrice: totalPriceInShoppingCart } = await getShoppingCartData()
+        let totalPrice = await getShoppingCartData()
+        console.log('totalPrice', totalPrice)
         let shoppingCartData
-        if (totalPriceInShoppingCart && totalPriceInShoppingCart > 0) {
+        if (totalPrice && totalPrice > 0) {
             shoppingCartData = {
-                totalPriceInShoppingCart
+                totalPrice
             }
         }
 
@@ -181,9 +182,9 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                 if (shoppingCart && shoppingCart.restaurant) {
                     setRestaurantDetails(shoppingCart.restaurant)
                 }
-
-                return { totalPrice }
             }
+            return { totalPrice }
+
         } catch (error) {
             console.log('error', error)
         }
@@ -213,8 +214,8 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         setHaveMenuInCart(true)
                     }
 
-                    if (shoppingCartData && shoppingCartData.totalPriceInShoppingCart > 0) {
-                        totalOrderActive += shoppingCartData.totalPriceInShoppingCart
+                    if (shoppingCartData && shoppingCartData.totalPrice > 0) {
+                        totalOrderActive += shoppingCartData.totalPrice
                     }
                     setOrderActiveData(orderActiveData)
                     setCountOrderActiveItems(countOrderActive)

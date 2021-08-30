@@ -125,7 +125,9 @@ export default function MobileLayout(props) {
     let shoppingCartData
     let numberOfOrderInCart = 0
     let haveOrderActive = false
-    if (user) {
+    console.log('user', user)
+    if (user && user.isLoggedIn) {
+
       //// if user logged will get shopping cart data from Database
       try {
         let response_shopping_cart_datbase = await shoppingCartService.getShoppingCart()
@@ -134,9 +136,7 @@ export default function MobileLayout(props) {
           shoppingCartData = response_shopping_cart_datbase.shopping_cart_items
           if (shoppingCartData.length > 0) {
             //// have order in shopping cart
-            shoppingCartData.forEach((orderData) => {
-              numberOfOrderInCart++
-            })
+            numberOfOrderInCart = shoppingCartData.length
           }
         }
 
@@ -159,7 +159,13 @@ export default function MobileLayout(props) {
       }
     } else {
       //// if user not yet login it get shopping cart data from localstorage
-
+      let shoppingCartLocal = window.localStorage.getItem('shoppingCart')
+      numberOfOrderInCart = 0
+      if (shoppingCartLocal) {
+        shoppingCartLocal = JSON.parse(shoppingCartLocal)
+        numberOfOrderInCart = shoppingCartLocal.shopping_cart_items.length
+        setTotal_menu_in_basket(numberOfOrderInCart)
+      }
     }
 
   }

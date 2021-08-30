@@ -19,15 +19,12 @@ const orderService = {
                 Authorization: "Bearer " + temp_accessToken,
             },
         };
-        axios.patch('/api/order/check_bill_except/' + tableId, data, config)
-            .then(function (response) {
-                console.log('checkBillExcept', response)
-                return response;
-            })
-            .catch(async function (error) {
-                console.log('error', error)
-                throw error
-            })
+        try {
+            return await axios.patch('/api/order/check_bill_except/' + tableId, data, config)
+        } catch (error) {
+            throw error
+                
+        }
     }
 
 }

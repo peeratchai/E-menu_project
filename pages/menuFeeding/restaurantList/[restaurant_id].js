@@ -57,6 +57,59 @@ export default function Restaurant() {
           .getShoppingCart()
           .then(async (response) => {
             console.log("shoppingCart response", response);
+
+            if (tableId && restaurantId) {
+              try {
+                let await_responseTableData = partnerSerivce.checkHaveTableBycustomer(tableId)
+                let await_restaurantData = restaurantService.getRestaurantById(restaurantId)
+
+                let responseTableData = await await_responseTableData
+                let restaurantData = await await_restaurantData
+                if (responseTableData && restaurantData) {
+                  if (responseTableData.id && restaurantData.id) {
+
+                    if (response !== "Not Login") {
+                      //// If user logged in it wiil check leftover orders in system if have existing order it will check bill all
+                      console.log('tableId', tableId)
+                      try {
+                        let response_check_bill_except = await orderService.checkBillExcept(tableId)
+                        if (response_check_bill_except.data.is_success === true) {
+                          console.log('check bill success')
+                          window.location.reload()
+                        } else {
+                          console.log('bill not found')
+                        }
+                      } catch (error) {
+                        console.log('response_check_bill_except error', error)
+                      }
+                    }
+
+                    setQrcodeDetails({
+                      tableId: tableId,
+                      restaurantId: restaurantId
+                    })
+                    message.success(
+                      `You've checked in ${responseTableData.name} at ${restaurantDetail.name}. Let's start ordering!`,
+                      4
+                    );
+
+                    try {
+                      await saveTableOnScanQrCode();
+                    } catch (error) {
+                      console.log(
+                        "saveTableOnScanQrCode",
+                        saveTableOnScanQrCode
+                      );
+                    }
+                  }
+                } else {
+                  message.warning('Qr code ไม่ถูกต้อง! กรุณาแสกนใหม่อีกครั้งค่ะ')
+                }
+              } catch (error) {
+                console.log('error', error)
+              }
+            }
+
             if (response === "Not Login") {
               //// Not yet login 
               //// Get shopping cart from localstorage
@@ -252,49 +305,7 @@ export default function Restaurant() {
 
             }
 
-            if (tableId && restaurantId) {
-              try {
-                let await_responseTableData = partnerSerivce.checkHaveTableBycustomer(tableId)
-                let await_restaurantData = restaurantService.getRestaurantById(restaurantId)
 
-                let responseTableData = await await_responseTableData
-                let restaurantData = await await_restaurantData
-                if (responseTableData && restaurantData) {
-                  if (responseTableData.id && restaurantData.id) {
-
-                    if (response !== "Not Login") {
-                      //// If user logged in it wiil check leftover orders in system if have existing order it will check bill all
-                      console.log('tableId', tableId)
-                      let response_check_bill_except = await orderService.checkBillExcept(tableId)
-                      console.log('response_check_bill_except', response_check_bill_except)
-                    }
-
-                    setQrcodeDetails({
-                      tableId: tableId,
-                      restaurantId: restaurantId
-                    })
-                    message.success(
-                      `You've checked in ${responseTableData.name} at ${restaurantDetail.name}. Let's start ordering!`,
-                      4
-                    );
-
-                    try {
-                      await saveTableOnScanQrCode();
-                    } catch (error) {
-                      console.log(
-                        "saveTableOnScanQrCode",
-                        saveTableOnScanQrCode
-                      );
-                    }
-                  }
-                } else {
-                  message.warning('Qr code ไม่ถูกต้อง! กรุณาแสกนใหม่อีกครั้งค่ะ')
-                }
-              } catch (error) {
-                console.log('error', error)
-              }
-
-            }
           })
           .catch((error) => {
             console.log("error", error);
