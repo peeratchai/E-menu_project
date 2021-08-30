@@ -160,7 +160,7 @@ export default function Newspaper() {
     if (isMobileResolution) {
         //Layout for mobile
         component = (
-            <MobileLayout containerType="mobile" search searchFunc={searchFunc}>
+            <MobileLayout containerType="mobile" filterFunc={searchFunc}>
                 <Container className={utilStyles.container_sm}>
                     <Spin spinning={loading} tip="Loading...">
                         <ShowFiilterSelected

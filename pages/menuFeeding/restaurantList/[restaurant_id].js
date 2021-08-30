@@ -403,7 +403,7 @@ export default function Restaurant() {
         // Mobile Version
         <MobileLayout
           containerType="mobile"
-          searchFunc={() => console.log("none")}
+          filterFunc={() => console.log("none")}
           page="restaurantDetails"
           menuInBasket={numberOfCartItem}
           is_show_login_modal={isShowLoginModal}
