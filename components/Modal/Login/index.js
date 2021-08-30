@@ -320,8 +320,17 @@ export default function LoginModal(props) {
     const checkLeftoverOrder = async (accessToken) => {
         //// Check qrcode from url and session if has qr code breadcrumb will removed.
         if (qr_code_details && qr_code_details.tableId) {
-            let response_check_bill_except = await orderService.checkBillExcept(qr_code_details.tableId, accessToken)
-            console.log('response_check_bill_except', response_check_bill_except)
+            try {
+                let response_check_bill_except = await orderService.checkBillExcept(qr_code_details.tableId, accessToken)
+                if (response_check_bill_except && response_check_bill_except.data.is_success === true) {
+                    window.location.reload()
+                } else {
+                    console.log('bill not found')
+                }
+            } catch (error) {
+                console.log('response_check_bill_except error', error)
+            }
+
         }
     }
 

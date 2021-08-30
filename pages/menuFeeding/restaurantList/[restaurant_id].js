@@ -73,6 +73,7 @@ export default function Restaurant() {
                       console.log('tableId', tableId)
                       try {
                         let response_check_bill_except = await orderService.checkBillExcept(tableId)
+                        console.log('response_check_bill_except', response_check_bill_except)
                         if (response_check_bill_except.data.is_success === true) {
                           console.log('check bill success')
                           window.location.reload()

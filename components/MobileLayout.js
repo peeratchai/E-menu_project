@@ -142,15 +142,13 @@ export default function MobileLayout(props) {
 
         try {
           let response_order_active = await orderService.getOrderActive()
-          if (response_order_active) {
+          console.log('response_order_active', response_order_active)
+          if (response_order_active && response_order_active.length > 0) {
             haveOrderActive = true
           }
         } catch (error) {
           console.log('get order active error: ', error)
         }
-
-        console.log('numberOfOrderInCart', numberOfOrderInCart)
-        console.log('haveOrderActive', haveOrderActive)
 
         setTotal_menu_in_basket(numberOfOrderInCart)
         setHaveOrderActive(haveOrderActive)

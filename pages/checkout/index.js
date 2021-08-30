@@ -39,7 +39,8 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
     const mappingOrderStatus = {
         'New Order': 'Pending',
         'In Order': 'Cooking',
-        'Completed': 'Completed'
+        'Completed': 'Completed',
+        'Canceled': 'Canceled'
     }
     const [orderActiveData, setOrderActiveData] = React.useState([])
     const [countOrderActiveItems, setCountOrderActiveItems] = React.useState(0);
@@ -196,6 +197,8 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
             let orderActiveData = []
             let countOrderActive = 0
             let totalOrderActive = 0
+            console.log('responseOrderActive', responseOrderActive)
+
             if (responseOrderActive) {
                 if (responseOrderActive.length > 0) {
                     setRestaurantDetails(responseOrderActive[0].restaurant)
@@ -204,9 +207,11 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
                         if (order.order_items) {
                             order.order_items.forEach((orderItem) => {
                                 console.log('orderItem', orderItem)
-                                totalOrderActive += orderItem.total
-                                countOrderActive++
+                                if (orderItem.status !== 'Canceled') {
+                                    totalOrderActive += orderItem.total
+                                }
                                 orderActiveData.push(orderItem)
+                                countOrderActive++
                             })
                         }
                     })
@@ -421,7 +426,7 @@ const CheckoutPage = ({ user, tableId = null, qr_code_restaurantID = null }) => 
 
     let OrderActiveListMobileComponent = orderActiveData && orderActiveData.map((orderItem, index) => {
         return (
-            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", paddingBottom: "10px" }} key={orderItem.id}>
+            <Row style={{ height: "6rem", borderBottom: "1px solid #DEDEDE", padding: "10px 0" }} key={orderItem.id}>
                 <Col xs={4} style={{ paddingRight: "0px", height: "100%" }}>
                     <Image className="filterGray" src={orderItem.menu.image_url} rounded style={{ height: "100%" }} />
                 </Col>

@@ -53,6 +53,7 @@ export default function ViewOrderModal(props) {
             "start_date": startDate,
             "end_date": endDate
         }
+        console.log('data', data)
         try {
             let tableDetails = await partnerService.getOrderByfilter2(data)
             console.log('tableDetails', tableDetails)
@@ -280,7 +281,7 @@ export default function ViewOrderModal(props) {
                     }
                     console.log('newOrder', newOrder)
 
-                    setNewOrderSelected(newOrder)
+                    // setNewOrderSelected(newOrder)
                     message.success('Take order successful.')
                 } else {
                     message.error('Cannot take order.Please try again.')
