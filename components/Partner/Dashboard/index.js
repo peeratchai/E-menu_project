@@ -279,8 +279,8 @@ export default function Dashboard(props) {
     let orderList = renderOrderList()
     let OrderListComponent = (
         <>
-            <Col xs={5} style={{ borderRight: "1px solid #DEDEDE", height: "inherit", overflowY: "scroll" }}>
-                <div style={{ color: "white", marginBottom: "20px", backgroundColor: "#78100E", padding: "15px" }}>
+            <Col xs={5} style={{ height: "100%" }}>
+                <div style={{ color: "white", marginBottom: "10px", backgroundColor: "#78100E", padding: "15px" }}>
                     <div style={{ marginBottom: "10px" }}>
                         <Row>
                             <Col>
@@ -295,11 +295,13 @@ export default function Dashboard(props) {
                     </div>
                     <RangePicker onChange={onChangePeriod} style={{ width: "100%" }} disabled={disable} />
                 </div>
-                <Spin spinning={loading} tip="Loading...">
-                    {
-                        haveOrder ? orderTableListComponent : <EmptyComponent />
-                    }
-                </Spin>
+                <div style={{ borderRight: "1px solid #DEDEDE", height: "calc(100% - 140px)", overflowY: "scroll" }}>
+                    <Spin spinning={loading} tip="Loading...">
+                        {
+                            haveOrder ? orderTableListComponent : <EmptyComponent />
+                        }
+                    </Spin>
+                </div>
             </Col>
             <Col xs={7} style={{ height: "inherit", overflowY: "scroll" }}>
                 <Spin spinning={loading} tip="Loading...">
@@ -315,12 +317,12 @@ export default function Dashboard(props) {
         <div>
             {
                 type === 'partner' && (
-                    <div style={{ color: 'white', marginBottom: "20px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
+                    <div style={{ color: 'white', marginBottom: "10px", backgroundColor: "#78100E", padding: "15px", textAlign: "center" }}>
                         Dashboard
                     </div>
                 )
             }
-            <Row style={{ height: "80vh" }}>
+            <Row style={{ height: "85vh" }}>
                 {OrderListComponent}
             </Row>
         </div>

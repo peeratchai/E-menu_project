@@ -420,22 +420,22 @@ export default function ViewOrderModal(props) {
         });
     }
 
-    const acceptAlNewOrder = async () => {
+    const acceptAllNewOrder = async () => {
         try {
             setLoading(true)
-            console.log('newOrderSelected', newOrderSelected)
             if (newOrderSelected) {
                 await Promise.all(newOrderSelected.order_items.map(async (orderItem) => {
-                    console.log('order_item', orderItem)
-                    let orderId = orderItem.id
-                    let response = await partnerService.takeOrder(orderId)
-                    console.log('response', response)
-                    if (response) {
-                        if (response.is_success === true) {
-                            let newOrder = { ...newOrderSelected }
-                            newOrder.order_items = []
-                            getNewOrder()
-                            setNewOrderSelected(newOrder)
+                    if (orderItem.status !== 'Canceled') {
+                        let orderId = orderItem.id
+                        let response = await partnerService.takeOrder(orderId)
+                        console.log('response', response)
+                        if (response) {
+                            if (response.is_success === true) {
+                                let newOrder = { ...newOrderSelected }
+                                newOrder.order_items = []
+                                getNewOrder()
+                                setNewOrderSelected(newOrder)
+                            }
                         }
                     }
                 }));
@@ -456,20 +456,22 @@ export default function ViewOrderModal(props) {
             setLoading(true)
             if (inOrderSelected) {
                 await Promise.all(inOrderSelected.order_items.map(async (orderItem) => {
-                    let orderId = orderItem.id
-                    let response = await partnerService.completeOrder(orderId)
-                    console.log('response', response)
-                    if (response) {
-                        if (response.is_success === true) {
-                            let inOrder = { ...inOrderSelected }
-                            inOrder.order_items = []
-                            getInOrder()
-                            setInOrderSelected(inOrder)
+                    if (orderItem.status !== 'Canceled') {
+                        let orderId = orderItem.id
+                        let response = await partnerService.completeOrder(orderId)
+                        console.log('response', response)
+                        if (response) {
+                            if (response.is_success === true) {
+                                let inOrder = { ...inOrderSelected }
+                                inOrder.order_items = []
+                                getInOrder()
+                                setInOrderSelected(inOrder)
+                            } else {
+                                message.error('Cannot complete order.Please try again.')
+                            }
                         } else {
                             message.error('Cannot complete order.Please try again.')
                         }
-                    } else {
-                        message.error('Cannot complete order.Please try again.')
                     }
                 }));
             }
@@ -650,7 +652,7 @@ export default function ViewOrderModal(props) {
                 <div style={{ textAlign: "right", marginBottom: "15px" }}>
                     <Popconfirm
                         title="คุณแน่ใจหรือไม่ที่จะรับออเดอร์ทั้งหมด"
-                        onConfirm={() => acceptAlNewOrder()}
+                        onConfirm={() => acceptAllNewOrder()}
                         okText="ยืนยัน"
                         cancelText="ยกเลิก"
                     >
