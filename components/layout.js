@@ -1,4 +1,4 @@
-import styles from "./Layout.module.css";
+import styles from "./layout.module.css";
 import { Navbar, Nav, NavDropdown, Image } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { Badge, message } from "antd";
