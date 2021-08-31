@@ -125,13 +125,11 @@ export default function MobileLayout(props) {
     let shoppingCartData
     let numberOfOrderInCart = 0
     let haveOrderActive = false
-    console.log('user', user)
     if (user && user.isLoggedIn) {
 
       //// if user logged will get shopping cart data from Database
       try {
         let response_shopping_cart_datbase = await shoppingCartService.getShoppingCart()
-        console.log('response_shopping_cart_datbase', response_shopping_cart_datbase)
         if (response_shopping_cart_datbase) {
           shoppingCartData = response_shopping_cart_datbase.shopping_cart_items
           if (shoppingCartData.length > 0) {
