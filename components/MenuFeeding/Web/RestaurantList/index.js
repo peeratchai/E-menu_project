@@ -1,4 +1,4 @@
-import Layout from '../../../Layout'
+import Layout from '../../../layout'
 import { Row, Col, Card, Button, Form, Breadcrumb } from 'react-bootstrap'
 import styles from './index.module.css'
 import Link from 'next/link'

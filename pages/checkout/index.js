@@ -1,4 +1,4 @@
-import Layout, { siteTitle } from '../../components/Layout'
+import Layout, { siteTitle } from '../../components/layout'
 import MobileLayout from '../../components/MobileLayout'
 import utilStyles from '../../styles/utils.module.css'
 import styles from './index.module.css'

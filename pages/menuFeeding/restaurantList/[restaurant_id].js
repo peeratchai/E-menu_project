@@ -11,7 +11,7 @@ import checkUserPermission from "../../../lib/checkUserPermission";
 import fetchJson from "../../../lib/fetchJson";
 import shoppingCartService from "../../../services/shoppingCart";
 import utilStyles from "../../../styles/utils.module.css";
-import Layout from "../../../components/Layout";
+import Layout from "../../../components/layout";
 import MobileLayout from "../../../components/MobileLayout";
 import partnerSerivce from "../../../services/partner";
 import orderService from "../../../services/order";

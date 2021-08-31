@@ -1,4 +1,4 @@
-import Layout, { siteTitle } from '../../components/Layout'
+import Layout, { siteTitle } from '../../components/layout'
 import { Row, Col, Card, Form, Button } from 'react-bootstrap'
 import useMediaQuery from "../../utils/utils";
 import utilStyles from '../../styles/utils.module.css'

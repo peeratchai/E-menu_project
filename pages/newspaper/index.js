@@ -1,5 +1,5 @@
 import MobileLayout from '../../components/MobileLayout'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import utilStyles from '../../styles/utils.module.css'
 import Container from 'react-bootstrap/Container'
 import useMediaQuery from "../../utils/utils";

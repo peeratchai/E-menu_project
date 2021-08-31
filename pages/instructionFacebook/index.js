@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import styles from './index.module.css'
 
 export default function instructionFacebook() {

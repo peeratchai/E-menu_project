@@ -1,4 +1,4 @@
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import styles from './index.module.css'
 import { Form, Button } from 'react-bootstrap'
 import React, { useEffect } from 'react'

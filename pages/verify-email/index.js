@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { message } from 'antd'
 import 'antd/dist/antd.css';
 import authentication from '../../services/authentication'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import styles from './index.module.css'
 
 export default function verifyEmail() {
