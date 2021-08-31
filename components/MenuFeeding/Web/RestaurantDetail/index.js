@@ -1,4 +1,4 @@
-import Layout from "../../../Layout";
+import Layout from "../../../layout";
 import utilStyles from "../../../../styles/utils.module.css";
 import {
   Row,
